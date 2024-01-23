@@ -1,0 +1,29 @@
+{
+    "name": "registrars/realtimeregister",
+    "type": "library",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/marcvdm/realtimeregister-php"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "RealtimeRegister\\": "src/"
+        },
+        "files": [
+            "src/helpers.php"
+        ]
+    },
+    "authors": [
+        {
+            "name": "Marc van der Meulen",
+            "email": "marcvdmeulen@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "sandwave-io/realtimeregister-php": "dev-needed-master",
+        "illuminate/cache": "^10.29"
+    }
+}

@@ -1,0 +1,6 @@
+{
+    "name": "realtimeregister/whmcs",
+    "require-dev": {
+        "illuminate/database": "^10.29"
+    }
+}

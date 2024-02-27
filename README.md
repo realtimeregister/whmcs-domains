@@ -8,7 +8,10 @@
 ### INFO
 https://developers.whmcs.com/domain-registrars/function-index/
 
-In de map `modules/realtimeregister/src/Actions` bevinden alle commandos die al zijn geimplementeert 
+In de map `modules/realtimeregister/src/Actions` bevinden alle commandos die al zijn geïmplementeerd.
+
+In deze module gebruiken wij https://github.com/sandwave-io/realtimeregister-php.
+Deze kan nog wel verbeterd worden maar is grotendeels toereikend.
 
 
 

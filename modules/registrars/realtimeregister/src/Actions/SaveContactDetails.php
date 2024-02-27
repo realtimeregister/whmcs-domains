@@ -37,8 +37,6 @@ class SaveContactDetails extends Action
 
         $metadata = $this->tldInfo($request)->metadata;
 
-        dd($request->input());
-
         foreach ($this->roles as $whmcsRole => $role) {
 
             // Role is not present
@@ -56,6 +54,8 @@ class SaveContactDetails extends Action
             if ($role !== DomainContactRoleEnum::ROLE_REGISTRANT) {
                 $currentHandle = Arr::first($domain->contacts->entities, fn(DomainContact $contact) => $contact->role === $role)?->handle;
             }
+
+            // @todo: This is still a work in progress.
 
             dump($role . ' - ' . $key . ' - ' . ($organizationAllowed ? 'Org allowed' : ' No org allowed') . ' - ' . $currentHandle);
             if ($request->input('wc.' . $whmcsRole) === 'custom')  {

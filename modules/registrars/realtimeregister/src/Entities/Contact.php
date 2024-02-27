@@ -48,6 +48,17 @@ class Contact
 
     }
 
+    public function diff(WhmcsContact $contact)
+    {
+        $diff = [];
+
+        foreach (['name', 'addressLine', 'postalCode', 'city', 'country', 'email', 'voice'] as $field) {
+            if ($this->{$field} != $new_contact[$field]) {
+                $diff[$field] = $new_contact[$field];
+            }
+        }
+    }
+
     public static function fromLocalApi(ContactType $type, DataObject $data)
     {
         return new Contact(

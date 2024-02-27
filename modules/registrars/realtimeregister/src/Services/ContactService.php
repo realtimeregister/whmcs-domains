@@ -2,6 +2,7 @@
 
 namespace RealtimeRegister\Services;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Arr;
 use RealtimeRegister\App;
 use RealtimeRegister\Entities\Contact;
@@ -46,6 +47,16 @@ class ContactService
         // Search in contact mappings
 
         // Search with data
+    }
+
+    /**
+     * @param string|int $userId
+     * @param string|int $contactId
+     * @return Collection<ContactMapping>
+     */
+    public function fetchMappingByContactId(string|int $userId, string|int $contactId): Collection
+    {
+        return ContactMapping::query()->where('userid', $userId)->where('contactid', $contactId)->get();
     }
 
     public function fetchMappingByHandle(string $handle): ?ContactMapping

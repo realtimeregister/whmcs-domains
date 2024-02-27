@@ -10,4 +10,9 @@ class DataObject extends \ArrayObject
     {
         return Arr::get($this, $key, $default);
     }
+
+    public function __get(string $name)
+    {
+        return $this->get($name);
+    }
 }

@@ -53,9 +53,10 @@ class RegistrarConfig
         return Arr::get($this->registrarConfig, $key, $default);
     }
 
-    protected function loadRegistrarConfig()
+    protected function loadRegistrarConfig(): void
     {
         if ($this->registrarConfig === null) {
+            require_once ROOTDIR . "/includes/registrarfunctions.php";
             $this->registrarConfig = array_merge(
                 [
                     'SyncStatus' => null,

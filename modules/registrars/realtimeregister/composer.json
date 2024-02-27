@@ -24,6 +24,7 @@
     "minimum-stability": "stable",
     "require": {
         "sandwave-io/realtimeregister-php": "dev-needed-master",
-        "illuminate/cache": "^10.29"
+        "illuminate/cache": "^10.29",
+        "giggsey/libphonenumber-for-php-lite": "^8.13"
     }
 }

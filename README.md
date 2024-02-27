@@ -8,6 +8,17 @@
 
 ### Features
 - [ ] Domain registration
+- [ ] Domain transfer
+- [ ] Domain check
+- [ ] Domain registration
+- [ ] Domain registration
+- [ ] Domain registration
+- [ ] Domain registration
+- [ ] Domain registration
+- [ ] Domain registration
+- [ ] Domain registration
+- [ ] Domain registration
+- [ ] Domain registration
 
 
 ### Todo

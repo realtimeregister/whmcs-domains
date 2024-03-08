@@ -4,7 +4,7 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/marcvdm/realtimeregister-php"
+            "url": "https://github.com/sandwave-io/realtimeregister-php"
         }
     ],
     "autoload": {
@@ -17,13 +17,13 @@
     },
     "authors": [
         {
-            "name": "Marc van der Meulen",
-            "email": "marcvdmeulen@gmail.com"
+            "name": "Realtime Register",
+            "email": "info@realtimeregister.com"
         }
     ],
     "minimum-stability": "stable",
     "require": {
-        "sandwave-io/realtimeregister-php": "dev-needed-master",
+        "sandwave-io/realtimeregister-php": "dev-master",
         "illuminate/cache": "^10.29",
         "giggsey/libphonenumber-for-php-lite": "^8.13"
     }

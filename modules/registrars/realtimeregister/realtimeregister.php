@@ -19,19 +19,16 @@ if (!defined("WHMCS")) {
 require_once __DIR__ . '/vendor/autoload.php';
 //require_once ROOTDIR. '/includes/registrarfunctions.php';
 
-
-
-
 $app = App::boot();
 
-function realtimeregister_version()
+function realtimeregister_version(): string
 {
     return App::VERSION;
 }
 
-function realtimeregister_getConfigArray()
+function realtimeregister_ConfigOptions(): array
 {
-    return (new ConfigArray)();
+    return (new ConfigArray())();
 }
 
 function realtimeregister_CheckAvailability(array $params)
@@ -79,7 +76,7 @@ function realtimeregister_Sync(array $params)
     return App::dispatch(Sync::class, $params);
 }
 
-function realtimeregister_AdminCustomButtonArray(array $params)
+function realtimeregister_AdminCustomButtonArray(array $params): array
 {
     return [
         "Sync domain" => "Sync"

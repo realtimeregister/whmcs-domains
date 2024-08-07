@@ -80,7 +80,7 @@ class ConfigArray
             'test_mode' => [
                 'FriendlyName' => 'Test mode',
                 'Type' => 'yesno',
-                'Description' => 'Use the test environment, request a test account at <a href="mailto:support@realtimeregister.com">support@realtimeregister.com</a>',
+                'Description' => 'Use the test environment, request a test account at <a href="mailto:support@realtimeregister.com">support@realtimeregister.com</a>',
             ],
             'ignore_ssl' => [
                 'FriendlyName' => 'Ignore SSL errors',

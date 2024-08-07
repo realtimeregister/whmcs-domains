@@ -5,10 +5,10 @@ namespace RealtimeRegister\Hooks;
 use RealtimeRegister\App;
 use RealtimeRegister\Entities\DataObject;
 
-class AdminAreaHeadOutput extends Hook
+class AdminAreaFooterOutput extends Hook
 {
     public function __invoke(DataObject $vars): string
     {
-        return App::assets()->renderHead();
+        return App::assets()->renderFooter();
     }
 }

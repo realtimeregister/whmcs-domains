@@ -2,19 +2,17 @@
 
 namespace RealtimeRegister\Models;
 
-use Realtimeregister\Services\Config\Config;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 
-class Registrars extends \Illuminate\Database\Eloquent\Model
+class Registrars extends Model
 {
     protected $table = 'tblregistrars';
 
     /**
      * Scope a query to only include the current addon.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeRegistrar($query)
+    public function scopeRegistrar(Builder $query): Builder
     {
         return $query->where('registrar', 'realtimeregister');
     }

@@ -23,10 +23,10 @@ class GetDomainInformation extends Action
         $expiryDate = $domain->expiryDate;
 
         if ($metadata->expiryDateOffset) {
-            $expiryDate = $expiryDate->add(new \DateInterval('PT'. $metadata->expiryDateOffset . 'S'));
+            $expiryDate = $expiryDate->add(new \DateInterval('PT' . $metadata->expiryDateOffset . 'S'));
         }
 
-        return (new Domain)
+        return (new Domain())
             ->setDomain($domain->domainName)
             ->setNameservers($nameservers)
             ->setRegistrationStatus($this->getWhmcsDomainStatus($domain))
@@ -62,20 +62,19 @@ class GetDomainInformation extends Action
     }
 
     /**
-     * @param Request $request
      * @param string $handle
      * @return bool
      */
     public function hasPendingChanges(string $handle): bool
     {
         return App::client()->processes->list(
-                limit: 1,
-                parameters: [
-                    'type:eq' => 'contact',
-                    'action:eq' => 'update',
-                    'identifier' => $handle,
-                    'status' => 'SUSPENDED',
-                ]
-            )->count() > 0;
+            limit: 1,
+            parameters: [
+                'type:eq' => 'contact',
+                'action:eq' => 'update',
+                'identifier' => $handle,
+                'status' => 'SUSPENDED',
+            ]
+        )->count() > 0;
     }
 }

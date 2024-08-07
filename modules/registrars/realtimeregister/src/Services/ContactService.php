@@ -8,7 +8,6 @@ use RealtimeRegister\App;
 use RealtimeRegister\Entities\Contact;
 use RealtimeRegister\Models\ContactMapping;
 use SandwaveIo\RealtimeRegister\Domain\Contact as RTRContact;
-use function RealtimeRegister\dd;
 
 class ContactService
 {
@@ -39,7 +38,6 @@ class ContactService
     public function findByContactId($contactId)
     {
         // Find a local contact by its id
-
     }
 
     public function findLocal(RTRContact $contact)

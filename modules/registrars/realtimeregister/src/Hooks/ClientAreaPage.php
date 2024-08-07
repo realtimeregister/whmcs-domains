@@ -6,7 +6,6 @@ use RealtimeRegister\Entities\DataObject;
 
 class ClientAreaPage extends Hook
 {
-
     public function __invoke(DataObject $vars)
     {
         // Skip in case there are no lookup.
@@ -15,6 +14,5 @@ class ClientAreaPage extends Hook
         }
 
         dd($vars);
-
     }
 }

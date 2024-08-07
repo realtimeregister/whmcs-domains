@@ -2,7 +2,7 @@
 
 namespace RealtimeRegister\Enums;
 
-enum ContactType:string
+enum ContactType: string
 {
     case Registrant = 'registrant';
     case Admin = 'admin';

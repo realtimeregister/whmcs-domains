@@ -10,7 +10,6 @@ use SandwaveIo\RealtimeRegister\Domain\Enum\DomainStatusEnum;
 
 class Sync extends Action
 {
-
     /**
      * @throws Exception
      */
@@ -23,7 +22,7 @@ class Sync extends Action
         $expiryDate = $domain->expiryDate;
 
         if ($metadata->expiryDateOffset) {
-            $expiryDate = $expiryDate->add(new \DateInterval('PT'. $metadata->expiryDateOffset . 'S'));
+            $expiryDate = $expiryDate->add(new \DateInterval('PT' . $metadata->expiryDateOffset . 'S'));
         }
 
         $values = [];
@@ -68,7 +67,7 @@ class Sync extends Action
         return date("Y-m-d", strtotime($date . ($syncDueOffset * -1) . ' days'));
     }
 
-    protected function parseDomainStatus(array $statuses)
+    protected function parseDomainStatus(array $statuses): string
     {
         if (array_intersect([DomainStatusEnum::STATUS_SERVER_HOLD, DomainStatusEnum::STATUS_REGISTRAR_HOLD], $statuses)) {
             return 'Fraud';

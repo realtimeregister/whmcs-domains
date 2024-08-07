@@ -1,2 +1,4 @@
 whmcs_helper.php
 /vendor
+.idea/**
+.phpunit.result.cache

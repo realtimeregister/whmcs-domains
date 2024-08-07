@@ -7,23 +7,21 @@ use RealtimeRegister\Enums\ContactType;
 class Domain
 {
     public function __construct(
-        public readonly string   $name,
-        public readonly string   $tld,
-        public readonly array    $nameservers = [],
+        public readonly string $name,
+        public readonly string $tld,
+        public readonly array $nameservers = [],
         public readonly ?Contact $registrant = null,
         public readonly ?Contact $admin = null,
         public readonly ?Contact $tech = null,
         public readonly ?Contact $billing = null,
-        public readonly ?string  $idnLanguage = null,
-        public readonly ?string  $punyCode = null,
-        public readonly ?string  $namePunyCode = null,
-        public readonly ?string  $tldPunyCode = null,
-        public readonly ?bool    $isIdn = null,
-        public readonly ?bool    $isInGracePeriod = null,
-        public readonly ?bool    $isInRedemptionGracePeriod = null,
-    )
-    {
-
+        public readonly ?string $idnLanguage = null,
+        public readonly ?string $punyCode = null,
+        public readonly ?string $namePunyCode = null,
+        public readonly ?string $tldPunyCode = null,
+        public readonly ?bool $isIdn = null,
+        public readonly ?bool $isInGracePeriod = null,
+        public readonly ?bool $isInRedemptionGracePeriod = null,
+    ) {
     }
 
     public function domainName(): string

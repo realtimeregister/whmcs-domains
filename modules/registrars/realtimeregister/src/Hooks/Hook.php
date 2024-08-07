@@ -9,6 +9,5 @@ abstract class Hook implements InvokableHook
 {
     public function __construct(protected App $app)
     {
-
     }
 }

@@ -15,6 +15,7 @@ use RuntimeException;
 use SandwaveIo\RealtimeRegister\IsProxy;
 use SandwaveIo\RealtimeRegister\RealtimeRegister;
 
+// TODO https://dev.to/vimuth7/singleton-pattern-in-php-and-dependency-injection-di-container-in-laravel-4nj9
 class App
 {
     public const NAME = 'realtimeregister';
@@ -52,9 +53,9 @@ class App
         $app = static::instance();
 
         if (!static::$booted) {
-            Cache::boot();
+//            Cache::boot();
 
-            $app->ensureTablesExist();
+//            $app->ensureTablesExist();
 
             static::$booted = true;
         }
@@ -117,8 +118,8 @@ class App
 
     protected function dispatchTo(string $action, array $params = [])
     {
-        if (($pos = strpos($action, '_')) !== FALSE) {
-            $action = substr($action, $pos+1);
+        if (($pos = strpos($action, '_')) !== false) {
+            $action = substr($action, $pos + 1);
         }
 
         if (!class_exists($action)) {

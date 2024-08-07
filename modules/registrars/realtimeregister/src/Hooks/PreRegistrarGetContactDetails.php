@@ -4,11 +4,9 @@ namespace RealtimeRegister\Hooks;
 
 use RealtimeRegister\App;
 use RealtimeRegister\Entities\DataObject;
-use function RealtimeRegister\dd;
 
 class PreRegistrarGetContactDetails extends Hook
 {
-
     public function __invoke(DataObject $vars)
     {
         App::assets()->head(<<<html

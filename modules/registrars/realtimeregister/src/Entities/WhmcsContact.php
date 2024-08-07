@@ -8,7 +8,7 @@ use SandwaveIo\RealtimeRegister\Domain\Contact as RtrContact;
 class WhmcsContact
 {
     public function __construct(
-        public ?int    $id,
+        public ?int $id,
         public ?string $firstName = null,
         public ?string $lastName = null,
         public ?string $companyName = null,
@@ -20,8 +20,7 @@ class WhmcsContact
         public ?string $postCode = null,
         public ?string $countryCode = null,
         public ?string $phoneNumber = null,
-    )
-    {
+    ) {
     }
 
     public static function make(DataObject $data): WhmcsContact

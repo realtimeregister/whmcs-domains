@@ -8,21 +8,21 @@ class Assets
 
     protected array $footer = [];
 
-    public function prependHead(string $content)
+    public function prependHead(string $content): self
     {
         array_unshift($this->head, $content);
 
         return $this;
     }
 
-    public function head(string $content)
+    public function head(string $content): self
     {
         $this->head[] = $content;
 
         return $this;
     }
 
-    public function footer(string $content)
+    public function footer(string $content): self
     {
         $this->footer[] = $content;
 

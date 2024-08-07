@@ -27,25 +27,23 @@ class Contact
 
     public function __construct(
         public readonly ContactType $type,
-        public readonly ?string     $firstName = null,
-        public readonly ?string     $lastName = null,
-        public readonly ?string     $companyName = null,
-        public readonly ?string     $email = null,
-        public readonly ?string     $address1 = null,
-        public readonly ?string     $address2 = null,
-        public readonly ?string     $city = null,
-        public readonly ?string     $state = null,
-        public readonly ?string     $fullState = null,
-        public readonly ?string     $postCode = null,
-        public readonly ?string     $countryCode = null,
-        public readonly ?string     $countryName = null,
-        public readonly ?string     $phoneNumber = null,
-        public readonly ?string     $phoneCountryCode = null,
-        public readonly ?string     $fullPhoneNumber = null,
-        public readonly ?array      $additionalFields = null
-    )
-    {
-
+        public readonly ?string $firstName = null,
+        public readonly ?string $lastName = null,
+        public readonly ?string $companyName = null,
+        public readonly ?string $email = null,
+        public readonly ?string $address1 = null,
+        public readonly ?string $address2 = null,
+        public readonly ?string $city = null,
+        public readonly ?string $state = null,
+        public readonly ?string $fullState = null,
+        public readonly ?string $postCode = null,
+        public readonly ?string $countryCode = null,
+        public readonly ?string $countryName = null,
+        public readonly ?string $phoneNumber = null,
+        public readonly ?string $phoneCountryCode = null,
+        public readonly ?string $fullPhoneNumber = null,
+        public readonly ?array $additionalFields = null
+    ) {
     }
 
     public function diff(WhmcsContact $contact)
@@ -53,8 +51,8 @@ class Contact
         $diff = [];
 
         foreach (['name', 'addressLine', 'postalCode', 'city', 'country', 'email', 'voice'] as $field) {
-            if ($this->{$field} != $new_contact[$field]) {
-                $diff[$field] = $new_contact[$field];
+            if ($this->{$field} != $contact[$field]) {
+                $diff[$field] = $contact[$field];
             }
         }
     }
@@ -85,7 +83,6 @@ class Contact
         $reflection = new \ReflectionClass(static::class);
 
         foreach (static::$mapping as $internal => $external) {
-
             if (!$reflection->hasProperty($internal)) {
                 continue;
             }
@@ -107,14 +104,13 @@ class Contact
         $reflection = new \ReflectionClass(static::class);
 
         foreach (static::$mapping as $internal => $external) {
-
             if (!$reflection->hasProperty($internal)) {
                 continue;
             }
 
             $prop = $reflection->getProperty($internal);
 
-            $mapped[$internal] = $params[$prefix.$external] ?? $prop->getDefaultValue();
+            $mapped[$internal] = $params[$prefix . $external] ?? $prop->getDefaultValue();
         }
 
         return new Contact($type, ...$mapped);
@@ -127,7 +123,7 @@ class Contact
         $mapped = [];
 
         foreach (static::$mapping as $internal => $external) {
-            $mapped[$prefix.$external] = $this->{$internal};
+            $mapped[$prefix . $external] = $this->{$internal};
         }
 
         return $mapped;

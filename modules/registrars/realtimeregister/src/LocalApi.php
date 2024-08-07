@@ -67,8 +67,7 @@ class LocalApi
             }
 
             $start += (int)$data['numreturned'];
-
-        } while($start < (int)$data['totalresults']);
+        } while ($start < (int)$data['totalresults']);
 
         return null;
     }

@@ -23,8 +23,12 @@
     ],
     "minimum-stability": "stable",
     "require": {
+        "php": "^8.1",
         "sandwave-io/realtimeregister-php": "dev-master",
         "illuminate/cache": "^10.29",
         "giggsey/libphonenumber-for-php-lite": "^8.13"
+    },
+    "require-dev": {
+        "symfony/var-dumper": "^6.4"
     }
 }

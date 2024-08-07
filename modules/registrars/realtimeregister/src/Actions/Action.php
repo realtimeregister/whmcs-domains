@@ -16,7 +16,6 @@ abstract class Action implements InvokableAction
 {
     public function __construct(protected App $app)
     {
-
     }
 
     protected function domainInfo(Request $request): DomainDetails
@@ -35,9 +34,12 @@ abstract class Action implements InvokableAction
     {
         $customerHandle = App::registrarConfig()->customerHandle();
 
-        return Cache::request()->rememberForever('contact-info:' . $customerHandle . ':' . $handle, function () use($customerHandle, $handle) {
-            return App::client()->contacts->get($customerHandle, $handle);
-        });
+        return Cache::request()->rememberForever(
+            'contact-info:' . $customerHandle . ':' . $handle,
+            function () use ($customerHandle, $handle) {
+                return App::client()->contacts->get($customerHandle, $handle);
+            }
+        );
     }
 
     protected function metadata(Request $request): TLDMetaData
@@ -65,7 +67,6 @@ abstract class Action implements InvokableAction
 
     protected function additionalFields(Request $request)
     {
-
     }
 
     public function config(string $key, $default = null)

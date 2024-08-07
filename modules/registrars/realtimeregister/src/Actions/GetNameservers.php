@@ -3,7 +3,7 @@
 namespace RealtimeRegister\Actions;
 
 use RealtimeRegister\Request;
-use SandwaveIo\RealtimeRegister\Exceptions\NotFoundException;
+use SandwaveIo\RealtimeRegister\Exceptions\BadRequestException;
 
 class GetNameservers extends Action
 {
@@ -18,11 +18,10 @@ class GetNameservers extends Action
             }
 
             return $nameservers;
-        } catch (NotFoundException) {
+        } catch (BadRequestException $e) {
             return [
                 'error' => 'Domain not registered yet.'
             ];
         }
-
     }
 }

@@ -38,7 +38,9 @@ class GetDomainInformation extends Action
             ->setIrtpTransferLock(in_array('IRTPC_TRANSFER_PROHIBITED', $domain->status))
             ->setDomainContactChangePending($this->hasPendingChanges($domain->registrant))
             ->setRegistrantEmailAddress($registrant->email)
-            ->setIrtpVerificationTriggerFields(['Registrant' => ['First Name', 'Last Name', 'Organization Name', 'Email']]);
+            ->setIrtpVerificationTriggerFields(
+                ['Registrant' => ['First Name', 'Last Name', 'Organization Name', 'Email']]
+            );
     }
 
     /**

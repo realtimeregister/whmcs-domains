@@ -16,7 +16,10 @@ class CheckAvailability extends Action
 
         $isProxy->enable('premium');
 
-        $isProxyDomains = $isProxy->checkMany($request->get('searchTerm'), array_map(fn(string $tld) => ltrim($tld, '.'), $request->get('tldsToInclude')));
+        $isProxyDomains = $isProxy->checkMany(
+            $request->get('searchTerm'),
+            array_map(fn(string $tld) => ltrim($tld, '.'), $request->get('tldsToInclude'))
+        );
 
         $results = new ResultsList();
 

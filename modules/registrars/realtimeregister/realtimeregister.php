@@ -1,5 +1,7 @@
 <?php
 
+// phpcs:disable PSR1.Files.SideEffects
+
 use RealtimeRegister\Actions\CheckAvailability;
 use RealtimeRegister\Actions\GetContactDetails;
 use RealtimeRegister\Actions\GetDomainInformation;

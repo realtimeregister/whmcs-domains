@@ -198,7 +198,10 @@ class App
                 $table->integer('contactid');
                 $table->char('handle', 40);
                 $table->boolean('org_allowed');
-                $table->unique(['userid', 'contactid', 'org_allowed'], 'mod_realtimeregister_contact_mapping_unique_contact');
+                $table->unique(
+                    ['userid', 'contactid', 'org_allowed'],
+                    'mod_realtimeregister_contact_mapping_unique_contact'
+                );
                 $table->unique('handle', 'mod_realtimeregister_contact_mapping_unique_handle');
             });
         }

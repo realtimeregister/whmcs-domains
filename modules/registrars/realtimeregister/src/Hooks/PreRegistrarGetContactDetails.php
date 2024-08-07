@@ -26,7 +26,9 @@ $(document).ready(function() {
 
         let options = {duration: 'fast', easing: 'linear'};
         radio_contact.on('click', function () { contact_custom_fields.hide(options); });
-        self.find('input[type=radio][name^=wc][value=custom]').on('click', function () { contact_custom_fields.show(options); });
+        self.find('input[type=radio][name^=wc][value=custom]').on('click', function () { 
+            contact_custom_fields.show(options); 
+        });
     })
 });
 

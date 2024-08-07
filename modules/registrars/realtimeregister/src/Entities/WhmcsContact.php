@@ -100,6 +100,7 @@ class WhmcsContact
 
         $phoneNumber = $phoneNumberUtil->parse($number, $country);
 
-        return '+' . $phoneNumber->getCountryCode() . '.' . $phoneNumberUtil->getNationalSignificantNumber($phoneNumber);
+        return '+' . $phoneNumber->getCountryCode() . '.'
+            . $phoneNumberUtil->getNationalSignificantNumber($phoneNumber);
     }
 }

@@ -26,7 +26,11 @@ class ContactEdit extends Hook
 
             if (!empty($diff)) {
                 try {
-                    App::client()->contacts->update(App::registrarConfig()->customerHandle(), $mapping->handle, ...$diff);
+                    App::client()->contacts->update(
+                        App::registrarConfig()->customerHandle(),
+                        $mapping->handle,
+                        ...$diff
+                    );
                 } catch (\Exception $exception) {
                     // @todo: Handle bad requests
                     throw $exception;

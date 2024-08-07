@@ -39,7 +39,8 @@ class SaveContactDetails extends Action
                 continue;
             }
 
-            $key = $role === DomainContactRoleEnum::ROLE_REGISTRANT ? 'registrant' : sprintf('%sContacts', strtolower($role));
+            $key = $role === DomainContactRoleEnum::ROLE_REGISTRANT
+                ? 'registrant' : sprintf('%sContacts', strtolower($role));
 
             /** @var bool $organizationAllowed */
             $organizationAllowed = $metadata->{$key}->organizationAllowed;
@@ -47,12 +48,18 @@ class SaveContactDetails extends Action
             $currentHandle = $domain->registrant;
 
             if ($role !== DomainContactRoleEnum::ROLE_REGISTRANT) {
-                $currentHandle = Arr::first($domain->contacts->entities, fn(DomainContact $contact) => $contact->role === $role)?->handle;
+                $currentHandle = Arr::first(
+                    $domain->contacts->entities,
+                    fn(DomainContact $contact) => $contact->role === $role
+                )?->handle;
             }
 
             // @todo: This is still a work in progress.
 
-            dump($role . ' - ' . $key . ' - ' . ($organizationAllowed ? 'Org allowed' : ' No org allowed') . ' - ' . $currentHandle);
+            dump(
+                $role . ' - ' . $key . ' - '
+                . ($organizationAllowed ? 'Org allowed' : ' No org allowed') . ' - ' . $currentHandle
+            );
             if ($request->input('wc.' . $whmcsRole) === 'custom') {
                 if (App::contacts()->handleHasMapping($currentHandle)) {
                     DB::transaction(function () use ($request) {
@@ -96,7 +103,8 @@ class SaveContactDetails extends Action
                 $selected = $request->input('sel.' . $whmcsRole);
 
                 if (str_starts_with($selected, 'u')) {
-                    // Update the contact with the user information, if there is a mapping already for the current handle we create a new one
+                    // Update the contact with the user information, if there is a mapping already for the current
+                    // handle we create a new one
                 } else {
                     // Check if the contact
                 }

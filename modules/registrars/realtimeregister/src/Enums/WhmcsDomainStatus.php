@@ -15,7 +15,12 @@ enum WhmcsDomainStatus: string
 
     public static function fromDomainDetails(DomainDetails $domain): WhmcsDomainStatus
     {
-        if (array_intersect([DomainStatusEnum::STATUS_SERVER_HOLD, DomainStatusEnum::STATUS_REGISTRAR_HOLD], $domain->status)) {
+        if (
+            array_intersect(
+                [DomainStatusEnum::STATUS_SERVER_HOLD, DomainStatusEnum::STATUS_REGISTRAR_HOLD],
+                $domain->status
+            )
+        ) {
             return self::Fraud;
         }
 

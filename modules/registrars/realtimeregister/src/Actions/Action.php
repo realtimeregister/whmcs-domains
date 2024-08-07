@@ -20,9 +20,12 @@ abstract class Action implements InvokableAction
 
     protected function domainInfo(Request $request): DomainDetails
     {
-        return Cache::request()->rememberForever('domain-info:' . $request->domain->domainName(), function () use ($request) {
-            return App::client()->domains->get($request->domain->domainName());
-        });
+        return Cache::request()->rememberForever(
+            'domain-info:' . $request->domain->domainName(),
+            function () use ($request) {
+                return App::client()->domains->get($request->domain->domainName());
+            }
+        );
     }
 
     protected function forgetDomainInfo(Request $request): bool
@@ -49,20 +52,25 @@ abstract class Action implements InvokableAction
 
     protected function tldInfo(Request $request): TLDInfo
     {
-        return TLDInfo::fromArray(Cache::db()->remember('tld-info:' . $request->domain->tld, 14400, function () use ($request) {
-            $info = App::client()->tlds->info($request->domain->tld);
+        return TLDInfo::fromArray(
+            Cache::db()->remember(
+                'tld-info:' . $request->domain->tld,
+                14400,
+                function () use ($request) {
+                    $info = App::client()->tlds->info($request->domain->tld);
 
+                    foreach ($info->applicableFor as $applicableTld) {
+                        if ($applicableTld === $request->domain->tld) {
+                            continue;
+                        }
 
-            foreach ($info->applicableFor as $applicableTld) {
-                if ($applicableTld === $request->domain->tld) {
-                    continue;
+                        Cache::db()->put('tld-info:' . $applicableTld, $info->toArray(), 14400);
+                    }
+
+                    return $info->toArray();
                 }
-
-                Cache::db()->put('tld-info:' . $applicableTld, $info->toArray(), 14400);
-            }
-
-            return $info->toArray();
-        }));
+            )
+        );
     }
 
     protected function additionalFields(Request $request)

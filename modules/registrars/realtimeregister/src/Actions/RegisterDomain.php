@@ -19,12 +19,17 @@ class RegisterDomain extends Action
 
         $period = $request->get('regperiod') * 12;
         if (!in_array($period, $metadata->createDomainPeriods)) {
-            throw new \Exception(sprintf('It is not possible to register/transfer .%s domains for that period.', $domain->tld));
+            throw new \Exception(
+                sprintf('It is not possible to register/transfer .%s domains for that period.', $domain->tld)
+            );
         }
 
         // Check if we even need nameservers
 
-        $orderId = App::localApi()->domain(clientId: $request->get('clientid'), domainId: $request->get('domainid'))->get('orderid');
+        $orderId = App::localApi()->domain(
+            clientId: $request->get('clientid'),
+            domainId: $request->get('domainid')
+        )->get('orderid');
         $contactId = App::localApi()->order(id: $orderId)->get('contactid');
 
         $contacts = [];

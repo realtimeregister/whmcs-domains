@@ -38,8 +38,12 @@ class LocalApi
         return collect($data['orders'] ?? [])->map(fn($order) => new DataObject($order));
     }
 
-    public function order(int $id = null, int $clientId = null, int $requestorId = null, string $status = null): ?DataObject
-    {
+    public function order(
+        int $id = null,
+        int $clientId = null,
+        int $requestorId = null,
+        string $status = null
+    ): ?DataObject {
         return $this->orders([
             'id' => $id,
             'clientid' => $clientId,

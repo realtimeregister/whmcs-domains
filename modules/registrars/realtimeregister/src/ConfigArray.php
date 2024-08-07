@@ -32,7 +32,8 @@ class ConfigArray
                 'FriendlyName' => 'API Key',
                 'Type' => 'password',
                 'Size' => '20',
-                'Description' => 'Enter your Realtime Register <a target="_blank" href="https://dm.realtimeregister.com/app/profile/keys">API key</a> here.',
+                'Description' => 'Enter your Realtime Register <a target="_blank" ' .
+                    'href="https://dm.realtimeregister.com/app/profile/keys">API key</a> here.',
             ],
             'INFO_ACCOUNT_EMPTY_LINE' => [
                 'FriendlyName' => '<br>',
@@ -80,12 +81,14 @@ class ConfigArray
             'test_mode' => [
                 'FriendlyName' => 'Test mode',
                 'Type' => 'yesno',
-                'Description' => 'Use the test environment, request a test account at <a href="mailto:support@realtimeregister.com">support@realtimeregister.com</a>',
+                'Description' => 'Use the test environment, request a test account at ' .
+                    '<a href="mailto:support@realtimeregister.com">support@realtimeregister.com</a>',
             ],
             'ignore_ssl' => [
                 'FriendlyName' => 'Ignore SSL errors',
                 'Type' => 'yesno',
-                'Description' => 'Enable this ONLY when you are having connectivity issues with Realtime Register due to SSL errors.',
+                'Description' => 'Enable this ONLY when you are having connectivity issues with ' .
+                    'Realtime Register due to SSL errors.',
             ],
             'debug_sentry' => [
                 'FriendlyName' => 'Sentry errors',
@@ -95,12 +98,14 @@ class ConfigArray
             'debug_mode' => [
                 'FriendlyName' => 'Debug errors',
                 'Type' => 'yesno',
-                'Description' => 'Debug mode for extensive information when you encounter errors. Activate for troubleshooting.',
+                'Description' => 'Debug mode for extensive information when you encounter errors. ' .
+                    'Activate for troubleshooting.',
             ],
             'debug_mail' => [
                 'FriendlyName' => 'Debug API requests',
                 'Type' => 'text',
-                'Description' => 'Specificy your email address to which you want to receive debug information. <br/> If you do not want to receive debug information, leave this field empty.',
+                'Description' => 'Specificy your email address to which you want to receive debug information. ' .
+                    '<br/> If you do not want to receive debug information, leave this field empty.',
             ],
             'INFO_GENERAL_EMPTY_LINE' => [
                 'FriendlyName' => '</br>',
@@ -112,7 +117,8 @@ class ConfigArray
             'INFO_REGISTRATION' => [
                 'FriendlyName' => '<strong>Registration Profile</strong>',
                 'Type' => 'none',
-                'Description' => '<strong>With your registration profile you can set default handles for Admin, Billing and Tech contact which will be used for domain registrations and transfers.<br/>
+                'Description' => '<strong>With your registration profile you can set default handles for Admin, ' .
+                    'Billing and Tech contact which will be used for domain registrations and transfers.<br/>
 If you do not use this option, the registrant details will be used for Admin, Billing and Tech.</strong>',
             ],
             'handle' => [
@@ -144,7 +150,8 @@ If you do not use this option, the registrant details will be used for Admin, Bi
             'INFO_ADAC' => [
                 'FriendlyName' => '<strong>ADAC</strong>',
                 'Type' => 'none',
-                'Description' => '<strong>Use Realtime Register ADAC domain check instead of WHMCS for a more quick and better result.</strong>',
+                'Description' => '<strong>Use Realtime Register ADAC domain check instead of WHMCS for a more quick ' .
+                    'and better result.</strong>',
             ],
             'adac_token' => [
                 'FriendlyName' => 'TLD set token',
@@ -165,12 +172,15 @@ If you do not use this option, the registrant details will be used for Admin, Bi
             'INFO_WHOIS' => [
                 'FriendlyName' => '<strong>Domain availability check</strong>',
                 'Type' => 'none',
-                'Description' => '<strong>Use Realtime Register WHOIS check instead of WHMCS for a more quick and better result.</strong>',
+                'Description' => '<strong>Use Realtime Register WHOIS check instead of WHMCS for a more quick and ' .
+                    'better result.</strong>',
             ],
             'rtrWhois' => [
                 'FriendlyName' => 'Use Realtimeregister WHOIS',
                 'Type' => 'yesno',
-                'Description' => 'Adds WHOIS layer over WHMCS core to check domain availability. See installation guide for instructions.',
+                'Description' =>
+                    'Adds WHOIS layer over WHMCS core to check domain availability. ' .
+                    'See installation guide for instructions.',
             ],
             'INFO_WHOIS_EMPTY_LINE' => [
                 'FriendlyName' => '</br>',

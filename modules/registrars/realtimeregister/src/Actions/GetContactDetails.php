@@ -37,7 +37,9 @@ class GetContactDetails extends Action
 
     protected function fetchId(DomainDetails $domain, string $role): ?string
     {
-        $handle = $role === DomainContactRoleEnum::ROLE_REGISTRANT ? $domain->registrant : Arr::first($domain->contacts->entities, fn(DomainContact $contact) => $contact->role === $role)?->handle;
+        $handle = $role === DomainContactRoleEnum::ROLE_REGISTRANT
+            ? $domain->registrant
+            : Arr::first($domain->contacts->entities, fn(DomainContact $contact) => $contact->role === $role)?->handle;
 
         if (!$handle) {
             return null;

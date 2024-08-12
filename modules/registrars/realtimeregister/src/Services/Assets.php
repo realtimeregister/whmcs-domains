@@ -25,7 +25,7 @@ class Assets
     public function addScript(string $name): self {
         $path = self::getPath(self::getSystemUrl() . __DIR__ . '/../Assets/Js/' . $name);
 
-        $this->head[] = '<script>' . file_get_contents($path) . '</script>';
+        $this->head[] = '<script type="text/javascript">' . file_get_contents($path) . '</script>';
         return $this;
     }
 

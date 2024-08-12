@@ -5,8 +5,6 @@
 use RealtimeRegister\Actions\CheckAvailability;
 use RealtimeRegister\Actions\GetContactDetails;
 use RealtimeRegister\Actions\GetDomainInformation;
-use RealtimeRegister\Actions\GetNameservers;
-use RealtimeRegister\Actions\GetRegistrarLock;
 use RealtimeRegister\Actions\SaveContactDetails;
 use RealtimeRegister\Actions\SaveNameservers;
 use RealtimeRegister\Actions\SaveRegistrarLock;
@@ -28,10 +26,11 @@ function realtimeregister_version(): string
     return App::VERSION;
 }
 
-function realtimeregister_ConfigOptions(): array
+function realtimeregister_getConfigArray(): array
 {
     return (new ConfigArray())();
 }
+
 
 function realtimeregister_CheckAvailability(array $params)
 {
@@ -83,4 +82,9 @@ function realtimeregister_AdminCustomButtonArray(array $params): array
     return [
         "Sync domain" => "Sync"
     ];
+}
+
+function realtimeregister_GetTldPricing(array $params)
+{
+    // TODO for tldsync
 }

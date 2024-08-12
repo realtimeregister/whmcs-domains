@@ -4,7 +4,16 @@
   "name": "realtimeregister",
   "license": "MIT",
   "category": "domains",
-  "description": {},
+  "description": {
+    "name": "Realtime Register Domains Module",
+    "tagline": "..for all your domains needs",
+    "long": "Realtime Register API for all your domain needs",
+    "features": [
+      "Easy to use",
+      "Reliable",
+      "Security"
+    ]
+  },
   "logo": {
     "filename": "logo.gif"
   },

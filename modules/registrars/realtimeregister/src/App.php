@@ -25,7 +25,7 @@ class App
     protected const TABLE_REGISTRANT_HANDLE = 'mod_realtimeregister_registrant_handle';
 
     protected const API_URL = "https://api.yoursrs.com/";
-    protected const API_URL_TEST = "https://api.yoursrs-ote.com/";
+    protected const API_URL_TEST = "host.docker.internal:8003"; //FIXME
     protected const IS_PROXY_HOST = "is.yoursrs.com";
     protected const IS_PROXY_HOST_TEST = "is.yoursrs-ote.com";
 
@@ -53,9 +53,9 @@ class App
         $app = static::instance();
 
         if (!static::$booted) {
-//            Cache::boot();
+            Cache::boot();
 
-//            $app->ensureTablesExist();
+            $app->ensureTablesExist();
 
             static::$booted = true;
         }
@@ -101,6 +101,13 @@ class App
         return static::$client = new RealtimeRegister(
             apiKey: App::registrarConfig()->apiKey(),
             baseUrl: App::registrarConfig()->isTest() ? self::API_URL_TEST : self::API_URL
+        );
+    }
+
+    public static function standalone(string $apiKey, bool $isTest) : RealtimeRegister {
+        return new RealtimeRegister(
+            apiKey: $apiKey,
+            baseUrl: $isTest ? self::API_URL_TEST : self::API_URL
         );
     }
 

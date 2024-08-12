@@ -22,6 +22,26 @@ class Assets
         return $this;
     }
 
+    public function addScript(string $name): self {
+        $path = self::getPath(self::getSystemUrl() . __DIR__ . '/../Assets/Js/' . $name);
+
+        $this->head[] = '<script>' . file_get_contents($path) . '</script>';
+        return $this;
+    }
+
+    private static function getSystemUrl() : string {
+        global $whmcs;
+        return parse_url($whmcs->getSystemURL(), PHP_URL_PATH);
+    }
+
+    private static function getPath(string $path) : string  {
+        return str_replace(
+            ['//', '\\\\', '/'. '\\'],
+            DIRECTORY_SEPARATOR,
+            $path
+        );
+    }
+
     public function footer(string $content): self
     {
         $this->footer[] = $content;

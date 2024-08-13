@@ -36,10 +36,10 @@ class ConfigArray
                     'href="https://dm.realtimeregister.com/app/profile/keys">API key</a> here.',
             ],
             'INFO_ACCOUNT_EMPTY_LINE' => [
-                'FriendlyName' => '<br>',
+                'FriendlyName' => "<br/>",
                 'Type' => 'none',
-//                'Description' => Admin::description(),
-                'Description' => 'check connection'
+                'Description' => '<button class="check-connection">Check Connection</button>
+<span class="credentials-result"></span>',
             ],
             /**
              * General settings.

@@ -29,7 +29,8 @@ $(document).ready(function () {
                 apiKey: apiField.val(),
                 ote: oteField.is(":checked"),
                 ignore_ssl: ignoreSslField.is(":checked"),
-            }, function (response) {
+            },
+            function (response) {
                 btn.html(text);
                 btn.removeClass("disabled");
                 if (response.connection === "true") {
@@ -38,7 +39,8 @@ $(document).ready(function () {
                     result.html('<span class="status error"><strong>FAILED:</strong> ' + response.msg + '</span>');
                 }
                 btn.attr("disabled", false);
-            }, "json"
+            },
+            "json"
         ).fail(function (e) {
             btn.html(text);
             btn.removeClass("disabled");

@@ -7,7 +7,6 @@ use RealtimeRegister\Entities\DataObject;
 
 class CheckCredentials extends Hook
 {
-
     private string $ACTION = 'checkConnection';
 
     public function __invoke(DataObject $vars): void
@@ -17,7 +16,6 @@ class CheckCredentials extends Hook
         if ($_POST['action'] === $this->ACTION && $_POST['module'] == 'realtimeregister') {
             self::checkConnection();
         }
-
     }
 
     private static function checkConnection(): void

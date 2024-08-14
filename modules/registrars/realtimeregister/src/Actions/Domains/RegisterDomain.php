@@ -35,7 +35,6 @@ class RegisterDomain extends Action
         }
 
         // Check if we even need nameservers
-
         $orderId = App::localApi()->domain(
             clientId: $request->get('clientid'),
             domainId: $request->get('domainid')
@@ -68,7 +67,7 @@ class RegisterDomain extends Action
             domainName: $domain->domainName(),
             customer: App::registrarConfig()->customerHandle(),
             registrant: $registrant,
-            period: $request->registrationPeriod,
+            period: $period,
             autoRenew: false,
             ns: $domain->nameservers,
             contacts: DomainContactCollection::fromArray($contacts)

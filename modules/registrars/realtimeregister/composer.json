@@ -25,7 +25,7 @@
     "require": {
         "php": "^8.1",
         "sandwave-io/realtimeregister-php": "dev-master",
-        "illuminate/cache": "^v9.52.16",
+        "illuminate/cache": "^9",
         "giggsey/libphonenumber-for-php-lite": "^8.13"
     },
     "require-dev": {

@@ -1,6 +1,6 @@
 <?php
 
-namespace RealtimeRegister\Actions;
+namespace RealtimeRegister\Actions\Domains;
 
 use RealtimeRegister\App;
 use RealtimeRegister\Models\ContactMapping;

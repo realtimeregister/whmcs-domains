@@ -5,6 +5,8 @@
     <file>tests</file>
     <file>modules</file>
 
+    <exclude-pattern>*\.(css|js)$</exclude-pattern>
+    <exclude-pattern>*/migrations/*php</exclude-pattern>
     <exclude-pattern>*/vendor/*</exclude-pattern>
     <!-- ignore warnings and display ERRORS only -->
     <arg  value="np"/>

@@ -1,7 +1,8 @@
 <?php
 
-namespace RealtimeRegister\Actions;
+namespace RealtimeRegister\Actions\Domains;
 
+use RealtimeRegister\Actions\Action;
 use RealtimeRegister\App;
 use RealtimeRegister\Request;
 use SandwaveIo\RealtimeRegister\Exceptions\RealtimeRegisterClientException;

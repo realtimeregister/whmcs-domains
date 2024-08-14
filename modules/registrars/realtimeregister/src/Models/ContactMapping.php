@@ -11,7 +11,9 @@ use Illuminate\Database\Eloquent\Model;
  */
 class ContactMapping extends Model
 {
-    protected $table = 'mod_realtimeregister_contact_mapping';
+    public const TABLE_NAME = 'mod_realtimeregister_contact_mapping';
+    protected $table = self::TABLE_NAME;
+
     public $timestamps = false;
     protected $casts = [
         'org_allowed' => 'bool'

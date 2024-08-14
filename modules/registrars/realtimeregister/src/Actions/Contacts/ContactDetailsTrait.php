@@ -1,6 +1,6 @@
 <?php
 
-namespace RealtimeRegister\Actions;
+namespace RealtimeRegister\Actions\Contacts;
 
 use Illuminate\Support\Arr;
 use SandwaveIo\RealtimeRegister\Domain\Contact;

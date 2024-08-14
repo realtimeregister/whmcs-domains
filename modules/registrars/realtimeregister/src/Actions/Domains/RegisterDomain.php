@@ -68,7 +68,7 @@ class RegisterDomain extends Action
             domainName: $domain->domainName(),
             customer: App::registrarConfig()->customerHandle(),
             registrant: $registrant,
-            period: $domain->period,
+            period: $request->registrationPeriod,
             autoRenew: false,
             ns: $domain->nameservers,
             contacts: DomainContactCollection::fromArray($contacts)

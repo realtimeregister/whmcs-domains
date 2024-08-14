@@ -9,7 +9,6 @@ class Domain
     public function __construct(
         public readonly string $name,
         public readonly string $tld,
-        public readonly int $period = 12,
         public readonly array $nameservers = [],
         public readonly ?Contact $registrant = null,
         public readonly ?Contact $admin = null,
@@ -35,7 +34,6 @@ class Domain
         return new static(
             name: $params['sld'],
             tld: $params['tld'],
-            period: $params['period'] ?? 12,
             nameservers: array_filter([
                 $params['ns1'] ?? null,
                 $params['ns2'] ?? null,

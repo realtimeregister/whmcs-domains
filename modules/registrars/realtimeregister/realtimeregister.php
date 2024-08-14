@@ -2,13 +2,13 @@
 
 // phpcs:disable PSR1.Files.SideEffects
 
-use RealtimeRegister\Actions\CheckAvailability;
-use RealtimeRegister\Actions\GetContactDetails;
-use RealtimeRegister\Actions\GetDomainInformation;
-use RealtimeRegister\Actions\SaveContactDetails;
-use RealtimeRegister\Actions\SaveNameservers;
-use RealtimeRegister\Actions\SaveRegistrarLock;
-use RealtimeRegister\Actions\Sync;
+use RealtimeRegister\Actions\Contacts\GetContactDetails;
+use RealtimeRegister\Actions\Contacts\SaveContactDetails;
+use RealtimeRegister\Actions\Domains\CheckAvailability;
+use RealtimeRegister\Actions\Domains\GetDomainInformation;
+use RealtimeRegister\Actions\Domains\SaveNameservers;
+use RealtimeRegister\Actions\Domains\SaveRegistrarLock;
+use RealtimeRegister\Actions\Domains\Sync;
 use RealtimeRegister\App;
 use RealtimeRegister\ConfigArray;
 
@@ -17,7 +17,7 @@ if (!defined("WHMCS")) {
 }
 
 require_once __DIR__ . '/vendor/autoload.php';
-//require_once ROOTDIR. '/includes/registrarfunctions.php';
+require_once ROOTDIR . '/includes/registrarfunctions.php';
 
 $app = App::boot();
 
@@ -30,7 +30,6 @@ function realtimeregister_getConfigArray(): array
 {
     return (new ConfigArray())();
 }
-
 
 function realtimeregister_CheckAvailability(array $params)
 {
@@ -86,5 +85,5 @@ function realtimeregister_AdminCustomButtonArray(array $params): array
 
 function realtimeregister_GetTldPricing(array $params)
 {
-    // TODO for tldsync
+    return App::dispatch(\RealtimeRegister\Actions\Tlds\PricingSync::class, $params);
 }

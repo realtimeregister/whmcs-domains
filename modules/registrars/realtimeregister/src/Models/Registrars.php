@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Registrars extends Model
 {
-    protected $table = 'tblregistrars';
+    public const TABLE_NAME = 'tblregistrars';
+    protected $table = self::TABLE_NAME;
 
     /**
      * Scope a query to only include the current addon.

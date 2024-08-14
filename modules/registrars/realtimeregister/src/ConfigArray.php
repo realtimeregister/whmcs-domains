@@ -2,8 +2,6 @@
 
 namespace RealtimeRegister;
 
-use RealtimeRegister\Models\Registrars;
-
 class ConfigArray
 {
     public function __invoke(): array

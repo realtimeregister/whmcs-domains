@@ -1,11 +1,12 @@
 <?php
 
-namespace RealtimeRegister\Actions;
+namespace RealtimeRegister\Actions\Domains;
 
+use RealtimeRegister\Actions\Action;
 use RealtimeRegister\App;
 use RealtimeRegister\Request;
 
-class RenewDomain extends Action
+class RegisterDomain extends Action
 {
     use DomainTrait;
 
@@ -58,7 +59,7 @@ class RenewDomain extends Action
             customer: null,
             registrant: null,
             autoRenew: false,
-            ns: $domain->nameservers,
+            ns: $domain->nameservers
         );
     }
 }

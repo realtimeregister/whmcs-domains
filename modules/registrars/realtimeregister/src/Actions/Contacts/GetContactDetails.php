@@ -1,8 +1,9 @@
 <?php
 
-namespace RealtimeRegister\Actions;
+namespace RealtimeRegister\Actions\Contacts;
 
 use Illuminate\Support\Arr;
+use RealtimeRegister\Actions\Action;
 use RealtimeRegister\App;
 use RealtimeRegister\Models\Contact as ContactModel;
 use RealtimeRegister\Request;

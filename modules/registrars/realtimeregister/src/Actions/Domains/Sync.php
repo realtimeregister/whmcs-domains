@@ -1,8 +1,9 @@
 <?php
 
-namespace RealtimeRegister\Actions;
+namespace RealtimeRegister\Actions\Domains;
 
 use Exception;
+use RealtimeRegister\Actions\Action;
 use RealtimeRegister\Enums\WhmcsDomainStatus;
 use RealtimeRegister\Models\Domain;
 use RealtimeRegister\Request;

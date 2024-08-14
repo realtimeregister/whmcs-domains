@@ -9,6 +9,7 @@ use RealtimeRegister\Contracts\InvokableHook;
 use RealtimeRegister\Entities\DataObject;
 use RealtimeRegister\Entities\RegistrarConfig;
 use RealtimeRegister\Exceptions\ActionFailedException;
+use RealtimeRegister\Models\Cache;
 use RealtimeRegister\Services\Assets;
 use RealtimeRegister\Services\ContactService;
 use RuntimeException;
@@ -126,14 +127,6 @@ class App
 
     protected function dispatchTo(string $action, array $params = [])
     {
-        if (($pos = strpos($action, '_')) !== false) {
-            $action = substr($action, $pos + 1);
-        }
-
-        if (!class_exists($action)) {
-            $action = '\RealtimeRegister\Actions\\' . ucfirst($action);
-        }
-
         if (!class_exists($action)) {
             throw new RuntimeException('Class ' . $action . ' does not exists.');
         }

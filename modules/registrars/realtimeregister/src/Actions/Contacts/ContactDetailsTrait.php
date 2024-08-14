@@ -1,7 +1,8 @@
 <?php
 
-namespace RealtimeRegister\Actions;
+namespace RealtimeRegister\Actions\Contacts;
 
+use RealtimeRegister\Actions\Arr;
 use SandwaveIo\RealtimeRegister\Domain\Contact;
 use SandwaveIo\RealtimeRegister\Domain\DomainContact;
 use SandwaveIo\RealtimeRegister\Domain\DomainDetails;

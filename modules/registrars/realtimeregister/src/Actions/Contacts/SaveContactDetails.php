@@ -1,13 +1,14 @@
 <?php
 
-namespace RealtimeRegister\Actions;
+namespace RealtimeRegister\Actions\Contacts;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
+use RealtimeRegister\Actions\Action;
 use RealtimeRegister\App;
+use RealtimeRegister\Models\Contact as ContactModel;
 use RealtimeRegister\Models\Domain;
 use RealtimeRegister\Request;
-use RealtimeRegister\Models\Contact as ContactModel;
 use SandwaveIo\RealtimeRegister\Domain\DomainContact;
 use SandwaveIo\RealtimeRegister\Domain\Enum\DomainContactRoleEnum;
 use WHMCS\View\Template\AssetUtil;

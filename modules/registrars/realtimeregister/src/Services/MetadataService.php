@@ -9,7 +9,7 @@ use SandwaveIo\RealtimeRegister\RealtimeRegister;
 
 class MetadataService
 {
-    const DAY_MINUTES = 14400;
+    public const DAY_MINUTES = 14400;
 
     private RealtimeRegister $api;
     private string $tld;

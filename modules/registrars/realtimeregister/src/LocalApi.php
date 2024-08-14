@@ -15,7 +15,8 @@ class LocalApi
     {
         $data = localApi('GetClientsDomains', array_filter($filters));
 
-        return collect($data['domains'] ?? [])->map(fn($domain) => new DataObject($domain));
+
+        return collect($data['domains'] ?? [])->map(fn($domain) => new DataObject($domain[0]));
     }
 
     public function domain(int $clientId = null, int $domainId = null, string $domain = null): ?DataObject
@@ -35,7 +36,7 @@ class LocalApi
     {
         $data = localApi('GetOrders', array_filter($filters));
 
-        return collect($data['orders'] ?? [])->map(fn($order) => new DataObject($order));
+        return collect($data['orders'] ?? [])->map(fn($order) => new DataObject($order[0]));
     }
 
     public function order(
@@ -73,7 +74,9 @@ class LocalApi
             $start += (int)$data['numreturned'];
         } while ($start < (int)$data['totalresults']);
 
-        return null;
+
+
+        return new DataObject(localAPI('GetClientsDetails', ['clientid' => $clientId])['client']);
     }
 
     public function createContact()

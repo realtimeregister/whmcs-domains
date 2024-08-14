@@ -4,6 +4,7 @@ namespace RealtimeRegister\Actions;
 
 use RealtimeRegister\App;
 use RealtimeRegister\Models\ContactMapping;
+use RealtimeRegister\Services\ContactService;
 
 trait DomainTrait
 {
@@ -32,34 +33,34 @@ trait DomainTrait
             return $handle;
         }
 
-        // Should we use the request domain?
-
         // Fetch the whmcs contact
         $whmcsContact = App::localApi()->contact($clientId, $contactId);
 
-        if (!$whmcsContact) {
-            return null;
-        }
-
-        $fields = [
-            'name' => $whmcsContact->get('')
-        ];
 
         // Try and match the whmcs contact to a rtr contact
-        // Should we even match the contact?
-        $contacts = App::client()->contacts->list(
-            App::registrarConfig()->get('customer_handle'),
-            parameters: [
-                'order' => '-createdDate',
-                'export' => true,
-                'fields' => 'handle'
-            ]
-        );
+        // Should we even match the contact? yes / on exception only?
+
+        // $contact = ContactService::findRemote();
 
         // If we do not find a match we create a new contact
+        $rtrContact = ContactService::convertToRtrContact($whmcsContact, $organizationAllowed);
+        $handle = uniqid(App::registrarConfig()->contactHandlePrefix() ?: '');
 
-        // Map the contact in the mapper
+        App::client()->contacts->create(
+            customer: App::registrarConfig()->customerHandle(),
+            handle: $handle,
+            name: $rtrContact->get('name'),
+            addressLine: $rtrContact->get('addressLine'),
+            postalCode: $rtrContact->get('postalCode'),
+            city: $rtrContact->get('city'),
+            country: $rtrContact->get('country'),
+            email: $rtrContact->get('email'),
+            voice: $rtrContact->get('voice'),
+            organization: $rtrContact->get('organization'),
+            state: $rtrContact->get('state')
+        );
 
-        //
+        ContactService::addContactMapping($clientId, $contactId, $handle, $organizationAllowed);
+        return $handle;
     }
 }

@@ -25,7 +25,7 @@ class App
     protected const TABLE_REGISTRANT_HANDLE = 'mod_realtimeregister_registrant_handle';
 
     protected const API_URL = "https://api.yoursrs.com/";
-    protected const API_URL_TEST = "https://api.yoursrs-ote.com/";
+    protected const API_URL_TEST = "host.docker.internal:8003"; //FIXME
     protected const IS_PROXY_HOST = "is.yoursrs.com";
     protected const IS_PROXY_HOST_TEST = "is.yoursrs-ote.com";
 
@@ -119,7 +119,7 @@ class App
         }
 
         return static::$isProxy = new IsProxy(
-            apiKey: App::registrarConfig()->apiKey(),
+            apiKey: "cGlldGVyamFuL2FkbWluOmtlcvS8FZgoxd2yygmFBvvP0iJGmkyd2MrEh+PejQy/",
             host: App::registrarConfig()->isTest() ? self::IS_PROXY_HOST_TEST : self::IS_PROXY_HOST
         );
     }

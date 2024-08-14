@@ -4,16 +4,25 @@ namespace RealtimeRegister\Actions;
 
 use RealtimeRegister\App;
 use RealtimeRegister\Request;
+use SandwaveIo\RealtimeRegister\Domain\DomainContactCollection;
 
 class RegisterDomain extends Action
 {
     use DomainTrait;
+
+    private static array $CONTACT_ROLES = [
+        "TECH" => "techContacts",
+        "ADMIN" => "adminContacts",
+        "BILLING" => "billingContacts"
+    ];
+
 
     /**
      * @throws \Exception
      */
     public function __invoke(Request $request)
     {
+
         $metadata = $this->metadata($request);
         $domain = $request->domain;
 
@@ -29,18 +38,24 @@ class RegisterDomain extends Action
         $orderId = App::localApi()->domain(
             clientId: $request->get('clientid'),
             domainId: $request->get('domainid')
-        )->get('orderid');
+        )->get('orderId');
         $contactId = App::localApi()->order(id: $orderId)->get('contactid');
 
         $contacts = [];
 
-        foreach (['REGISTRANT', 'ADMIN', 'BILLING'] as $role) {
-            $organizationAllowed = $metadata->{strtolower($role) . 'Contacts'}->organizationAllowed;
+        $registrant = $this->getOrCreateContact(
+            clientId: $request->get('client_id'),
+            contactId: $contactId,
+            role: 'REGISTRANT',
+            organizationAllowed: $metadata->registrant->organizationAllowed
+        );
 
+        foreach (self::$CONTACT_ROLES as $role => $name) {
+            $organizationAllowed = $metadata->{$name}->organizationAllowed;
             $contacts[] = [
                 'role' => $role,
                 'handle' => $this->getOrCreateContact(
-                    clientId: $request->get('clientid'),
+                    clientId: $request->get('client_id'),
                     contactId: $contactId,
                     role: $role,
                     organizationAllowed: $organizationAllowed
@@ -48,17 +63,14 @@ class RegisterDomain extends Action
             ];
         }
 
-        // Fetch order id
-        // Fetch contact id
-
-        // Create contacts for domain with all roles
-
-        $registration = App::client()->domains->register(
+        App::client()->domains->register(
             domainName: $domain->domainName(),
-            customer: null,
-            registrant: null,
+            customer: App::registrarConfig()->customerHandle(),
+            registrant: $registrant,
+            period: $domain->period,
             autoRenew: false,
-            ns: $domain->nameservers
+            ns: $domain->nameservers,
+            contacts: DomainContactCollection::fromArray($contacts)
         );
     }
 }

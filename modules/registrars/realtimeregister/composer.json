@@ -18,9 +18,17 @@
     "authors": [
         {
             "name": "Realtime Register",
-            "email": "info@realtimeregister.com"
+            "email": "info@realtimeregister.com",
+            "homepage": "https://realtimeregister.com"
         }
     ],
+    "support": {
+        "email": "support@realtimeregister.com",
+        "docs": "https://kb.realtimeregister.com/category/100-whmcs",
+        "security": "https://realtimeregister.com/.well-known/security.txt",
+        "source": "https://github.com/realtimeregister/whmcs"
+
+    },
     "minimum-stability": "stable",
     "require": {
         "php": "^8.1",

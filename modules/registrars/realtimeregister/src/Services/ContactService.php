@@ -31,6 +31,15 @@ class ContactService
         )[0];
     }
 
+    public static function getContactMapping(int $userId, int $contactId, bool $organizationAllowed) : ?ContactMapping
+    {
+        /** @noinspection PhpIncompatibleReturnTypeInspection */
+        return ContactMapping::query()->where('userid', $userId)
+            ->where('contactid', $contactId)
+            ->where('org_allowed', $organizationAllowed)
+            ->first();
+    }
+
     public function findByContactId($contactId)
     {
         // Find a local contact by its id

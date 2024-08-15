@@ -120,7 +120,7 @@ class App
         }
 
         return static::$isProxy = new IsProxy(
-            apiKey: "cGlldGVyamFuL2FkbWluOrcOQbo4Mi8bN8Ck2VpToNW7eggL6Q6fpDSqWGs0TOKQ",
+            apiKey: "cGlldGVyamFuL2FkbWluOmtlcvS8FZgoxd2yygmFBvvP0iJGmkyd2MrEh+PejQy/",
             host: App::registrarConfig()->isTest() ? self::IS_PROXY_HOST_TEST : self::IS_PROXY_HOST
         );
     }

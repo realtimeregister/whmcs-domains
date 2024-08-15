@@ -78,17 +78,41 @@ function realtimeregister_Sync(array $params)
 
 function realtimeregister_AdminCustomButtonArray(array $params): array
 {
-    return [
-        "Sync domain" => "Sync"
-    ];
+    return App::dispatch(\RealtimeRegister\Hooks\AdminCustomButtonArray::class, $params);
 }
 
-function realtimeregister_RegisterDomain(array $params): array
+function realtimeregister_RegisterDomain(array $params)
 {
-    return App::dispatch(RegisterDomain::class, $params);
+    return App::dispatch(\RealtimeRegister\Actions\Domains\RegisterDomain::class, $params);
 }
 
 function realtimeregister_GetTldPricing(array $params)
 {
     return App::dispatch(\RealtimeRegister\Actions\Tlds\PricingSync::class, $params);
+}
+
+// Custom functions
+function realtimeregister_SyncExpiryDate($params)
+{
+    return App::dispatch(\RealtimeRegister\Actions\Domains\SyncExpiryDate::class, $params);
+}
+
+function realtimeregister_RegisterWithBillables(array $params)
+{
+    return App::dispatch(\RealtimeRegister\Actions\Domains\RegisterWithBillables::class, $params);
+}
+
+function realtimeregister_TransferWithBillables($params)
+{
+    throw new Exception(__FUNCTION__ . ' is not implemented yet');
+}
+
+function realtimeregister_ResendTransfer(array $params)
+{
+    throw new Exception(__FUNCTION__ . ' is not implemented yet');
+}
+
+function realtimeregister_ResendValidationMails(array $params)
+{
+    throw new Exception(__FUNCTION__ . ' is not implemented yet');
 }

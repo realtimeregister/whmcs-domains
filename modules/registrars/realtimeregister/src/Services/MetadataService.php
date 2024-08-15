@@ -43,7 +43,7 @@ class MetadataService
 
     public function getAll()
     {
-        return $this->info['metadata'];
+        return $this->info->metadata;
     }
 
     /**

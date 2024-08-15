@@ -24,7 +24,6 @@ class CheckAvailability extends Action
         $results = new ResultsList();
 
         foreach ($isProxyDomains as $result) {
-
             $tld = trim(strstr($result->getDomain(), '.'), '.');
 
             $searchResult = new SearchResult($request->get('searchTerm'), $tld);
@@ -47,7 +46,6 @@ class CheckAvailability extends Action
             }
 
             $results->append($searchResult);
-
         }
         return $results;
     }

@@ -52,7 +52,7 @@ class ContactService
         // Search with data
     }
 
-    public static function convertToRtrContact(DataObject $whmcsContact, bool $organizationAllowed) : DataObject
+    public static function convertToRtrContact(DataObject $whmcsContact, bool $organizationAllowed): DataObject
     {
         $rtr_contact = [
             'name' => trim($whmcsContact['firstname'] . " " . $whmcsContact['lastname']),
@@ -93,7 +93,8 @@ class ContactService
         return ContactMapping::query()->where('handle', $handle)->exists();
     }
 
-    public static function addContactMapping(int $clientId, int $contactId, string $handle, bool $orgAllowed): void {
+    public static function addContactMapping(int $clientId, int $contactId, string $handle, bool $orgAllowed): void
+    {
         ContactMapping::query()->insert([
             "userid" => $clientId,
             "contactid" => $contactId,
@@ -102,7 +103,8 @@ class ContactService
         ]);
     }
 
-    public static function getMatchingRtrContact() {
+    public static function getMatchingRtrContact()
+    {
         //TODO if necessary
 //        App::client()->contacts->list(
 //            App::registrarConfig()->get('customer_handle'),

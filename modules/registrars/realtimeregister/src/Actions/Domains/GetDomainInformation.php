@@ -12,6 +12,7 @@ class GetDomainInformation extends Action
     public function __invoke(Request $request)
     {
         $metadata = $this->metadata($request);
+
         $domain = $this->domainInfo($request);
 
         $registrant = $this->contactInfo($domain->registrant);

@@ -2,53 +2,57 @@
 
 namespace RealtimeRegister\Hooks;
 
+use RealtimeRegister\Actions\Action;
 use RealtimeRegister\App;
-use RealtimeRegister\Entities\DataObject;
 use RealtimeRegister\Models\Domain;
+use RealtimeRegister\Request;
 use RealtimeRegister\Services\MetadataService;
 
-class AdminCustomButtonArray extends Hook
+class AdminCustomButtonArray extends Action
 {
-    public function __invoke(DataObject $vars)
+    public function __invoke(Request $request): array|string
     {
         $adminButtons = [
-            "Sync expiry date" => "sync_expiry_date"
+            "Sync expiry date" => "SyncExpiryDate"
         ];
 
-        $whmcsDomain = Domain::find($vars->get('domainid'));
+        $whmcsDomain = Domain::find($request->params['domainid']);
         if ($whmcsDomain['status'] === 'Pending') {
             if ($whmcsDomain['type'] === 'Register') {
-                $adminButtons['Register and accept billables'] = "register_with_billables";
+                $adminButtons['Register and accept billables'] = "RegisterWithBillables";
             }
             if ($whmcsDomain['type'] === 'Transfer') {
-                $adminButtons['Transfer and accept billables'] = "transfer_with_billables";
+                $adminButtons['Transfer and accept billables'] = "TransferWithBillables";
             }
         }
 
         try {
-            $metadataService = new MetadataService($vars->get('tld'), App::client());
-//            $metadata = RtrApiService::getMetaData($params['tld']);
-            $metadata = $metadataService->get($vars->get('tld'));
+            $metadataService = new MetadataService($request->params['tld'], App::client());
+            $metadata = $metadataService->getAll();
             if (empty($metadata)) {
                 return $adminButtons;
             }
 
-            $domain = $vars->get('sld') . '.' . $vars->get('tld');
+            $domain = $request->params['sld'] . '.' . $request->params['tld'];
+            if (!empty($metadata->transferFOA)) {
+                $processes = App::client()->processes->list(
+                    1,
+                    0,
+                    null,
+                    ['action' => 'incomingInternalTransfer']
+                );
 
-            if (!empty($metadata['transferFOA'])) {
-                $processes = RtrApiService::getProcesses($domain, 1, ['action' => 'incomingInternalTransfer']);
-
-                if (!empty($processes['entities'][0]) && $processes['entities'][0]['status'] === 'SUSPENDED') {
-                    $adminButtons['Resend FOA'] = "resend_transfer";
+                if ($processes->count() > 0 && $processes->entities[0]->status === 'SUSPENDED') {
+                    $adminButtons['Resend FOA'] = "ResendTransfer";
                 }
             }
 
-            if ($vars->get('regtype') !== 'Transfer' && !empty($metadata['metadata']['validationCategory'])) {
+            if ($request->params['regtype'] !== 'Transfer' && !empty($metadata->validationCategory)) {
                 try {
-                    $info = RtrApiService::getDomain($domain);
+                    $info = App::client()->domains->get($domain);
 
-                    if (in_array('PENDING_VALIDATION', $info['status'])) {
-                        $adminButtons['Resend validation mails'] = "resend_validation_mails";
+                    if (in_array('PENDING_VALIDATION', $info->status)) {
+                        $adminButtons['Resend validation mails'] = "ResendValidationMails";
                     }
                 } catch (\Exception $ex) {
                     if (!str_contains($ex->getMessage(), 'Entity not found')) {
@@ -57,7 +61,7 @@ class AdminCustomButtonArray extends Hook
                 }
             }
         } catch (\Exception $ex) {
-            return rtrApiClient::instance()->error('Error retrieving information about domain: %s.', $ex->getMessage());
+            return sprintf('Error retrieving information about domain: %s.', $ex->getMessage());
         }
 
         return $adminButtons;

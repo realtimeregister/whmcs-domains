@@ -23,7 +23,6 @@ class RegisterDomain extends Action
      */
     public function __invoke(Request $request)
     {
-
         $metadata = $this->metadata($request);
         $domain = $request->domain;
 

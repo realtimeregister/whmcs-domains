@@ -21,6 +21,7 @@ class Domain
         public readonly ?bool $isIdn = null,
         public readonly ?bool $isInGracePeriod = null,
         public readonly ?bool $isInRedemptionGracePeriod = null,
+        public readonly array $contactProperties = []
     ) {
     }
 
@@ -52,6 +53,7 @@ class Domain
             isIdn: $params['is_idn'] ?? null,
             isInGracePeriod: $params['isInGracePeriod'] ?? null,
             isInRedemptionGracePeriod: $params['isInRedemptionGracePeriod'] ?? null,
+            contactProperties: $params['additionalfields']
         );
     }
 }

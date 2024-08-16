@@ -2,12 +2,12 @@
 
 namespace RealtimeRegister\Services;
 
-use Http\Discovery\Exception\NotFoundException;
 use RealtimeRegister\App;
 use RealtimeRegister\Entities\DataObject;
 use RealtimeRegister\Models\Cache;
 use RealtimeRegister\Services\Config\Config;
 use SandwaveIo\RealtimeRegister\Domain\TLDInfo;
+use SandwaveIo\RealtimeRegister\Domain\TLDMetaData;
 
 class MetadataService
 {
@@ -28,29 +28,32 @@ class MetadataService
         }
 
         $this->tld = $tld;
-        $this->info = Cache::remember('tld.' . $tld, MetadataService::DAY_MINUTES, function () use ($tld) {
-            $metadata = App::client()->tlds->info($tld);
-            $this->provider = Cache::remember('provider.' . $tld, MetadataService::DAY_MINUTES, function () use ($tld) {
-                return $this->getProvider($tld);
-            });
+        $this->info = TLDInfo::fromArray(Cache::remember('tld.' . $this->tld, MetadataService::DAY_MINUTES, function () {
+            $metadata = App::client()->tlds->info($this->tld);
             foreach ($metadata->applicableFor as $app_tld) {
                 Cache::put('tld.' . $app_tld, $metadata, MetadataService::DAY_MINUTES);
-                Cache::put('provider.' . $app_tld, $this->provider, MetadataService::DAY_MINUTES);
             }
-            return $metadata;
-        });
+            return $metadata->toArray();
+        }));
+
+        $this->provider = $this->info->provider;
     }
 
-    public function getAll()
+    public function getMetadata(): TLDMetaData
     {
         return $this->info->metadata;
+    }
+
+    public function getAll(): TLDInfo
+    {
+        return $this->info;
     }
 
     /**
      * @param string $param
      * @return string|int|array|bool
      */
-    public function get($param)
+    public function get(string $param)
     {
         $metadata = $this->info->metadata;
         if (!$metadata) {
@@ -91,7 +94,6 @@ class MetadataService
 
     public function getTldAdditionalFields(): DataObject
     {
-        // Only allow registrar to be realtimeregistef
         global $_LANG;
 
         $languageCodes = $this->get('domainSyntax')['languageCodes'];
@@ -117,7 +119,7 @@ class MetadataService
                 $tldAdditionalFields[] = self::propertyToAdditionalField($this->tld, $property, $default);
             }
         }
-        return new DataObject(['fields' => $tldAdditionalFields, 'applicableFor' => $this->info->getApplicableFor()]);
+        return new DataObject(['fields' => $tldAdditionalFields, 'applicableFor' => $this->info->applicableFor]);
     }
 
     private function parseCurrentProperties(): array
@@ -132,29 +134,23 @@ class MetadataService
             return [];
         }
 
-        $rtr_contact = App::client()->contacts->get(App::registrarConfig()->customerHandle(), $handle);
+        try {
+            $rtr_contact = App::client()->contacts->get(App::registrarConfig()->customerHandle(), $handle);
+        } catch (\Exception $e) {
+            return [];
+        }
+
         return $rtr_contact->properties[$this->provider] ?? [];
     }
 
-    private function getProvider(string $tld) : string
-    {
-        $providers = Cache::remember('rtrProviders', self::DAY_MINUTES, function() {
-            return App::client()->providers->list(parameters: ["fields" => "tlds,name", "export" => true]);
-        });
-        foreach ($providers->entities as $provider) {
-            $tlds = array_map(fn($tld) => strtolower($tld['name']), $provider['tlds']);
-            if (in_array(strtolower($tld), $tlds)) {
-                return $provider->name;
-            }
-        }
-        throw new NotFoundException("No provider found for tld");
-    }
 
-    public static function toLangVar(string $tld, string $property_name): string {
+    private static function toLangVar(string $tld, string $property_name): string
+    {
         return sprintf('tld_%s_%s', strtolower($tld), preg_replace('/[^a-z0-9]/', '', strtolower($property_name)));
     }
 
-    public static function propertyToAdditionalField($tld, $property, $default=null) {
+    private static function propertyToAdditionalField($tld, $property, $default = null)
+    {
         global $_LANG;
         $langvar = self::toLangVar($tld, $property['name']);
         $field = [
@@ -185,21 +181,28 @@ class MetadataService
         return $field;
     }
 
-    public static function isBool($propertyValues): bool {
+    public static function isBool($propertyValues): bool
+    {
         if (count($propertyValues) == 1 && array_keys($propertyValues)[0] == 'true') {
             return true;
         }
-        if (count($propertyValues['values']) == 2) {
-            return count(array_intersect(['true', 'false', 'n', 'y'], $propertyValues)) == 2;
+        if (count($propertyValues) == 2) {
+            return count(array_intersect(['true', 'false', 'n', 'y'], array_keys($propertyValues))) == 2;
         }
         return false;
     }
 
-    public static function arrayToOptions($array, $propertyName) {
+    public static function getPropertyBoolValue($propertyValues, $bool)
+    {
+        return array_intersect($bool ? ['true', 'y'] : ['false', 'n'], array_keys($propertyValues))[0];
+    }
+
+    private static function arrayToOptions(array $propertyValues, string $propertyName): string
+    {
         global $_LANG;
 
         $options = [];
-        foreach ($array as $key => &$value) {
+        foreach ($propertyValues as $key => $value) {
             $translation = sprintf('tld_properties_%s', preg_replace('/[^a-z0-9_]/', '', strtolower($key)));
 
             $translationKey = sprintf(
@@ -218,7 +221,37 @@ class MetadataService
         return ',' . implode(',', $options);
     }
 
-    public static function strip($str) {
+    private static function strip($str)
+    {
         return str_replace([',', '|'], ' ', $str);
+    }
+
+    public static function removeDefaultFields(&$rtrAdditionalFields)
+    {
+        $defaultFields = implode(DIRECTORY_SEPARATOR, [ROOTDIR, 'resources', 'domains', 'dist.additionalfields.php']);
+
+        if (!file_exists($defaultFields)) {
+            return;
+        }
+
+        $additionaldomainfields = [];
+        include $defaultFields;
+
+        $tldNames = array_reduce(
+            array_keys($rtrAdditionalFields),
+            function ($names, $tld) use ($rtrAdditionalFields) {
+                $names[$tld] = array_map(fn($field) => $field['Name'], $rtrAdditionalFields[$tld]);
+                return $names;
+            },
+            []
+        );
+
+        foreach ($additionaldomainfields as $tld => $tld_fields) {
+            foreach ($tld_fields as $tld_field) {
+                if (!array_key_exists($tld, $tldNames) || !in_array($tld_field['Name'], $tldNames[$tld])) {
+                    $rtrAdditionalFields[$tld][] = ["Name" => is_array($tld_field) ? $tld_field["Name"] : $tld_field, "Remove" => true];
+                }
+            }
+        }
     }
 }

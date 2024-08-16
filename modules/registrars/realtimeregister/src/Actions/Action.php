@@ -7,6 +7,7 @@ use RealtimeRegister\App;
 use RealtimeRegister\Contracts\InvokableAction;
 use RealtimeRegister\Models\Cache;
 use RealtimeRegister\Request;
+use RealtimeRegister\Services\MetadataService;
 use SandwaveIo\RealtimeRegister\Domain\Contact;
 use SandwaveIo\RealtimeRegister\Domain\DomainDetails;
 use SandwaveIo\RealtimeRegister\Domain\TLDInfo;
@@ -47,35 +48,13 @@ abstract class Action implements InvokableAction
 
     protected function metadata(Request $request): TLDMetaData
     {
-        return $this->tldInfo($request)->metadata;
+        return (new MetadataService($request->domain->tld))->getMetadata();
     }
 
-    protected function tldInfo(Request $request): TLDInfo
-    {
-        return TLDInfo::fromArray(
-            Cache::db()->remember(
-                'tld-info:' . $request->domain->tld,
-                14400,
-                function () use ($request) {
-                    $info = App::client()->tlds->info($request->domain->tld);
-
-                    foreach ($info->applicableFor as $applicableTld) {
-                        if ($applicableTld === $request->domain->tld) {
-                            continue;
-                        }
-
-                        Cache::db()->put('tld-info:' . $applicableTld, $info->toArray(), 14400);
-                    }
-
-                    return $info->toArray();
-                }
-            )
-        );
+    protected function info(Request $request) : TLDInfo {
+        return (new MetadataService($request->domain->tld))->getAll();
     }
 
-    protected function additionalFields(Request $request)
-    {
-    }
 
     public function config(string $key, $default = null)
     {

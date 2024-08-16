@@ -27,8 +27,8 @@ class AdminCustomButtonArray extends Action
         }
 
         try {
-            $metadataService = new MetadataService($request->params['tld'], App::client());
-            $metadata = $metadataService->getAll();
+            $metadataService = new MetadataService($request->params['tld']);
+            $metadata = $metadataService->getMetadata();
             if (empty($metadata)) {
                 return $adminButtons;
             }

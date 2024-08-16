@@ -21,7 +21,7 @@
 
 use RealtimeRegister\Services\MetadataService;
 
-$tlds = array();
+$tlds = [];
 
 if (isset($_SESSION['cart']['domains'])) {
     $tlds = array_map(function ($domain) { return MetadataService::getTld($domain['domain']); }, $_SESSION['cart']['domains']);
@@ -43,9 +43,10 @@ $tlds = array_unique($tlds);
 
 foreach ($tlds as $tld) {
     try {
-        $additional = (new MetadataService($tld, null))->getTldAdditionalFields();
+        dd($tld);
+        $additional = (new MetadataService($tld, true))->getTldAdditionalFields();
     } catch (\Exception $e) {
-        //TODO
+        dd($e);
     }
 
     if (empty($additional)) {
@@ -166,6 +167,3 @@ if (!empty($additionaldomainfields['.eu'])) {
         }
     }
 }
-
-// Remove remaining default WHMCS additional fields, for WHMCS 7+
-rtrHelper::removeWhmcsDefaultAdditionalFields($additionaldomainfields);

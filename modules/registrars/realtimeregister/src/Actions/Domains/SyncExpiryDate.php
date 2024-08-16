@@ -2,18 +2,18 @@
 
 namespace RealtimeRegister\Actions\Domains;
 
+use Illuminate\Database\Capsule\Manager as Capsule;
 use RealtimeRegister\Actions\Action;
 use RealtimeRegister\App;
 use RealtimeRegister\Request;
 use RealtimeRegister\Services\MetadataService;
-use Illuminate\Database\Capsule\Manager as Capsule;
 
 class SyncExpiryDate extends Action
 {
     public function __invoke(Request $request)
     {
         try {
-            $metadata = new MetadataService(tld: $request->params['tld'], api: App::client());
+            $metadata = new MetadataService($request->params['tld']);
         } catch (\Exception $ex) {
             return sprintf('Error while trying connect to server: %s.', $ex->getMessage());
         }

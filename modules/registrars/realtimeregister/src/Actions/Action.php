@@ -5,7 +5,7 @@ namespace RealtimeRegister\Actions;
 use Illuminate\Database\Capsule\Manager;
 use RealtimeRegister\App;
 use RealtimeRegister\Contracts\InvokableAction;
-use RealtimeRegister\Models\Cache;
+use RealtimeRegister\Models\RealtimeRegister\Cache;
 use RealtimeRegister\Request;
 use SandwaveIo\RealtimeRegister\Domain\Contact;
 use SandwaveIo\RealtimeRegister\Domain\DomainDetails;

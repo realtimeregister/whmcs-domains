@@ -11,13 +11,6 @@ class RegisterDomain extends Action
 {
     use DomainTrait;
 
-    private static array $CONTACT_ROLES = [
-        "TECH" => "techContacts",
-        "ADMIN" => "adminContacts",
-        "BILLING" => "billingContacts"
-    ];
-
-
     /**
      * @throws \Exception
      */
@@ -37,7 +30,7 @@ class RegisterDomain extends Action
         $orderId = App::localApi()->domain(
             clientId: $request->get('clientid'),
             domainId: $request->get('domainid')
-        )->get('orderId');
+        )->get('orderid');
         $contactId = App::localApi()->order(id: $orderId)->get('contactid');
 
         $contacts = [];

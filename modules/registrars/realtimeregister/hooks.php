@@ -16,3 +16,7 @@ App::hook(Hooks\AdminAreaHeadOutput::class, null, 100);
 App::hook(Hooks\AdminAreaFooterOutput::class, null, 100);
 App::hook(Hooks\ClientAreaPage::class);
 App::hook(Hooks\ContactEdit::class);
+
+add_hook('AdminHomeWidgets', 1, function() {
+    return new \RealtimeRegister\Widget\InformationModuleWidget();
+});

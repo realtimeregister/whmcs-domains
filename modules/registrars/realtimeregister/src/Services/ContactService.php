@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Arr;
 use RealtimeRegister\App;
 use RealtimeRegister\Entities\DataObject;
-use RealtimeRegister\Models\ContactMapping;
+use RealtimeRegister\Models\RealtimeRegister\ContactMapping;
 use SandwaveIo\RealtimeRegister\Domain\Contact as RTRContact;
 
 class ContactService

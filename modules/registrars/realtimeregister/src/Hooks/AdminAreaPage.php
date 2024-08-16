@@ -2,10 +2,11 @@
 
 namespace RealtimeRegister\Hooks;
 
-use RealtimeRegister\Entities\DataObject;
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Illuminate\Database\Schema\Blueprint;
-use RealtimeRegister\Models\Cache;
+use RealtimeRegister\Entities\DataObject;
+use RealtimeRegister\Models\RealtimeRegister\Cache;
+use RealtimeRegister\Models\RealtimeRegister\ContactMapping;
 
 class AdminAreaPage extends Hook
 {
@@ -18,8 +19,8 @@ class AdminAreaPage extends Hook
     public function __invoke(DataObject $vars)
     {
         // TODO fix the code in https://gist.github.com/jaceju/cc53d2fbab6e828f69b2a3b7e267d1ed
-        if (!Capsule::schema()->hasTable(\RealtimeRegister\Models\ContactMapping::TABLE_NAME)) {
-            Capsule::schema()->create(\RealtimeRegister\Models\ContactMapping::TABLE_NAME, function (Blueprint $table) {
+        if (!Capsule::schema()->hasTable(ContactMapping::TABLE_NAME)) {
+            Capsule::schema()->create(ContactMapping::TABLE_NAME, function (Blueprint $table) {
                 $table->integer('userid');
                 $table->integer('contactid');
                 $table->char('handle', 40);

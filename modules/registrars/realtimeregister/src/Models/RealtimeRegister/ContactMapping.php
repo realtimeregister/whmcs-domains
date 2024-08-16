@@ -1,6 +1,6 @@
 <?php
 
-namespace RealtimeRegister\Models;
+namespace RealtimeRegister\Models\RealtimeRegister;
 
 use Illuminate\Database\Eloquent\Model;
 

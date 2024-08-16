@@ -5,7 +5,7 @@ namespace RealtimeRegister\Actions\Domains;
 use Exception;
 use RealtimeRegister\Actions\Action;
 use RealtimeRegister\Enums\WhmcsDomainStatus;
-use RealtimeRegister\Models\Domain;
+use RealtimeRegister\Models\Whmcs\Domain;
 use RealtimeRegister\Request;
 use SandwaveIo\RealtimeRegister\Domain\Enum\DomainStatusEnum;
 

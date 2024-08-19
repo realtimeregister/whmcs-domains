@@ -3,7 +3,6 @@
 namespace RealtimeRegister\Services;
 
 use RealtimeRegister\App;
-use RealtimeRegister\Entities\DataObject;
 use RealtimeRegister\Models\Cache;
 use RealtimeRegister\Models\DomainPricing;
 use RealtimeRegister\Services\Config\Config;
@@ -93,11 +92,11 @@ class MetadataService
         return end($domain_parts);
     }
 
-    public function getTldAdditionalFields(): DataObject
+    public function getTldAdditionalFields(): array
     {
         global $_LANG;
         if (!self::isRtr($this->tld)) {
-            return new DataObject([]);
+            return [];
         }
 
         $languageCodes = $this->get('domainSyntax')['languageCodes'];
@@ -123,7 +122,7 @@ class MetadataService
                 $tldAdditionalFields[] = self::propertyToAdditionalField($this->tld, $property, $default);
             }
         }
-        return new DataObject(['fields' => $tldAdditionalFields, 'applicableFor' => $this->info->applicableFor]);
+        return ['fields' => $tldAdditionalFields, 'applicableFor' => $this->info->applicableFor];
     }
 
     private function parseCurrentProperties(): array
@@ -252,7 +251,10 @@ class MetadataService
 
         foreach ($additionaldomainfields as $tld => $tld_fields) {
             foreach ($tld_fields as $tld_field) {
-                if (!array_key_exists($tld, $tldNames) || !in_array($tld_field['Name'], $tldNames[$tld])) {
+                if (!array_key_exists($tld, $tldNames)) {
+                    continue;
+                }
+                if (!in_array($tld_field['Name'], $tldNames[$tld])) {
                     $rtrAdditionalFields[$tld][] = ["Name" => is_array($tld_field) ? $tld_field["Name"] : $tld_field, "Remove" => true];
                 }
             }

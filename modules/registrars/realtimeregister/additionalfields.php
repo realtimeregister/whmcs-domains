@@ -53,7 +53,7 @@ foreach ($tlds as $tld) {
         continue;
     }
 
-    $fields = $additional['fields'];
+    $fields = $additional['fields'] ?? [];
 
     if ($tld !== 'aero') {
         $fields = array_filter($fields, function ($field) {

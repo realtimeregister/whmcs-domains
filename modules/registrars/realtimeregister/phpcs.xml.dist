@@ -3,7 +3,7 @@
 <ruleset  name="PHP_CodeSniffer">
     <description>PHPCS configuration file.</description>
     <file>tests</file>
-    <file>modules</file>
+    <file>src</file>
 
     <exclude-pattern>*\.(css|js)$</exclude-pattern>
     <exclude-pattern>*/migrations/*php</exclude-pattern>

@@ -14,7 +14,7 @@ use PHPUnit\Framework\TestCase;
 class WHMCSModuleTest extends TestCase
 {
     /** @var string $moduleName */
-    protected $moduleName = 'realtimeregister';
+    protected string $moduleName = 'realtimeregister';
 
     /**
      * Asserts the required config options function is defined.

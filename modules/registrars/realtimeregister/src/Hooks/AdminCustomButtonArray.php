@@ -4,14 +4,17 @@ namespace RealtimeRegister\Hooks;
 
 use RealtimeRegister\Actions\Action;
 use RealtimeRegister\App;
-use RealtimeRegister\Models\Domain;
+use RealtimeRegister\Models\Whmcs\Domain;
 use RealtimeRegister\Request;
-use RealtimeRegister\Services\MetadataService;
+use SandwaveIo\RealtimeRegister\Exceptions\BadRequestException;
+use SandwaveIo\RealtimeRegister\Exceptions\NotFoundException;
 
 class AdminCustomButtonArray extends Action
 {
     public function __invoke(Request $request): array|string
     {
+        $metadata = $this->metadata($request);
+
         $adminButtons = [
             "Sync expiry date" => "SyncExpiryDate"
         ];
@@ -27,8 +30,6 @@ class AdminCustomButtonArray extends Action
         }
 
         try {
-            $metadataService = new MetadataService($request->params['tld']);
-            $metadata = $metadataService->getMetadata();
             if (empty($metadata)) {
                 return $adminButtons;
             }
@@ -46,14 +47,14 @@ class AdminCustomButtonArray extends Action
                     $adminButtons['Resend FOA'] = "ResendTransfer";
                 }
             }
-
             if ($request->params['regtype'] !== 'Transfer' && !empty($metadata->validationCategory)) {
                 try {
                     $info = App::client()->domains->get($domain);
-
                     if (in_array('PENDING_VALIDATION', $info->status)) {
                         $adminButtons['Resend validation mails'] = "ResendValidationMails";
                     }
+                } catch (\SandwaveIo\RealtimeRegister\Exceptions\NotFoundException $exception) {
+                    // Don't care about this exception at this point in the code
                 } catch (\Exception $ex) {
                     if (!str_contains($ex->getMessage(), 'Entity not found')) {
                         throw $ex;

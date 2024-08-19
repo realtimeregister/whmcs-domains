@@ -3,8 +3,8 @@
 namespace RealtimeRegister\Services;
 
 use RealtimeRegister\App;
-use RealtimeRegister\Models\Cache;
 use RealtimeRegister\Models\DomainPricing;
+use RealtimeRegister\Models\RealtimeRegister\Cache;
 use RealtimeRegister\Services\Config\Config;
 use SandwaveIo\RealtimeRegister\Domain\TLDInfo;
 use SandwaveIo\RealtimeRegister\Domain\TLDMetaData;
@@ -17,15 +17,9 @@ class MetadataService
     /** @var TLDInfo */
     private $info;
 
-    /**
-     * @throws \Exception
-     */
     public function __construct(string $tld)
     {
         $tld = self::getTld($tld);
-        if (strlen($tld) < 2) {
-            throw new \Exception('Invalid TLD \'' . $tld . '\'');
-        }
 
         $this->tld = $tld;
         $this->info = TLDInfo::fromArray(Cache::remember('tld.' . $this->tld, MetadataService::DAY_MINUTES, function () {

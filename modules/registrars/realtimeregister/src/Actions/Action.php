@@ -5,7 +5,7 @@ namespace RealtimeRegister\Actions;
 use Illuminate\Database\Capsule\Manager;
 use RealtimeRegister\App;
 use RealtimeRegister\Contracts\InvokableAction;
-use RealtimeRegister\Models\Cache;
+use RealtimeRegister\Models\RealtimeRegister\Cache;
 use RealtimeRegister\Request;
 use RealtimeRegister\Services\MetadataService;
 use SandwaveIo\RealtimeRegister\Domain\Contact;
@@ -51,7 +51,7 @@ abstract class Action implements InvokableAction
         return (new MetadataService($request->domain->tld))->getMetadata();
     }
 
-    protected function info(Request $request) : TLDInfo {
+    protected function tldInfo(Request $request) : TLDInfo {
         return (new MetadataService($request->domain->tld))->getAll();
     }
 

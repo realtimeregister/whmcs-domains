@@ -5,7 +5,7 @@ namespace RealtimeRegister\Actions\Contacts;
 use Illuminate\Support\Arr;
 use RealtimeRegister\Actions\Action;
 use RealtimeRegister\App;
-use RealtimeRegister\Models\Contact as ContactModel;
+use RealtimeRegister\Models\Whmcs\Contact as ContactModel;
 use RealtimeRegister\Request;
 use SandwaveIo\RealtimeRegister\Domain\DomainContact;
 use SandwaveIo\RealtimeRegister\Domain\DomainDetails;

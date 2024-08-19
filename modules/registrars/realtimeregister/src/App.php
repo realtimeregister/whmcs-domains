@@ -2,14 +2,12 @@
 
 namespace RealtimeRegister;
 
-use Illuminate\Database\Capsule\Manager as Capsule;
-use Illuminate\Database\Schema\Blueprint;
 use RealtimeRegister\Contracts\InvokableAction;
 use RealtimeRegister\Contracts\InvokableHook;
 use RealtimeRegister\Entities\DataObject;
 use RealtimeRegister\Entities\RegistrarConfig;
 use RealtimeRegister\Exceptions\ActionFailedException;
-use RealtimeRegister\Models\Cache;
+use RealtimeRegister\Models\RealtimeRegister\Cache;
 use RealtimeRegister\Services\Assets;
 use RealtimeRegister\Services\ContactService;
 use RuntimeException;
@@ -21,9 +19,6 @@ class App
 {
     public const NAME = 'realtimeregister';
     public const VERSION = '2.0.0';
-
-    protected const TABLE_CONTACT_MAPPING = 'mod_realtimeregister_contact_mapping';
-    protected const TABLE_REGISTRANT_HANDLE = 'mod_realtimeregister_registrant_handle';
 
     protected const API_URL = "https://api.yoursrs.com/";
     protected const API_URL_TEST = "host.docker.internal:8003"; //FIXME
@@ -55,9 +50,6 @@ class App
 
         if (!static::$booted) {
             Cache::boot();
-
-            $app->ensureTablesExist();
-
             static::$booted = true;
         }
 
@@ -189,22 +181,5 @@ class App
         }
 
         add_hook($name, $priority, fn (array $vars = []) => static::dispatchHook($hook ?: $name, $vars));
-    }
-
-    protected function ensureTablesExist(): void
-    {
-        if (!Capsule::schema()->hasTable(self::TABLE_CONTACT_MAPPING)) {
-            Capsule::schema()->create(self::TABLE_CONTACT_MAPPING, function (Blueprint $table) {
-                $table->integer('userid');
-                $table->integer('contactid');
-                $table->char('handle', 40);
-                $table->boolean('org_allowed');
-                $table->unique(
-                    ['userid', 'contactid', 'org_allowed'],
-                    'mod_realtimeregister_contact_mapping_unique_contact'
-                );
-                $table->unique('handle', 'mod_realtimeregister_contact_mapping_unique_handle');
-            });
-        }
     }
 }

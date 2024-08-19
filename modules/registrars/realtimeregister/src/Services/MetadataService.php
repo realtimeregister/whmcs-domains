@@ -5,6 +5,7 @@ namespace RealtimeRegister\Services;
 use RealtimeRegister\App;
 use RealtimeRegister\Entities\DataObject;
 use RealtimeRegister\Models\Cache;
+use RealtimeRegister\Models\DomainPricing;
 use RealtimeRegister\Services\Config\Config;
 use SandwaveIo\RealtimeRegister\Domain\TLDInfo;
 use SandwaveIo\RealtimeRegister\Domain\TLDMetaData;
@@ -22,7 +23,7 @@ class MetadataService
      */
     public function __construct(string $tld)
     {
-        $tld = MetadataService::getTld($tld);
+        $tld = self::getTld($tld);
         if (strlen($tld) < 2) {
             throw new \Exception('Invalid TLD \'' . $tld . '\'');
         }
@@ -95,6 +96,9 @@ class MetadataService
     public function getTldAdditionalFields(): DataObject
     {
         global $_LANG;
+        if (!self::isRtr($this->tld)) {
+            return new DataObject([]);
+        }
 
         $languageCodes = $this->get('domainSyntax')['languageCodes'];
         $tldAdditionalFields = [];
@@ -144,7 +148,7 @@ class MetadataService
     }
 
 
-    private static function toLangVar(string $tld, string $property_name): string
+    public static function toLangVar(string $tld, string $property_name): string
     {
         return sprintf('tld_%s_%s', strtolower($tld), preg_replace('/[^a-z0-9]/', '', strtolower($property_name)));
     }
@@ -253,5 +257,21 @@ class MetadataService
                 }
             }
         }
+    }
+
+    public static function getAllTlds() : array {
+        $providers = Cache::remember("rtrProviders", self::DAY_MINUTES, fn () =>
+            App::client()->providers->list(parameters: ["fields" => "tlds", "export" => "true"])->toArray()
+        );
+        return array_map(fn($tld) => $tld['name'],
+            array_merge(...array_map(fn($provider) => $provider['tlds'], $providers))
+        );
+    }
+
+    public static function isRtr($tld) {
+        return DomainPricing::query()
+            ->where("extension", "." . $tld)
+            ->whereIn("autoreg", ["realtimeregister", ""])
+            ->first() !== null;
     }
 }

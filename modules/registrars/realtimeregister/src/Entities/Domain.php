@@ -35,13 +35,15 @@ class Domain
         return new static(
             name: $params['sld'],
             tld: $params['tld'],
-            nameservers: array_filter([
+            nameservers: array_filter(
+                [
                 $params['ns1'] ?? null,
                 $params['ns2'] ?? null,
                 $params['ns3'] ?? null,
                 $params['ns4'] ?? null,
                 $params['ns5'] ?? null,
-            ]),
+                ]
+            ),
             registrant: Contact::fromWhmcs(ContactType::Registrant, $params),
             admin: Contact::fromWhmcs(ContactType::Admin, $params),
             tech: Contact::fromWhmcs(ContactType::Tech, $params),

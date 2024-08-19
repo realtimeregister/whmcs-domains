@@ -6,16 +6,17 @@ use RealtimeRegister\Services\MetadataService;
 use SandwaveIo\RealtimeRegister\Domain\TLDInfo;
 use SandwaveIo\RealtimeRegister\Domain\TLDMetaData;
 
-trait DomainContactTrait {
+trait DomainContactTrait
+{
 
     /**
      * Add properties to contact if necessary
-     * @param Request $request
-     * @param string $handle
-     * @param TLDInfo $tldInfo
+     *
+     * @param  Request $request
+     * @param  string  $handle
+     * @param  TLDInfo $tldInfo
      * @return void
      */
-
     protected static function addProperties(Request $request, string $handle, TLDInfo $tldInfo): void
     {
         $customer = App::registrarConfig()->customerHandle();
@@ -38,7 +39,7 @@ trait DomainContactTrait {
     }
 
     /**
-     * @param MetadataService $metadata
+     * @param  MetadataService $metadata
      * @return array
      */
     protected static function getNewProperties(Request $request, TLDMetaData $metadata) : array

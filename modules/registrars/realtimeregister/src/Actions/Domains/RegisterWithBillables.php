@@ -71,7 +71,9 @@ class RegisterWithBillables extends Action
                 ];
             }
 
-            /** @var DomainRegistration $registeredDomain */
+            /**
+ * @var DomainRegistration $registeredDomain 
+*/
             $registeredDomain = App::client()->domains->register(
                 domainName: $request->domain->domainName(),
                 customer: App::registrarConfig()->customerHandle(),
@@ -97,7 +99,9 @@ class RegisterWithBillables extends Action
     {
         $billables = [];
         if (!empty($quote->quote->billables) && $quote->quote->billables->count() > 1) {
-            /** @var Billable $billable */
+            /**
+ * @var Billable $billable 
+*/
             foreach ($quote->quote->billables as $billable) {
                 $billables[] = [
                     'action' => $billable->action,

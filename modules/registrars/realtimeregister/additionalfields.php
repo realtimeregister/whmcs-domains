@@ -24,7 +24,11 @@ use RealtimeRegister\Services\MetadataService;
 $tlds = [];
 
 if (isset($_SESSION['cart']['domains'])) {
-    $tlds = array_map(function ($domain) { return MetadataService::getTld($domain['domain']); }, $_SESSION['cart']['domains']);
+    $tlds = array_map(
+        function ($domain) {
+            return MetadataService::getTld($domain['domain']); 
+        }, $_SESSION['cart']['domains']
+    );
 }
 
 if (!empty($_POST['domain']) && is_string($_POST['domain'])) {
@@ -56,9 +60,11 @@ foreach ($tlds as $tld) {
     $fields = $additional['fields'] ?? [];
 
     if ($tld !== 'aero') {
-        $fields = array_filter($fields, function ($field) {
-            return !in_array($field['Name'], ['AeroId', 'AeroKey']);
-        });
+        $fields = array_filter(
+            $fields, function ($field) {
+                return !in_array($field['Name'], ['AeroId', 'AeroKey']);
+            }
+        );
     }
 
     if (empty($fields)) {

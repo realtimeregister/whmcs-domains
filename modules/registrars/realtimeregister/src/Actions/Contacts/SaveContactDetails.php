@@ -43,7 +43,9 @@ class SaveContactDetails extends Action
             $key = $role === DomainContactRoleEnum::ROLE_REGISTRANT
                 ? 'registrant' : sprintf('%sContacts', strtolower($role));
 
-            /** @var bool $organizationAllowed */
+            /**
+ * @var bool $organizationAllowed 
+*/
             $organizationAllowed = $metadata->{$key}->organizationAllowed;
 
             $currentHandle = $domain->registrant;
@@ -63,9 +65,11 @@ class SaveContactDetails extends Action
             );
             if ($request->input('wc.' . $whmcsRole) === 'custom') {
                 if (App::contacts()->handleHasMapping($currentHandle)) {
-                    DB::transaction(function () use ($request) {
-                        App::localApi()->createContact();
-                    });
+                    DB::transaction(
+                        function () use ($request) {
+                            App::localApi()->createContact();
+                        }
+                    );
 
                     // First create a new contact in whmcs
 

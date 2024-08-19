@@ -97,13 +97,15 @@ trait DomainTrait
             }
         }
 
-        return array_merge($params, [
+        return array_merge(
+            $params, [
             'ns1' => Configuration::query()->where('setting', 'DefaultNameserver1')->value('value'),
             'ns2' => Configuration::query()->where('setting', 'DefaultNameserver2')->value('value'),
             'ns3' => Configuration::query()->where('setting', 'DefaultNameserver3')->value('value'),
             'ns4' => Configuration::query()->where('setting', 'DefaultNameserver4')->value('value'),
             'ns5' => Configuration::query()->where('setting', 'DefaultNameserver5')->value('value')
-        ]);
+            ]
+        );
     }
 
     /**

@@ -14,7 +14,9 @@ class MetadataService
     public const DAY_MINUTES = 14400;
     private string $tld;
     private string $provider;
-    /** @var TLDInfo */
+    /**
+     * @var TLDInfo 
+     */
     private $info;
 
     public function __construct(string $tld)
@@ -22,13 +24,17 @@ class MetadataService
         $tld = self::getTld($tld);
 
         $this->tld = $tld;
-        $this->info = TLDInfo::fromArray(Cache::remember('tld.' . $this->tld, MetadataService::DAY_MINUTES, function () {
-            $metadata = App::client()->tlds->info($this->tld);
-            foreach ($metadata->applicableFor as $app_tld) {
-                Cache::put('tld.' . $app_tld, $metadata, MetadataService::DAY_MINUTES);
-            }
-            return $metadata->toArray();
-        }));
+        $this->info = TLDInfo::fromArray(
+            Cache::remember(
+                'tld.' . $this->tld, MetadataService::DAY_MINUTES, function () {
+                    $metadata = App::client()->tlds->info($this->tld);
+                    foreach ($metadata->applicableFor as $app_tld) {
+                        Cache::put('tld.' . $app_tld, $metadata, MetadataService::DAY_MINUTES);
+                    }
+                    return $metadata->toArray();
+                }
+            )
+        );
 
         $this->provider = $this->info->provider;
     }
@@ -44,7 +50,7 @@ class MetadataService
     }
 
     /**
-     * @param string $param
+     * @param  string $param
      * @return string|int|array|bool
      */
     public function get(string $param)
@@ -68,7 +74,7 @@ class MetadataService
     }
 
     /**
-     * @param string $domain the domain name
+     * @param  string $domain the domain name
      * @return string
      */
     public static function getTld($domain)
@@ -255,16 +261,20 @@ class MetadataService
         }
     }
 
-    public static function getAllTlds() : array {
-        $providers = Cache::remember("rtrProviders", self::DAY_MINUTES, fn () =>
+    public static function getAllTlds() : array
+    {
+        $providers = Cache::remember(
+            "rtrProviders", self::DAY_MINUTES, fn () =>
             App::client()->providers->list(parameters: ["fields" => "tlds", "export" => "true"])->toArray()
         );
-        return array_map(fn($tld) => $tld['name'],
+        return array_map(
+            fn($tld) => $tld['name'],
             array_merge(...array_map(fn($provider) => $provider['tlds'], $providers))
         );
     }
 
-    public static function isRtr($tld) {
+    public static function isRtr($tld)
+    {
         return DomainPricing::query()
             ->where("extension", "." . $tld)
             ->whereIn("autoreg", ["realtimeregister", ""])

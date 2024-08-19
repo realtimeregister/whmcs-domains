@@ -9,7 +9,8 @@ class PreRegistrarGetContactDetails extends Hook
 {
     public function __invoke(DataObject $vars)
     {
-        App::assets()->head(<<<html
+        App::assets()->head(
+            <<<html
 <script>
 $(document).ready(function() {
     $('form#frmDomainContactModification > div.row > div[class^=col-]').each(function () {
@@ -33,6 +34,7 @@ $(document).ready(function() {
 });
 
 </script>
-html);
+html
+        );
     }
 }

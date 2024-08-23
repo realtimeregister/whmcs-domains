@@ -11,10 +11,12 @@ jobs:
 
       - name: Composer install --dev
         uses: php-actions/composer@v6
+        working_dir: modules/registrars/realtimeregister
 
       - name: PHP Code Sniffer
         uses: php-actions/phpcs@v1
         with:
           php_version: 8.1
-          path: modules/
+          path: modules/registrars/realtimeregister
+          ignore: modules/registrars/realtimregister/vendor
           standard: PSR12

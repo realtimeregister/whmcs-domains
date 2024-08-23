@@ -7,11 +7,14 @@ class ConfigArray
     public function __invoke(): array
     {
         return [
+            'FriendlyName' => [
+                'Type'  => 'System',
+                'Value' => 'Realtime Register'
+            ],
             'Description' => [
                 'Type'  => 'System',
-                'Value' => sprintf('Version: %s', App::VERSION)
+                'Value' => 'The Domains &amp; Digital Security Experts'
             ],
-
             /**
              * Account information.
              */
@@ -36,7 +39,7 @@ class ConfigArray
             'INFO_ACCOUNT_EMPTY_LINE' => [
                 'FriendlyName' => "<br/>",
                 'Type' => 'none',
-                'Description' => '<button class="check-connection">Check Connection</button>
+                'Description' => '<button class="btn btn-xs check-connection">Check Connection</button>
 <span class="credentials-result"></span>',
             ],
             /**
@@ -87,11 +90,6 @@ class ConfigArray
                 'Type' => 'yesno',
                 'Description' => 'Enable this ONLY when you are having connectivity issues with ' .
                     'Realtime Register due to SSL errors.',
-            ],
-            'debug_sentry' => [
-                'FriendlyName' => 'Sentry errors',
-                'Type' => 'yesno',
-                'Description' => 'Turn on sentry errors for RealtimeRegister. Activate for troubleshooting.',
             ],
             'debug_mode' => [
                 'FriendlyName' => 'Debug errors',

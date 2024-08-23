@@ -3,8 +3,8 @@
 namespace RealtimeRegister {
     if (!function_exists('view')) {
         /**
-         * @param $template
-         * @param array $args
+         * @param  $template
+         * @param  array $args
          * @return string
          * @throws Exception
          * @throws SmartyException

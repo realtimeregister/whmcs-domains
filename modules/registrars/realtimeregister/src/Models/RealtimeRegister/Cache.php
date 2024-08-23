@@ -70,7 +70,7 @@ class Cache
     /**
      * Store an item in the cache.
      *
-     * @param  mixed $value
+     * @param  mixed         $value
      * @param  \DateTime|int $minutes
      * @return void
      */

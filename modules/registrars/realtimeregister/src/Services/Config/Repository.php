@@ -31,7 +31,7 @@ class Repository implements ArrayAccess, RepositoryInterface
     /**
      * Get the specified configuration value.
      *
-     * @param  mixed   $default
+     * @param  mixed $default
      * @return mixed
      */
     public function get(string $key, $default = null)
@@ -42,8 +42,8 @@ class Repository implements ArrayAccess, RepositoryInterface
     /**
      * Set a given configuration value.
      *
-     * @param  array|string  $key
-     * @param  mixed   $value
+     * @param  array|string $key
+     * @param  mixed        $value
      * @return void
      */
     public function set($key, $value = null)
@@ -58,7 +58,7 @@ class Repository implements ArrayAccess, RepositoryInterface
     /**
      * Prepend a value onto an array configuration value.
      *
-     * @param  mixed  $value
+     * @param  mixed $value
      * @return void
      */
     public function prepend(string $key, $value)
@@ -73,7 +73,7 @@ class Repository implements ArrayAccess, RepositoryInterface
     /**
      * Push a value onto an array configuration value.
      *
-     * @param  mixed  $value
+     * @param  mixed $value
      * @return void
      */
     public function push(string $key, $value)
@@ -96,7 +96,7 @@ class Repository implements ArrayAccess, RepositoryInterface
     /**
      * Determine if the given configuration option exists.
      *
-     * @param  string  $key
+     * @param string $key
      */
     public function offsetExists($key): bool
     {
@@ -106,7 +106,7 @@ class Repository implements ArrayAccess, RepositoryInterface
     /**
      * Get a configuration option.
      *
-     * @param  string  $key
+     * @param  string $key
      * @return mixed
      */
     public function offsetGet($key)
@@ -117,7 +117,7 @@ class Repository implements ArrayAccess, RepositoryInterface
     /**
      * Set a configuration option.
      *
-     * @param  mixed  $value
+     * @param  mixed $value
      * @return void
      */
     public function offsetSet($key, $value)
@@ -128,7 +128,7 @@ class Repository implements ArrayAccess, RepositoryInterface
     /**
      * Unset a configuration option.
      *
-     * @param  string  $key
+     * @param  string $key
      * @return void
      */
     public function offsetUnset($key): void

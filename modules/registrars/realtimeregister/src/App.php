@@ -113,7 +113,7 @@ class App
         }
 
         return static::$isProxy = new IsProxy(
-            apikey: App::registrarConfig()->apiKey(),
+            apiKey: App::registrarConfig()->apiKey(),
             host: App::registrarConfig()->isTest() ? self::IS_PROXY_HOST_TEST : self::IS_PROXY_HOST
         );
     }

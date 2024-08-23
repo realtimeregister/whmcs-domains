@@ -6,8 +6,8 @@ use RealtimeRegister\Actions\Action;
 use RealtimeRegister\App;
 use RealtimeRegister\Request;
 use SandwaveIo\RealtimeRegister\Domain\Price;
-use WHMCS\Domains\DomainLookup\ResultsList;
 use WHMCS\Domain\TopLevel\ImportItem;
+use WHMCS\Domains\DomainLookup\ResultsList;
 
 class PricingSync extends Action
 {
@@ -22,7 +22,9 @@ class PricingSync extends Action
         $pricesSLD = [];
 
         if (App::registrarConfig()->customerHandle() !== '') {
-            /** @var Price $priceItem */
+            /**
+ * @var Price $priceItem 
+*/
             foreach (App::client()->customers->priceList(App::registrarConfig()->customerHandle()) as $priceItem) {
                 if (!str_starts_with($priceItem->product, "domain_")) {
                     continue;
@@ -68,7 +70,7 @@ class PricingSync extends Action
             foreach ($prices as $tld => $priceInfo) {
                 $item = new ImportItem();
                 try {
-                    $metadata = $this->tldInfo(new Request(['domain' => ['tld' => $tld]]))->metadata;
+                    $metadata = $this->metadata(new Request(['domain' => ['tld' => $tld]]));
                 } catch (\Exception $e) {
                     continue;
                 }

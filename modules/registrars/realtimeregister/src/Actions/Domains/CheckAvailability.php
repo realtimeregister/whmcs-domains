@@ -28,21 +28,25 @@ class CheckAvailability extends Action
 
             $searchResult = new SearchResult($request->get('searchTerm'), $tld);
 
-            $searchResult->setStatus(match ($result->getStatus()) {
+            $searchResult->setStatus(
+                match ($result->getStatus()) {
                 IsProxyDomain::STATUS_AVAILABLE => SearchResult::STATUS_NOT_REGISTERED,
                 IsProxyDomain::STATUS_NOT_AVAILABLE => SearchResult::STATUS_REGISTERED,
                 default => SearchResult::STATUS_UNKNOWN
-            });
+                }
+            );
 
             $extra = $result->getExtras();
 
             if (isset($extra['type'], $extra['price'], $extra['currency']) && $extra['type'] === 'premium') {
                 $searchResult->setPremiumDomain(true);
-                $searchResult->setPremiumCostPricing([
+                $searchResult->setPremiumCostPricing(
+                    [
                     'register' => number_format(($extra['price'] / 100), 2, '.', ''),
                     'renew' => number_format(($extra['price'] / 100), 2, '.', ''),
                     'CurrencyCode' => $extra['currency']
-                ]);
+                    ]
+                );
             }
 
             $results->append($searchResult);

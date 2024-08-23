@@ -23,7 +23,7 @@ class Config
             return false;
         }
 
-        $config = new Repository(require $configFile);
+        $config = new Repository(include $configFile);
 
         if (!empty($configSettings)) {
             return $config->get(implode('.', $configSettings));

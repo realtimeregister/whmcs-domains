@@ -12,7 +12,7 @@ interface RepositoryInterface
     /**
      * Get the specified configuration value.
      *
-     * @param  mixed   $default
+     * @param  mixed $default
      * @return mixed
      */
     public function get(string $key, $default = null);
@@ -25,8 +25,8 @@ interface RepositoryInterface
     /**
      * Set a given configuration value.
      *
-     * @param  array|string  $key
-     * @param  mixed   $value
+     * @param  array|string $key
+     * @param  mixed        $value
      * @return void
      */
     public function set($key, $value = null);
@@ -34,7 +34,7 @@ interface RepositoryInterface
     /**
      * Prepend a value onto an array configuration value.
      *
-     * @param  mixed  $value
+     * @param  mixed $value
      * @return void
      */
     public function prepend(string $key, $value);
@@ -42,7 +42,7 @@ interface RepositoryInterface
     /**
      * Push a value onto an array configuration value.
      *
-     * @param  mixed  $value
+     * @param  mixed $value
      * @return void
      */
     public function push(string $key, $value);

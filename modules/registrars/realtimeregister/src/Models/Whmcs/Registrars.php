@@ -26,12 +26,14 @@ class Registrars extends Model
             ->whereIn('setting', $settingParams)
             ->get();
 
-        collect($tblregistrars)->filter(function ($value) {
-            $value->value = decrypt(
-                $value->value,
-                $GLOBALS['cc_encryption_hash']
-            );
-        });
+        collect($tblregistrars)->filter(
+            function ($value) {
+                $value->value = decrypt(
+                    $value->value,
+                    $GLOBALS['cc_encryption_hash']
+                );
+            }
+        );
 
         $params = [];
         foreach ($tblregistrars as $param) {

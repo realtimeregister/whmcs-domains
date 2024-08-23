@@ -2,10 +2,11 @@
 
 namespace RealtimeRegister\Actions\Domains;
 
+use Illuminate\Database\Capsule\Manager as Capsule;
 use RealtimeRegister\Actions\Action;
 use RealtimeRegister\App;
 use RealtimeRegister\Request;
-use Illuminate\Database\Capsule\Manager as Capsule;
+
 
 class SyncExpiryDate extends Action
 {

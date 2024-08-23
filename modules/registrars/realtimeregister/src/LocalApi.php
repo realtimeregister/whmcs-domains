@@ -8,7 +8,7 @@ use RealtimeRegister\Entities\DataObject;
 class LocalApi
 {
     /**
-     * @param array $filters
+     * @param  array $filters
      * @return Collection<DataObject>
      */
     public function domains(array $filters = []): Collection
@@ -21,15 +21,17 @@ class LocalApi
 
     public function domain(int $clientId = null, int $domainId = null, string $domain = null): ?DataObject
     {
-        return $this->domains([
+        return $this->domains(
+            [
             'clientid' => $clientId,
             'domainid' => $domainId,
             'domain' => $domain
-        ])->first();
+            ]
+        )->first();
     }
 
     /**
-     * @param array $filters
+     * @param  array $filters
      * @return Collection<DataObject>
      */
     public function orders(array $filters = []): Collection
@@ -45,12 +47,14 @@ class LocalApi
         int $requestorId = null,
         string $status = null
     ): ?DataObject {
-        return $this->orders([
+        return $this->orders(
+            [
             'id' => $id,
             'clientid' => $clientId,
             'requestor_id' => $requestorId,
             'status' => $status
-        ])->first();
+            ]
+        )->first();
     }
 
     public function client(int $clientId): DataObject
@@ -81,8 +85,10 @@ class LocalApi
 
     public function createContact()
     {
-        localAPI('AddContact', [
-           'firstname' => ''
-        ]);
+        localAPI(
+            'AddContact', [
+            'firstname' => ''
+            ]
+        );
     }
 }

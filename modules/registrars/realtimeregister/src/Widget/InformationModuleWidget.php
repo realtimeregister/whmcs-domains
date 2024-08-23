@@ -16,7 +16,7 @@ class InformationModuleWidget extends \WHMCS\Module\AbstractWidget
 
     public function getData()
     {
-//        $credits = App::client()->customers->credits(App::registrarConfig()->customerHandle());
+        //        $credits = App::client()->customers->credits(App::registrarConfig()->customerHandle());
         return [];
     }
 

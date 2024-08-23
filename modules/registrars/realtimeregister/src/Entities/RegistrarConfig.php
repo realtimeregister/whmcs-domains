@@ -56,8 +56,10 @@ class RegistrarConfig
     protected function loadRegistrarConfig(): void
     {
         if ($this->registrarConfig === null) {
-            /** @noinspection PhpUndefinedConstantInspection */
-            require_once ROOTDIR . "/includes/registrarfunctions.php";
+            /**
+ * @noinspection PhpUndefinedConstantInspection 
+*/
+            include_once ROOTDIR . "/includes/registrarfunctions.php";
             $this->registrarConfig = array_merge(
                 [
                     'SyncStatus' => null,

@@ -2,6 +2,7 @@
 
 namespace RealtimeRegister\Actions\Domains;
 
+use DomainContactTrait;
 use RealtimeRegister\Actions\Action;
 use RealtimeRegister\App;
 use RealtimeRegister\Request;
@@ -10,13 +11,15 @@ use SandwaveIo\RealtimeRegister\Domain\DomainContactCollection;
 class RegisterDomain extends Action
 {
     use DomainTrait;
+    use DomainContactTrait;
 
     /**
      * @throws \Exception
      */
     public function __invoke(Request $request)
     {
-        $metadata = $this->metadata($request);
+        $tldInfo = $this->tldInfo($request);
+        $metadata = $tldInfo->metadata;
         $domain = $request->domain;
 
         $period = $request->get('regperiod') * 12;
@@ -41,6 +44,8 @@ class RegisterDomain extends Action
             role: 'REGISTRANT',
             organizationAllowed: $metadata->registrant->organizationAllowed
         );
+
+        $this->addProperties($request, $registrant, $tldInfo);
 
         foreach (self::$CONTACT_ROLES as $role => $name) {
             $organizationAllowed = $metadata->{$name}->organizationAllowed;

@@ -46,7 +46,7 @@ class GetDomainInformation extends Action
     }
 
     /**
-     * @param \SandwaveIo\RealtimeRegister\Domain\DomainDetails $domain
+     * @param  \SandwaveIo\RealtimeRegister\Domain\DomainDetails $domain
      * @return string
      */
     public function getWhmcsDomainStatus(\SandwaveIo\RealtimeRegister\Domain\DomainDetails $domain): string
@@ -66,7 +66,7 @@ class GetDomainInformation extends Action
     }
 
     /**
-     * @param string $handle
+     * @param  string $handle
      * @return bool
      */
     public function hasPendingChanges(string $handle): bool

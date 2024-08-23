@@ -20,15 +20,28 @@ class ContactService
             $params['organization:null'] = '';
         }
 
-        $params = array_merge($params, [
+        $params = array_merge(
+            $params, [
             'order' => '-createdDate',
             'export' => true
-        ]);
+            ]
+        );
 
         return App::client()->contacts->list(
             customer: App::registrarConfig()->customerHandle(),
             parameters: $params
         )[0];
+    }
+
+    public static function getContactMapping(int $userId, int $contactId, bool $organizationAllowed) : ?ContactMapping
+    {
+        /**
+ * @noinspection PhpIncompatibleReturnTypeInspection 
+*/
+        return ContactMapping::query()->where('userid', $userId)
+            ->where('contactid', $contactId)
+            ->where('org_allowed', $organizationAllowed)
+            ->first();
     }
 
     public function findByContactId($contactId)
@@ -64,8 +77,8 @@ class ContactService
     }
 
     /**
-     * @param string|int $userId
-     * @param string|int $contactId
+     * @param  string|int $userId
+     * @param  string|int $contactId
      * @return Collection<ContactMapping>
      */
     public function fetchMappingByContactId(string|int $userId, string|int $contactId): Collection
@@ -75,7 +88,9 @@ class ContactService
 
     public function fetchMappingByHandle(string $handle): ?ContactMapping
     {
-        /** @noinspection PhpIncompatibleReturnTypeInspection */
+        /**
+ * @noinspection PhpIncompatibleReturnTypeInspection 
+*/
         return ContactMapping::query()->where('handle', $handle)->first();
     }
 
@@ -86,24 +101,26 @@ class ContactService
 
     public static function addContactMapping(int $clientId, int $contactId, string $handle, bool $orgAllowed): void
     {
-        ContactMapping::query()->insert([
+        ContactMapping::query()->insert(
+            [
             "userid" => $clientId,
             "contactid" => $contactId,
             "handle" => $handle,
             "org_allowed" => $orgAllowed
-        ]);
+            ]
+        );
     }
 
     public static function getMatchingRtrContact()
     {
         //TODO if necessary
-//        App::client()->contacts->list(
-//            App::registrarConfig()->get('customer_handle'),
-//            parameters: [
-//                'order' => '-createdDate',
-//                'export' => true,
-//                'fields' => 'handle'
-//            ]
-//        )->first();
+        //        App::client()->contacts->list(
+        //            App::registrarConfig()->get('customer_handle'),
+        //            parameters: [
+        //                'order' => '-createdDate',
+        //                'export' => true,
+        //                'fields' => 'handle'
+        //            ]
+        //        )->first();
     }
 }

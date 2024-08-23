@@ -21,6 +21,7 @@ class Domain
         public readonly ?bool $isIdn = null,
         public readonly ?bool $isInGracePeriod = null,
         public readonly ?bool $isInRedemptionGracePeriod = null,
+        public readonly array $contactProperties = []
     ) {
     }
 
@@ -34,13 +35,15 @@ class Domain
         return new static(
             name: $params['sld'],
             tld: $params['tld'],
-            nameservers: array_filter([
+            nameservers: array_filter(
+                [
                 $params['ns1'] ?? null,
                 $params['ns2'] ?? null,
                 $params['ns3'] ?? null,
                 $params['ns4'] ?? null,
                 $params['ns5'] ?? null,
-            ]),
+                ]
+            ),
             registrant: Contact::fromWhmcs(ContactType::Registrant, $params),
             admin: Contact::fromWhmcs(ContactType::Admin, $params),
             tech: Contact::fromWhmcs(ContactType::Tech, $params),
@@ -52,6 +55,7 @@ class Domain
             isIdn: $params['is_idn'] ?? null,
             isInGracePeriod: $params['isInGracePeriod'] ?? null,
             isInRedemptionGracePeriod: $params['isInRedemptionGracePeriod'] ?? null,
+            contactProperties: $params['additionalfields']
         );
     }
 }

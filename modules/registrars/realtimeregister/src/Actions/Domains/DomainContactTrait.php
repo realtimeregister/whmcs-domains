@@ -1,5 +1,7 @@
 <?php
 
+namespace RealtimeRegister\Actions\Domains;
+
 use RealtimeRegister\App;
 use RealtimeRegister\Request;
 use RealtimeRegister\Services\MetadataService;
@@ -8,7 +10,6 @@ use SandwaveIo\RealtimeRegister\Domain\TLDMetaData;
 
 trait DomainContactTrait
 {
-
     /**
      * Add properties to contact if necessary
      *
@@ -42,7 +43,7 @@ trait DomainContactTrait
      * @param  MetadataService $metadata
      * @return array
      */
-    protected static function getNewProperties(Request $request, TLDMetaData $metadata) : array
+    protected static function getNewProperties(Request $request, TLDMetaData $metadata): array
     {
         $contactProperties = $metadata->contactProperties->toArray();
         $tldProperties = array_combine(array_column($contactProperties, 'name'), $contactProperties);

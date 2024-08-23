@@ -21,9 +21,10 @@ class ContactService
         }
 
         $params = array_merge(
-            $params, [
-            'order' => '-createdDate',
-            'export' => true
+            $params,
+            [
+                'order' => '-createdDate',
+                'export' => true
             ]
         );
 
@@ -33,11 +34,11 @@ class ContactService
         )[0];
     }
 
-    public static function getContactMapping(int $userId, int $contactId, bool $organizationAllowed) : ?ContactMapping
+    public static function getContactMapping(int $userId, int $contactId, bool $organizationAllowed): ?ContactMapping
     {
         /**
- * @noinspection PhpIncompatibleReturnTypeInspection 
-*/
+         * @noinspection PhpIncompatibleReturnTypeInspection
+         */
         return ContactMapping::query()->where('userid', $userId)
             ->where('contactid', $contactId)
             ->where('org_allowed', $organizationAllowed)
@@ -77,8 +78,8 @@ class ContactService
     }
 
     /**
-     * @param  string|int $userId
-     * @param  string|int $contactId
+     * @param string|int $userId
+     * @param string|int $contactId
      * @return Collection<ContactMapping>
      */
     public function fetchMappingByContactId(string|int $userId, string|int $contactId): Collection
@@ -89,8 +90,8 @@ class ContactService
     public function fetchMappingByHandle(string $handle): ?ContactMapping
     {
         /**
- * @noinspection PhpIncompatibleReturnTypeInspection 
-*/
+         * @noinspection PhpIncompatibleReturnTypeInspection
+         */
         return ContactMapping::query()->where('handle', $handle)->first();
     }
 
@@ -103,10 +104,10 @@ class ContactService
     {
         ContactMapping::query()->insert(
             [
-            "userid" => $clientId,
-            "contactid" => $contactId,
-            "handle" => $handle,
-            "org_allowed" => $orgAllowed
+                "userid" => $clientId,
+                "contactid" => $contactId,
+                "handle" => $handle,
+                "org_allowed" => $orgAllowed
             ]
         );
     }

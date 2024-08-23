@@ -44,8 +44,8 @@ class SaveContactDetails extends Action
                 ? 'registrant' : sprintf('%sContacts', strtolower($role));
 
             /**
- * @var bool $organizationAllowed 
-*/
+             * @var bool $organizationAllowed
+             */
             $organizationAllowed = $metadata->{$key}->organizationAllowed;
 
             $currentHandle = $domain->registrant;

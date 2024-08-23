@@ -23,8 +23,8 @@ class PricingSync extends Action
 
         if (App::registrarConfig()->customerHandle() !== '') {
             /**
- * @var Price $priceItem 
-*/
+             * @var Price $priceItem
+             */
             foreach (App::client()->customers->priceList(App::registrarConfig()->customerHandle()) as $priceItem) {
                 if (!str_starts_with($priceItem->product, "domain_")) {
                     continue;
@@ -34,7 +34,7 @@ class PricingSync extends Action
                 if (str_contains($priceItem->product, '_sld')) {
                     $pricesSLD[$explodeTld[1]][$priceItem->action] = [
                         'currency' => $priceItem->currency,
-                        'price'    => $priceItem->price
+                        'price' => $priceItem->price
                     ];
 
                     continue;
@@ -46,7 +46,7 @@ class PricingSync extends Action
 
                 $prices[$explodeTld[1]][$priceItem->action] = [
                     'currency' => $priceItem->currency,
-                    'price'    => $priceItem->price
+                    'price' => $priceItem->price
                 ];
             }
 

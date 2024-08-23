@@ -57,8 +57,8 @@ class RegistrarConfig
     {
         if ($this->registrarConfig === null) {
             /**
- * @noinspection PhpUndefinedConstantInspection 
-*/
+             * @noinspection PhpUndefinedConstantInspection
+             */
             include_once ROOTDIR . "/includes/registrarfunctions.php";
             $this->registrarConfig = array_merge(
                 [

@@ -2,38 +2,38 @@
 
 namespace RealtimeRegister\Services;
 
-class Assets
-{
-    protected array $head = [];
+use RealtimeRegister\App;
+use RealtimeRegister\Enums\ScriptLocationType;
 
-    protected array $footer = [];
+final class Assets
+{
+    protected static array $head = [];
+    protected static array $footer = [];
+    protected static array $javascriptVariables = [];
 
     public function prependHead(string $content): self
     {
-        array_unshift($this->head, $content);
+        array_unshift(self::$head, $content);
 
         return $this;
     }
 
-    public function head(string $content): self
+    public function addToHeader(string $content): self
     {
-        $this->head[] = $content;
-
+        self::$head[] = $content;
         return $this;
     }
 
-    public function addScript(string $name): self
+    public function addScript(string $name, ScriptLocationType $scriptLocationType = ScriptLocationType::Header): self
     {
-        $path = self::getPath(self::getSystemUrl() . __DIR__ . '/../Assets/Js/' . $name);
-
-        $this->head[] = '<script type="text/javascript">' . file_get_contents($path) . '</script>';
+        $payload = '<script src="' . self::getPath($this->getBasePath('/Assets/Js/' . $name))
+            . '?' . App::VERSION . '"></script>';
+        if ($scriptLocationType === ScriptLocationType::Header) {
+            $this->addToHeader($payload);
+        } else {
+            $this->addToFooter($payload);
+        }
         return $this;
-    }
-
-    private static function getSystemUrl(): string
-    {
-        global $whmcs;
-        return parse_url($whmcs->getSystemURL(), PHP_URL_PATH);
     }
 
     private static function getPath(string $path): string
@@ -45,28 +45,72 @@ class Assets
         );
     }
 
-    public function footer(string $content): self
+    public function addToFooter(string $content): self
     {
-        $this->footer[] = $content;
+        self::$footer[] = $content;
 
         return $this;
     }
 
     public function renderHead(): string
     {
-        $content = implode("\n", $this->head);
+        $content = implode("\n", self::$head);
+        self::$head = [];
 
-        $this->head = [];
+        foreach (self::$javascriptVariables as $key => $foo) {
+            $content .= $this->renderJavascriptVariables($key);
+        }
 
         return $content;
     }
 
     public function renderFooter(): string
     {
-        $content = implode("\n", $this->footer);
+        $content = implode("\n", self::$footer);
 
-        $this->footer = [];
+        self::$footer = [];
 
         return $content;
+    }
+
+    private function getBasePath(string $assetUrl): string
+    {
+        $basePath = realpath(__DIR__ . '/../../../../../');
+        $baseModulePath = realpath(__DIR__ . '/../');
+        $basePath = str_replace($basePath, '', $baseModulePath);
+
+        return $basePath . $assetUrl;
+    }
+
+    public function addStyle(string $name): self
+    {
+        $this->addToHeader(
+            '<link href="' . self::getPath($this->getBasePath('/Assets/Css/' . $name))
+            . '?' . App::VERSION . '" rel="stylesheet">'
+        );
+
+        return $this;
+    }
+
+    public function addToJavascriptVariables(string $name, array $data): void
+    {
+        self::$javascriptVariables[$name] = $data;
+    }
+
+    private function renderJavascriptVariables(string $asset): string
+    {
+        $output = '';
+        if (!empty(self::$javascriptVariables[$asset])) {
+            $output .= '<script>';
+            foreach (self::$javascriptVariables[$asset] as $key => $data) {
+                if (is_array($data)) {
+                    $output .= 'var ' . $key . ' = ' . json_encode($data) . ';';
+                } else {
+                    $output .= 'var ' . $key . ' = "' . $data . '";';
+                }
+            }
+            $output .= '</script>';
+        }
+        return $output;
     }
 }

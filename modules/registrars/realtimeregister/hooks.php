@@ -18,5 +18,9 @@ App::hook(Hooks\ClientAreaPage::class);
 App::hook(Hooks\ContactEdit::class);
 
 add_hook('AdminHomeWidgets', 1, function() {
-    return new \RealtimeRegister\Widget\InformationModuleWidget();
+    return new \RealtimeRegister\Widget\BalanceModuleWidget();
+});
+
+add_hook('AdminHomeWidgets', 1, function() {
+    return new \RealtimeRegister\Widget\DomainOverviewModuleWidget();
 });

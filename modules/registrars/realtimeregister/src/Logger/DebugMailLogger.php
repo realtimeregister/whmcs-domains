@@ -26,8 +26,11 @@ class DebugMailLogger extends AbstractLogger
 
         if ($context['response_body']) {
             $message .= 'HTTP Status: ' . $context['response_code'] . '<br>' . PHP_EOL;
-            $message .= '<br>' . PHP_EOL . 'HEADER: <br>' . PHP_EOL . '<pre>'
-                . htmlentities($context['headers']) . '</pre><br>' . PHP_EOL;
+            $message .= '<br>' . PHP_EOL . 'HEADER: <br>' . PHP_EOL . '<pre>';
+            foreach ($context['headers'] as $header) {
+                $message .= htmlentities(implode(' ', $header)) . '<br>';
+            }
+            $message .= '</pre><br>' . PHP_EOL;
             $message .= '<br>' . PHP_EOL . 'BODY: <br>' . PHP_EOL . '<pre>' . htmlentities(
                 var_export(json_decode($context['response_body'], 1), true)
             ) . '</pre><br>' . PHP_EOL;

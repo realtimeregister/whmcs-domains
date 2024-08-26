@@ -3,7 +3,7 @@ name: CI
 on: [ push ]
 
 jobs:
-  build-and-test:
+  phpcs:
     runs-on: ubuntu-latest
 
     steps:
@@ -11,7 +11,7 @@ jobs:
 
       - name: Composer install --dev
         uses: php-actions/composer@v6
-        working_dir: modules/registrars/realtimeregister
+        working-directory: modules/registrars/realtimeregister
 
       - name: PHP Code Sniffer
         uses: php-actions/phpcs@v1

@@ -5,16 +5,15 @@ on: [ push ]
 jobs:
   phpcs:
     runs-on: ubuntu-latest
-#    defaults:
-#      run:
-#        working-directory: ./modules/registrars/realtimeregister
+    defaults:
+      run:
+        working-directory: "modules/registrars/realtimeregister"
 
     steps:
       - uses: actions/checkout@v3
 
       - name: Composer install --dev
         uses: php-actions/composer@v6
-        working_dir: "modules/registrars/realtimeregister"
 
       - name: PHP Code Sniffer
         uses: php-actions/phpcs@v1

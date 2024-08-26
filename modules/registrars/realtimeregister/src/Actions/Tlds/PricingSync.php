@@ -5,6 +5,7 @@ namespace RealtimeRegister\Actions\Tlds;
 use RealtimeRegister\Actions\Action;
 use RealtimeRegister\App;
 use RealtimeRegister\Request;
+use RealtimeRegister\Services\MetadataService;
 use SandwaveIo\RealtimeRegister\Domain\Price;
 use WHMCS\Domain\TopLevel\ImportItem;
 use WHMCS\Domains\DomainLookup\ResultsList;
@@ -53,7 +54,7 @@ class PricingSync extends Action
             // Loop through the sld pricings and add every applicable tld that is not the main tld
             foreach ($pricesSLD as $tld => $priceInfo) {
                 try {
-                    $metadata = $this->tldInfo(new Request(['domain' => ['tld' => $tld]]));
+                    $metadata = (new MetadataService($tld))->getAll();
                 } catch (\Exception) {
                     continue;
                 }
@@ -70,7 +71,7 @@ class PricingSync extends Action
             foreach ($prices as $tld => $priceInfo) {
                 $item = new ImportItem();
                 try {
-                    $metadata = $this->metadata(new Request(['domain' => ['tld' => $tld]]));
+                    $metadata = (new MetadataService($tld))->getMetadata();
                 } catch (\Exception $e) {
                     continue;
                 }

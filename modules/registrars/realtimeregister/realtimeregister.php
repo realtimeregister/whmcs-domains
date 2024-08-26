@@ -116,3 +116,4 @@ function realtimeregister_ResendValidationMails(array $params)
 {
     throw new Exception(__FUNCTION__ . ' is not implemented yet');
 }
+

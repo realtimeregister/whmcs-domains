@@ -99,7 +99,7 @@ class ContactService
         return ContactMapping::query()->where('handle', $handle)->exists();
     }
 
-    public static function addContactMapping(int $clientId, int $contactId, string $handle, bool $orgAllowed): void
+    public function addContactMapping(int $clientId, int $contactId, string $handle, bool $orgAllowed): void
     {
         ContactMapping::query()->insert(
             [

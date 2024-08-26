@@ -33,11 +33,16 @@ class ConfigArray
                 'Description' => 'Enter your Realtime Register <a target="_blank" ' .
                     'href="https://dm.realtimeregister.com/app/profile/keys">API key</a> here.',
             ],
-            'INFO_ACCOUNT_EMPTY_LINE' => [
+            'check_credentials' => [
                 'FriendlyName' => "<br/>",
                 'Type' => 'none',
                 'Description' => '<button class="check-connection">Check Connection</button>
 <span class="credentials-result"></span>',
+            ],
+            'import_domains' => [
+                'FriendlyName' => "<br/>",
+                'Type' => 'none',
+                'Description' => '<button class="import-wizard">Import Wizard</button>'
             ],
             /**
              * General settings.

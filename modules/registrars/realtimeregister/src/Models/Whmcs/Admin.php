@@ -1,12 +1,13 @@
 <?php
 
-namespace RealtimeRegister\Models;
+namespace RealtimeRegister\Models\Whmcs;
 
 use Illuminate\Database\Eloquent\Model;
 
-class DomainPricing extends Model
+class Admin extends Model
 {
-    protected $table = 'tbldomainpricing';
+
+    protected $table = 'tbladmins';
 
     protected $guarded = ['id'];
 

@@ -2,13 +2,16 @@
 
     <div class="stepwizard-row">
         <div class="stepwizard-step">
-            <button type="button" class="btn btn-default btn-circle btn-primary" onclick="goToStep(1)">Setup</button>
+            <button type="button" class="btn btn-default btn-circle btn-primary" onclick="goToStep(1)">1</button>
+            <span>Setup</span>
         </div>
         <div class="stepwizard-step">
-            <button type="button" class="btn btn-default btn-circle btn-primary" onclick="goToStep(2)">Confirm</button>
+            <button type="button" class="btn btn-default btn-circle btn-primary" onclick="goToStep(1)">2</button>
+            <span>Confirm</span>
         </div>
         <div class="stepwizard-step">
-            <button type="button" class="btn btn-default btn-circle btn-primary disabled">Import</button>
+            <button type="button" class="btn btn-default btn-circle btn-primary btn-current">3</button>
+            <span>Import</span>
         </div>
     </div>
 

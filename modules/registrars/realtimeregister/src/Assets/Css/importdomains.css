@@ -1,0 +1,66 @@
+.stepwizard-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem
+}
+
+.stepwizard-step {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: 0.75rem
+}
+
+.btn-circle {
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    padding: 6px 0;
+    font-size: 12px;
+    line-height: 1.428571429;
+    border-radius: 15px;
+}
+
+.btn-circle:not(.btn-current) {
+    background: #79a8d0 !important;
+}
+
+.failed-domains {
+    color: red;
+}
+
+.warning_domains {
+    color: red;
+}
+
+.brand_overview,
+.failed_domains,
+.warning_domains {
+    list-style: none;
+    max-height: 170px;
+    overflow-y: scroll;
+    margin-top: 15px;
+    background-color: #f7e9e9;
+    padding: 15px;
+    border-radius: 3px;
+}
+
+.brand_overview li,
+.warning_domains li,
+.failed_domains li {
+    margin-top: 8px;
+    margin-bottom: 0;
+}
+
+.brand_overview li span,
+.warning_domains li span,
+.failed_domains li span {
+    font-weight: bold;
+}
+
+.brand_overview li:first-child,
+.warning_domains li:first-child,
+.failed_domains li:first-child {
+    margin-top: 0;
+}

@@ -24,11 +24,12 @@ class ImportDomains extends Hook
     public function __invoke(DataObject $vars): void
     {
         App::assets()->addScript("importDomains.js");
+        App::assets()->addStyle("importdomains.css");
 
         if ($_POST['action'] === $this->ACTION && $_POST['module'] == 'realtimeregister') {
+
             self::importWizard();
         }
-
     }
 
     #[NoReturn] private static function importWizard(): void

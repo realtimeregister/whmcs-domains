@@ -21,7 +21,8 @@ class AdminAreaPage extends Hook
         // TODO fix the code in https://gist.github.com/jaceju/cc53d2fbab6e828f69b2a3b7e267d1ed
         if (!Capsule::schema()->hasTable(ContactMapping::TABLE_NAME)) {
             Capsule::schema()->create(
-                ContactMapping::TABLE_NAME, function (Blueprint $table) {
+                ContactMapping::TABLE_NAME,
+                function (Blueprint $table) {
                     $table->integer('userid');
                     $table->integer('contactid');
                     $table->char('handle', 40);
@@ -37,7 +38,8 @@ class AdminAreaPage extends Hook
 
         if (!Capsule::schema()->hasTable(Cache::TABLE_NAME)) {
             Capsule::schema()->create(
-                Cache::TABLE_NAME, function ($table) {
+                Cache::TABLE_NAME,
+                function ($table) {
                     $table->string('key')->unique();
                     $table->text('value');
                     $table->integer('expiration');

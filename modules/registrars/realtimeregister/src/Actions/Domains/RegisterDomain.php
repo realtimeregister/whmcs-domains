@@ -2,7 +2,6 @@
 
 namespace RealtimeRegister\Actions\Domains;
 
-use DomainContactTrait;
 use RealtimeRegister\Actions\Action;
 use RealtimeRegister\App;
 use RealtimeRegister\Request;

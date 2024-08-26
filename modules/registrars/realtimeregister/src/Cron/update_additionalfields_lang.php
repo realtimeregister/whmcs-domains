@@ -1,10 +1,10 @@
 <?php
 
 namespace Realtimeregister\Cron;
+
 require_once __DIR__ . '/../../vendor/autoload.php';
 require_once implode(DIRECTORY_SEPARATOR, [__DIR__, '..', '..', '..', '..', '..', 'init.php']);
 require_once ROOTDIR . '/includes/registrarfunctions.php';
-
 
 use RealtimeRegister\Services\MetadataService;
 

@@ -83,11 +83,12 @@ class LocalApi
         return new DataObject(localAPI('GetClientsDetails', ['clientid' => $clientId])['client']);
     }
 
-    public function createContact()
+    public function createContact(): void
     {
         localAPI(
-            'AddContact', [
-            'firstname' => ''
+            'AddContact',
+            [
+                'firstname' => ''
             ]
         );
     }

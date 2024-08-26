@@ -15,7 +15,7 @@ class MetadataService
     private string $tld;
     private string $provider;
     /**
-     * @var TLDInfo 
+     * @var TLDInfo
      */
     private $info;
 
@@ -26,7 +26,9 @@ class MetadataService
         $this->tld = $tld;
         $this->info = TLDInfo::fromArray(
             Cache::remember(
-                'tld.' . $this->tld, MetadataService::DAY_MINUTES, function () {
+                'tld.' . $this->tld,
+                MetadataService::DAY_MINUTES,
+                function () {
                     $metadata = App::client()->tlds->info($this->tld);
                     foreach ($metadata->applicableFor as $app_tld) {
                         Cache::put('tld.' . $app_tld, $metadata->toArray(), MetadataService::DAY_MINUTES);
@@ -50,7 +52,7 @@ class MetadataService
     }
 
     /**
-     * @param  string $param
+     * @param string $param
      * @return string|int|array|bool
      */
     public function get(string $param)
@@ -74,7 +76,7 @@ class MetadataService
     }
 
     /**
-     * @param  string $domain the domain name
+     * @param string $domain the domain name
      * @return string
      */
     public static function getTld($domain)
@@ -255,17 +257,19 @@ class MetadataService
                     continue;
                 }
                 if (!in_array($tld_field['Name'], $tldNames[$tld])) {
-                    $rtrAdditionalFields[$tld][] = ["Name" => is_array($tld_field) ? $tld_field["Name"] : $tld_field, "Remove" => true];
+                    $rtrAdditionalFields[$tld][] = [
+                        "Name" => is_array($tld_field) ? $tld_field["Name"] : $tld_field, "Remove" => true
+                    ];
                 }
             }
         }
     }
 
-    public static function getAllTlds() : array
+    public static function getAllTlds(): array
     {
         $providers = Cache::remember(
             "rtrProviders", self::DAY_MINUTES, fn () =>
-            App::client()->providers->export(parameters: ["fields" => "tlds"])->toArray()
+            App::client()->providers->export(parameters: ["fields" => "tlds"])
         );
         return array_map(
             fn($tld) => $tld['name'],
@@ -276,9 +280,9 @@ class MetadataService
     public static function isRtr($tld)
     {
         return DomainPricing::query()
-            ->where("extension", "." . $tld)
-            ->whereIn("autoreg", ["realtimeregister", ""])
-            ->first() !== null;
+                ->where("extension", "." . $tld)
+                ->whereIn("autoreg", ["realtimeregister", ""])
+                ->first() !== null;
     }
 
     public function getOffsetExpiryDate(string $expiryDate): string

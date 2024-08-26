@@ -51,11 +51,10 @@ abstract class Action implements InvokableAction
         return (new MetadataService($request->domain->tld))->getMetadata();
     }
 
-    protected function tldInfo(Request $request) : TLDInfo
+    protected function tldInfo(Request $request): TLDInfo
     {
         return (new MetadataService($request->domain->tld))->getAll();
     }
-
 
     public function config(string $key, $default = null)
     {

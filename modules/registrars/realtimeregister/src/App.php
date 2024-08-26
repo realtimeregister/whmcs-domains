@@ -7,6 +7,7 @@ use RealtimeRegister\Contracts\InvokableHook;
 use RealtimeRegister\Entities\DataObject;
 use RealtimeRegister\Entities\RegistrarConfig;
 use RealtimeRegister\Exceptions\ActionFailedException;
+use RealtimeRegister\Logger\DebugMailLogger;
 use RealtimeRegister\Models\RealtimeRegister\Cache;
 use RealtimeRegister\Services\Assets;
 use RealtimeRegister\Services\ContactService;
@@ -14,7 +15,6 @@ use RuntimeException;
 use SandwaveIo\RealtimeRegister\IsProxy;
 use SandwaveIo\RealtimeRegister\RealtimeRegister;
 
-// TODO https://dev.to/vimuth7/singleton-pattern-in-php-and-dependency-injection-di-container-in-laravel-4nj9
 class App
 {
     public const NAME = 'realtimeregister';
@@ -93,7 +93,8 @@ class App
 
         return static::$client = new RealtimeRegister(
             apiKey: App::registrarConfig()->apiKey(),
-            baseUrl: App::registrarConfig()->isTest() ? self::API_URL_TEST : self::API_URL
+            baseUrl: App::registrarConfig()->isTest() ? self::API_URL_TEST : self::API_URL,
+            logger: App::registrarConfig()->get('debug_mode') == 'on' ? new DebugMailLogger() : null
         );
     }
 
@@ -180,6 +181,6 @@ class App
             $name = class_basename($name);
         }
 
-        add_hook($name, $priority, fn (array $vars = []) => static::dispatchHook($hook ?: $name, $vars));
+        add_hook($name, $priority, fn(array $vars = []) => static::dispatchHook($hook ?: $name, $vars));
     }
 }

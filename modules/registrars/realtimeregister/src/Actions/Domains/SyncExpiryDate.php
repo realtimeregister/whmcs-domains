@@ -7,7 +7,6 @@ use RealtimeRegister\Actions\Action;
 use RealtimeRegister\App;
 use RealtimeRegister\Request;
 
-
 class SyncExpiryDate extends Action
 {
     public function __invoke(Request $request)

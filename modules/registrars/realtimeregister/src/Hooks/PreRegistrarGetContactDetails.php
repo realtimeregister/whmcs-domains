@@ -9,7 +9,7 @@ class PreRegistrarGetContactDetails extends Hook
 {
     public function __invoke(DataObject $vars)
     {
-        App::assets()->head(
+        App::assets()->addToHeader(
             <<<html
 <script>
 $(document).ready(function() {

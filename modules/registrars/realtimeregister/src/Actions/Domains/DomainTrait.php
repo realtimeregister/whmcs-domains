@@ -3,9 +3,6 @@
 namespace RealtimeRegister\Actions\Domains;
 
 use Illuminate\Database\Capsule\Manager as Capsule;
-use libphonenumber\PhoneNumber;
-use libphonenumber\PhoneNumberFormat;
-use libphonenumber\PhoneNumberUtil;
 use RealtimeRegister\App;
 use RealtimeRegister\Models\RealtimeRegister\ContactMapping;
 use RealtimeRegister\Models\Whmcs\Configuration;

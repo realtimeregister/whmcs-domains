@@ -31,7 +31,7 @@ class MetadataService
                 function () {
                     $metadata = App::client()->tlds->info($this->tld);
                     foreach ($metadata->applicableFor as $app_tld) {
-                        Cache::put('tld.' . $app_tld, $metadata, MetadataService::DAY_MINUTES);
+                        Cache::put('tld.' . $app_tld, $metadata->toArray(), MetadataService::DAY_MINUTES);
                     }
                     return $metadata->toArray();
                 }
@@ -268,9 +268,8 @@ class MetadataService
     public static function getAllTlds(): array
     {
         $providers = Cache::remember(
-            "rtrProviders",
-            self::DAY_MINUTES,
-            fn() => App::client()->providers->list(parameters: ["fields" => "tlds", "export" => "true"])->toArray()
+            "rtrProviders", self::DAY_MINUTES, fn () =>
+            App::client()->providers->export(parameters: ["fields" => "tlds"])
         );
         return array_map(
             fn($tld) => $tld['name'],
@@ -284,5 +283,17 @@ class MetadataService
                 ->where("extension", "." . $tld)
                 ->whereIn("autoreg", ["realtimeregister", ""])
                 ->first() !== null;
+    }
+
+    public function getOffsetExpiryDate(string $expiryDate): string
+    {
+        $offset = $this->get("expiryDateOffset") || 0;
+
+        return date("Y-m-d", strtotime($expiryDate . " - " . ((int)$offset) . " seconds"));
+    }
+
+    public function getProvider() : string
+    {
+        return $this->provider;
     }
 }

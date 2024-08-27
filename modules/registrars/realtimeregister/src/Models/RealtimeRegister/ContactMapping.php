@@ -5,6 +5,7 @@ namespace RealtimeRegister\Models\RealtimeRegister;
 use Illuminate\Database\Eloquent\Model;
 
 /**
+ * @property int $userid
  * @property string $handle
  * @property int $contactid
  * @property bool $org_allowed

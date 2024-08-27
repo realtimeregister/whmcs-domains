@@ -72,7 +72,7 @@ trait DomainTrait
             state: $rtrContact->get('state')
         );
 
-        ContactService::addContactMapping($clientId, $contactId, $handle, $organizationAllowed);
+        App::contacts()->addContactMapping($clientId, $contactId, $handle, $organizationAllowed);
         return $handle;
     }
 

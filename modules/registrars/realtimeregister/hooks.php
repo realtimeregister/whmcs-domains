@@ -18,6 +18,7 @@ App::hook(Hooks\AdminAreaHeadOutput::class, null, 100);
 App::hook(Hooks\AdminAreaFooterOutput::class, null, 100);
 App::hook(Hooks\ClientAreaPage::class);
 App::hook(Hooks\ContactEdit::class);
+App::hook("AdminAreaHeadOutput", Hooks\ImportDomains::class);
 App::hook('ShoppingCartValidateCheckout', Hooks\ShoppingCartValidate::class);
 App::hook('ShoppingCartValidateDomainsConfig', Hooks\ShoppingCartValidate::class);
 App::hook(Hooks\UserLogin::class);

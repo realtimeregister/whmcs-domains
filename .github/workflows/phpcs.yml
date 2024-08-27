@@ -3,20 +3,27 @@ name: CI
 on: [ push ]
 
 jobs:
-  build-and-test:
+  phpcs:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: "modules/registrars/realtimeregister"
 
     steps:
       - uses: actions/checkout@v3
 
       - name: Composer install --dev
         uses: php-actions/composer@v6
-        working_dir: modules/registrars/realtimeregister
+        env:
+          COMPOSER: "composer.json"
+        with:
+          working_dir: "modules/registrars/realtimeregister"
 
       - name: PHP Code Sniffer
         uses: php-actions/phpcs@v1
         with:
           php_version: 8.1
           path: modules/registrars/realtimeregister
-          ignore: modules/registrars/realtimregister/vendor
+          ignore: modules/registrars/realtimeregister/vendor
+          extensions: php
           standard: PSR12

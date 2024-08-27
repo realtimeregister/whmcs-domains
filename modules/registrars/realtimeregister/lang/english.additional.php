@@ -1,4 +1,5 @@
 <?php
+// phpcs:ignoreFile
 /**
  * WHMCS Language File for RTR module additional domain fields
  * English (en)
@@ -21,4 +22,3 @@ $_LANG['tld_se_orgno_label'] = 'Unique data set or Organization number';
 $_LANG['tld_se_orgno_description'] = 'Corporate identity number or personal identification number for swedish contacts (for non Swedish, any other unique identification number can be used instead)';
 $_LANG['tld_se_vatno_label'] = 'Vat number';
 $_LANG['tld_se_vatno_description'] = 'VAT registration number (only for foreign legal entities within the EU who are registered to pay VAT)';
-

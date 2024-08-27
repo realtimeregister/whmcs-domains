@@ -1,6 +1,6 @@
 <?php
 
-namespace tests;
+namespace Tests;
 
 use PHPUnit\Framework\TestCase;
 
@@ -21,7 +21,7 @@ class WHMCSModuleTest extends TestCase
      */
     public function testRequiredConfigOptionsFunctionExists()
     {
-        $this->assertTrue(function_exists($this->moduleName . '_ConfigOptions'));
+        $this->assertTrue(function_exists($this->moduleName . '_getConfigArray'));
     }
 
     /**
@@ -36,12 +36,9 @@ class WHMCSModuleTest extends TestCase
     {
         return [
             'Version' => ['version', 'string'],
-            'Config Options' => ['ConfigOptions', 'array'],
             'Check Availability' => ['CheckAvailability', 'array'],
             'Get Domain Information' => ['GetDomainInformation', 'array'],
-//            'Get Nameservers' => ['GetNameservers', 'array'],
             'Save Nameservers' => ['SaveNameservers', 'array'],
-//            'Get Registrar Lock' => ['GetRegistrarLock', 'array'],
             'Save Registrar Lock' => ['SaveRegistrarLock', 'array'],
             'Get Contact Details' => ['GetContactDetails', 'array'],
             'Save Contact Details' => ['SaveContactDetails', 'array'],

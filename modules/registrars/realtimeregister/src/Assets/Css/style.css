@@ -1,0 +1,108 @@
+#realtimeregisterconfig table .fieldlabel {
+    width: 200px;
+}
+#realtimeregisterconfig table td {
+    padding: 2px 5px;
+    text-align: left;
+    vertical-align: top;
+}
+#realtimeregisterconfig table td li {
+    list-style: circle;
+}
+#realtimeregisterconfig table td a {
+    text-decoration: underline;
+}
+form .view-ips {
+    padding-top: 4px;
+    vertical-align: top;
+    max-width: initial;
+}
+.manage-ips, .delete-host {
+    vertical-align: top;
+}
+.add-ip {
+    font-weight: bold;
+    padding: 0 5px;
+}
+.remove-ip {
+    padding: 5px;
+}
+
+.remove-ip i {
+    margin-top: 4px;
+}
+
+.extra-ips {
+    padding: 0 5px;
+    white-space: nowrap;
+}
+.extra-ips:hover, .add-ip:hover {
+    text-decoration: none;
+}
+.ip-version {
+    min-width: 175px;
+}
+
+@keyframes spinner-border {
+    to { transform: rotate(360deg); }
+}
+
+.spinner {
+    display: none;
+    background-color: rgba(255, 255, 255, 0.6);
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    text-align: center;
+}
+.spinner.active {
+    display: block;
+}
+
+.spinner-border {
+    position: absolute;
+    top: calc(50% - 1rem);
+    display: inline-block;
+    width: 2rem;
+    height: 2rem;
+    vertical-align: text-bottom;
+    border: .25em solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    -webkit-animation: spinner-border .75s linear infinite;
+    animation: spinner-border .75s linear infinite;
+}
+
+.child-host {
+}
+
+.child-host__table {
+    width: 100%;
+}
+
+.child-host__table td input,
+.child-host__table td select {
+    height: 30px;
+    padding: 5px;
+}
+
+.child-host__table td label,
+.child-host__table td input,
+.child-host__table td select {
+    width: 100%;
+}
+
+.child-host__table td {
+    padding-bottom: 5px;
+    padding-top: 5px;
+}
+
+.child-host__table td.version {
+    padding-left: 10px;
+}
+
+.child-host__table td.remove {
+    width: 20px;
+}

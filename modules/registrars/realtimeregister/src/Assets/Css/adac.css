@@ -1,0 +1,139 @@
+.adac-js .suggestion,
+.adac-js .domain-option {
+    clear: both;
+    line-height: 3rem;
+    overflow: hidden;
+    padding: 5px 15px;
+
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+}
+
+.adac-js .domain-option {
+    border: 1px solid #eee;
+}
+
+.adac-js .domain-option:nth-child(even) {
+    background: #eee;
+}
+
+.adac-js .suggestion:nth-child(even) {
+    background: #dddedf;
+}
+
+#adac-js-suggestions,
+#adac-js-domain-results {
+    margin: 30px 0;
+}
+
+.adac-js .label {
+    border-radius: 3px;
+}
+
+#adac-js-categories input {
+    display: none;
+}
+
+#adac-js-categories label {
+    color: #fff !important;
+    display: inline-block;
+    margin-bottom: 4px;
+    padding: 5px 6px;
+    font-size: 90%;
+    font-weight: 400;
+    border-radius: 2px;
+    background-color: #777;
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+#adac-js-categories label:hover {
+    background-color: #5e5e5e;
+}
+
+#adac-js-categories input:checked + label {
+    background-color: #5cb85c;
+}
+
+#adac-js-categories input:checked + label:hover {
+    background-color: #449d44;
+}
+
+.adac-js .domain_status_0,
+.adac-js .domain_status_2,
+.adac-js .domain_status_3,
+.adac-js .domain_status_4 {
+    color: #a2a2a2;
+}
+
+.adac-js .transfer,
+.adac-js .checkout {
+    border-color: #ccc;
+    background-color: white;
+    color: #777;
+}
+
+.adac-js .transfer:hover,
+.adac-js .checkout:hover {
+    color: #505050;
+    border-color: #909090;
+}
+
+.adac-js .adac-register-domain,
+.adac-js .adac-transfer-domain {
+    width: 100%;
+    max-width: 300px;
+}
+
+@media only screen and (max-width: 767px) and (min-width: 460px) {
+    .adac-js #adac-js-domain-results {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .adac-js #adac-js-domain-results .domain-option {
+        background: #fff;
+        width: 50%;
+        display: inline-block;
+        flex: 0 50%;
+    }
+
+    .adac-js #adac-js-domain-results .domain-option:nth-child(4n+2),
+    .adac-js #adac-js-domain-results .domain-option:nth-child(4n+3) {
+        background-color: #eee;
+    }
+
+    .adac-js #adac-js-suggestions .suggestion {
+        width: 50%;
+        display: inline-block;
+        background-color: #edeeef;
+        flex: 0 50%;
+    }
+
+    .adac-js #adac-js-suggestions .suggestion:nth-child(4n+3),
+    .adac-js #adac-js-suggestions .suggestion:nth-child(4n+4) {
+        background-color: #dddedf;
+    }
+}
+
+@media (max-width: 767px) {
+    .adac-js .suggestion,
+    .adac-js .domain-option {
+        padding-top: 10px;
+        padding-bottom: 15px;
+    }
+}
+
+@media (max-width: 767px) {
+    .text-xs-center {
+        text-align: center;
+    }
+}
+
+@media only screen and (max-width: 992px) and (min-width: 767px) {
+    .text-sm-center {
+        text-align: center;
+    }
+}

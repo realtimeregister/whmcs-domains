@@ -14,7 +14,10 @@ class CheckAvailability extends Action
     public function __invoke(Request $request)
     {
         $isProxy = App::isProxy();
-        $isProxy->enable('premium');
+
+        if ($request->params['premiumEnabled']) {
+            $isProxy->enable('premium');
+        }
 
         $isProxyDomains = $isProxy->checkMany(
             $request->get('searchTerm'),
@@ -30,9 +33,9 @@ class CheckAvailability extends Action
 
             $searchResult->setStatus(
                 match ($result->getStatus()) {
-                IsProxyDomain::STATUS_AVAILABLE => SearchResult::STATUS_NOT_REGISTERED,
-                IsProxyDomain::STATUS_NOT_AVAILABLE => SearchResult::STATUS_REGISTERED,
-                default => SearchResult::STATUS_UNKNOWN
+                    IsProxyDomain::STATUS_AVAILABLE => SearchResult::STATUS_NOT_REGISTERED,
+                    IsProxyDomain::STATUS_NOT_AVAILABLE => SearchResult::STATUS_REGISTERED,
+                    default => SearchResult::STATUS_UNKNOWN
                 }
             );
 

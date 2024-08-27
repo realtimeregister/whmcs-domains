@@ -22,5 +22,5 @@ jobs:
           version: 9.6
           php_version: 8.1
           bootstrap: modules/registrars/realtimeregister/vendor/autoload.php
-          configuration: modules/registrars/realtimeregister/test/phpunit.xml
+          configuration: modules/registrars/realtimeregister/phpunit.xml.dist
           args: --coverage-text

@@ -11,7 +11,7 @@ App::hook(Hooks\PreRegistrarGetContactDetails::class);
 
 App::hook(Hooks\AdminAreaPage::class, 10);
 App::hook('AdminAreaHeadOutput', Hooks\CheckCredentials::class, 1);
-App::hook('ClientAreaHeadOutput',Hooks\Adac::class, 10);
+App::hook('ClientAreaHeadOutput', Hooks\Adac::class, 10);
 App::hook('ClientAreaHeadOutput', Hooks\ClientAreaHeadOutput::class, 20);
 App::hook('ClientAreaHeadOutput', Hooks\CheckCredentials::class, 10);
 App::hook(Hooks\AdminAreaHeadOutput::class, null, 100);

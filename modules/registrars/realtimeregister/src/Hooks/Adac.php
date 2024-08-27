@@ -158,7 +158,7 @@ class Adac extends Hook
                         $tldGroup[$tldPricing[$price['relid']]]['title'];
                     $build[$tldPricing[$price['relid']]]['interval'] = '12';
                     $build[$tldPricing[$price['relid']]][$price['type']] = $priceString;
-                } else if (!($price['qsetupfee'] < 0)) {
+                } elseif (!($price['qsetupfee'] < 0)) {
                     $priceString = $price->getValutaAttribute();
                     $priceString .= $price['qsetupfee'];
                     $priceString .= $price->getCurrencySuffixAttribute();

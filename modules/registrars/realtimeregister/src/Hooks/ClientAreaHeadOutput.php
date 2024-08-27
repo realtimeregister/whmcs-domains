@@ -21,7 +21,7 @@ class ClientAreaHeadOutput extends Hook
                 $tld = substr($renewal['tld'], 1);
                 $metaData = (new MetadataService($tld))->getMetadata();
 
-                if (MetadataService::isRtr($tld) && !in_array('RENEW', $metaData['metadata']['featuresAvailable'])) {
+                if (MetadataService::isRtr($tld) && !in_array('RENEW', $metaData->featuresAvailable)) {
                     if ($renewal['expiryDate']->timestamp > $dateToCheck) {
                         $renewal['eligibleForRenewal'] = false;
                     }

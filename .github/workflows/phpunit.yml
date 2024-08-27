@@ -1,0 +1,29 @@
+name: Test application
+
+on:
+  pull_request:
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  phpunit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Composer install --dev
+        uses: php-actions/composer@v6
+        working-directory: modules/registrars/realtimeregister
+
+      - name: PHPUnit
+        uses: php-actions/phpunit@master
+        env:
+          TEST_NAME: WHMCS
+        with:
+          version: 9.6
+          php_version: 8.1
+          bootstrap: modules/registrars/realtimeregister/vendor/autoload.php
+          configuration: modules/registrars/realtimeregister/test/phpunit.xml
+          args: --coverage-text

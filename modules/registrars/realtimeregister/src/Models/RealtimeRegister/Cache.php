@@ -6,12 +6,13 @@ use Illuminate\Cache\ArrayStore;
 use Illuminate\Cache\DatabaseStore;
 use Illuminate\Cache\Repository;
 use Illuminate\Database\Capsule\Manager as Capsule;
+use RealtimeRegister\App;
 use RealtimeRegister\Models\Whmcs\Registrars;
 
 class Cache
 {
     public const TABLE_NAME = 'mod_realtimeregister_cache';
-    protected string $table = self::TABLE_NAME;
+    protected $table = self::TABLE_NAME;
 
     protected static ?Repository $requestCache = null;
     protected static ?Repository $dbCache = null;

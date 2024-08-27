@@ -11,7 +11,8 @@ jobs:
 
       - name: Composer install --dev
         uses: php-actions/composer@v6
-        working-directory: modules/registrars/realtimeregister
+        with:
+          working_dir: "modules/registrars/realtimeregister"
 
       - name: PHPUnit
         uses: php-actions/phpunit@master

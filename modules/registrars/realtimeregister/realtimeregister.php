@@ -126,4 +126,8 @@ function realtimeregister_RequestDelete($params)
 {
     return App::dispatch(\RealtimeRegister\Actions\Domains\Delete::class, $params);
 }
-    
+
+function realtimeregister_RenewDomain($params)
+{
+    return App::dispatch(\RealtimeRegister\Actions\Domains\RenewDomain::class, $params);
+}

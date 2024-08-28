@@ -35,6 +35,19 @@ class Sync extends Action
                 return [];
             }
 
+            try {
+                if (function_exists('realtimeregister_before_Sync')) {
+                    $values = realtimeregister_before_Sync($values, $request->params, $metadata, $domain);
+                }
+            } catch (\Exception $ex) {
+                return [
+                    'error' => sprintf(
+                        'Error while trying to execute the realtimeregister_before_Sync hook: %s.',
+                        $ex->getMessage()
+                    )
+                ];
+            }
+
             if (strtotime($expiryDate->format('Y-m-d')) < strtotime($whmcsDomain->nextduedate)) {
                 return ['expirydate' => $this->syncDueDate($whmcsDomain->nextduedate)];
             }
@@ -55,6 +68,19 @@ class Sync extends Action
         }
 
         $values[$status->value] = true;
+
+        try {
+            if (function_exists('realtimeregister_after_Sync')) {
+                return realtimeregister_after_Sync($request->params, $values);
+            }
+        } catch (\Exception $ex) {
+            return [
+                'error' => sprintf(
+                    'Error while trying to execute the realtimeregister_after_Sync hook: %s.',
+                    $ex->getMessage()
+                )
+            ];
+        }
 
         return $values;
     }

@@ -121,3 +121,9 @@ function realtimeregister_GetEPPCode($params)
 {
     return App::dispatch(\RealtimeRegister\Actions\Domains\GetAuthCode::class, $params);
 }
+
+function realtimeregister_RequestDelete($params)
+{
+    return App::dispatch(\RealtimeRegister\Actions\Domains\Delete::class, $params);
+}
+    

@@ -6,10 +6,10 @@ use Smarty;
 class TemplateService
 {
 
-    public static function renderTemplate(string $templatePath, array $args = []) : false | string
+    public static function renderTemplate(string $templatePath, array $args = []): false|string
     {
         $smarty = new Smarty;
-        
+
         foreach ($args as $key => $value) {
             $smarty->assign($key, $value);
         }

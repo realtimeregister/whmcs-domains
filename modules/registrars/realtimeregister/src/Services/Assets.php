@@ -2,7 +2,6 @@
 
 namespace RealtimeRegister\Services;
 
-use RealtimeRegister\App;
 use RealtimeRegister\Enums\ScriptLocationType;
 
 final class Assets
@@ -27,7 +26,7 @@ final class Assets
     public function addScript(string $name, ScriptLocationType $scriptLocationType = ScriptLocationType::Header): self
     {
         $payload = '<script src="' . self::getPath($this->getBasePath('/Assets/Js/' . $name))
-            . '?' . App::VERSION . '"></script>';
+            . '?' . rand() . '"></script>';
         if ($scriptLocationType === ScriptLocationType::Header) {
             $this->addToHeader($payload);
         } else {
@@ -86,7 +85,7 @@ final class Assets
     {
         $this->addToHeader(
             '<link href="' . self::getPath($this->getBasePath('/Assets/Css/' . $name))
-            . '?' . App::VERSION . '" rel="stylesheet">'
+            . '?' . rand() . '" rel="stylesheet">'
         );
 
         return $this;

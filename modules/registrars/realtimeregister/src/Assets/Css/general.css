@@ -1,0 +1,53 @@
+@keyframes move {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 50px 50px;
+    }
+}
+
+.rtr-progress-bar {
+    display: none;
+    background-color: #f1f0e8;
+    position: relative;
+    height: 30px;
+    overflow: hidden;
+    border-radius: 3px;
+}
+
+.rtr-progress-bar .progress-label {
+    color: white;
+    text-align: center;
+    height: 30px;
+    background-color: #2261a3;
+    width: 5%;
+    line-height: 30px;
+    position: relative;
+}
+
+.rtr-progress-bar .progress-label .complete:after {
+    display: none;
+}
+
+.rtr-progress-bar .progress-label:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 1;
+    background-size: 50px 50px;
+    background-image: linear-gradient(
+            45deg,
+            rgba(255, 255, 255, 0.2) 25%,
+            transparent 25%,
+            transparent 50%,
+            rgba(255, 255, 255, 0.2) 50%,
+            rgba(255, 255, 255, 0.2) 75%,
+            transparent 75%,
+            transparent
+    );
+    animation: move 2s linear infinite;
+}

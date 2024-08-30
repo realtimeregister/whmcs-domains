@@ -6,7 +6,7 @@
             <span>Setup</span>
         </div>
         <div class="stepwizard-step">
-            <button type="button" class="btn btn-default btn-circle btn-primary" onclick="goToStep(1)">2</button>
+            <button type="button" class="btn btn-default btn-circle btn-primary" onclick="goToStep(2)">2</button>
             <span>Confirm</span>
         </div>
         <div class="stepwizard-step">
@@ -15,32 +15,28 @@
         </div>
     </div>
 
-    <div class="spinner">
-        <span class="spinner__text">The domain importer is running. Please be patient until this process completes.</span>
-        <div class="bounce1"></div>
-        <div class="bounce2"></div>
-        <div class="bounce3"></div>
-        <span class="domain-progress-bar" style="display: block; margin-top: 10px;">
-            0%
-        </span>
+    <div class="rtr-progress-bar">
+        <div class="progress-label">Processing...</div>
     </div>
+
     <div style="margin-top: 20px; text-align: center;">
         <p class="processed-domains">Processed domains: 0</p>
     </div>
-    <div class="import-complete hidden mt-1">
+
+    <div class="import-complete mt-1">
         <p><strong></strong></p>
     </div>
 </div>
 
 <script type="text/javascript">
     const CHUNK_SIZE = 1;
-    const fields = JSON.parse('{$fieldsJSON}');
+    const fields = {$fieldsJSON};
     const selectedDomains = fields.selectedDomains;
     let processed = 0;
     let updated = 0;
 
     function goToStep(step) {
-        const contentArea = $('#contentarea');
+        const contentArea = $('.modal-body');
         $.post(
             window.location.href,
             {
@@ -61,6 +57,8 @@
     }
 
     $(function () {
+        $('.import-complete').hide();
+        showProgressBar();
         executeChunk(0);
     });
 
@@ -76,19 +74,14 @@
                 domains
             },
             function (response) {
-                processed += CHUNK_SIZE;
+                processed += domains.length;
                 updated += response.updated;
-                $('.domain-progress-bar').each((_, elem) => {
-                    elem.innerText = Math.ceil(processed / selectedDomains.length * 100) + '%'
-                });
-                $('.processed-domains').each((_, elem) => {
-                    elem.innerText = 'Processed domains: ' + processed;
-                });
-                if (i + CHUNK_SIZE >= selectedDomains.length) {
-                    $('.import-complete').removeClass('hidden');
-                    $('.import-complete strong').each((_, elem) => {
-                        elem.innerText = 'Total domains imported: ' + updated
-                    })
+                setProgress(selectedDomains.length, processed);
+                $('.processed-domains').text('Processed domains: ' + processed);
+                if (processed === selectedDomains.length) {
+                    progressComplete();
+                    $('.import-complete').show();
+                    $('.import-complete strong').text('Total domains imported: ' + updated);
                 } else {
                     executeChunk(i + CHUNK_SIZE);
                 }

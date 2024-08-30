@@ -1,4 +1,4 @@
-<div id="app">
+<div class="step-one">
     <p>
         This wizard will import domains from your Realtime Register account into WHMCS.
         Domain attributes like expiry date and status will be copied automatically. The importer will match up domain
@@ -11,11 +11,11 @@
             <span>Setup</span>
         </div>
         <div class="stepwizard-step">
-            <button type="button" class="btn btn-default btn-circle btn-primary disabled">2</button>
+            <button type="button" class="btn btn-default btn-circle btn-primary" disabled>2</button>
             <span>Confirm</span>
         </div>
         <div class="stepwizard-step">
-            <button type="button" class="btn btn-default btn-circle btn-primary disabled">3</button>
+            <button type="button" class="btn btn-default btn-circle btn-primary" disabled>3</button>
             <span>Import</span>
         </div>
     </div>
@@ -29,8 +29,7 @@
     {/if}
 
     <div class="rtr-import">
-        <div class="row step-one">
-            <div class="col-sm-12 col-md-10 col-lg-10">
+        <div class="step-one">
                 <h2>Setup</h2>
                 <form class="step-one-form">
                     <fieldset class="form-group">
@@ -68,7 +67,7 @@
                             import.</small>
                     </fieldset>
 
-                    <fieldset class="form-group domain-selection-list {if $fields['domainSelectionMethod'] != 'list'} hidden{/if}">
+                    <fieldset class="form-group domain-selection-list">
                         <textarea class="form-control" rows="4" cols="50" name="domainselection_list"></textarea>
                     </fieldset>
 
@@ -131,7 +130,7 @@
                         </small>
                     </fieldset>
 
-                    <div class="brand-selection-list hidden">
+                    <div class="brand-selection-list">
                         <a href="#" onclick="selectAllBrands(true)" title="Select all">Select all</a> /
                         <a href="#" onclick="selectAllBrands(false)" title="Deselect all">
                             Deselect all
@@ -178,10 +177,11 @@
                                 payment gateway</strong>
                         {/if}
                     </fieldset>
-                    <button class="btn btn-success" type="submit">Next step</button>
+                    <div class="modal-footer">
+                        <button class="btn btn-success" type="submit">Next step</button>
+                    </div>
                 </form>
             </div>
-        </div>
     </div>
 </div>
 
@@ -218,18 +218,20 @@
     function setBrandSelection(type) {
         brandSelectionMethod = type;
         if (type === 'list') {
-            $('.brand-selection-list').removeClass('hidden');
+            $('.brand-selection-list').show();
         } else {
-            $('.brand-selection-list').addClass('hidden');
+            $('.brand-selection-list').hide();
         }
     }
 
     function setDomainSelection(type) {
         domainSelectionMethod = type;
         if (type === 'list') {
-            $('.domain-selection-list').removeClass('hidden');
+            $('.domain-selection-list').show();
+            $('.warning_domains').hide();
         } else {
-            $('.domain-selection-list').addClass('hidden');
+            $('.domain-selection-list').hide();
+            $('.warning_domains').show();
         }
     }
 
@@ -276,6 +278,15 @@
     $(function () {
         if (domainSelectionMethod === 'list') {
             $('.domain-selection-list textarea').val((fields.selectedDomains || []).join("\n"));
+            $('.warning_domains').hide();
+        } else {
+            $('.domain-selection-list').hide();
+        }
+
+        if (brandSelectionMethod === 'list') {
+            $('.brand-selection-list').show();
+        } else {
+            $('.brand-selection-list').hide();
         }
 
         $('.step-one-form').on("submit", event => {
@@ -284,7 +295,7 @@
                 return;
             }
 
-            const contentArea = $('#contentarea');
+            const contentArea = $('.modal-body');
             $.post(
                 window.location.href,
                 {

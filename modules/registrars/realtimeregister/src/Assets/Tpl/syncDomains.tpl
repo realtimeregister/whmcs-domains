@@ -15,11 +15,7 @@
         </p>
     {/if}
 
-    <button class="sync-button btn btn-success" type="button" onclick="syncDomains()">
-        Sync RTR domain expiry dates to WHMCS
-    </button>
 
-    <hr>
 
     <div class="rtr-progress-bar">
         <div class="progress-label">Loading...</div>
@@ -30,18 +26,24 @@
         <p class="processed-domains">Processed domains: 0/0</p>
     </div>
 
-    <hr>
-
     <div class="sync-complete">
-        <div style="text-align: center; margin: 100px 0;">
+        <hr>
+        <div class="sync-complete__result" style="text-align: center; margin: 30px 0;">
+            <i class="fa fa-check-circle" style="font-size: 90px; color: #449d44; display: block"></i>
             <span class="spinner__text">Expiry date sync completed!</span>
-            <i class="fa fa-check-circle" style="font-size: 90px; color: #449d44;"></i>
             <div style="margin-top: 13px;">
                 <p><strong class="domains-synced">Total domains synced: 0</strong></p>
                 <p class="domains-changed">Domains changed: 0</p>
                 <p class="domains-skipped">Domains skipped: 0</p>
             </div>
         </div>
+    </div>
+
+
+    <div class="modal-footer">
+        <button class="sync-button btn btn-success" type="button" onclick="syncDomains()">
+            Sync expiry dates to WHMCS
+        </button>
     </div>
 </div>
 

@@ -29,7 +29,7 @@ App::hook(Hooks\ClientAreaPage::class);
 App::hook(Hooks\ContactEdit::class);
 
 
-App::hook('AdminHomeWidgets', Hooks\Widgets\ToolsWidget::class);
+App::hook('AdminHomeWidgets', Hooks\Widgets\ActionsWidget::class);
 //App::hook('AdminHomeWidgets', Hooks\Widgets\DomainOverviewWidget::class);
 
 App::hook('ClientAreaHeadOutput', Hooks\HeadAssets::class, 100);

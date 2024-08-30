@@ -1,9 +1,42 @@
 <div id="actions">
 
     <div class="action-group">
-        <button class="import-wizard" type="button" onclick="onAction(this, 'importWizard')">Import Domains</button>
-        <button class="sync-expiry" type="button" onclick="onAction(this, 'syncExpiry')">Sync Domain Expiry Dates</button>
-        <button class="auto-renew" type="button" onclick="onAction(this, 'autoRenew')">Change Auto Renew Status</button>
+        <div title="Import Domains"
+             class="action-item health-status-block status-badge-cyan clearfix"
+             onclick="onAction(this, 'importWizard')"
+        >
+            <div class="icon" style="width: 100px;">
+                <i class="fas fa-file-import"></i>
+            </div>
+            <div class="detail">
+                <span class="count">Import domains</span>
+                <span class="desc">Import domains/clients from RealtimeRegister into WHMCS</span>
+            </div>
+        </div>
+        <div title="Sync Domain Expiry Dates"
+             class="action-item health-status-block status-badge-cyan clearfix"
+             onclick="onAction(this, 'syncExpiry')"
+        >
+            <div class="icon" style="width: 100px;">
+                <i class="fas fa-sync"></i>
+            </div>
+            <div class="detail">
+                <span class="count">Sync Expiry Dates</span>
+                <span class="desc">Sync the expiry date for all domains in your WHMCS account</span>
+            </div>
+        </div>
+        <div title="Change Auto Renew status"
+             class="action-item health-status-block status-badge-cyan clearfix"
+             onclick="onAction(this, 'autoRenew')"
+        >
+            <div class="icon" style="width: 100px;">
+                <i class="fas fa-retweet"></i>
+            </div>
+            <div class="detail">
+                <span class="count">Change Auto Renew Status</span>
+                <span class="desc">Change the domains autorenew status to false at RealtimeRegister</span>
+            </div>
+        </div>
     </div>
 
     <div class="modal-container modal fade">
@@ -24,10 +57,9 @@
     const module = 'realtimeregister';
     const modal = $('.modal-container');
 
-
     function onAction(element, action) {
         const contentArea = $('.modal-body');
-        $('.modal-title').text(element.innerText);
+        $('.modal-title').text(element.title);
 
         $.post(
             window.location.href,
@@ -38,16 +70,8 @@
             function (response) {
                 contentArea.html(response);
                 modal.modal("show");
-                window.scrollTo(0, 0);
             },
             "html"
         ).fail(console.error);
     }
-
-
-    $(document).ready(
-        function () {
-
-        }
-    );
 </script>

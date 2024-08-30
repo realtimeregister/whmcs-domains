@@ -4,9 +4,9 @@ namespace RealtimeRegister\Widget;
 
 use RealtimeRegister\Services\TemplateService;
 
-class ToolsWidget extends \WHMCS\Module\AbstractWidget
+class ActionsWidget extends \WHMCS\Module\AbstractWidget
 {
-    protected $title = 'Realtime Register - Tools';
+    protected $title = 'Realtime Register - Actions';
     protected $description = '';
     protected $weight = 150;
     protected $columns = 1;

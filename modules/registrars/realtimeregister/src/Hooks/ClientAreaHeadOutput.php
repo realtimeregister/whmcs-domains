@@ -53,7 +53,7 @@ class ClientAreaHeadOutput extends Hook
                 $domain = App::client()->domains->get($whmcs_domain['domainname']);
                 $contact_handles = ['Registrant' => self::getWhmcsCidFromHandle($domain->registrant)];
                 /**
- * @var DomainContact $contact 
+ * @var DomainContact $contact
 */
                 foreach ($domain->contacts as $contact) {
                     $contact_handles[ucfirst(strtolower($contact->role))]

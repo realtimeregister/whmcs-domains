@@ -61,7 +61,8 @@ class Sync extends Action
 
         $status = WhmcsDomainStatus::fromDomainDetails($domain);
 
-        if (!in_array($status, [WhmcsDomainStatus::Active, WhmcsDomainStatus::Expired, WhmcsDomainStatus::Redemption])
+        if (
+            !in_array($status, [WhmcsDomainStatus::Active, WhmcsDomainStatus::Expired, WhmcsDomainStatus::Redemption])
         ) {
             throw new Exception(sprintf("Domain status %s", $status->value));
         }
@@ -97,7 +98,8 @@ class Sync extends Action
 
     protected function parseDomainStatus(array $statuses): string
     {
-        if (array_intersect([DomainStatusEnum::STATUS_SERVER_HOLD, DomainStatusEnum::STATUS_REGISTRAR_HOLD], $statuses)
+        if (
+            array_intersect([DomainStatusEnum::STATUS_SERVER_HOLD, DomainStatusEnum::STATUS_REGISTRAR_HOLD], $statuses)
         ) {
             return 'Fraud';
         }

@@ -9,7 +9,6 @@ use RealtimeRegister\Services\TemplateService;
 
 class AutoRenewStatus extends Hook
 {
-
     private string $ACTION = "autoRenew";
 
     public function __invoke(DataObject $vars): void
@@ -31,7 +30,8 @@ class AutoRenewStatus extends Hook
     private static function getDomains(): array
     {
         $whmcsDomains = array_map(
-            fn($domain) => $domain['domain'], Domain::query()
+            fn($domain) => $domain['domain'],
+            Domain::query()
                 ->select(['domain'])
                 ->where('registrar', '=', 'realtimeregister')
                 ->whereIn('status', ['active', 'pending'])

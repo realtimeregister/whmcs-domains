@@ -18,7 +18,8 @@ class Adac extends Hook
         global $smarty;
         $shopCurrency = strtoupper($vars['currency']['code']);
 
-        if (!empty($smarty->tpl_vars['templatefile']->value) 
+        if (
+            !empty($smarty->tpl_vars['templatefile']->value)
             && in_array($smarty->tpl_vars['templatefile']->value, ['viewcart', 'domainregister'])
         ) {
             if ($_POST['currency']) {
@@ -29,10 +30,12 @@ class Adac extends Hook
             }
         }
 
-        if (!empty($smarty->tpl_vars['templatefile']->value)
+        if (
+            !empty($smarty->tpl_vars['templatefile']->value)
             && $smarty->tpl_vars['templatefile']->value == 'domainregister'
         ) {
-            if (!empty($_POST['adacpremium']) && !empty($_POST['adacpremiumprice'])
+            if (
+                !empty($_POST['adacpremium']) && !empty($_POST['adacpremiumprice'])
                 && !empty($_POST['adacpremiumcurrency'])
             ) {
                 $premiumPrice = $_POST['adacpremiumprice'] / 100;
@@ -131,7 +134,7 @@ class Adac extends Hook
         }
 
         /**
- * @var Pricing[] $prices 
+ * @var Pricing[] $prices
 */
         $prices = Pricing::where('currency', $currency)->where(
             function ($query) {
@@ -197,7 +200,8 @@ class Adac extends Hook
             App::assets()->addStyle('adac.css');
             App::assets()->addScript('adac.js', ScriptLocationType::Footer);
             App::assets()->addToJavascriptVariables(
-                'adac-js', [
+                'adac-js',
+                [
                 'adacLang'       => $_LANG['rtr']['adac'],
                 'tldPrices'      => $build,
                 'ote'            => $oteValue,

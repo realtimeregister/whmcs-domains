@@ -34,15 +34,15 @@ class ImportDomains extends Hook
     #[NoReturn] private static function importWizard(): void
     {
         switch ($_POST['step']) {
-        case 2:
-            self::step2();
-            break;
-        case 3:
-            self::step3();
-            break;
-        default:
-            self::step1();
-            break;
+            case 2:
+                self::step2();
+                break;
+            case 3:
+                self::step3();
+                break;
+            default:
+                self::step1();
+                break;
         }
         exit;
     }
@@ -50,10 +50,14 @@ class ImportDomains extends Hook
     private static function step1(): void
     {
         $brands = App::client()->brands->export(
-            App::registrarConfig()->customerHandle(), ["fields" => "organization,handle,email"]
+            App::registrarConfig()->customerHandle(),
+            ["fields" => "organization,handle,email"]
         );
 
-        $domains = array_map(fn($domain) => $domain['domainName'], App::client()->domains->export(["fields" => "domainName"]));
+        $domains = array_map(
+            fn($domain) => $domain['domainName'],
+            App::client()->domains->export(["fields" => "domainName"])
+        );
         $paymentGateways = PaymentGateway::query()
             ->select('gateway', 'value')
             ->where('setting', '=', 'name')
@@ -72,7 +76,8 @@ class ImportDomains extends Hook
                     "gateways" => $paymentGateways,
                     "nonActiveTlds" => self::getNonActiveTlds($domains),
                     'domainSelectionMethod' => 'all',
-                    "brandSelectionMethod" => "contactsAsClients"], $fields
+                    "brandSelectionMethod" => "contactsAsClients"],
+                    $fields
                 )
             ]
         );
@@ -81,7 +86,8 @@ class ImportDomains extends Hook
     private static function step2(): void
     {
         echo TemplateService::renderTemplate(
-            'importDomainsStepTwo.tpl', [
+            'importDomainsStepTwo.tpl',
+            [
             "fields" => $_POST['fields'],
             ]
         );
@@ -124,7 +130,7 @@ class ImportDomains extends Hook
         }
     }
 
-    private static function importDomains() : int
+    private static function importDomains(): int
     {
         $domainNames = array_map(fn($domainName) => self::getDomainName($domainName), $_POST['domains']);
         $args = [
@@ -317,10 +323,14 @@ class ImportDomains extends Hook
     private static function getNonActiveTlds(array $domains): array
     {
         $tlds = array_map(fn($domain) => MetadataService::getTld($domain), $domains);
-        $activeTlds = array_map(fn($pricing) => $pricing['extension'], DomainPricing::query()->get(['extension'])->toArray());
+        $activeTlds = array_map(
+            fn($pricing) => $pricing['extension'],
+            DomainPricing::query()->get(['extension'])->toArray()
+        );
         return array_values(
             array_filter(
-                $tlds, function ($tld) use ($activeTlds) {
+                $tlds,
+                function ($tld) use ($activeTlds) {
                     return !in_array("." . strtolower($tld), $activeTlds);
                 }
             )

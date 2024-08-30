@@ -268,7 +268,9 @@ class MetadataService
     public static function getAllTlds(): array
     {
         $providers = Cache::remember(
-            "rtrProviders", self::DAY_MINUTES, fn () =>
+            "rtrProviders",
+            self::DAY_MINUTES,
+            fn () =>
             App::client()->providers->export(parameters: ["fields" => "tlds"])
         );
         return array_map(
@@ -292,7 +294,7 @@ class MetadataService
         return date("Y-m-d", strtotime($expiryDate . " - " . ((int)$offset) . " seconds"));
     }
 
-    public function getProvider() : string
+    public function getProvider(): string
     {
         return $this->provider;
     }

@@ -32,10 +32,11 @@ class ShoppingCartService
                         $languageCode = '';
                     }
 
-                    if ($languageCodes && !$languageCode && (!preg_match(
-                        '/^([0-9a-z\-]+\.)+([a-z\-]+|xn--[a-z0-9\-]+)$/',
-                        $domainName
-                    ) || str_starts_with($domainName, 'xn--'))
+                    if (
+                        $languageCodes && !$languageCode && (!preg_match(
+                            '/^([0-9a-z\-]+\.)+([a-z\-]+|xn--[a-z0-9\-]+)$/',
+                            $domainName
+                        ) || str_starts_with($domainName, 'xn--'))
                     ) {
                         $errors[] = 'Language code is required (' . $domainName . ')';
                     }

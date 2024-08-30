@@ -78,8 +78,8 @@ class ContactService
     }
 
     /**
-     * @param string|int $userId
-     * @param string|int $contactId
+     * @param  string|int $userId
+     * @param  string|int $contactId
      * @return Collection<ContactMapping>
      */
     public function fetchMappingByContactId(string|int $userId, string|int $contactId): Collection

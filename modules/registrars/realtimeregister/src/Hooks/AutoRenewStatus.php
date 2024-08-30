@@ -30,20 +30,26 @@ class AutoRenewStatus extends Hook
 
     private static function getDomains(): array
     {
-        $whmcsDomains = array_map(fn($domain) => $domain['domain'], Domain::query()
-            ->select(['domain'])
-            ->where('registrar', '=', 'realtimeregister')
-            ->whereIn('status', ['active', 'pending'])
-            ->get()
-            ->toArray());
+        $whmcsDomains = array_map(
+            fn($domain) => $domain['domain'], Domain::query()
+                ->select(['domain'])
+                ->where('registrar', '=', 'realtimeregister')
+                ->whereIn('status', ['active', 'pending'])
+                ->get()
+                ->toArray()
+        );
 
 
-        $rtrDomains = array_map(fn($domain) => $domain['domainName'],
-            App::client()->domains->export([
+        $rtrDomains = array_map(
+            fn($domain) => $domain['domainName'],
+            App::client()->domains->export(
+                [
                 'fields' => 'domainName',
                 'autoRenew' => 'true',
                 'autoRenewPeriod:gte' => '12'
-            ]));
+                ]
+            )
+        );
 
         return array_values(array_intersect($rtrDomains, $whmcsDomains));
     }

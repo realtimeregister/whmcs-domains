@@ -34,15 +34,15 @@ class ImportDomains extends Hook
     #[NoReturn] private static function importWizard(): void
     {
         switch ($_POST['step']) {
-            case 2:
-                self::step2();
-                break;
-            case 3:
-                self::step3();
-                break;
-            default:
-                self::step1();
-                break;
+        case 2:
+            self::step2();
+            break;
+        case 3:
+            self::step3();
+            break;
+        default:
+            self::step1();
+            break;
         }
         exit;
     }
@@ -62,28 +62,35 @@ class ImportDomains extends Hook
 
         $fields = $_POST['fields'] ?? [];
 
-        echo TemplateService::renderTemplate('importDomains.tpl',
+        echo TemplateService::renderTemplate(
+            'importDomains.tpl',
             [
-                "fields" => array_merge(["brandSelectionList" => [],
+                "fields" => array_merge(
+                    ["brandSelectionList" => [],
                     "allBrands" => $brands,
                     "allDomains" => $domains,
                     "gateways" => $paymentGateways,
                     "nonActiveTlds" => self::getNonActiveTlds($domains),
                     'domainSelectionMethod' => 'all',
-                    "brandSelectionMethod" => "contactsAsClients"], $fields)
-            ]);
+                    "brandSelectionMethod" => "contactsAsClients"], $fields
+                )
+            ]
+        );
     }
 
     private static function step2(): void
     {
-        echo TemplateService::renderTemplate('importDomainsStepTwo.tpl', [
+        echo TemplateService::renderTemplate(
+            'importDomainsStepTwo.tpl', [
             "fields" => $_POST['fields'],
-        ]);
+            ]
+        );
     }
 
 
 
-    private static function getDomainName(string $domain) {
+    private static function getDomainName(string $domain)
+    {
         if (Config::get('tldinfomapping.' . MetadataService::getTld($domain)) === 'centralnic') {
             return $domain . '.centralnic';
         }
@@ -108,7 +115,8 @@ class ImportDomains extends Hook
         return $domains;
     }
 
-    private static function step3(): void {
+    private static function step3(): void
+    {
         if ($_POST['domains']) {
             echo json_encode(["updated" => self::importDomains()]);
         } else {
@@ -161,7 +169,8 @@ class ImportDomains extends Hook
                 $recurringAmount = $tldPricing['pricing'][$tld]['renew'][$tldPricingCurrencyid];
             }
 
-            $domainId = Domain::query()->insertGetId([
+            $domainId = Domain::query()->insertGetId(
+                [
                 'userid'             => $userId,
                 'registrationdate'   => $domain['createdDate'],
                 'domain'             => $domain['domainName'],
@@ -174,17 +183,20 @@ class ImportDomains extends Hook
                 'nextduedate'        => $dueDate,
                 'nextinvoicedate'    => $dueDate,
                 'expirydate'         => $expiryDate
-            ]);
+                ]
+            );
 
             $provider = $metadata->getProvider();
 
             if (!empty($domain['registrant']['properties'] && !empty($domain['registrant']['properties'][$provider]))) {
                 foreach ($domain['registrant']['properties'][$provider] as $name => $value) {
-                    AdditionalFields::query()->insert([
+                    AdditionalFields::query()->insert(
+                        [
                         'domainid' => $domainId,
                         'name' => $name,
                         'value' => $value
-                    ]);
+                        ]
+                    );
                 }
             }
 
@@ -242,7 +254,7 @@ class ImportDomains extends Hook
         if ($results['result'] == 'success') {
             return $results['clientid'];
         } else {
-            logActivity("Error for creating a client. An Error Occurred: " . implode(" | ",$results));
+            logActivity("Error for creating a client. An Error Occurred: " . implode(" | ", $results));
         }
 
         return 0;
@@ -278,7 +290,7 @@ class ImportDomains extends Hook
         if ($results['result'] == 'success') {
             return $results['contactid'];
         } else {
-            logActivity("Error for creating a contact. An Error Occurred: " . implode(" | ",$results));
+            logActivity("Error for creating a contact. An Error Occurred: " . implode(" | ", $results));
         }
 
         return 0;
@@ -306,9 +318,13 @@ class ImportDomains extends Hook
     {
         $tlds = array_map(fn($domain) => MetadataService::getTld($domain), $domains);
         $activeTlds = array_map(fn($pricing) => $pricing['extension'], DomainPricing::query()->get(['extension'])->toArray());
-        return array_values(array_filter($tlds, function ($tld) use ($activeTlds) {
-            return !in_array("." . strtolower($tld), $activeTlds);
-        }));
+        return array_values(
+            array_filter(
+                $tlds, function ($tld) use ($activeTlds) {
+                    return !in_array("." . strtolower($tld), $activeTlds);
+                }
+            )
+        );
     }
 
     private static function randomPassword(): string

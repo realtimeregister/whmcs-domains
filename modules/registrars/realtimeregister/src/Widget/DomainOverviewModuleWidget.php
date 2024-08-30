@@ -23,7 +23,9 @@ class DomainOverviewModuleWidget extends \WHMCS\Module\AbstractWidget
 
     public function generateOutput($data): string
     {
-        /** @var Pagination $data */
+        /**
+ * @var Pagination $data 
+*/
 
         $number = number_format($data->total);
         return <<<EOF

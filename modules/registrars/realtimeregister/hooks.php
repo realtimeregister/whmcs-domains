@@ -8,11 +8,13 @@ require_once __DIR__ . '/vendor/autoload.php';
 App::boot();
 
 // Utils
-add_hook("AdminHomepage", 1, function() {
-    App::assets()->addScript("util.js");
-    App::assets()->addStyle("general.css");
-    App::assets()->addStyle("actions.css");
-});
+add_hook(
+    "AdminHomepage", 1, function () {
+        App::assets()->addScript("util.js");
+        App::assets()->addStyle("general.css");
+        App::assets()->addStyle("actions.css");
+    }
+);
 
 App::hook(Hooks\PreRegistrarGetContactDetails::class);
 
@@ -20,7 +22,7 @@ App::hook(Hooks\AdminAreaPage::class, null, 10);
 App::hook("AdminAreaHeadOutput", Hooks\CheckCredentials::class);
 App::hook("AdminHomepage", Hooks\SyncExpiry::class, 2);
 App::hook("AdminHomepage", Hooks\ImportDomains::class, 2);
-App::hook("AdminHomepage", Hooks\AutoRenewStatus::class ,2);
+App::hook("AdminHomepage", Hooks\AutoRenewStatus::class, 2);
 
 
 App::hook(Hooks\AdminAreaHeadOutput::class, null, 100);
@@ -30,7 +32,8 @@ App::hook(Hooks\ContactEdit::class);
 
 
 App::hook('AdminHomeWidgets', Hooks\Widgets\ActionsWidget::class);
-//App::hook('AdminHomeWidgets', Hooks\Widgets\DomainOverviewWidget::class);
+App::hook('AdminHomeWidgets', Hooks\Widgets\DomainOverviewWidget::class);
+App::hook('AdminHomeWidgets', Hooks\Widgets\BalanceWidget::class);
 
 App::hook('ClientAreaHeadOutput', Hooks\HeadAssets::class, 100);
 App::hook('ClientAreaFooterOutput', Hooks\FooterAssets::class, 100);

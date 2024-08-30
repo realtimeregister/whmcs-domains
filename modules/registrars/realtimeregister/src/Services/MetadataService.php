@@ -52,7 +52,7 @@ class MetadataService
     }
 
     /**
-     * @param string $param
+     * @param  string $param
      * @return string|int|array|bool
      */
     public function get(string $param)
@@ -76,7 +76,7 @@ class MetadataService
     }
 
     /**
-     * @param string $domain the domain name
+     * @param  string $domain the domain name
      * @return string
      */
     public static function getTld($domain)
@@ -280,9 +280,9 @@ class MetadataService
     public static function isRtr($tld)
     {
         return DomainPricing::query()
-                ->where("extension", "." . $tld)
-                ->whereIn("autoreg", ["realtimeregister", ""])
-                ->first() !== null;
+            ->where("extension", "." . $tld)
+            ->whereIn("autoreg", ["realtimeregister", ""])
+            ->first() !== null;
     }
 
     public function getOffsetExpiryDate(string $expiryDate): string

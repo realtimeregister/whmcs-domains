@@ -31,10 +31,12 @@ class SyncExpiry extends Hook
                     ->toArray()
             );
 
-            echo TemplateService::renderTemplate("syncDomains.tpl", ["fields" => [
+            echo TemplateService::renderTemplate(
+                "syncDomains.tpl", ["fields" => [
                 "rtrDomains" => $rtrDomains,
                 "whmcsDomains" => $whmcsDomains
-            ]]);
+                ]]
+            );
             exit();
         }
     }

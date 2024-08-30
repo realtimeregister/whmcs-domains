@@ -27,8 +27,8 @@ App::hook(Hooks\ContactEdit::class);
 App::hook('ClientAreaHeadOutput', Hooks\ClientAreaHeadOutput::class, 20);
 
 App::hook('AdminHomeWidgets', Hooks\Widgets\ActionsWidget::class);
-//App::hook('AdminHomeWidgets', Hooks\Widgets\DomainOverviewWidget::class);
-//App::hook('AdminHomeWidgets', Hooks\Widgets\BalanceWidget::class);
+App::hook('AdminHomeWidgets', Hooks\Widgets\DomainOverviewWidget::class);
+App::hook('AdminHomeWidgets', Hooks\Widgets\BalanceWidget::class);
 
 App::hook(Hooks\AdminHomepage::class);
 App::hook('ClientAreaHeadOutput', Hooks\HeadAssets::class, 100);

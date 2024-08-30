@@ -29,7 +29,7 @@
 </div>
 
 <script type="text/javascript">
-    const CHUNK_SIZE = 1;
+    const CHUNK_SIZE = 100;
     const fields = {$fieldsJSON};
     const selectedDomains = fields.selectedDomains;
     let processed = 0;

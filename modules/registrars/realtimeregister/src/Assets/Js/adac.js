@@ -49,7 +49,8 @@ statusClass[3] = 'label-danger';
 statusClass[4] = 'label-default';
 statusClass[5] = 'label-default';
 
-function ready(fn) {
+function ready(fn)
+{
     if (document.readyState != 'loading') {
         fn();
     }
@@ -57,15 +58,18 @@ function ready(fn) {
         document.addEventListener('DOMContentLoaded', fn);
     }
     else {
-        document.attachEvent('onreadystatechange', function () {
-            if (document.readyState != 'loading') {
-                fn();
+        document.attachEvent(
+            'onreadystatechange', function () {
+                if (document.readyState != 'loading') {
+                    fn();
+                }
             }
-        });
+        );
     }
 }
 
-function getCheckedBoxes(checkboxName) {
+function getCheckedBoxes(checkboxName)
+{
     var checkboxes = document.getElementsByName(checkboxName);
     var checkboxesChecked = [];
 
@@ -92,24 +96,31 @@ var init = function () {
                     }
                     var dataArray = JSON.parse(xhr.responseText);
 
-                    dataArray.forEach(function (data) {
-                        adac['action_' + data.action](data.data);
-                    });
+                    dataArray.forEach(
+                        function (data) {
+                            adac['action_' + data.action](data.data);
+                        }
+                    );
                 }
 
                 if (xhr.status == 200) {
                     adac.pollServer();
                 }
                 else {
-                    setTimeout(function () {
-                        adac.pollServer();
-                    }, adac.RECONNECT_TIME);
+                    setTimeout(
+                        function () {
+                            adac.pollServer();
+                        }, adac.RECONNECT_TIME
+                    );
                 }
             }
         };
 
         adac.inputElement.onpaste = function (event) {
-            setTimeout(function () { adac.processInput.call(adac.inputElement, event, adac.inputElement.value); }, 0);
+            setTimeout(
+                function () {
+                    adac.processInput.call(adac.inputElement, event, adac.inputElement.value); }, 0
+            );
         };
 
         adac.pollServer = function (xhr_type, command) {
@@ -144,9 +155,11 @@ var init = function () {
                     adac.connection.send(JSON.stringify(command));
                 }
                 else {
-                    setTimeout(function () {
-                        adac.sendCommand(command);
-                    }, 100);
+                    setTimeout(
+                        function () {
+                            adac.sendCommand(command);
+                        }, 100
+                    );
                 }
             };
 
@@ -171,12 +184,14 @@ var init = function () {
                     }
                     setupFallbackConnection();
                 } else {
-                    setTimeout(function () {
-                        if (adac.debug) {
-                            console.log('ws connection retrying...');
-                        }
-                        setupWebsocketConnection();
-                    }, adac.RECONNECT_TIME);
+                    setTimeout(
+                        function () {
+                            if (adac.debug) {
+                                console.log('ws connection retrying...');
+                            }
+                            setupWebsocketConnection();
+                        }, adac.RECONNECT_TIME
+                    );
                 }
             };
         };
@@ -203,9 +218,11 @@ var adac = {
         return function () {
             var context = this, args = arguments;
             clearTimeout(timer);
-            timer = setTimeout(function () {
-                fn.apply(context, args);
-            }, delay);
+            timer = setTimeout(
+                function () {
+                    fn.apply(context, args);
+                }, delay
+            );
         };
     },
 
@@ -236,16 +253,20 @@ var adac = {
         adac.categoriesElement = config.categoriesElement;
         adac.debug = config.debug;
 
-        ready(function() {
-            init();
-            adac.fetch_categories();
+        ready(
+            function () {
+                init();
+                adac.fetch_categories();
 
-            $(document).ready(function () {
-                if (adac.inputElement.value) {
-                    adac.processInput.call(adac.inputElement, null, adac.inputElement.value);
-                }
-            });
-        });
+                $(document).ready(
+                    function () {
+                        if (adac.inputElement.value) {
+                            adac.processInput.call(adac.inputElement, null, adac.inputElement.value);
+                        }
+                    }
+                );
+            }
+        );
     },
 
     fetch_categories: function () {
@@ -254,15 +275,17 @@ var adac = {
     },
 
     initInputListener: function () {
-        adac.inputElement.onkeyup = adac.debounce(function (event) {
-            var ignoreKeys = [9, 16, 17, 18, 20, 37, 38, 39, 40, 91, 92, 93];
-            if (ignoreKeys.indexOf(event.which) > -1) {
-                return false;
-            }
+        adac.inputElement.onkeyup = adac.debounce(
+            function (event) {
+                var ignoreKeys = [9, 16, 17, 18, 20, 37, 38, 39, 40, 91, 92, 93];
+                if (ignoreKeys.indexOf(event.which) > -1) {
+                    return false;
+                }
 
-            adac.preInput(this.value);
-            adac.processInput.call(this, event, this.value);
-        }, adac.DEBOUNCE_TIME);
+                adac.preInput(this.value);
+                adac.processInput.call(this, event, this.value);
+            }, adac.DEBOUNCE_TIME
+        );
 
         if (adac.categoriesElement) {
             adac.categoriesElement.onchange = function (event) {
@@ -368,7 +391,7 @@ var adac = {
             div.className = 'domain-option domain_status_' + domainResult.status;
 
             // Premium label
-            if(domainResult.price != undefined){
+            if(domainResult.price != undefined) {
                 document.getElementById('domain-name-' + domainResult.domain_name).innerHTML += ' <span class="label label-primary">' + premiumLang + '</span>';
             }
         }
@@ -473,27 +496,29 @@ var adac = {
                 console.error('Categories container not found. Please check the `adac.categoriesElement` setting.');
             }
         } else {
-            categories.forEach(function (category, _index, _array) {
-                var id = category[0],
+            categories.forEach(
+                function (category, _index, _array) {
+                    var id = category[0],
                     name = category[1],
                     checkbox = document.createElement('input');
 
-                checkbox.type = 'checkbox';
-                checkbox.name = 'adac-js-categories';
-                checkbox.value = id;
-                checkbox.id = id;
+                    checkbox.type = 'checkbox';
+                    checkbox.name = 'adac-js-categories';
+                    checkbox.value = id;
+                    checkbox.id = id;
 
-                var label = document.createElement('label');
-                label.htmlFor = id;
-                label.appendChild(document.createTextNode(name));
+                    var label = document.createElement('label');
+                    label.htmlFor = id;
+                    label.appendChild(document.createTextNode(name));
 
-                adac.categoriesElement.appendChild(checkbox);
-                adac.categoriesElement.appendChild(label);
-            });
+                    adac.categoriesElement.appendChild(checkbox);
+                    adac.categoriesElement.appendChild(label);
+                }
+            );
         }
     },
 
-    showError: function(error) {
+    showError: function (error) {
         var p = document.createElement('p');
         p.appendChild(document.createTextNode('Error: ' + error));
         adac.resultsElement.appendChild(p);
@@ -503,17 +528,24 @@ var adac = {
         var checkedBoxes = getCheckedBoxes('adac-js-categories');
 
         if (checkedBoxes) {
-            return checkedBoxes.map(function (element) {
-                return parseInt(element.value);
-            });
+            return checkedBoxes.map(
+                function (element) {
+                    return parseInt(element.value);
+                }
+            );
         }
 
         return null;
     },
 
-    ensureUUID: function() {
+    ensureUUID: function () {
         if (localStorage.getItem('sessionId') === null) {
-            localStorage.setItem('sessionId', 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {var r = Math.random()*16|0,v=c=='x'?r:r&0x3|0x8;return v.toString(16);}));
+            localStorage.setItem(
+                'sessionId', 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(
+                    /[xy]/g, function (c) {
+                        var r = Math.random()*16|0,v=c=='x'?r:r&0x3|0x8;return v.toString(16);}
+                )
+            );
         }
     }
 };
@@ -535,10 +567,10 @@ function domainHtml(domainName, domainResult)
     domainName.className = 'domain col-xs-12 col-sm-5 text-xs-center';
     domainName.innerHTML = '<span class="domain">' + domainWithoutExtension[0] + '</span><span class="extension">.' + domainResult.suffix + '</span>';
 
-    if (tldPrices['' + suffixWithoutDot + ''] != undefined &&
-        tldPrices['' + suffixWithoutDot + ''].group != undefined &&
-        tldPrices['' + suffixWithoutDot + ''].group != 'none' &&
-        tldPrices['' + suffixWithoutDot + ''].group != ''
+    if (tldPrices['' + suffixWithoutDot + ''] != undefined 
+        && tldPrices['' + suffixWithoutDot + ''].group != undefined 
+        && tldPrices['' + suffixWithoutDot + ''].group != 'none' 
+        && tldPrices['' + suffixWithoutDot + ''].group != ''
     ) {
         var group = tldPrices['' + suffixWithoutDot + ''].group;
         var labelClass = 'label-warning';
@@ -571,26 +603,32 @@ function priceHtml(price, domainResult, status)
                 price.innerHTML = premiumNotSupportedLang;
             } else {
                 // Do ajax call to get premium price
-                $.post(document.location.href, {
-                    adacpremium: domainResult.domain_name,
-                    adacpremiumprice: domainResult.price,
-                    adacpremiumcurrency: domainResult.currency
-                })
-                    .done(function (data) {
-                        var json = $.parseJSON(data);
+                $.post(
+                    document.location.href, {
+                        adacpremium: domainResult.domain_name,
+                        adacpremiumprice: domainResult.price,
+                        adacpremiumcurrency: domainResult.currency
+                    }
+                )
+                    .done(
+                        function (data) {
+                            var json = $.parseJSON(data);
 
-                        if (json.error != undefined) {
-                            price.innerHTML = '';
-                            status.innerHTML = '<span class="label label-danger">error</span>';
-                            $('.adac-register-domain[domain="' + domainResult.domain_name + '"]').replaceWith(
-                                json.error);
-                        } else {
-                            // Set register to enable
-                            price.innerHTML = json.price + ' ' + json.currency['suffix'];
-                            $('.adac-register-domain[domain="' + domainResult.domain_name + '"]').removeClass(
-                                'disabled');
-                        }
-                    }, "json");
+                            if (json.error != undefined) {
+                                price.innerHTML = '';
+                                status.innerHTML = '<span class="label label-danger">error</span>';
+                                $('.adac-register-domain[domain="' + domainResult.domain_name + '"]').replaceWith(
+                                    json.error
+                                );
+                            } else {
+                                // Set register to enable
+                                price.innerHTML = json.price + ' ' + json.currency['suffix'];
+                                $('.adac-register-domain[domain="' + domainResult.domain_name + '"]').removeClass(
+                                    'disabled'
+                                );
+                            }
+                        }, "json"
+                    );
                 price.innerHTML = '<i class=\'fa fa-spinner fa-spin \'></i>';
             }
         } else if(tldPrices['' + suffixWithoutDot + ''] && tldPrices['' + suffixWithoutDot + ''].domainregister != undefined) {
@@ -613,10 +651,12 @@ function clickRegister(event, domain)
         button.html("<i class='fa fa-spinner fa-spin '></i>");
 
         $.post(window.location.pathname, {a: "addToCart", domain: domain, token: csrfToken, whois: 0})
-            .done(function (data) {
-                button.attr("href", "cart.php?a=confdomains");
-                button.html('<i class="glyphicon glyphicon-shopping-cart"></i> ' + checkoutLang);
-                button.addClass('checkout');
-            });
+            .done(
+                function (data) {
+                    button.attr("href", "cart.php?a=confdomains");
+                    button.html('<i class="glyphicon glyphicon-shopping-cart"></i> ' + checkoutLang);
+                    button.addClass('checkout');
+                }
+            );
     }
 }

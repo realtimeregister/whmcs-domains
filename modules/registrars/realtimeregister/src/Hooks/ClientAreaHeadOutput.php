@@ -52,7 +52,9 @@ class ClientAreaHeadOutput extends Hook
             try {
                 $domain = App::client()->domains->get($whmcs_domain['domainname']);
                 $contact_handles = ['Registrant' => self::getWhmcsCidFromHandle($domain->registrant)];
-                /** @var DomainContact $contact */
+                /**
+ * @var DomainContact $contact 
+*/
                 foreach ($domain->contacts as $contact) {
                     $contact_handles[ucfirst(strtolower($contact->role))]
                         = self::getWhmcsCidFromHandle($contact->handle);
@@ -63,7 +65,7 @@ class ClientAreaHeadOutput extends Hook
                     data: ['contact_ids' => array_filter($contact_handles)]
                 );
             } catch (\Exception) {
-                # pass
+                // pass
             }
         }
     }

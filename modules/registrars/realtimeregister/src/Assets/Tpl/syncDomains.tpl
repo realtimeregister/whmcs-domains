@@ -50,7 +50,7 @@
 <script type="text/javascript">
     const fields = {$fieldsJSON}
     const domains = getDomains();
-    const CHUNK_SIZE = 1;
+    const CHUNK_SIZE = 100;
     let processed = 0;
     let updated = 0;
 

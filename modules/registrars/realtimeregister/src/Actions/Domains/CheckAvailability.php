@@ -27,6 +27,8 @@ class CheckAvailability extends Action
         if ($originalQuery != $request->params['searchTerm']) {
             $tld = MetadataService::getTld($originalQuery);
             if (Config::get('tldinfomapping.' . $tld) === 'centralnic') {
+                $tlds[] = $tld . '.centralnic';
+            } else {
                 $tlds[] = $tld;
             }
         } else {
@@ -36,6 +38,8 @@ class CheckAvailability extends Action
             foreach ($tlds as $key => $tld) {
                 if (Config::get('tldinfomapping.' . $tld) === 'centralnic') {
                     $tlds[$key] = $tld . '.centralnic';
+                } else {
+                    $tlds[$key] = $tld;
                 }
             }
         }

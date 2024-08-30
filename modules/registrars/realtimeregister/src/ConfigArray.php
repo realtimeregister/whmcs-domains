@@ -42,11 +42,6 @@ class ConfigArray
                 'Description' => '<button class="btn btn-xs check-connection">Check Connection</button>
 <span class="credentials-result"></span>',
             ],
-            'import_domains' => [
-                'FriendlyName' => "<br/>",
-                'Type' => 'none',
-                'Description' => '<button class="import-wizard">Import Wizard</button>'
-            ],
             /**
              * General settings.
              */

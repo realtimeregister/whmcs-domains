@@ -52,7 +52,7 @@ class MetadataService
     }
 
     /**
-     * @param string $param
+     * @param  string $param
      * @return string|int|array|bool
      */
     public function get(string $param)
@@ -76,7 +76,7 @@ class MetadataService
     }
 
     /**
-     * @param string $domain the domain name
+     * @param  string $domain the domain name
      * @return string
      */
     public static function getTld($domain)
@@ -268,7 +268,9 @@ class MetadataService
     public static function getAllTlds(): array
     {
         $providers = Cache::remember(
-            "rtrProviders", self::DAY_MINUTES, fn () =>
+            "rtrProviders",
+            self::DAY_MINUTES,
+            fn () =>
             App::client()->providers->export(parameters: ["fields" => "tlds"])
         );
         return array_map(
@@ -280,9 +282,9 @@ class MetadataService
     public static function isRtr($tld): bool
     {
         return DomainPricing::query()
-                ->where("extension", "." . $tld)
-                ->whereIn("autoreg", ["realtimeregister", ""])
-                ->first() !== null;
+            ->where("extension", "." . $tld)
+            ->whereIn("autoreg", ["realtimeregister", ""])
+            ->first() !== null;
     }
 
     public function getOffsetExpiryDate(string $expiryDate): string
@@ -292,7 +294,7 @@ class MetadataService
         return date("Y-m-d", strtotime($expiryDate . " - " . ((int)$offset) . " seconds"));
     }
 
-    public function getProvider() : string
+    public function getProvider(): string
     {
         return $this->provider;
     }

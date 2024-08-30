@@ -33,8 +33,7 @@ class ShoppingCartService
                     }
 
                     if (
-                        $languageCodes && !$languageCode && (
-                        !preg_match(
+                        $languageCodes && !$languageCode && (!preg_match(
                             '/^([0-9a-z\-]+\.)+([a-z\-]+|xn--[a-z0-9\-]+)$/',
                             $domainName
                         ) || str_starts_with($domainName, 'xn--'))

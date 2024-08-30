@@ -19,8 +19,8 @@ class Adac extends Hook
         $shopCurrency = strtoupper($vars['currency']['code']);
 
         if (
-            !empty($smarty->tpl_vars['templatefile']->value) &&
-            in_array($smarty->tpl_vars['templatefile']->value, ['viewcart', 'domainregister'])
+            !empty($smarty->tpl_vars['templatefile']->value)
+            && in_array($smarty->tpl_vars['templatefile']->value, ['viewcart', 'domainregister'])
         ) {
             if ($_POST['currency']) {
                 if (ShoppingCartService::updateCartPremiumPrices($shopCurrency)) {
@@ -133,12 +133,16 @@ class Adac extends Hook
             }
         }
 
-        /** @var Pricing[] $prices */
-        $prices = Pricing::where('currency', $currency)->where(function ($query) {
-            $query->where('type', 'domainregister')
-                ->orWhere('type', 'domaintransfer')
-                ->orWhere('type', 'domainrenew');
-        })->get();
+        /**
+ * @var Pricing[] $prices
+*/
+        $prices = Pricing::where('currency', $currency)->where(
+            function ($query) {
+                $query->where('type', 'domainregister')
+                    ->orWhere('type', 'domaintransfer')
+                    ->orWhere('type', 'domainrenew');
+            }
+        )->get();
 
         if (!empty($prices)) {
             $build = [];
@@ -195,13 +199,16 @@ class Adac extends Hook
 
             App::assets()->addStyle('adac.css');
             App::assets()->addScript('adac.js', ScriptLocationType::Footer);
-            App::assets()->addToJavascriptVariables('adac-js', [
+            App::assets()->addToJavascriptVariables(
+                'adac-js',
+                [
                 'adacLang'       => $_LANG['rtr']['adac'],
                 'tldPrices'      => $build,
                 'ote'            => $oteValue,
                 'premiumDomains' => $premiumDomains,
                 'cartDomains'    => $cartDomains
-            ]);
+                ]
+            );
         }
 
         return $prices;

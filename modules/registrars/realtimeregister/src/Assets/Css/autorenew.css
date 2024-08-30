@@ -1,0 +1,45 @@
+.autorenew .failed_updates,
+.autorenew .failed_domains,
+.autorenew .processed_updates {
+    display: none;
+}
+
+.autorenew .processed_updates {
+    font-weight: bold;
+}
+
+.autorenew .failed_updates {
+    margin-top: 10px;
+    color: red;
+    font-weight: bold;
+}
+
+.autorenew .failed_domains {
+    max-height: 170px;
+    overflow-y: scroll;
+    margin-top: 15px;
+    background-color: #f7e9e9;
+    padding: 15px;
+    border-radius: 3px;
+}
+
+.autorenew .failed_domains p {
+    margin-top: 10px;
+    margin-bottom: 0;
+}
+
+.autorenew .failed_domains p:first-child {
+    margin-top: 0;
+}
+
+.autorenew .amount {
+    font-weight: bold;
+}
+
+#renew_form .submit {
+    margin: 1rem 0;
+}
+
+.autorenew .is-active {
+    display: block;
+}

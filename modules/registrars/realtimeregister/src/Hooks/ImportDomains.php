@@ -6,10 +6,10 @@ use JetBrains\PhpStorm\NoReturn;
 use RealtimeRegister\App;
 use RealtimeRegister\Entities\DataObject;
 use RealtimeRegister\Models\RealtimeRegister\Cache;
-use Realtimeregister\Models\RTRContactMapping;
 use RealtimeRegister\Models\Whmcs\AdditionalFields;
 use RealtimeRegister\Models\Whmcs\Admin;
 use RealtimeRegister\Models\Whmcs\Client;
+use RealtimeRegister\Models\Whmcs\Configuration;
 use RealtimeRegister\Models\Whmcs\Domain;
 use RealtimeRegister\Models\Whmcs\DomainPricing;
 use RealtimeRegister\Models\Whmcs\PaymentGateway;
@@ -26,8 +26,7 @@ class ImportDomains extends Hook
         App::assets()->addScript("importDomains.js");
         App::assets()->addStyle("importdomains.css");
 
-        if ($_POST['action'] === $this->ACTION && $_POST['module'] == 'realtimeregister') {
-
+        if ($_REQUEST['action'] === $this->ACTION && $_REQUEST['module'] == 'realtimeregister') {
             self::importWizard();
         }
     }
@@ -44,7 +43,6 @@ class ImportDomains extends Hook
             default:
                 self::step1();
                 break;
-
         }
         exit;
     }
@@ -52,10 +50,14 @@ class ImportDomains extends Hook
     private static function step1(): void
     {
         $brands = App::client()->brands->export(
-            App::registrarConfig()->customerHandle(), ["fields" => "organization,handle,email"]
+            App::registrarConfig()->customerHandle(),
+            ["fields" => "organization,handle,email"]
         );
 
-        $domains = array_map(fn($domain) => $domain['domainName'], App::client()->domains->export(["fields" => "domainName"]));
+        $domains = array_map(
+            fn($domain) => $domain['domainName'],
+            App::client()->domains->export(["fields" => "domainName"])
+        );
         $paymentGateways = PaymentGateway::query()
             ->select('gateway', 'value')
             ->where('setting', '=', 'name')
@@ -64,28 +66,37 @@ class ImportDomains extends Hook
 
         $fields = $_POST['fields'] ?? [];
 
-        echo TemplateService::renderTemplate('importDomains.tpl',
+        echo TemplateService::renderTemplate(
+            'importDomains.tpl',
             [
-                "fields" => array_merge(["brandSelectionList" => [],
+                "fields" => array_merge(
+                    ["brandSelectionList" => [],
                     "allBrands" => $brands,
                     "allDomains" => $domains,
                     "gateways" => $paymentGateways,
                     "nonActiveTlds" => self::getNonActiveTlds($domains),
                     'domainSelectionMethod' => 'all',
-                    "brandSelectionMethod" => "contactsAsClients"], $fields)
-            ]);
+                    "brandSelectionMethod" => "contactsAsClients"],
+                    $fields
+                )
+            ]
+        );
     }
 
     private static function step2(): void
     {
-        echo TemplateService::renderTemplate('importDomainsStepTwo.tpl', [
+        echo TemplateService::renderTemplate(
+            'importDomainsStepTwo.tpl',
+            [
             "fields" => $_POST['fields'],
-        ]);
+            ]
+        );
     }
 
 
 
-    private static function getDomainName(string $domain) {
+    private static function getDomainName(string $domain)
+    {
         if (Config::get('tldinfomapping.' . MetadataService::getTld($domain)) === 'centralnic') {
             return $domain . '.centralnic';
         }
@@ -110,7 +121,8 @@ class ImportDomains extends Hook
         return $domains;
     }
 
-    private static function step3(): void {
+    private static function step3(): void
+    {
         if ($_POST['domains']) {
             echo json_encode(["updated" => self::importDomains()]);
         } else {
@@ -118,7 +130,7 @@ class ImportDomains extends Hook
         }
     }
 
-    private static function importDomains() : int
+    private static function importDomains(): int
     {
         $domainNames = array_map(fn($domainName) => self::getDomainName($domainName), $_POST['domains']);
         $args = [
@@ -155,6 +167,7 @@ class ImportDomains extends Hook
 
             $metadata = new MetadataService($domain['domainName']);
             $expiryDate = $metadata->getOffsetExpiryDate($domain['expiryDate']);
+            $dueDate = self::getSyncDueDate($expiryDate);
 
             $tld = MetadataService::getTld($domain['domainName']);
             $recurringAmount = '0.00';
@@ -162,7 +175,8 @@ class ImportDomains extends Hook
                 $recurringAmount = $tldPricing['pricing'][$tld]['renew'][$tldPricingCurrencyid];
             }
 
-            $domainId = Domain::query()->insertGetId([
+            $domainId = Domain::query()->insertGetId(
+                [
                 'userid'             => $userId,
                 'registrationdate'   => $domain['createdDate'],
                 'domain'             => $domain['domainName'],
@@ -172,20 +186,23 @@ class ImportDomains extends Hook
                 'paymentmethod'      => $paymentMethod,
                 'status'             => 'Active',
                 //'is_premium'         => 0,
-                'nextduedate'        => $expiryDate,
-                'nextinvoicedate'    => $expiryDate,
+                'nextduedate'        => $dueDate,
+                'nextinvoicedate'    => $dueDate,
                 'expirydate'         => $expiryDate
-            ]);
+                ]
+            );
 
             $provider = $metadata->getProvider();
 
             if (!empty($domain['registrant']['properties'] && !empty($domain['registrant']['properties'][$provider]))) {
                 foreach ($domain['registrant']['properties'][$provider] as $name => $value) {
-                    AdditionalFields::query()->insert([
+                    AdditionalFields::query()->insert(
+                        [
                         'domainid' => $domainId,
                         'name' => $name,
                         'value' => $value
-                    ]);
+                        ]
+                    );
                 }
             }
 
@@ -243,7 +260,7 @@ class ImportDomains extends Hook
         if ($results['result'] == 'success') {
             return $results['clientid'];
         } else {
-            logActivity("Error for creating a client. An Error Occurred: " . implode(" | ",$results));
+            logActivity("Error for creating a client. An Error Occurred: " . implode(" | ", $results));
         }
 
         return 0;
@@ -279,125 +296,48 @@ class ImportDomains extends Hook
         if ($results['result'] == 'success') {
             return $results['contactid'];
         } else {
-            logActivity("Error for creating a contact. An Error Occurred: " . implode(" | ",$results));
+            logActivity("Error for creating a contact. An Error Occurred: " . implode(" | ", $results));
         }
 
         return 0;
     }
 
-    /*
-     * foreach ($domainsWithRegistrant as $domain) {
-            if (!self::domainExists($domain['domainName'])) {
-                $userid = self::getRegistrantUser($domain['registrant']['handle']);
-                if (!$userid) {
-                    if (in_array($domain['brand']['handle'], $brands)) {
-                        $userid = self::createClient($domain['brand']);
-                    } else {
-                        $userid = self::createClient($domain['registrant']);
-                    }
-                }
+    public static function getSyncDueDate($date)
+    {
+        $hasOffset =  Configuration::query()
+            ->select(["value"])
+            ->where("setting", '=', 'DomainSyncNextDueDate')
+            ->first();
+        $syncOffset = Configuration::query()
+            ->select(["value"])
+            ->where("setting", '=', 'DomainSyncNextDueDateDays')
+            ->first();
 
-                if (!RTRContactMapping::where('userid', $userid)->where('handle', $domain['registrant']['handle'])->exists()) {
-                    $contactid = self::createContact($userid, $domain['registrant']);
-
-                    $values = [
-                        'userid'      => $userid,
-                        'contactid'   => $contactid,
-                        'handle'      => $domain['registrant']['handle'],
-                        'org_allowed' => true
-                    ];
-
-                    RTRContactMapping::insert($values);
-                }
-
-                try {
-                    $metadata = new MetadataService($domain['domainName'], rtrApiClient::instance($params));
-                    $expirydate = DomainDateService::getOffsetExpiryDate($domain['expiryDate'], $metadata);
-                } catch (DefaultException $e) {
-                    $expirydate = date('Y-m-d', strtotime($domain['expiryDate']));
-                }
-
-                $duedate = DomainDateService::getSyncDueDate($expirydate);
-
-                $tld = rtrHelper::getTld($domain['domainName']);
-                $recurringamount = '0.00';
-                if (!empty($tldPricing['pricing'][$tld]['renew'][$tldPricingCurrencyid])) {
-                    $recurringamount = $tldPricing['pricing'][$tld]['renew'][$tldPricingCurrencyid];
-                }
-
-                // Insert domain in the database
-                $domainId = Capsule::table("tbldomains")->insertGetId([
-                    'userid'             => $userid,
-                    'registrationdate'   => $domain['createdDate'],
-                    'domain'             => $domain['domainName'],
-                    'recurringamount'    => $recurringamount,
-                    'registrar'          => 'realtimeregister',
-                    'registrationperiod' => ceil($domain['autoRenewPeriod'] / 12),
-                    'paymentmethod'      => $paymentmethod,
-                    'status'             => RtrApiService::mapStatustoWhmcs($domain['status']),
-                    //'is_premium'         => 0,
-                    'nextduedate'        => $duedate,
-                    'nextinvoicedate'    => $duedate,
-                    'expirydate'         => $expirydate
-                ]);
-
-                if (!empty($domain['registrant']['properties'])) {
-                    $provider = rtrApiClient::instance($params)->tldProvider($tld);
-
-                    if (!empty($domain['registrant']['properties'][$provider])) {
-                        foreach ($domain['registrant']['properties'][$provider] as $name => $value) {
-                            Capsule::table("tbldomainsadditionalfields")->insert([
-                                'domainid' => $domainId,
-                                'name'     => $name,
-                                'value'    => $value
-                            ]);
-                        }
-                    }
-                }
-
-                $resultCount['domains']++;
-            } else {
-                // Domain already exists
-                $resultCount['domains_exists']++;
-            }
+        if ($hasOffset?->value && $syncOffset?->value) {
+            return date("Y-m-d", strtotime($date . (-$syncOffset->value) . ' days'));
         }
-     */
 
-
-
-    /*
-     * if (isset($_POST['rtr']) && $_POST['rtr'] == 'import' && !empty($_POST['selection'])) {
-        $args = [
-            'fields' => 'domainName,autoRenewPeriod,status,createdDate,expiryDate,registrant,ns,contacts,customer',
-            'export' => 'true'
-        ];
-        if (!empty($_POST['domains'])) {
-            foreach ($_POST['domains'] as &$domain) {
-                if (Config::get('tldinfomapping.' . rtrHelper::getTld($domain)) === 'centralnic') {
-                    $domain = $domain . '.centralnic';
-                }
-            }
-            $args['domainName:in'] = implode(',', $_POST['domains']);
-        }
-        $paymentmethod = $_POST['paymentmethod'];
-        $brands = isset($_POST['brands']) && is_array($_POST['brands']) ? $_POST['brands'] : [];
-
-        echo json_encode(WhmcsService::insertDomains(WhmcsService::getRtrDomainsWithActiveTld($args), $brands, $paymentmethod, $vars));
-
-        exit;
+        return $date;
     }
-     */
 
     private static function getNonActiveTlds(array $domains): array
     {
         $tlds = array_map(fn($domain) => MetadataService::getTld($domain), $domains);
-        $activeTlds = array_map(fn($pricing) => $pricing['extension'], DomainPricing::query()->get(['extension'])->toArray());
-        return array_values(array_filter($tlds, function ($tld) use ($activeTlds) {
-            return !in_array("." . strtolower($tld), $activeTlds);
-        }));
+        $activeTlds = array_map(
+            fn($pricing) => $pricing['extension'],
+            DomainPricing::query()->get(['extension'])->toArray()
+        );
+        return array_values(
+            array_filter(
+                $tlds,
+                function ($tld) use ($activeTlds) {
+                    return !in_array("." . strtolower($tld), $activeTlds);
+                }
+            )
+        );
     }
 
-    private static function randomPassword()
+    private static function randomPassword(): string
     {
         $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_-=+;:,.?";
 

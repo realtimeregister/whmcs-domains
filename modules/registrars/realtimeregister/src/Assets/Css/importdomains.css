@@ -1,29 +1,53 @@
 .stepwizard-row {
+    position: relative;
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 1rem
+    justify-content: space-between;
 }
 
 .stepwizard-step {
     display: flex;
     align-items: center;
-    flex-direction: row;
-    gap: 0.75rem
+    flex-direction: column;
+    gap: 0.5rem;
+    z-index: 2;
+}
+
+.stepwizard-row:before {
+    top: 14px;
+    bottom: 0;
+    position: absolute;
+    content: " ";
+    width: 100%;
+    height: 2px;
+    background-color: #ccc;
 }
 
 .btn-circle {
     width: 30px;
     height: 30px;
-    text-align: center;
-    padding: 6px 0;
+    padding: 0 0;
     font-size: 12px;
     line-height: 1.428571429;
     border-radius: 15px;
 }
 
-.btn-circle:not(.btn-current) {
-    background: #79a8d0 !important;
+.btn-circle:not(.btn-current):not(:disabled) {
+    color: #333333;
+    opacity: 1 !important;
+    background: #fff
+}
+
+.btn-circle:disabled {
+    background-color: lightgrey;
+    border-color: grey;
+    opacity: 1 !important;
+}
+
+.btn-circle:disabled:hover {
+    background-color: lightgrey;
+    border-color: grey;
 }
 
 .failed-domains {
@@ -32,6 +56,10 @@
 
 .warning_domains {
     color: red;
+}
+
+.rtr-progress-bar {
+    margin-top: 2rem;
 }
 
 .brand_overview,

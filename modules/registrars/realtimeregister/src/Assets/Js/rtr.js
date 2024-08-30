@@ -1,6 +1,5 @@
-;
 (function ($) {
-    let rtr = $.extend({
+    rtr = $.extend({
         controller: [],
         params: null,
         routes: {},
@@ -14,6 +13,5 @@
                 rtr.routes[controller]();
             }
         });
-       
     });
 })(jQuery);

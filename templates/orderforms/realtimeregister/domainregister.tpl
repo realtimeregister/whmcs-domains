@@ -61,6 +61,133 @@
             {if !empty($adacApiKey) && $adacTldToken}
 
             {else}
+                <div id="DomainSearchResults" class="w-hidden">
+                    <div id="searchDomainInfo" class="domain-checker-result-headline">
+                        <p id="primaryLookupSearching" class="domain-lookup-loader domain-lookup-primary-loader domain-searching"><i class="fas fa-spinner fa-spin"></i> {lang key='orderForm.searching'}...</p>
+                        <div id="primaryLookupResult" class="domain-lookup-result w-hidden">
+                            <p class="domain-invalid domain-checker-invalid">{lang key='orderForm.domainLetterOrNumber'}<span class="domain-length-restrictions">{lang key='orderForm.domainLengthRequirements'}</span></p>
+                            <p class="domain-unavailable domain-checker-unavailable">{lang key='orderForm.domainIsUnavailable'}</p>
+                            <p class="domain-tld-unavailable domain-checker-unavailable">{lang key='orderForm.domainHasUnavailableTld'}</p>
+                            <p class="domain-available domain-checker-available">{$LANG.domainavailablemessage}</p>
+                            <a class="domain-contact-support btn btn-primary">{$LANG.domainContactUs}</a>
+                            <div id="idnLanguageSelector" class="form-group idn-language-selector w-hidden">
+                                <div class="row">
+                                    <div class="col-sm-10 col-sm-offset-1 col-lg-8 col-lg-offset-2 offset-sm-1 offset-lg-2">
+                                        <div class="margin-10 text-center">
+                                            {lang key='cart.idnLanguageDescription'}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-8 col-lg-6 col-sm-offset-2 col-lg-offset-3 offset-sm-2 offset-lg-3">
+                                        <select name="idnlanguage" class="form-control">
+                                            <option value="">{lang key='cart.idnLanguage'}</option>
+                                            {foreach $idnLanguages as $idnLanguageKey => $idnLanguage}
+                                                <option value="{$idnLanguageKey}">{lang key='idnLanguage.'|cat:$idnLanguageKey}</option>
+                                            {/foreach}
+                                        </select>
+                                        <div class="field-error-msg">
+                                            {lang key='cart.selectIdnLanguageForRegister'}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="domain-price">
+                                <span class="price"></span>
+                                <button class="btn btn-primary btn-add-to-cart" data-whois="0" data-domain="">
+                                    <span class="to-add">{$LANG.addtocart}</span>
+                                    <span class="loading">
+                                    <i class="fas fa-spinner fa-spin"></i> {lang key='loading'}
+                                </span>
+                                    <span class="added"><i class="far fa-shopping-cart"></i> {lang key='checkout'}</span>
+                                    <span class="unavailable">{$LANG.domaincheckertaken}</span>
+                                </button>
+                            </p>
+                            <p class="domain-error domain-checker-unavailable"></p>
+                        </div>
+                    </div>
+
+                    {if $spotlightTlds}
+                        <div id="spotlightTlds" class="spotlight-tlds clearfix">
+                            <div class="spotlight-tlds-container">
+                                {foreach $spotlightTlds as $key => $data}
+                                    <div class="spotlight-tld-container spotlight-tld-container-{$spotlightTlds|count}">
+                                        <div id="spotlight{$data.tldNoDots}" class="spotlight-tld">
+                                            {if $data.group}
+                                                <div class="spotlight-tld-{$data.group}">{$data.groupDisplayName}</div>
+                                            {/if}
+                                            {$data.tld}
+                                            <span class="domain-lookup-loader domain-lookup-spotlight-loader">
+                                            <i class="fas fa-spinner fa-spin"></i>
+                                        </span>
+                                            <div class="domain-lookup-result">
+                                                <button type="button" class="btn unavailable w-hidden" disabled="disabled">
+                                                    {lang key='domainunavailable'}
+                                                </button>
+                                                <button type="button" class="btn invalid w-hidden" disabled="disabled">
+                                                    {lang key='domainunavailable'}
+                                                </button>
+                                                <span class="available price w-hidden">{$data.register}</span>
+                                                <button type="button" class="btn btn-add-to-cart w-hidden" data-whois="0" data-domain="">
+                                                    <span class="to-add">{lang key='orderForm.add'}</span>
+                                                    <span class="loading">
+                                                    <i class="fas fa-spinner fa-spin"></i> {lang key='loading'}
+                                                </span>
+                                                    <span class="added"><i class="far fa-shopping-cart"></i> {lang key='checkout'}</span>
+                                                    <span class="unavailable">{$LANG.domaincheckertaken}</span>
+                                                </button>
+                                                <button type="button" class="btn btn-primary domain-contact-support w-hidden">
+                                                    {lang key='domainChecker.contactSupport'}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {/foreach}
+                            </div>
+                        </div>
+                    {/if}
+
+                    <div class="suggested-domains{if !$showSuggestionsContainer} w-hidden{/if}">
+                        <div class="panel-heading card-header">
+                            {lang key='orderForm.suggestedDomains'}
+                        </div>
+                        <div id="suggestionsLoader" class="panel-body card-body domain-lookup-loader domain-lookup-suggestions-loader">
+                            <i class="fas fa-spinner fa-spin"></i> {lang key='orderForm.generatingSuggestions'}
+                        </div>
+                        <div id="domainSuggestions" class="domain-lookup-result list-group w-hidden">
+                            <div class="domain-suggestion list-group-item w-hidden">
+                                <span class="domain"></span><span class="extension"></span>
+                                <span class="promo w-hidden">
+                                <span class="sales-group-hot w-hidden">{lang key='domainCheckerSalesGroup.hot'}</span>
+                                <span class="sales-group-new w-hidden">{lang key='domainCheckerSalesGroup.new'}</span>
+                                <span class="sales-group-sale w-hidden">{lang key='domainCheckerSalesGroup.sale'}</span>
+                            </span>
+                                <div class="actions">
+                                    <span class="price"></span>
+                                    <button type="button" class="btn btn-add-to-cart" data-whois="1" data-domain="">
+                                        <span class="to-add">{$LANG.addtocart}</span>
+                                        <span class="loading">
+                                        <i class="fas fa-spinner fa-spin"></i> {lang key='loading'}
+                                    </span>
+                                        <span class="added"><i class="far fa-shopping-cart"></i> {lang key='checkout'}</span>
+                                        <span class="unavailable">{$LANG.domaincheckertaken}</span>
+                                    </button>
+                                    <button type="button" class="btn btn-primary domain-contact-support w-hidden">
+                                        {lang key='domainChecker.contactSupport'}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-footer card-footer more-suggestions text-center w-hidden">
+                            <a id="moreSuggestions" href="#" onclick="loadMoreSuggestions();return false;">{lang key='domainsmoresuggestions'}</a>
+                            <span id="noMoreSuggestions" class="no-more small w-hidden">{lang key='domaincheckernomoresuggestions'}</span>
+                        </div>
+                        <div class="text-center text-muted domain-suggestions-warning">
+                            <p>{lang key='domainssuggestionswarnings'}</p>
+                        </div>
+                    </div>
+
+                </div>
                 <div class="domain-pricing">
                     {if $featuredTlds}
                         <div class="featured-tlds-container">

@@ -31,7 +31,6 @@ class ClientAreaHeadOutput extends Hook
 
         App::assets()->addScript("rtr.js");
         App::assets()->addScript("rtrClient.js");
-        App::assets()->addScript("rtr.js");
         App::assets()->addStyle('style.css');
 
         if ($vars['action'] === 'domaincontacts') {

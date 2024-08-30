@@ -55,7 +55,7 @@ class Domain
             isIdn: $params['is_idn'] ?? null,
             isInGracePeriod: $params['isInGracePeriod'] ?? null,
             isInRedemptionGracePeriod: $params['isInRedemptionGracePeriod'] ?? null,
-            contactProperties: $params['additionalfields']
+            contactProperties: $params['additionalfields'] ?? []
         );
     }
 }

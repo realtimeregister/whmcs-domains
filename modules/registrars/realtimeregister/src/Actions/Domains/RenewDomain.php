@@ -18,6 +18,18 @@ class RenewDomain extends Action
         $metadata = $this->metadata($request);
         $domain = $request->domain;
 
+        try {
+            if (function_exists('realtimeregister_before_RenewDomain')) {
+                realtimeregister_before_RenewDomain($request->params);
+            }
+        } catch (\Exception $ex) {
+            return [
+                'error' =>
+                    'Error while trying to execute the realtimeregister_before_RenewDomain hook: %s.',
+                $ex->getMessage()
+            ];
+        }
+
         $period = $request->get('regperiod') * 12;
         if (!in_array($period, $metadata->createDomainPeriods)) {
             throw new \Exception(
@@ -25,41 +37,22 @@ class RenewDomain extends Action
             );
         }
 
-        // Check if we even need nameservers
+        $renewal = App::client()->domains->renew(
+            domain: $domain->domainName(),
+            period: $period,
+        );
 
-        $orderId = App::localApi()->domain(
-            clientId: $request->get('clientid'),
-            domainId: $request->get('domainid')
-        )->get('orderid');
-        $contactId = App::localApi()->order(id: $orderId)->get('contactid');
-
-        $contacts = [];
-
-        foreach (['REGISTRANT', 'ADMIN', 'BILLING'] as $role) {
-            $organizationAllowed = $metadata->{strtolower($role) . 'Contacts'}->organizationAllowed;
-
-            $contacts[] = [
-                'role' => $role,
-                'handle' => $this->getOrCreateContact(
-                    clientId: $request->get('clientid'),
-                    contactId: $contactId,
-                    role: $role,
-                    organizationAllowed: $organizationAllowed
+        try {
+            if (function_exists('realtimeregister_after_RenewDomain')) {
+                realtimeregister_after_RenewDomain($request->params, $renewal);
+            }
+        } catch (\Exception $ex) {
+            return [
+                'error' => sprintf(
+                    'Error while trying to execute the realtimeregister_after_RenewDomain hook: %s.',
+                    $ex->getMessage()
                 )
             ];
         }
-
-        // Fetch order id
-        // Fetch contact id
-
-        // Create contacts for domain with all roles
-
-        $registration = App::client()->domains->register(
-            domainName: $domain->domainName(),
-            customer: null,
-            registrant: null,
-            autoRenew: false,
-            ns: $domain->nameservers,
-        );
     }
 }

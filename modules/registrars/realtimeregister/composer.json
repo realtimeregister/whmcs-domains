@@ -1,6 +1,7 @@
 {
     "name": "registrars/realtimeregister",
     "type": "library",
+    "version": "2.0.0",
     "repositories": [
         {
             "type": "vcs",
@@ -14,6 +15,11 @@
         "files": [
             "src/helpers.php"
         ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
     },
     "authors": [
         {

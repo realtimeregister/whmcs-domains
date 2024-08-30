@@ -1,14 +1,18 @@
 <?php
 
-// This is the bootstrap for PHPUnit testing.
+// phpcs:disable PSR1.Files.SideEffects
 
+// This is the bootstrap for PHPUnit testing.
 if (!defined('WHMCS')) {
     define('WHMCS', true);
 }
 
-//if (!defined('ROOTDIR')) {
-//    define('ROOTDIR', __DIR__ . '/../../../../');
-//}
+if (!defined('ROOTDIR')) {
+    define('ROOTDIR', __DIR__ . '/../../../../');
+}
+
+require_once __DIR__ . '/../../../../vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 // Include the WHMCS module.
 require_once __DIR__ . '/../realtimeregister.php';

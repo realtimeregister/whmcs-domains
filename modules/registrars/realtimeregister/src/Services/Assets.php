@@ -18,16 +18,32 @@ final class Assets
         return $this;
     }
 
-    public function addToHeader(string $content): self
+    /**
+     * @param array|string $content If you use this function directly, you can also add random pieces of content to the
+     *                              header. If you just want to add a file, use addScript or addStyle instead
+     */
+    public function addToHeader($content): self
     {
-        self::$head[] = $content;
+        if (is_array($content)) {
+            self::$head[] = $content;
+        } else {
+            $payload = [];
+            $payload['name'] = uniqid();
+            $payload['location'] = ScriptLocationType::Header;
+            $payload['type'] = 'inline';
+            $payload['content'] = $content;
+            self::$head[] = $payload;
+        }
         return $this;
     }
 
     public function addScript(string $name, ScriptLocationType $scriptLocationType = ScriptLocationType::Header): self
     {
-        $payload = '<script src="' . self::getPath($this->getBasePath('/Assets/Js/' . $name))
-            . '?' . App::VERSION . '"></script>';
+        $payload = [];
+        $payload['name'] = $name;
+        $payload['location'] = $scriptLocationType;
+        $payload['type'] = 'script';
+
         if ($scriptLocationType === ScriptLocationType::Header) {
             $this->addToHeader($payload);
         } else {
@@ -45,30 +61,48 @@ final class Assets
         );
     }
 
-    public function addToFooter(string $content): self
+    private function addToFooter(array $content): void
     {
         self::$footer[] = $content;
-
-        return $this;
     }
 
     public function renderHead(): string
     {
-        $content = implode("\n", self::$head);
+        $content = $this->render(self::$head);
         self::$head = [];
-
-        foreach (self::$javascriptVariables as $key => $foo) {
-            $content .= $this->renderJavascriptVariables($key);
-        }
 
         return $content;
     }
 
     public function renderFooter(): string
     {
-        $content = implode("\n", self::$footer);
-
+        $content = $this->render(self::$footer);
         self::$footer = [];
+
+        return $content;
+    }
+
+    /**
+     * Render function, adds App::VERSION to each file to combat caching
+     */
+    private function render(array $assets): string
+    {
+        $content = '';
+
+        foreach ($assets as $asset) {
+            if ($asset['type'] === 'script') {
+                $content .= '<script src="' . self::getPath($this->getBasePath('/Assets/Js/' . $asset['name']))
+                . '?' . App::VERSION . '"></script>';
+                if (array_key_exists($asset['name'], self::$javascriptVariables)) {
+                    $content .= $this->renderJavascriptVariables($asset['name']);
+                }
+            } elseif ($asset['type'] === 'style') {
+                $content .= '<link href="' . self::getPath($this->getBasePath('/Assets/Css/' . $asset['name']))
+                . '?' . App::VERSION . '" rel="stylesheet">';
+            } elseif ($asset['type'] === 'inline') {
+                $content .= $asset['content'];
+            }
+        }
 
         return $content;
     }
@@ -84,10 +118,11 @@ final class Assets
 
     public function addStyle(string $name): self
     {
-        $this->addToHeader(
-            '<link href="' . self::getPath($this->getBasePath('/Assets/Css/' . $name))
-            . '?' . App::VERSION . '" rel="stylesheet">'
-        );
+        $payload = [];
+        $payload['name'] = $name;
+        $payload['type'] = 'style';
+
+        $this->addToHeader($payload);
 
         return $this;
     }

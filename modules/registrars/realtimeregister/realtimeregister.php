@@ -117,3 +117,17 @@ function realtimeregister_ResendValidationMails(array $params)
     throw new Exception(__FUNCTION__ . ' is not implemented yet');
 }
 
+function realtimeregister_GetEPPCode($params)
+{
+    return App::dispatch(\RealtimeRegister\Actions\Domains\GetAuthCode::class, $params);
+}
+
+function realtimeregister_RequestDelete($params)
+{
+    return App::dispatch(\RealtimeRegister\Actions\Domains\Delete::class, $params);
+}
+
+function realtimeregister_RenewDomain($params)
+{
+    return App::dispatch(\RealtimeRegister\Actions\Domains\RenewDomain::class, $params);
+}

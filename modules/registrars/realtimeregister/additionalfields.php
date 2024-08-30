@@ -26,8 +26,9 @@ $tlds = [];
 if (isset($_SESSION['cart']['domains'])) {
     $tlds = array_map(
         function ($domain) {
-            return MetadataService::getTld($domain['domain']); 
-        }, $_SESSION['cart']['domains']
+            return MetadataService::getTld($domain['domain']);
+        },
+        $_SESSION['cart']['domains']
     );
 }
 
@@ -49,7 +50,9 @@ foreach ($tlds as $tld) {
     try {
         $additional = (new MetadataService($tld))->getTldAdditionalFields();
     } catch (\Exception $e) {
-        logActivity("Error while getting additional fields for '" . $tld . "' for Realtime Register:" . $e->getMessage());
+        logActivity(
+            "Error while getting additional fields for '" . $tld . "' for Realtime Register:" . $e->getMessage()
+        );
         $additional = [];
     }
 
@@ -61,7 +64,8 @@ foreach ($tlds as $tld) {
 
     if ($tld !== 'aero') {
         $fields = array_filter(
-            $fields, function ($field) {
+            $fields,
+            function ($field) {
                 return !in_array($field['Name'], ['AeroId', 'AeroKey']);
             }
         );

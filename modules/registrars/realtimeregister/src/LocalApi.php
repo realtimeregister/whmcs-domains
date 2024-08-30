@@ -92,4 +92,20 @@ class LocalApi
             ]
         );
     }
+
+    public function getTldPricing()
+    {
+        $currentUser = new \WHMCS\Authentication\CurrentUser();
+        $qry = [];
+        if ($currentUser) {
+            $qry['clientId'] = (string)$currentUser->user()->id;
+        } else {
+            $qry['currencyId'] = 'USD';
+        }
+        $result = localAPI('GetTldPricing', $qry);
+
+        if ($result) {
+            return $result['pricing'];
+        }
+    }
 }

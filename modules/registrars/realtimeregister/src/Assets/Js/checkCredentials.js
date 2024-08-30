@@ -11,7 +11,9 @@ $(document).ready(
         const ignoreSslField = config_container.find('[type="checkbox"][name="ignore_ssl"]');
 
         config_container.on(
-            'click', '.check-connection', function (e) {
+            'click',
+            '.check-connection',
+            function (e) {
                 e.preventDefault();
 
                 const btn = $(this);

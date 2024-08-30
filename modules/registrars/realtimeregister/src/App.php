@@ -49,7 +49,9 @@ class App
         $app = static::instance();
 
         if (!static::$booted) {
-            Cache::boot();
+            if (!defined('PHPUNIT_REALTIMEREGISTER_TESTSUITE')) {
+                Cache::boot();
+            }
             static::$booted = true;
         }
 

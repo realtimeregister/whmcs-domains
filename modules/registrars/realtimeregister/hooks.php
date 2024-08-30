@@ -24,12 +24,16 @@ App::hook("AdminHomepage", Hooks\SyncExpiry::class, 2);
 App::hook("AdminHomepage", Hooks\ImportDomains::class, 2);
 App::hook("AdminHomepage", Hooks\AutoRenewStatus::class, 2);
 
+App::hook('ClientAreaHeadOutput', Hooks\Adac::class, 10);
+App::hook('ShoppingCartValidateCheckout', Hooks\ShoppingCartValidate::class);
+App::hook('ShoppingCartValidateDomainsConfig', Hooks\ShoppingCartValidate::class);
+App::hook(Hooks\UserLogin::class);
 
 App::hook(Hooks\AdminAreaHeadOutput::class, null, 100);
 App::hook(Hooks\AdminAreaFooterOutput::class, null, 100);
 App::hook(Hooks\ClientAreaPage::class);
 App::hook(Hooks\ContactEdit::class);
-
+App::hook('ClientAreaHeadOutput', Hooks\ClientAreaHeadOutput::class, 20);
 
 App::hook('AdminHomeWidgets', Hooks\Widgets\ActionsWidget::class);
 App::hook('AdminHomeWidgets', Hooks\Widgets\DomainOverviewWidget::class);

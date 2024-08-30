@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9b3b8134609ea2aedb7695bddaca5cb0",
+    "content-hash": "8195acc04fd353a9ef218f486c39dd09",
     "packages": [
         {
             "name": "carbonphp/carbon-doctrine-types",
@@ -1421,12 +1421,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/realtimeregister/realtimeregister-php.git",
-                "reference": "6726db0eaa6809784707e6b18debc70150aa9eed"
+                "reference": "5621a8de294448a4c2cb14633724e76882a1afe8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/realtimeregister/realtimeregister-php/zipball/6726db0eaa6809784707e6b18debc70150aa9eed",
-                "reference": "6726db0eaa6809784707e6b18debc70150aa9eed",
+                "url": "https://api.github.com/repos/realtimeregister/realtimeregister-php/zipball/5621a8de294448a4c2cb14633724e76882a1afe8",
+                "reference": "5621a8de294448a4c2cb14633724e76882a1afe8",
                 "shasum": ""
             },
             "require": {
@@ -1492,7 +1492,7 @@
             "support": {
                 "source": "https://github.com/realtimeregister/realtimeregister-php/tree/whmcs"
             },
-            "time": "2024-08-23T07:18:53+00:00"
+            "time": "2024-08-27T07:26:51+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",

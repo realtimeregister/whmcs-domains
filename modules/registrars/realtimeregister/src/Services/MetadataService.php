@@ -154,7 +154,7 @@ class MetadataService
         return sprintf('tld_%s_%s', strtolower($tld), preg_replace('/[^a-z0-9]/', '', strtolower($property_name)));
     }
 
-    private static function propertyToAdditionalField($tld, $property, $default = null)
+    private static function propertyToAdditionalField($tld, $property, $default = null): array
     {
         global $_LANG;
         $langvar = self::toLangVar($tld, $property['name']);
@@ -226,12 +226,12 @@ class MetadataService
         return ',' . implode(',', $options);
     }
 
-    private static function strip($str)
+    private static function strip($str): array|string
     {
         return str_replace([',', '|'], ' ', $str);
     }
 
-    public static function removeDefaultFields(&$rtrAdditionalFields)
+    public static function removeDefaultFields(&$rtrAdditionalFields): void
     {
         $defaultFields = implode(DIRECTORY_SEPARATOR, [ROOTDIR, 'resources', 'domains', 'dist.additionalfields.php']);
 
@@ -277,7 +277,7 @@ class MetadataService
         );
     }
 
-    public static function isRtr($tld)
+    public static function isRtr($tld): bool
     {
         return DomainPricing::query()
             ->where("extension", "." . $tld)

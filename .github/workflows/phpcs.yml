@@ -27,3 +27,9 @@ jobs:
           ignore: modules/registrars/realtimeregister/vendor
           extensions: php
           standard: PSR12
+
+      - name: PHP Compatibility
+        uses: pantheon-systems/phpcompatibility-action@v1
+        with:
+          test-versions: 7.4-
+          paths: modules/registrars/realtimeregister/src

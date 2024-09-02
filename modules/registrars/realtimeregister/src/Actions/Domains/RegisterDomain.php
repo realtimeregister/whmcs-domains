@@ -15,7 +15,7 @@ class RegisterDomain extends Action
     /**
      * @throws \Exception
      */
-    public function __invoke(Request $request)
+    public function __invoke(Request $request): array
     {
         $tldInfo = $this->tldInfo($request);
         $metadata = $tldInfo->metadata;
@@ -28,45 +28,20 @@ class RegisterDomain extends Action
             );
         }
 
-        // Check if we even need nameservers
-        $orderId = App::localApi()->domain(
-            clientId: $request->get('clientid'),
-            domainId: $request->get('domainid')
-        )->get('orderid');
-        $contactId = App::localApi()->order(id: $orderId)->get('contactid');
-
-        $contacts = [];
-
-        $registrant = $this->getOrCreateContact(
-            clientId: $request->get('client_id'),
-            contactId: $contactId,
-            role: 'REGISTRANT',
-            organizationAllowed: $metadata->registrant->organizationAllowed
-        );
-
-        $this->addProperties($request, $registrant, $tldInfo);
-
-        foreach (self::$CONTACT_ROLES as $role => $name) {
-            $organizationAllowed = $metadata->{$name}->organizationAllowed;
-            $contacts[] = [
-                'role' => $role,
-                'handle' => $this->getOrCreateContact(
-                    clientId: $request->get('client_id'),
-                    contactId: $contactId,
-                    role: $role,
-                    organizationAllowed: $organizationAllowed
-                )
-            ];
-        }
+        list(
+            'registrant' => $registrant,
+            'contacts' => $contacts
+        ) = $this->generateContactsForDomain($request, $metadata);
 
         App::client()->domains->register(
             domainName: $domain->domainName(),
             customer: App::registrarConfig()->customerHandle(),
-            registrant: $registrant,
+            registrant:  $registrant,
             period: $period,
             autoRenew: false,
             ns: $domain->nameservers,
             contacts: DomainContactCollection::fromArray($contacts)
         );
+        return ['success' => true];
     }
 }

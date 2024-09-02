@@ -5,11 +5,14 @@ namespace RealtimeRegister\Actions\Contacts;
 use Illuminate\Support\Arr;
 use RealtimeRegister\Actions\Action;
 use RealtimeRegister\App;
+use RealtimeRegister\Exceptions\DomainNotFoundException;
 use RealtimeRegister\Models\Whmcs\Contact as ContactModel;
 use RealtimeRegister\Request;
 use SandwaveIo\RealtimeRegister\Domain\DomainContact;
 use SandwaveIo\RealtimeRegister\Domain\DomainDetails;
 use SandwaveIo\RealtimeRegister\Domain\Enum\DomainContactRoleEnum;
+use SandwaveIo\RealtimeRegister\Exceptions\BadRequestException;
+use SandwaveIo\RealtimeRegister\Exceptions\UnauthorizedException;
 
 class GetContactDetails extends Action
 {
@@ -17,27 +20,31 @@ class GetContactDetails extends Action
 
     public function __invoke(Request $request): array
     {
-        $domain = $this->domainInfo($request);
+        try {
+            $domain = $this->domainInfo($request);
 
-        $handles = json_encode(
-            [
-            ContactModel::ROLE_REGISTRANT => $this->fetchId($domain, DomainContactRoleEnum::ROLE_REGISTRANT),
-            ContactModel::ROLE_ADMIN => $this->fetchId($domain, DomainContactRoleEnum::ROLE_ADMIN),
-            ContactModel::ROLE_TECH => $this->fetchId($domain, DomainContactRoleEnum::ROLE_TECH),
-            ContactModel::ROLE_BILLING => $this->fetchId($domain, DomainContactRoleEnum::ROLE_BILLING)
-            ]
-        );
+            $handles = json_encode(
+                [
+                ContactModel::ROLE_REGISTRANT => $this->fetchId($domain, DomainContactRoleEnum::ROLE_REGISTRANT),
+                ContactModel::ROLE_ADMIN => $this->fetchId($domain, DomainContactRoleEnum::ROLE_ADMIN),
+                ContactModel::ROLE_TECH => $this->fetchId($domain, DomainContactRoleEnum::ROLE_TECH),
+                ContactModel::ROLE_BILLING => $this->fetchId($domain, DomainContactRoleEnum::ROLE_BILLING)
+                ]
+            );
 
-        App::assets()->prependHead("<script>let contact_ids = $handles;</script>");
+            App::assets()->prependHead("<script>let contact_ids = $handles;</script>");
 
-        return array_filter(
-            [
-            ContactModel::ROLE_REGISTRANT => $this->fetchContact($domain, DomainContactRoleEnum::ROLE_REGISTRANT),
-            ContactModel::ROLE_ADMIN => $this->fetchContact($domain, DomainContactRoleEnum::ROLE_ADMIN),
-            ContactModel::ROLE_TECH => $this->fetchContact($domain, DomainContactRoleEnum::ROLE_TECH),
-            ContactModel::ROLE_BILLING => $this->fetchContact($domain, DomainContactRoleEnum::ROLE_BILLING)
-            ]
-        );
+            return array_filter(
+                [
+                ContactModel::ROLE_REGISTRANT => $this->fetchContact($domain, DomainContactRoleEnum::ROLE_REGISTRANT),
+                ContactModel::ROLE_ADMIN => $this->fetchContact($domain, DomainContactRoleEnum::ROLE_ADMIN),
+                ContactModel::ROLE_TECH => $this->fetchContact($domain, DomainContactRoleEnum::ROLE_TECH),
+                ContactModel::ROLE_BILLING => $this->fetchContact($domain, DomainContactRoleEnum::ROLE_BILLING)
+                ]
+            );
+        } catch (BadRequestException | UnauthorizedException $exception) {
+            throw new DomainNotFoundException($exception);
+        }
     }
 
     protected function fetchId(DomainDetails $domain, string $role): ?string

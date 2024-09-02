@@ -136,3 +136,8 @@ function realtimeregister_TransferDomain($params)
 {
     return App::dispatch(\RealtimeRegister\Actions\Domains\TransferDomain::class, $params);
 }
+
+function realtimeregister_IDProtectToggle($params)
+{
+    return App::dispatch(\RealtimeRegister\Actions\Domains\IDProtection::class, $params);
+}

@@ -10,9 +10,8 @@ use RealtimeRegister\Services\MetadataService;
 
 ini_set('max_execution_time', 0);
 
-
 $tlds = MetadataService::getAllTlds();
-$re = '/(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])/';
+$regex = '/(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])/';
 $entry = "\$_LANG['%s'] = '%s';\n";
 $lines = [];
 
@@ -25,17 +24,24 @@ foreach ($tlds as $tld) {
                 $label = $property['label'];
                 if (strlen($label) > 70) {
                     $name = str_replace(['-', '_'], ' ', $property['name']);
-                    $label = ucfirst(strtolower(preg_replace($re, ' \0', $name)));
+                    $label = ucfirst(strtolower(preg_replace($regex, ' \0', $name)));
                 }
                 $label = addcslashes($label, "'");
                 $description = addcslashes($property['description'], "'");
                 $langvar = MetadataService::toLangVar($tld, $property['name']);
                 $lines[] = sprintf($entry, $langvar . '_label', $label);
                 $lines[] = sprintf($entry, $langvar . '_description', $description);
+
+                if ($property['values']) {
+                    foreach ($property['values'] as $key => $value) {
+                        $lines[] = sprintf($entry, $langvar . '_' . $key, $value);
+                    }
+                }
             }
             $lines[] = "\n";
         }
-    } catch (\Exception $ignored) {
+    } catch (\Exception $e) {
+        logActivity("Exception in update_additional_fields while getting metadata for " . $tld . ": " . $e->getMessage());
         continue;
     }
 }

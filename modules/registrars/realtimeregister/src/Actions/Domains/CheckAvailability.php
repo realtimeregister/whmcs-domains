@@ -85,4 +85,24 @@ class CheckAvailability extends Action
         }
         return $results;
     }
+
+    public static function handleException(\Throwable $exception, array $params) : ResultsList {
+        $resultList =  new ResultsList();
+
+        $query = $_REQUEST['domain'];
+        $searchTerm = $params['searchTerm'];
+
+        if ($query !== $searchTerm) {
+            $searchResult = new SearchResult($searchTerm, "." . MetadataService::getTld($query));
+        } else {
+            $searchResult = new SearchResult($searchTerm, array_keys(App::localApi()->getTldPricing())[0]);
+        }
+
+        $searchResult->setStatus(SearchResult::STATUS_UNKNOWN);
+        $resultList->append($searchResult);
+
+        logActivity("Error while checking domain" . $query . ": " . $exception->getMessage());
+
+        return $resultList;
+    }
 }

@@ -32,4 +32,4 @@ jobs:
         uses: pantheon-systems/phpcompatibility-action@v1
         with:
           test-versions: 7.4-
-          paths: modules/registrars/realtimeregister/src
+          paths: src

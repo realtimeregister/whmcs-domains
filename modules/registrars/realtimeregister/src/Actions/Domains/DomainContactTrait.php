@@ -53,4 +53,41 @@ trait DomainContactTrait
         }
         return $properties;
     }
+
+    protected function generateContactsForDomain(Request $request, TLDMetaData $metadata): array
+    {
+        $tldInfo = $this->tldInfo($request);
+        // Check if we even need nameservers
+        $orderId = App::localApi()->domain(
+            clientId: $request->get('clientid'),
+            domainId: $request->get('domainid')
+        )->get('orderid');
+        $contactId = App::localApi()->order(id: $orderId)->get('contactid');
+
+        $contacts = [];
+
+        $registrant = $this->getOrCreateContact(
+            clientId: $request->get('client_id'),
+            contactId: $contactId,
+            role: 'REGISTRANT',
+            organizationAllowed: $metadata->registrant->organizationAllowed
+        );
+
+        $this->addProperties($request, $registrant, $tldInfo);
+
+        foreach (self::$CONTACT_ROLES as $role => $name) {
+            $organizationAllowed = $metadata->{$name}->organizationAllowed;
+            $contacts[] = [
+                'role' => $role,
+                'handle' => $this->getOrCreateContact(
+                    clientId: $request->get('client_id'),
+                    contactId: $contactId,
+                    role: $role,
+                    organizationAllowed: $organizationAllowed
+                )
+            ];
+        }
+
+        return ['contacts' => $contacts, 'registrant' => $registrant];
+    }
 }

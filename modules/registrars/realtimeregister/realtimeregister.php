@@ -131,3 +131,8 @@ function realtimeregister_RenewDomain($params)
 {
     return App::dispatch(\RealtimeRegister\Actions\Domains\RenewDomain::class, $params);
 }
+
+function realtimeregister_TransferDomain($params)
+{
+    return App::dispatch(\RealtimeRegister\Actions\Domains\TransferDomain::class, $params);
+}

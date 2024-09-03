@@ -13,7 +13,7 @@ use SandwaveIo\RealtimeRegister\Exceptions\UnauthorizedException;
 
 class SaveRegistrarLock extends Action
 {
-    public function __invoke(Request $request)
+    public function __invoke(Request $request): array
     {
         try {
             $domain = $this->domainInfo($request);
@@ -27,8 +27,8 @@ class SaveRegistrarLock extends Action
             }
 
             App::client()->domains->update(
-                $request->domain->domainName(),
-                statuses: $statuses
+                domainName: $request->domain->domainName(),
+                statuses: array_values($statuses)
             );
 
             return ['success' => 'success'];

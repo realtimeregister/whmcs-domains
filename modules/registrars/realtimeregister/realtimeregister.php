@@ -41,20 +41,15 @@ function realtimeregister_GetDomainInformation(array $params)
     return App::dispatch(GetDomainInformation::class, $params);
 }
 
-//function realtimeregister_GetNameservers(array $params)
-//{
-//    return App::dispatch(GetNameservers::class, $params);
-//}
-
 function realtimeregister_SaveNameservers(array $params)
 {
     return App::dispatch(SaveNameservers::class, $params);
 }
 
-//function realtimeregister_GetRegistrarLock(array $params)
-//{
-//    return App::dispatch(GetRegistrarLock::class, $params);
-//}
+function realtimeregister_GetRegistrarLock(array $params)
+{
+    return App::dispatch(\RealtimeRegister\Actions\Domains\GetRegistrarLock::class, $params);
+}
 
 function realtimeregister_SaveRegistrarLock(array $params)
 {

@@ -89,7 +89,7 @@ class AssetsTest extends TestCase
             $asset->renderHead()
         );
     }
-    
+
     public function testAddPrependHead()
     {
         $asset = new Assets();

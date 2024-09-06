@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9dc6b00a6bde407f236e5aebf61fedd6",
+    "content-hash": "435313e67a7e65acca323294b86524ac",
     "packages": [
         {
             "name": "carbonphp/carbon-doctrine-types",
@@ -1417,16 +1417,16 @@
         },
         {
             "name": "sandwave-io/realtimeregister-php",
-            "version": "dev-whmcs",
+            "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/realtimeregister/realtimeregister-php.git",
-                "reference": "5621a8de294448a4c2cb14633724e76882a1afe8"
+                "url": "https://github.com/sandwave-io/realtimeregister-php.git",
+                "reference": "11dd0ea9e8a0d2ef77e679f72edf892aed974a68"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/realtimeregister/realtimeregister-php/zipball/5621a8de294448a4c2cb14633724e76882a1afe8",
-                "reference": "5621a8de294448a4c2cb14633724e76882a1afe8",
+                "url": "https://api.github.com/repos/sandwave-io/realtimeregister-php/zipball/11dd0ea9e8a0d2ef77e679f72edf892aed974a68",
+                "reference": "11dd0ea9e8a0d2ef77e679f72edf892aed974a68",
                 "shasum": ""
             },
             "require": {
@@ -1442,43 +1442,14 @@
                 "phpunit/phpunit": "^10.0.15",
                 "sandwave-io/php-cs-fixer-config": "^1.0.0"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
                     "SandwaveIo\\RealtimeRegister\\": "./src"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "SandwaveIo\\RealtimeRegister\\Tests\\": "tests/"
-                }
-            },
-            "scripts": {
-                "test": [
-                    "Composer\\Config::disableProcessTimeout",
-                    "@test:types",
-                    "@test:style",
-                    "@test:unit"
-                ],
-                "test:unit": [
-                    "@php vendor/bin/phpunit"
-                ],
-                "test:unit:coverage": [
-                    "@php -dpcov.enabled=1 -dpcov.directory=. -dpcov.exclude=\"~vendor~\" vendor/bin/phpunit --colors=never --coverage-text"
-                ],
-                "test:unit:coverage:html": [
-                    "@php -dpcov.enabled=1 -dpcov.directory=. -dpcov.exclude=\"~vendor~\" vendor/bin/phpunit --coverage-html=coverage"
-                ],
-                "test:types": [
-                    "@php vendor/bin/phpstan analyze --no-progress"
-                ],
-                "test:style": [
-                    "@php vendor/bin/php-cs-fixer fix --dry-run --diff --show-progress=none"
-                ],
-                "test:style:fix": [
-                    "@php vendor/bin/php-cs-fixer fix"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -1490,9 +1461,10 @@
             ],
             "description": "A PHP SDK for the RealtimeRegister REST API.",
             "support": {
-                "source": "https://github.com/realtimeregister/realtimeregister-php/tree/whmcs"
+                "issues": "https://github.com/sandwave-io/realtimeregister-php/issues",
+                "source": "https://github.com/sandwave-io/realtimeregister-php/tree/0.10.0"
             },
-            "time": "2024-08-27T07:26:51+00:00"
+            "time": "2024-09-06T11:43:10+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
@@ -3966,7 +3938,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "^8.1"
+        "php": "^7.4|^8.1"
     },
     "platform-dev": [],
     "plugin-api-version": "2.6.0"

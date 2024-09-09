@@ -25,7 +25,6 @@
         {if $keyData}
             {foreach from=$keyData key=i item=dns}
                 <tr>
-                    {dump($dns->flags)}
                     <td>
                         <select name="flags[{$i}]" class="form-control">
                             <option {if $dns->flags == '256'}selected{/if} value="256">256 (ZSK)</option>

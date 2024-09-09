@@ -136,3 +136,18 @@ function realtimeregister_IDProtectToggle($params)
 {
     return App::dispatch(\RealtimeRegister\Actions\Domains\IDProtection::class, $params);
 }
+
+function realtimeregister_ClientAreaCustomButtonArray($params)
+{
+    return App::dispatch(\RealtimeRegister\Actions\Domains\ClientAreaCustomButtonArray::class, $params);
+}
+
+function realtimeregister_ClientArea($params)
+{
+    return App::dispatch(\RealtimeRegister\Actions\Domains\ClientArea::class, $params);
+}
+
+function realtimeregister_DNSSec($params)
+{
+    return App::dispatch(\RealtimeRegister\Actions\Domains\DNSSec::class, $params);
+}

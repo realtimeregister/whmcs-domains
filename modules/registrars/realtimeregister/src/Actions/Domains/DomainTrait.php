@@ -11,6 +11,7 @@ use RealtimeRegister\Models\Whmcs\Orders;
 use RealtimeRegister\Models\Whmcs\Registrars;
 use RealtimeRegister\Services\ContactService;
 use SandwaveIo\RealtimeRegister\Domain\TLDMetaData;
+use RealtimeRegister\Entities\Domain as DomainEntity;
 
 trait DomainTrait
 {
@@ -163,5 +164,40 @@ trait DomainTrait
         $config = Registrars::getRegistrarConfig(['transfer_keep_nameservers']);
 
         return isset($config['transfer_keep_nameservers']) && $config['transfer_keep_nameservers'] === 'on';
+    }
+
+    /**
+     * @throws \Exception
+     */
+    private function checkForPunyCode(DomainEntity $domain, TLDMetaData $metadata): string
+    {
+        $domainName = $domain->domainName();
+
+        if ($domain->domainName() !== $domain->punyCode) {
+            // Check if we are allowed (& need) to use punycode
+            if ($domain->isIdn && $metadata->domainSyntax->idnSupport) {
+                if (
+                    !array_key_exists(
+                        strtoupper($domain->idnLanguage),
+                        $metadata->domainSyntax->languageCodes->toArray()
+                    )
+                ) {
+                    throw new \Exception(
+                        sprintf(
+                            'The language `%s` is not allowed for the %s tld.',
+                            $domain->idnLanguage,
+                            $domain->tld
+                        )
+                    );
+                }
+                $domainName = $domain->punyCode;
+            } else {
+                throw new \Exception(
+                    sprintf('It is not possible to use IDN domainnames for the %s tld.', $domain->tld)
+                );
+            }
+        }
+
+        return $domainName;
     }
 }

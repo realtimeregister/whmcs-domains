@@ -22,6 +22,8 @@ class RegisterWithBillables extends Action
         $metadata = $this->metadata($request);
 
         try {
+            $domainName = $this->checkForPunyCode($request->domain, $metadata);
+
             $orderId = App::localApi()->domain(
                 clientId: $request->get('userid'),
                 domainId: $request->get('domainid')
@@ -49,14 +51,21 @@ class RegisterWithBillables extends Action
                 ];
             }
 
+            $parameters = [
+                'domainName' => $domainName,
+                'customer' => App::registrarConfig()->customerHandle(),
+                'registrant' => $registrant,
+
+                'contacts' => DomainContactCollection::fromArray($contacts),
+                'isQuote' => true,
+            ];
+
+            if ($request->domain->idnLanguage) {
+                $parameters['languageCode'] = $request->domain->idnLanguage;
+            }
+
             $billables = $this->buildBillables(
-                App::client()->domains->register(
-                    domainName: $request->domain->domainName(),
-                    customer: App::registrarConfig()->customerHandle(),
-                    registrant: $registrant,
-                    contacts: DomainContactCollection::fromArray($contacts),
-                    isQuote: true,
-                )
+                App::client()->domains->register(...$parameters)
             );
         } catch (\Exception $ex) {
             return ['error' => $ex->getMessage()];
@@ -71,16 +80,21 @@ class RegisterWithBillables extends Action
                 ];
             }
 
-            /**
-             * @var DomainRegistration $registeredDomain
-             */
-            $registeredDomain = App::client()->domains->register(
-                domainName: $request->domain->domainName(),
-                customer: App::registrarConfig()->customerHandle(),
-                registrant: $registrant,
-                contacts: DomainContactCollection::fromArray($contacts),
-                billables: BillableCollection::fromArray($billables),
-            );
+            /** @var DomainRegistration $registeredDomain */
+            $parameters = [
+                'domainName' => $domainName,
+                'customer' => App::registrarConfig()->customerHandle(),
+                'registrant' => $registrant,
+
+                'contacts' => DomainContactCollection::fromArray($contacts),
+                'billables' => BillableCollection::fromArray($billables),
+            ];
+
+            if ($request->domain->idnLanguage) {
+                $parameters['languageCode'] = $request->domain->idnLanguage;
+            }
+
+            $registeredDomain = App::client()->domains->register(...$parameters);
         } catch (\Exception $ex) {
             return sprintf(
                 'Error creating domain %s. Error details: %s.',

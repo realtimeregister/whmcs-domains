@@ -21,6 +21,8 @@ class RegisterDomain extends Action
         $metadata = $tldInfo->metadata;
         $domain = $request->domain;
 
+        $domainName = $this->checkForPunyCode($domain, $metadata);
+
         $period = $request->get('regperiod') * 12;
         if (!in_array($period, $metadata->createDomainPeriods)) {
             throw new \Exception(
@@ -31,17 +33,22 @@ class RegisterDomain extends Action
         list(
             'registrant' => $registrant,
             'contacts' => $contacts
-        ) = $this->generateContactsForDomain($request, $metadata);
+            ) = $this->generateContactsForDomain($request, $metadata);
 
-        App::client()->domains->register(
-            domainName: $domain->domainName(),
-            customer: App::registrarConfig()->customerHandle(),
-            registrant:  $registrant,
-            period: $period,
-            autoRenew: false,
-            ns: $domain->nameservers,
-            contacts: DomainContactCollection::fromArray($contacts)
-        );
+        $parameters = [
+            'domainName' => $domainName,
+            'customer' => App::registrarConfig()->customerHandle(),
+            'registrant' => $registrant,
+            'period' => $period,
+            'autoRenew' => false,
+            'ns' => $domain->nameservers,
+            'contacts' => DomainContactCollection::fromArray($contacts)
+        ];
+
+        if ($domain->idnLanguage) {
+            $parameters['languageCode'] = $domain->idnLanguage;
+        }
+        App::client()->domains->register(...$parameters);
         return ['success' => true];
     }
 }

@@ -71,7 +71,7 @@ class GetDomainInformation extends Action
                 // Fallback to DomainNotFoundException
             }
 
-            return ['error' => 'This domain isn\'t registed with us (anymore)'];
+            return ['error' => 'This domain isn\'t registrered with us (anymore)'];
         }
     }
 

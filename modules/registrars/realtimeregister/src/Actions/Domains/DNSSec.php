@@ -61,7 +61,8 @@ class DNSSec extends Action
             return [
                 'templatefile' => 'load_template',
                 'breadcrumb' => [
-                    'clientarea.php?action=domaindetails&id=' . $domainid . '&modop=custom&a=ChildHosts' => 'Child Hosts'
+                    'clientarea.php?action=domaindetails&id=' . $domainid . '&modop=custom&a=ChildHosts'
+                    => 'Child Hosts'
                 ],
                 'vars' => [
                     'content' => $this->render(__DIR__ . '/../../Assets/Tpl/dns_sec_form.tpl', [

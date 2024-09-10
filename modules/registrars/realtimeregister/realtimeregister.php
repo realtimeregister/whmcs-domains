@@ -19,6 +19,8 @@ if (!defined("WHMCS")) {
 require_once __DIR__ . '/vendor/autoload.php';
 require_once ROOTDIR . '/includes/registrarfunctions.php';
 
+new \RealtimeRegister\Services\Language(); // Load our own language strings before anything else
+
 $app = App::boot();
 
 function realtimeregister_version(): string
@@ -145,6 +147,11 @@ function realtimeregister_ClientAreaCustomButtonArray($params)
 function realtimeregister_ClientArea($params)
 {
     return App::dispatch(\RealtimeRegister\Actions\Domains\ClientArea::class, $params);
+}
+
+function realtimeregister_ChildHosts($params)
+{
+    return App::dispatch(\RealtimeRegister\Actions\Domains\ChildHosts::class, $params);
 }
 
 function realtimeregister_DNSSec($params)

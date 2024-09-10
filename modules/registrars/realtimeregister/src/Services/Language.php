@@ -9,10 +9,13 @@ class Language
         $_CUSTOMLANG = $this->getTranslationFile();
 
         global $_LANG;
-        if (isset($_LANG['rtr'])) {
-            $_LANG['rtr'] = array_merge($_CUSTOMLANG['rtr'], $_LANG['rtr']);
-        } else {
-            $_LANG = array_merge($_CUSTOMLANG, $_LANG);
+
+        if (is_array($_LANG)) {
+            if (isset($_LANG['rtr'])) {
+                $_LANG['rtr'] = array_merge($_CUSTOMLANG['rtr'], $_LANG['rtr']);
+            } else {
+                $_LANG = array_merge($_CUSTOMLANG, $_LANG);
+            }
         }
     }
 

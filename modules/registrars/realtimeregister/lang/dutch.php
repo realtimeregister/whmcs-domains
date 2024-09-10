@@ -27,6 +27,7 @@ $_LANG['rtr']['deleteipaddressinstruction'] = "Verwijder IP adressen hieronder."
 $_LANG['rtr']['additionalchildhosts'] = "Extra Child Hosts";
 $_LANG['rtr']['add_keydata'] = "+ Voeg keydata toe";
 $_LANG['rtr']['something_went_wrong'] = 'Er is iets mis gegaan:';
+$_LANG['rtr']['add_ip'] = '+ voeg ip toe';
 
 $_LANG['rtr']['adac']['suggestions'] = 'Misschien zijn deze domeinnamen ook interessant:';
 $_LANG['rtr']['adac']['premium_not_supported'] = 'Premium domeinen worden niet ondersteund';

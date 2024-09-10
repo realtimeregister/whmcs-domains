@@ -1,0 +1,1 @@
+<a class="btn" href="clientarea.php?action=domaindetails&id={$domainid}&modop=custom&a=ChildHosts">AAAA{$LANG.rtr.childhostmanagement}</a>

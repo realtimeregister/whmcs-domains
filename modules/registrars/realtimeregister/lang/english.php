@@ -27,6 +27,7 @@ $_LANG['rtr']['deleteipaddressinstruction'] = "In order to delete IP address, si
 $_LANG['rtr']['additionalchildhosts'] = "Additional Child Hosts";
 $_LANG['rtr']['add_keydata'] = "+ Add keydata";
 $_LANG['rtr']['something_went_wrong'] = 'Something went wrong:';
+$_LANG['rtr']['add_ip'] = '+ add ip';
 
 $_LANG['rtr']['adac']['suggestions'] = 'Need suggestions? You might also like:';
 $_LANG['rtr']['adac']['premium_not_supported'] = 'Premium domains are not supported';

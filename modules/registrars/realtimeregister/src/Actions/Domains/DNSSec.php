@@ -5,12 +5,12 @@ namespace RealtimeRegister\Actions\Domains;
 use RealtimeRegister\Actions\Action;
 use RealtimeRegister\App;
 use RealtimeRegister\Request;
-use RealtimeRegister\Services\Language;
 use SandwaveIo\RealtimeRegister\Domain\KeyDataCollection;
-use Smarty;
 
 class DNSSec extends Action
 {
+    use SmartyTrait;
+
     public function __invoke(Request $request)
     {
         $domainid = $request->params['domainid'];
@@ -54,26 +54,18 @@ class DNSSec extends Action
             }
         }
 
-        $smarty = new Smarty();
-
-        global $_LANG;
-        new Language(); // Load translations
-
-        $smarty->assign([
-            'LANG' => $_LANG,
-            'keyData' => $keyData,
-            'error' => $message,
-            'domainName' => $domain->domainName,
-            'domainId' => $domainid,
-        ]);
-
         return [
             'templatefile' => 'load_template',
             'breadcrumb' => [
                 'clientarea.php?action=domaindetails&id=' . $domainid . '&modop=custom&a=ChildHosts' => 'Child Hosts'
             ],
             'vars' => [
-                'content' => $smarty->fetch(__DIR__ . '/../../Assets/Tpl/dns_sec_form.tpl'),
+                'content' => $this->render(__DIR__ . '/../../Assets/Tpl/dns_sec_form.tpl', [
+                    'keyData' => $keyData,
+                    'error' => $message,
+                    'domainName' => $domain->domainName,
+                    'domainId' => $domainid,
+                ]),
             ]
         ];
     }

@@ -22,7 +22,7 @@ class App
     public const VERSION = '2.0.0';
 
     protected const API_URL = "https://api.yoursrs.com/";
-    protected const API_URL_TEST = "https://api.yoursrs-ote.com/";
+    protected const API_URL_TEST = "host.docker.internal:8003"; //FIXME
     protected const IS_PROXY_HOST = "is.yoursrs.com";
     protected const IS_PROXY_HOST_TEST = "is.yoursrs-ote.com";
 
@@ -116,7 +116,7 @@ class App
         }
 
         return static::$isProxy = new IsProxy(
-            apiKey: App::registrarConfig()->apiKey(),
+            apiKey: "cGlldGVyamFuL2FkbWluOrcOQbo4Mi8bN8Ck2VpToNW7eggL6Q6fpDSqWGs0TOKQ",
             host: App::registrarConfig()->isTest() ? self::IS_PROXY_HOST_TEST : self::IS_PROXY_HOST
         );
     }

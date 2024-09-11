@@ -4,12 +4,14 @@ namespace RealtimeRegister\Actions\Domains;
 
 use Illuminate\Database\Capsule\Manager as Capsule;
 use RealtimeRegister\App;
+use RealtimeRegister\Entities\DataObject;
 use RealtimeRegister\Models\RealtimeRegister\ContactMapping;
 use RealtimeRegister\Models\Whmcs\Configuration;
 use RealtimeRegister\Models\Whmcs\Domain;
 use RealtimeRegister\Models\Whmcs\Orders;
 use RealtimeRegister\Models\Whmcs\Registrars;
 use RealtimeRegister\Services\ContactService;
+use RealtimeRegister\Services\MetadataService;
 use SandwaveIo\RealtimeRegister\Domain\TLDMetaData;
 use RealtimeRegister\Entities\Domain as DomainEntity;
 
@@ -169,8 +171,10 @@ trait DomainTrait
     /**
      * @throws \Exception
      */
-    private function checkForPunyCode(DomainEntity $domain, TLDMetaData $metadata): string
+    private function checkForPunyCode(DomainEntity $domain): string
     {
+        $tldInfo = (new MetadataService($domain->tld))->getAll();
+        $metadata = $tldInfo->metadata;
         $domainName = $domain->domainName();
 
         if ($domain->domainName() !== $domain->punyCode) {

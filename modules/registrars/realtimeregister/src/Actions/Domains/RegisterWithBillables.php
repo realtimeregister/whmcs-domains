@@ -22,7 +22,7 @@ class RegisterWithBillables extends Action
         $metadata = $this->metadata($request);
 
         try {
-            $domainName = $this->checkForPunyCode($request->domain, $metadata);
+            $domainName = $this->checkForPunyCode($request->domain);
 
             $orderId = App::localApi()->domain(
                 clientId: $request->get('userid'),

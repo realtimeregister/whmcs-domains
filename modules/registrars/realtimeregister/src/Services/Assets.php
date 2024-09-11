@@ -28,7 +28,7 @@ final class Assets
             self::$head[] = $content;
         } else {
             $payload = [];
-            $payload['name'] = uniqid();
+            $payload['name'] = uniqid(more_entropy: true);
             $payload['location'] = ScriptLocationType::Header;
             $payload['type'] = 'inline';
             $payload['content'] = $content;

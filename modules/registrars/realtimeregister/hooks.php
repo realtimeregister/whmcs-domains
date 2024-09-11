@@ -14,6 +14,7 @@ App::hook("AdminAreaHeadOutput", Hooks\CheckCredentials::class);
 App::hook("AdminHomepage", Hooks\SyncExpiry::class, 2);
 App::hook("AdminHomepage", Hooks\ImportDomains::class, 2);
 App::hook("AdminHomepage", Hooks\AutoRenewStatus::class, 2);
+App::hook(RealtimeRegister\Hooks\AdminClientDomainsTabFields::class);
 
 App::hook('ClientAreaHeadOutput', Hooks\Adac::class, 10);
 App::hook('ShoppingCartValidateCheckout', Hooks\ShoppingCartValidate::class);

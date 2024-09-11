@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d764ba9b2d13c1df77e2250f6cf5636f",
+    "content-hash": "0ef98ff9f54150cc6677d2498e4c10ab",
     "packages": [
         {
             "name": "carbonphp/carbon-doctrine-types",
@@ -1417,16 +1417,16 @@
         },
         {
             "name": "sandwave-io/realtimeregister-php",
-            "version": "dev-hosts-api",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/realtimeregister/realtimeregister-php.git",
-                "reference": "276f55a2cc19a53e4419f8fe6d0fd0238653d948"
+                "reference": "e46338591faf2d0a6303c8c1309888814c70ea64"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/realtimeregister/realtimeregister-php/zipball/276f55a2cc19a53e4419f8fe6d0fd0238653d948",
-                "reference": "276f55a2cc19a53e4419f8fe6d0fd0238653d948",
+                "url": "https://api.github.com/repos/realtimeregister/realtimeregister-php/zipball/e46338591faf2d0a6303c8c1309888814c70ea64",
+                "reference": "e46338591faf2d0a6303c8c1309888814c70ea64",
                 "shasum": ""
             },
             "require": {
@@ -1442,6 +1442,7 @@
                 "phpunit/phpunit": "^10.0.15",
                 "sandwave-io/php-cs-fixer-config": "^1.0.0"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -1490,9 +1491,9 @@
             ],
             "description": "A PHP SDK for the RealtimeRegister REST API.",
             "support": {
-                "source": "https://github.com/realtimeregister/realtimeregister-php/tree/hosts-api"
+                "source": "https://github.com/realtimeregister/realtimeregister-php/tree/master"
             },
-            "time": "2024-09-09T15:00:52+00:00"
+            "time": "2024-09-11T08:57:03+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",

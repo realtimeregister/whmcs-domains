@@ -159,7 +159,7 @@ function realtimeregister_DNSSec($params)
     return App::dispatch(\RealtimeRegister\Actions\Domains\DNSSec::class, $params);
 }
 
-function realtimeregsiter_TransferSync($params)
+function realtimeregister_TransferSync($params)
 {
     return App::dispatch(\RealtimeRegister\Actions\Domains\TransferSync::class, $params);
 }

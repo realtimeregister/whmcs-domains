@@ -10,7 +10,7 @@ class ContactEdit extends Hook
 {
     public function __invoke(DataObject $vars)
     {
-        $mappings = App::contacts()->fetchMappingByContactId($vars->get('userid'), $vars->get('contactid'));
+        $mappings = App::contacts()->fetchMappingByContactId((int)$vars->get('userid'), (int)$vars->get('contactid'));
 
         if ($mappings->isEmpty()) {
             // No mapping found, so we do nothing

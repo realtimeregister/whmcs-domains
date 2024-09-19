@@ -7,9 +7,8 @@ use Illuminate\Support\Arr;
 use RealtimeRegister\App;
 use RealtimeRegister\Entities\DataObject;
 use RealtimeRegister\Entities\WhmcsContact;
+use RealtimeRegister\LocalApi;
 use RealtimeRegister\Models\RealtimeRegister\ContactMapping;
-use Realtimeregister\rtrHelper as rtrHelper;
-use SandwaveIo\RealtimeRegister\Domain\Contact as RTRContact;
 use SandwaveIo\RealtimeRegister\Domain\TLDInfo;
 
 class ContactService
@@ -50,18 +49,6 @@ class ContactService
             ->first();
     }
 
-    public function findByContactId($contactId)
-    {
-        // Find a local contact by its id
-    }
-
-    public function findLocal(RTRContact $contact)
-    {
-        // Search in contact mappings
-
-        // Search with data
-    }
-
     public static function convertToRtrContact(DataObject $whmcsContact, bool $organizationAllowed): DataObject
     {
         $realtimeRegisterContact = [
@@ -80,6 +67,69 @@ class ContactService
         }
 
         return new DataObject($realtimeRegisterContact);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public static function getOrCreateRegistrantContact(
+        int $clientId,
+        int $contactId,
+        bool $organizationAllowed,
+        TLDInfo $tldInfo,
+        ?array $properties = null
+    ): ?string {
+        $handle = ContactService::getRtrContactHandle(
+            clientId: $clientId,
+            contactId: $contactId,
+            organizationAllowed: $organizationAllowed,
+            properties: $properties
+        );
+
+        if ($handle) {
+            // Check if we need to add properties
+            if ($properties['properties']) {
+                $rtrContact = App::client()->contacts->get(App::registrarConfig()->customerHandle(), $handle);
+
+                if (!$rtrContact->properties[$properties['registry']]) {
+                    App::client()->contacts->addProperties(
+                        customer: App::registrarConfig()->customerHandle(),
+                        handle: $handle,
+                        registry: $tldInfo->provider,
+                        properties: $properties
+                    );
+                } elseif ($rtrContact->properties[$properties['registry']] != $properties['properties']) {
+                    /**
+                     * Contact mapping already exists, but properties don't match. Create new contact with specified
+                     * properties, but don't store the mapping.
+                     */
+                    return ContactService::createRtrContactFromWhmcsContact(
+                        clientId: $clientId,
+                        contactId: $contactId,
+                        organizationAllowed: $organizationAllowed,
+                        tldInfo: $tldInfo,
+                        properties: $properties
+                    );
+                }
+            }
+            return $handle;
+        }
+
+        $handle = ContactService::createRtrContactFromWhmcsContact(
+            clientId: $clientId,
+            contactId: $contactId,
+            organizationAllowed: $organizationAllowed,
+            tldInfo: $tldInfo,
+            properties: $properties
+        );
+        ContactService::storeContactMapping(
+            clientId: $clientId,
+            contactId: $contactId,
+            handle: $handle,
+            organizationAllowed: $organizationAllowed
+        );
+
+        return $handle;
     }
 
     /**
@@ -296,37 +346,12 @@ class ContactService
     /**
      * @throws \Exception
      */
-    public static function getWhmcsContactDetails(int $clientId, int $contactId): array
-    {
-        $startNumber = 0;
-        while (true) {
-            $results = localAPI('GetContacts', ['userid' => $clientId, 'limitstart' => $startNumber]);
-
-            foreach ($results['contacts']['contact'] as $contact) {
-                if ($contact['id'] == $contactId) {
-                    return $contact;
-                }
-            }
-
-            if ((int)$results['numreturned'] + $startNumber >= (int)$results['totalresults']) {
-                break;
-            }
-
-            $startNumber += (int)$results['numreturned'];
-        }
-
-        throw new \Exception(sprintf('Contact with ID %s not found', $contactId));
-    }
-
-    /**
-     * @throws \Exception
-     */
     public static function getWhmcsContact(int $clientId, int $contactId): array
     {
         if ($contactId) {
-            $whmcsContact = ContactService::getWhmcsContactDetails(clientId: $clientId, contactId: $contactId);
+            $whmcsContact = LocalApi::getContactDetails(clientId: $clientId, contactId: $contactId);
         } else {
-            $whmcsContact = localAPI('GetClientsDetails', ['clientid' => $clientId])['client'];
+            $whmcsContact = LocalApi::getClient($clientId);
         }
 
         // Fix phone number
@@ -456,5 +481,50 @@ class ContactService
         }
 
         return $rtr_contact;
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public static function getOrCreateDomainContact(
+        $clientId,
+        int | string $contactId,
+        mixed $role,
+        $tldInfo,
+        bool $organizationAllowed,
+        ?array $properties = null
+    ): string {
+        $handle = ContactService::getConfiguredRoleHandle($role);
+
+        if (!$handle) {
+            $contact = ContactService::getRtrContactHandle(
+                clientId: $clientId,
+                contactId: $contactId,
+                organizationAllowed: $organizationAllowed,
+                properties: $properties
+            );
+
+            $handle = $contact->handle;
+        }
+
+        if ($handle) {
+            return $handle;
+        }
+
+        $handle = ContactService::createRtrContactFromWhmcsContact(
+            clientId: $clientId,
+            contactId: $contactId,
+            organizationAllowed: $organizationAllowed,
+            tldInfo: $tldInfo,
+            properties: $properties
+        );
+        ContactService::storeContactMapping(
+            clientId: $clientId,
+            contactId: $contactId,
+            handle: $handle,
+            organizationAllowed: $organizationAllowed
+        );
+
+        return $handle;
     }
 }

@@ -10,8 +10,8 @@ use RealtimeRegister\Exceptions\DomainNotFoundException;
 use RealtimeRegister\Models\RealtimeRegister\ContactMapping;
 use RealtimeRegister\Models\Whmcs\Contact as ContactModel;
 use RealtimeRegister\Models\Whmcs\Domain;
+use RealtimeRegister\PunyCode;
 use RealtimeRegister\Request;
-use Realtimeregister\Services\Config\Config;
 use Realtimeregister\Services\ContactService;
 use SandwaveIo\RealtimeRegister\Domain\Contact;
 use SandwaveIo\RealtimeRegister\Domain\DomainContact;
@@ -25,6 +25,7 @@ use WHMCS\View\Template\AssetUtil;
 class SaveContactDetails extends Action
 {
     use ContactDetailsTrait;
+    use PunyCode;
 
     protected array $roles = [
         ContactModel::ROLE_REGISTRANT => DomainContactRoleEnum::ROLE_REGISTRANT,
@@ -84,7 +85,7 @@ class SaveContactDetails extends Action
 
                     if ($role == DomainContactRoleEnum::ROLE_REGISTRANT) {
                         $properties = $this->getProperties($tldInfo);
-                        $newHandle = $this->getOrCreateRegistrantContact(
+                        $newHandle = ContactService::getOrCreateRegistrantContact(
                             $clientId,
                             $contactId,
                             $organizationAllowed,
@@ -93,7 +94,7 @@ class SaveContactDetails extends Action
                         );
                     } else {
                         try {
-                            $newHandle = $this->getOrCreateDomainContact(
+                            $newHandle = ContactService::getOrCreateDomainContact(
                                 clientId: $clientId,
                                 contactId: $contactId,
                                 role: $role,
@@ -236,114 +237,6 @@ class SaveContactDetails extends Action
         return $diff;
     }
 
-    /**
-     * @throws \Exception
-     */
-    private function getOrCreateDomainContact(
-        $clientId,
-        int | string $contactId,
-        mixed $role,
-        $tldInfo,
-        bool $organizationAllowed,
-        ?array $properties = null
-    ): string {
-        $handle = ContactService::getConfiguredRoleHandle($role);
-
-        if (!$handle) {
-            $contact = ContactService::getRtrContactHandle(
-                clientId: $clientId,
-                contactId: $contactId,
-                organizationAllowed: $organizationAllowed,
-                properties: $properties
-            );
-
-            $handle = $contact->handle;
-        }
-
-        if ($handle) {
-            return $handle;
-        }
-
-        $handle = ContactService::createRtrContactFromWhmcsContact(
-            clientId: $clientId,
-            contactId: $contactId,
-            organizationAllowed: $organizationAllowed,
-            tldInfo: $tldInfo,
-            properties: $properties
-        );
-        ContactService::storeContactMapping(
-            clientId: $clientId,
-            contactId: $contactId,
-            handle: $handle,
-            organizationAllowed: $organizationAllowed
-        );
-
-        return $handle;
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public static function getOrCreateRegistrantContact(
-        int $clientId,
-        int $contactId,
-        bool $organizationAllowed,
-        TLDInfo $tldInfo,
-        ?array $properties = null
-    ): ?string {
-        $handle = ContactService::getRtrContactHandle(
-            clientId: $clientId,
-            contactId: $contactId,
-            organizationAllowed: $organizationAllowed,
-            properties: $properties
-        );
-
-        if ($handle) {
-            // Check if we need to add properties
-            if ($properties['properties']) {
-                $rtrContact = App::client()->contacts->get(App::registrarConfig()->customerHandle(), $handle);
-
-                if (!$rtrContact->properties[$properties['registry']]) {
-                    App::client()->contacts->addProperties(
-                        customer: App::registrarConfig()->customerHandle(),
-                        handle: $handle,
-                        registry: $tldInfo->provider,
-                        properties: $properties
-                    );
-                } elseif ($rtrContact->properties[$properties['registry']] != $properties['properties']) {
-                    /**
-                     * Contact mapping already exists, but properties don't match. Create new contact with specified
-                     * properties, but don't store the mapping.
-                     */
-                    return ContactService::createRtrContactFromWhmcsContact(
-                        clientId: $clientId,
-                        contactId: $contactId,
-                        organizationAllowed: $organizationAllowed,
-                        tldInfo: $tldInfo,
-                        properties: $properties
-                    );
-                }
-            }
-            return $handle;
-        }
-
-        $handle = ContactService::createRtrContactFromWhmcsContact(
-            clientId: $clientId,
-            contactId: $contactId,
-            organizationAllowed: $organizationAllowed,
-            tldInfo: $tldInfo,
-            properties: $properties
-        );
-        ContactService::storeContactMapping(
-            clientId: $clientId,
-            contactId: $contactId,
-            handle: $handle,
-            organizationAllowed: $organizationAllowed
-        );
-
-        return $handle;
-    }
-
     public function getProperties(TLDInfo $tldInfo): array
     {
         $properties = ['registry' => $tldInfo->provider, 'properties' => []];
@@ -402,7 +295,13 @@ class SaveContactDetails extends Action
                 ];
         }
 
-        $domainName = $this->domainBuildName(false);
+        $domainName = $this->checkForPunyCode(
+            new \RealtimeRegister\Entities\Domain(
+                $this->params['original']['domainname'],
+                $this->params['original']['tld']
+            )
+        );
+
         $params = $domain;
         $params['domainName'] = $domainName;
         App::client()->domains->update(...$params);
@@ -410,26 +309,5 @@ class SaveContactDetails extends Action
         if (!empty($this->domainInfo[$domainName])) {
             $this->domainInfo[$domainName] = array_merge($this->domainInfo[$domainName], $domain);
         }
-    }
-
-    /**
-     * Generate domain name
-     *
-     * @param bool $internal
-     *   In case this is not internal use, use punycode version
-     *
-     * @return string
-     */
-    private function domainBuildName($internal = true)
-    {
-        $domainName = $this->params['original']['domainname'];
-        if (!$internal) {
-            $domainName = $this->params['original']['domain_punycode'];
-        }
-        if (Config::get('tldinfomapping.' . $this->params['tld']) === 'centralnic') {
-            $domainName .= '.centralnic';
-        }
-
-        return $domainName;
     }
 }

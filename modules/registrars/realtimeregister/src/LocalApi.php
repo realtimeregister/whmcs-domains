@@ -8,6 +8,31 @@ use RealtimeRegister\Entities\DataObject;
 class LocalApi
 {
     /**
+     * @throws \Exception
+     */
+    public static function getContactDetails(int $clientId, int $contactId): array
+    {
+        $startNumber = 0;
+        while (true) {
+            $results = localAPI('GetContacts', ['userid' => $clientId, 'limitstart' => $startNumber]);
+
+            foreach ($results['contacts']['contact'] as $contact) {
+                if ($contact['id'] == $contactId) {
+                    return $contact;
+                }
+            }
+
+            if ((int)$results['numreturned'] + $startNumber >= (int)$results['totalresults']) {
+                break;
+            }
+
+            $startNumber += (int)$results['numreturned'];
+        }
+
+        throw new \Exception(sprintf('Contact with ID %s not found', $contactId));
+    }
+
+    /**
      * @param  array $filters
      * @return Collection<DataObject>
      */
@@ -57,12 +82,12 @@ class LocalApi
         )->first();
     }
 
-    public function client(int $clientId): DataObject
+    public static function getClient(int $clientId): DataObject
     {
         return new DataObject(localAPI('GetClientDetails', ['id' => $clientId])['client']);
     }
 
-    public function contact(int $clientId, int $contactId): ?DataObject
+    public function getContact(int $clientId, int $contactId): ?DataObject
     {
         $start = 0;
 
@@ -86,16 +111,6 @@ class LocalApi
     public function getContactById(int $contactId): ?DataObject
     {
         return new DataObject(localAPI('GetContactDetails', ['id' => $contactId])['contacts'][0]);
-    }
-
-    public function createContact(): void
-    {
-        localAPI(
-            'AddContact',
-            [
-                'firstname' => ''
-            ]
-        );
     }
 
     public function getTldPricing()

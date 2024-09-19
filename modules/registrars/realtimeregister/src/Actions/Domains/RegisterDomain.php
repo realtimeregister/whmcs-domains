@@ -35,6 +35,7 @@ class RegisterDomain extends Action
             'contacts' => $contacts
             ) = $this->generateContactsForDomain($request, $metadata);
 
+
         $parameters = [
             'domainName' => $domainName,
             'customer' => App::registrarConfig()->customerHandle(),
@@ -48,6 +49,7 @@ class RegisterDomain extends Action
         if ($domain->idnLanguage) {
             $parameters['languageCode'] = $domain->idnLanguage;
         }
+
         App::client()->domains->register(...$parameters);
         return ['success' => true];
     }

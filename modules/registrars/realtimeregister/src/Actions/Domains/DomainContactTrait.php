@@ -37,6 +37,9 @@ trait DomainContactTrait
     protected static function getNewProperties(Request $request, TLDMetaData $metadata): array
     {
         $contactProperties = $metadata->contactProperties->toArray();
+        if (!$contactProperties) {
+            return [];
+        }
         $tldProperties = array_combine(array_column($contactProperties, 'name'), $contactProperties);
         $properties = [];
 

@@ -3,6 +3,7 @@
 // phpcs:disable PSR1.Files.SideEffects
 
 use RealtimeRegister\Actions\Contacts\GetContactDetails;
+use RealtimeRegister\Actions\Contacts\ResendValidation;
 use RealtimeRegister\Actions\Contacts\SaveContactDetails;
 use RealtimeRegister\Actions\Domains\CheckAvailability;
 use RealtimeRegister\Actions\Domains\GetDomainInformation;
@@ -111,6 +112,7 @@ function realtimeregister_ResendTransfer(array $params)
 
 function realtimeregister_ResendValidationMails(array $params)
 {
+    return App::dispatch(ResendValidation::class, $params);
     throw new Exception(__FUNCTION__ . ' is not implemented yet');
 }
 

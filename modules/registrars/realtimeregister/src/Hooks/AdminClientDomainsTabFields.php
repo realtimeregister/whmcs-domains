@@ -6,6 +6,7 @@ use RealtimeRegister\Actions\Domains\SmartyTrait;
 use RealtimeRegister\App;
 use RealtimeRegister\Entities\DataObject;
 use RealtimeRegister\Models\Whmcs\Domain;
+use RealtimeRegister\Services\MetadataService;
 
 class AdminClientDomainsTabFields extends Hook
 {
@@ -58,6 +59,23 @@ class AdminClientDomainsTabFields extends Hook
         }
         if (!empty($fields)) {
             $fields = array_merge(['' => '<h1>Information from Realtime Register:</h1>'], $fields);
+        }
+
+        $metaData = (new MetadataService(App::registrarConfig()->get('tld_punycode')))->getMetadata();
+
+        if ($metaData->expiryDateOffset > 0) {
+            $fields[''] = $fields[''] . '
+            <script>
+                let newElm = document.createElement("i");
+                newElm.classList.add("fas","fa-info-circle");
+                newElm.style.marginLeft = "0.5em";
+                newElm.onclick = function() {alert("Expiry offset is ' . $metaData->expiryDateOffset
+                . ' seconds, which translates to '
+                . \Carbon\CarbonInterval::seconds($metaData->expiryDateOffset)->cascade()->forHumans() . '");}
+                let elm = document.getElementById("inputExpiryDate");
+                elm.style.display = "inherit";
+                elm.after(newElm);
+            </script>';
         }
         return $fields;
     }

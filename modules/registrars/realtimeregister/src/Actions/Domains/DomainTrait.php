@@ -10,13 +10,14 @@ use RealtimeRegister\Models\Whmcs\Configuration;
 use RealtimeRegister\Models\Whmcs\Domain;
 use RealtimeRegister\Models\Whmcs\Orders;
 use RealtimeRegister\Models\Whmcs\Registrars;
+use RealtimeRegister\PunyCode;
 use RealtimeRegister\Services\ContactService;
-use RealtimeRegister\Services\MetadataService;
 use SandwaveIo\RealtimeRegister\Domain\TLDMetaData;
-use RealtimeRegister\Entities\Domain as DomainEntity;
 
 trait DomainTrait
 {
+    use PunyCode;
+
     protected static array $CONTACT_ROLES = [
         "TECH" => "techContacts",
         "ADMIN" => "adminContacts",
@@ -49,34 +50,45 @@ trait DomainTrait
         }
 
         // Fetch the whmcs contact
-        $whmcsContact = App::localApi()->contact($clientId, $contactId);
-
+        $whmcsContact = App::localApi()->getContact($clientId, $contactId);
 
         // Try and match the whmcs contact to a rtr contact
-        // Should we even match the contact? yes / on exception only?
-
-        // $contact = ContactService::findRemote();
-
-        // If we do not find a match we create a new contact
-        $rtrContact = ContactService::convertToRtrContact($whmcsContact, $organizationAllowed);
-        $handle = uniqid(App::registrarConfig()->contactHandlePrefix() ?: '');
-
-        App::client()->contacts->create(
-            customer: App::registrarConfig()->customerHandle(),
-            handle: $handle,
-            name: $rtrContact->get('name'),
-            addressLine: $rtrContact->get('addressLine'),
-            postalCode: $rtrContact->get('postalCode'),
-            city: $rtrContact->get('city'),
-            country: $rtrContact->get('country'),
-            email: $rtrContact->get('email'),
-            voice: $rtrContact->get('voice'),
-            organization: $rtrContact->get('organization'),
-            state: $rtrContact->get('state')
+        $contact = ContactService::findRemote(
+            new DataObject(
+                [
+                    'organization' => $whmcsContact->get('companyname'),
+                    'name' => $whmcsContact->get('fullname'),
+                    'email' => $whmcsContact->get('email'),
+                    'country' => $whmcsContact->get('countrycode')
+                ]
+            ),
+            $organizationAllowed
         );
 
-        App::contacts()->addContactMapping($clientId, $contactId, $handle, $organizationAllowed);
-        return $handle;
+        if (!$contact) {
+            // If we do not find a match we create a new contact
+            $rtrContact = ContactService::convertToRtrContact($whmcsContact, $organizationAllowed);
+            $handle = uniqid(App::registrarConfig()->contactHandlePrefix() ?: '', true);
+
+            App::client()->contacts->create(
+                customer: App::registrarConfig()->customerHandle(),
+                handle: $handle,
+                name: $rtrContact->get('name'),
+                addressLine: $rtrContact->get('addressLine'),
+                postalCode: $rtrContact->get('postalCode'),
+                city: $rtrContact->get('city'),
+                country: $rtrContact->get('country'),
+                email: $rtrContact->get('email'),
+                voice: $rtrContact->get('voice') ?: '',
+                organization: $rtrContact->get('organization'),
+                state: $rtrContact->get('state')
+            );
+
+            App::contacts()->addContactMapping($clientId, $contactId, $handle, $organizationAllowed);
+
+            return $handle;
+        }
+        return $contact->handle;
     }
 
     protected function getDomainNameservers(array $params, string $type = 'register'): array
@@ -166,42 +178,5 @@ trait DomainTrait
         $config = Registrars::getRegistrarConfig(['transfer_keep_nameservers']);
 
         return isset($config['transfer_keep_nameservers']) && $config['transfer_keep_nameservers'] === 'on';
-    }
-
-    /**
-     * @throws \Exception
-     */
-    private function checkForPunyCode(DomainEntity $domain): string
-    {
-        $tldInfo = (new MetadataService($domain->tld))->getAll();
-        $metadata = $tldInfo->metadata;
-        $domainName = $domain->domainName();
-
-        if ($domain->domainName() !== $domain->punyCode) {
-            // Check if we are allowed (& need) to use punycode
-            if ($domain->isIdn && $metadata->domainSyntax->idnSupport) {
-                if (
-                    !array_key_exists(
-                        strtoupper($domain->idnLanguage),
-                        $metadata->domainSyntax->languageCodes->toArray()
-                    )
-                ) {
-                    throw new \Exception(
-                        sprintf(
-                            'The language `%s` is not allowed for the %s tld.',
-                            $domain->idnLanguage,
-                            $domain->tld
-                        )
-                    );
-                }
-                $domainName = $domain->punyCode;
-            } else {
-                throw new \Exception(
-                    sprintf('It is not possible to use IDN domainnames for the %s tld.', $domain->tld)
-                );
-            }
-        }
-
-        return $domainName;
     }
 }

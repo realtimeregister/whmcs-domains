@@ -1,4 +1,5 @@
 <?php
+
 /**
  * WHMCS Language File for RTR module
  * English (en)
@@ -48,4 +49,7 @@ $_LANG['rtr']['adac']['status']['5'] = "unknown";
 $_LANG['rtr_languagecode_label'] = 'Select Language Code';
 $_LANG['rtr_languagecode_description'] = '';
 
-include_once implode(DIRECTORY_SEPARATOR, [ROOTDIR, 'modules', 'registrars', 'realtimeregister', 'lang', 'english.additional.php']);
+include_once implode(
+    DIRECTORY_SEPARATOR,
+    [ROOTDIR, 'modules', 'registrars', 'realtimeregister', 'lang', 'english.additional.php']
+);

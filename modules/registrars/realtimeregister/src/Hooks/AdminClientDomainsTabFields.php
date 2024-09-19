@@ -69,7 +69,7 @@ class AdminClientDomainsTabFields extends Hook
                 let newElm = document.createElement("i");
                 newElm.classList.add("fas","fa-info-circle");
                 newElm.style.marginLeft = "0.5em";
-                newElm.onclick = function() {alert("Expiry offset is ' . $metaData->expiryDateOffset
+                newElm.onclick = function() {alert("Expiry offset is ' . number_format($metaData->expiryDateOffset)
                 . ' seconds, which translates to '
                 . \Carbon\CarbonInterval::seconds($metaData->expiryDateOffset)->cascade()->forHumans() . '");}
                 let elm = document.getElementById("inputExpiryDate");

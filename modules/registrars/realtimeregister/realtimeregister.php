@@ -113,7 +113,6 @@ function realtimeregister_ResendTransfer(array $params)
 function realtimeregister_ResendValidationMails(array $params)
 {
     return App::dispatch(ResendValidation::class, $params);
-    throw new Exception(__FUNCTION__ . ' is not implemented yet');
 }
 
 function realtimeregister_GetEPPCode($params)

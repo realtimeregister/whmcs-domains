@@ -10,6 +10,10 @@ $(document).ready(
         const oteField = config_container.find('[type="checkbox"][name="test_mode"]');
         const ignoreSslField = config_container.find('[type="checkbox"][name="ignore_ssl"]');
 
+        // We don't need to display this field here
+        const customHandlesField = config_container.find('[name="customHandles"]');
+        $(customHandlesField).parentsUntil('tr').parent().hide();
+
         config_container.on(
             'click',
             '.check-connection',

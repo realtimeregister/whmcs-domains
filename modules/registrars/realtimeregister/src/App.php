@@ -25,6 +25,9 @@ class App
     protected const IS_PROXY_HOST = "is.yoursrs.com";
     protected const IS_PROXY_HOST_TEST = "is.yoursrs-ote.com";
 
+    protected const METADATA_PROXY_URL = 'https://rtrdm.blob.core.windows.net/metadata-prod/bundle.json';
+    protected const METADATA_PROXY_URL_TEST = 'https://rtrdm.blob.core.windows.net/metadata-ote/bundle.json';
+
     protected readonly LocalApi $localApi;
     protected readonly RegistrarConfig $registrarConfig;
     protected readonly ContactService $contactService;
@@ -118,6 +121,11 @@ class App
             apiKey: App::registrarConfig()->apiKey(),
             host: App::registrarConfig()->isTest() ? self::IS_PROXY_HOST_TEST : self::IS_PROXY_HOST
         );
+    }
+
+    public static function metadataUrl(): string
+    {
+        return App::registrarConfig()->isTest() ? self::METADATA_PROXY_URL_TEST : self::METADATA_PROXY_URL;
     }
 
     protected function dispatchTo(string $action, array $params = [])

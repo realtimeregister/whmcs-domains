@@ -49,6 +49,12 @@ $_LANG['rtr']['adac']['status']['5'] = "unknown";
 $_LANG['rtr_languagecode_label'] = 'Select Language Code';
 $_LANG['rtr_languagecode_description'] = '';
 
+$_LANG['rtr']['custom_handles']['please_wait'] = 'Please wait while we load the content..';
+$_LANG['rtr']['custom_handles']['custom_properties'] = 'Custom properties';
+$_LANG['rtr']['custom_handles']['close'] = 'Close';
+$_LANG['rtr']['custom_handles']['save'] = 'Save';
+$_LANG['rtr']['custom_handles']['error'] = 'Something went wrong, please try again after reviewing your data';
+
 include_once implode(
     DIRECTORY_SEPARATOR,
     [ROOTDIR, 'modules', 'registrars', 'realtimeregister', 'lang', 'english.additional.php']

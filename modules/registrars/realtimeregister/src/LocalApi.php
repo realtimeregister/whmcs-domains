@@ -127,5 +127,7 @@ class LocalApi
         if ($result) {
             return $result['pricing'];
         }
+
+        return null;
     }
 }

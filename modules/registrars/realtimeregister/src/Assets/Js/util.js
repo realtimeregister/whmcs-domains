@@ -7,7 +7,8 @@ function setProgress(total, current)
             .animate(
                 {
                     width: Math.floor(progress) + '%'
-                }, 200
+                },
+                200
             );
     } else {
         progressComplete();
@@ -27,6 +28,7 @@ function progressComplete()
         .animate(
             {
                 width: '100%'
-            }, 200
+            },
+            200
         );
 }

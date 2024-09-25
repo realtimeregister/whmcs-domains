@@ -54,9 +54,15 @@ class AdminClientDomainsTabFields extends Hook
                     ['keyData' => $rtrDomain->keyData->entities]
                 );
             }
+
+            $fields['Status'] = $this->render(
+                __DIR__ . '/../Assets/Tpl/admin/status.tpl',
+                ['status' => $rtrDomain->status]
+            );
         } catch (\Exception) {
             # ignore
         }
+
         if (!empty($fields)) {
             $fields = array_merge(['' => '<h1>Information from Realtime Register:</h1>'], $fields);
         }

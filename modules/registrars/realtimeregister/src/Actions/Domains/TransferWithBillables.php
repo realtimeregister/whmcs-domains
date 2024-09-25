@@ -12,7 +12,6 @@ use SandwaveIo\RealtimeRegister\Domain\DomainContactCollection;
 
 class TransferWithBillables extends Action
 {
-
     use DomainTrait;
     use DomainContactTrait;
 
@@ -32,12 +31,12 @@ class TransferWithBillables extends Action
         $order = Orders::query()->find($whmcsDomain->orderid)->first();
         $parameters = [
             'domainName' => $domain->domainName(),
-            'customer'=> App::registrarConfig()->customerHandle(),
+            'customer' => App::registrarConfig()->customerHandle(),
             'registrant' => $registrant,
             'ns' => App::registrarConfig()->keepNameServers() ? null : $domain->nameservers,
             'authcode' => html_entity_decode(unserialize($order->transfersecret)[$domain->domainName()]),
-            'autoRenew'=> false,
-            'contacts'=> DomainContactCollection::fromArray($contacts),
+            'autoRenew' => false,
+            'contacts' => DomainContactCollection::fromArray($contacts),
             'isQuote' => true
         ];
 

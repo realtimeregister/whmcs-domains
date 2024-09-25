@@ -39,8 +39,10 @@ class AdminCustomButtonArray extends Action
                     ]
                 );
 
-                if ($processes->count() > 0
-                    && in_array(ResumeTypeEnum::TYPE_RESEND, $processes->entities[0]->resumeTypes ?? [])) {
+                if (
+                    $processes->count() > 0
+                    && in_array(ResumeTypeEnum::TYPE_RESEND, $processes->entities[0]->resumeTypes ?? [])
+                ) {
                     $adminButtons['Resend FOA'] = "ResendTransfer";
                 }
             }

@@ -9,7 +9,6 @@ use SandwaveIo\RealtimeRegister\Domain\Enum\ResumeTypeEnum;
 
 class ResendTransfer extends Action
 {
-
     public function __invoke(Request $request): array
     {
         $processes = App::client()

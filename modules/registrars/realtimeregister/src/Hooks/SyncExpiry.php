@@ -32,7 +32,8 @@ class SyncExpiry extends Hook
             );
 
             echo TemplateService::renderTemplate(
-                "syncDomains.tpl", [
+                "syncDomains.tpl",
+                [
                     "fields" => [
                         "rtrDomains" => $rtrDomains,
                         "whmcsDomains" => $whmcsDomains

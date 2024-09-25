@@ -6,6 +6,7 @@ use RealtimeRegister\App;
 use RealtimeRegister\Entities\DataObject;
 use RealtimeRegister\Enums\ScriptLocationType;
 use RealtimeRegister\Models\Whmcs\Configuration;
+use RealtimeRegister\Models\Whmcs\Currencies;
 use RealtimeRegister\Models\Whmcs\DomainPricing;
 use RealtimeRegister\Models\Whmcs\Pricing;
 use RealtimeRegister\Models\Whmcs\Registrars;
@@ -133,16 +134,10 @@ class Adac extends Hook
             }
         }
 
-        /**
- * @var Pricing[] $prices
-*/
-        $prices = Pricing::where('currency', $currency)->where(
-            function ($query) {
-                $query->where('type', 'domainregister')
-                    ->orWhere('type', 'domaintransfer')
-                    ->orWhere('type', 'domainrenew');
-            }
-        )->get();
+        $prices = Pricing::query()->where('currency', $currency)
+            ->whereIn('type', ['domainregister', 'domaintransfer', 'domainrenew'])
+            ->get();
+        $currency = Currencies::query()->where("id", '=', $currency)->first();
 
         if (!empty($prices)) {
             $build = [];
@@ -153,9 +148,9 @@ class Adac extends Hook
                 }
 
                 if (!($price['msetupfee'] < 0)) {
-                    $priceString = $price->getValutaAttribute();
+                    $priceString = $currency->prefix;
                     $priceString .= $price['msetupfee'];
-                    $priceString .= $price->getCurrencySuffixAttribute();
+                    $priceString .= $currency->suffix;
 
                     $build[$tldPricing[$price['relid']]]['group'] = $tldGroup[$tldPricing[$price['relid']]]['type'];
                     $build[$tldPricing[$price['relid']]]['group_title'] =
@@ -163,9 +158,9 @@ class Adac extends Hook
                     $build[$tldPricing[$price['relid']]]['interval'] = '12';
                     $build[$tldPricing[$price['relid']]][$price['type']] = $priceString;
                 } elseif (!($price['qsetupfee'] < 0)) {
-                    $priceString = $price->getValutaAttribute();
+                    $priceString = $currency->prefix;
                     $priceString .= $price['qsetupfee'];
-                    $priceString .= $price->getCurrencySuffixAttribute();
+                    $priceString .= $currency->suffix;
 
                     $build[$tldPricing[$price['relid']]]['group'] = $tldGroup[$tldPricing[$price['relid']]]['type'];
                     $build[$tldPricing[$price['relid']]]['group_title'] =

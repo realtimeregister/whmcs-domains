@@ -24,7 +24,9 @@
             let key = $('input[name="totalIPS"]').val();
 
             $(document).on(
-                'click', '.delete-ns', function (e) {
+                'click',
+                '.delete-ns',
+                function (e) {
                     e.preventDefault();
 
                     let self = this, host = $(self).attr('data-ns');
@@ -32,10 +34,12 @@
                     if (confirm("Do you want to delete host: " + host)) {
                         $(self).closest('li').find('.spinner').addClass('active');
                         $.post(
-                            document.location.href, {
+                            document.location.href,
+                            {
                                 hostAction: "delete",
                                 hostName: host
-                            }, function (response) {
+                            },
+                            function (response) {
                                 $(self).closest('li').remove();
                             }
                         );
@@ -144,7 +148,9 @@
             );
 
             $(document).on(
-                'click', '.add-ip', function (e) {
+                'click',
+                '.add-ip',
+                function (e) {
                     e.preventDefault();
                     let total = $(this).closest('form').find('input[name="totalIPS"]').val();
 

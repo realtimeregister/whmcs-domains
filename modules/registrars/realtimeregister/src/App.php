@@ -153,7 +153,7 @@ class App
             return static::instance()->dispatchTo($action, $params);
         } catch (\Throwable $exception) {
             if ($catch) {
-                return $catch($exception);
+                return $catch($exception, $params);
             }
 
             if ($exception instanceof ActionFailedException) {

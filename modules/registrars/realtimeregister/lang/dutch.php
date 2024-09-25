@@ -75,7 +75,8 @@ $_LANG['rtr']['actions']['import_into_whmcs'] = 'Importeer domeinen/clienten van
 $_LANG['rtr']['actions']['sync_expire_dates'] = 'Sync Verloopdatums';
 $_LANG['rtr']['actions']['sync_all_expire_dates'] = 'Sync de Renew date voor alle domeinen in uw WHMCS account';
 $_LANG['rtr']['actions']['change_autorenew_status'] = 'Verander Auto Renew Status';
-$_LANG['rtr']['actions']['change_autorenew_to_false'] = 'Verander van alle domeinen de autorenew status naar false bij RealtimeRegister';
+$_LANG['rtr']['actions']['change_autorenew_to_false']
+    = 'Verander van alle domeinen de autorenew status naar false bij RealtimeRegister';
 
 include_once implode(
     DIRECTORY_SEPARATOR,

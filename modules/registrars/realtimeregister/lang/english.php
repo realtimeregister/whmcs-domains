@@ -76,7 +76,8 @@ $_LANG['rtr']['actions']['import_into_whmcs'] = 'Import domains/clients from Rea
 $_LANG['rtr']['actions']['sync_expire_dates'] = 'Sync Expiry Dates';
 $_LANG['rtr']['actions']['sync_all_expire_dates'] = 'Sync the expiry date for all domains in your WHMCS account';
 $_LANG['rtr']['actions']['change_autorenew_status'] = 'Change Auto Renew Status';
-$_LANG['rtr']['actions']['change_autorenew_to_false'] = 'Change the domains autorenew status to false at RealtimeRegister';
+$_LANG['rtr']['actions']['change_autorenew_to_false']
+    = 'Change the domains autorenew status to false at RealtimeRegister';
 
 include_once implode(
     DIRECTORY_SEPARATOR,

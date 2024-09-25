@@ -1,4 +1,5 @@
 <?php
+
 /**
  * WHMCS Language File for RTR module additional domain fields
  * English (en)
@@ -54,4 +55,3 @@ $_LANG['tld_es_entitytype_439'] = '439. Political Party';
 $_LANG['tld_es_entitytype_59'] = '59. Sports Association';
 $_LANG['tld_es_entitytype_124'] = '124. Savings Bank';
 $_LANG['tld_es_entitytype_510'] = '510. Farm Partnership';
-

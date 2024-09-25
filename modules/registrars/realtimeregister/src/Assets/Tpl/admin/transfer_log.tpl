@@ -2,9 +2,9 @@
 	<tbody>
 		<tr>
 			<th>{$LANG.rtr.date}</th>
-			<th>{$LANG.rtr.tranfer_log.type}</th>
+			<th>{$LANG.rtr.transfer_log.type}</th>
 			<th>{$LANG.rtr.status}</th>
-			<th>{$LANG.rtr.tranfer_log.message}</th>
+			<th>{$LANG.rtr.transfer_log.message}</th>
 		</tr>
 
 		{if $logs}

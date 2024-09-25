@@ -9,8 +9,8 @@
                 <i class="fas fa-file-import"></i>
             </div>
             <div class="detail">
-                <span class="count">{$LANG.rtr.import.import_domains}</span>
-                <span class="desc">{$LANG.rtr.import.import_into_whmcs}</span>
+                <span class="count">{$LANG.rtr.actions.import_domains}</span>
+                <span class="desc">{$LANG.rtr.actions.import_into_whmcs}</span>
             </div>
         </div>
         <div title="Sync Domain Expiry Dates"
@@ -21,8 +21,8 @@
                 <i class="fas fa-sync"></i>
             </div>
             <div class="detail">
-                <span class="count">{$LANG.rtr.import.sync_expire_dates}</span>
-                <span class="desc">{$LANG.rtr.import.sync_all_expire_dates}</span>
+                <span class="count">{$LANG.rtr.actions.sync_expire_dates}</span>
+                <span class="desc">{$LANG.rtr.actions.sync_all_expire_dates}</span>
             </div>
         </div>
         <div title="Change Auto Renew status"
@@ -33,8 +33,8 @@
                 <i class="fas fa-retweet"></i>
             </div>
             <div class="detail">
-                <span class="count">{$LANG.rtr.import.change_autorenew_status}</span>
-                <span class="desc">{$LANG.rtr.import.change_autorenew_to_false}</span>
+                <span class="count">{$LANG.rtr.actions.change_autorenew_status}</span>
+                <span class="desc">{$LANG.rtr.actions.change_autorenew_to_false}</span>
             </div>
         </div>
     </div>

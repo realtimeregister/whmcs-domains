@@ -9,8 +9,8 @@
                 <i class="fas fa-file-import"></i>
             </div>
             <div class="detail">
-                <span class="count">Import domains</span>
-                <span class="desc">Import domains/clients from RealtimeRegister into WHMCS</span>
+                <span class="count">{$LANG.rtr.import.import_domains}</span>
+                <span class="desc">{$LANG.rtr.import.import_into_whmcs}</span>
             </div>
         </div>
         <div title="Sync Domain Expiry Dates"
@@ -21,8 +21,8 @@
                 <i class="fas fa-sync"></i>
             </div>
             <div class="detail">
-                <span class="count">Sync Expiry Dates</span>
-                <span class="desc">Sync the expiry date for all domains in your WHMCS account</span>
+                <span class="count">{$LANG.rtr.import.sync_expire_dates}</span>
+                <span class="desc">{$LANG.rtr.import.sync_all_expire_dates}</span>
             </div>
         </div>
         <div title="Change Auto Renew status"
@@ -33,8 +33,8 @@
                 <i class="fas fa-retweet"></i>
             </div>
             <div class="detail">
-                <span class="count">Change Auto Renew Status</span>
-                <span class="desc">Change the domains autorenew status to false at RealtimeRegister</span>
+                <span class="count">{$LANG.rtr.import.change_autorenew_status}</span>
+                <span class="desc">{$LANG.rtr.import.change_autorenew_to_false}</span>
             </div>
         </div>
     </div>
@@ -45,7 +45,7 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                                 aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Action</h4>
+                    <h4 class="modal-title">{$LANG.rtr.action}</h4>
                 </div>
                 <div class="modal-body"></div>
             </div>

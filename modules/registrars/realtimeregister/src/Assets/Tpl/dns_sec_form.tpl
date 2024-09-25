@@ -14,10 +14,10 @@
     <table class="table table-bordered bg-white">
         <thead>
         <tr>
-            <th class="col-md-2" scope="col">Flags</th>
-            <th class="col-md-1" scope="col">Protocol</th>
-            <th class="col-md-3" scope="col">Algorithm</th>
-            <th class="col-md-5" scope="col">Public key</th>
+            <th class="col-md-2" scope="col">{$LANG.rtr.flags}</th>
+            <th class="col-md-1" scope="col">{$LANG.rtr.protocol}</th>
+            <th class="col-md-3" scope="col">{$LANG.rtr.algorithm}</th>
+            <th class="col-md-5" scope="col">{$LANG.rtr.public_key}</th>
             <th class="col-md-1">&nbsp;</th>
         </tr>
         </thead>

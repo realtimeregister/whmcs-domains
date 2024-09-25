@@ -1,10 +1,10 @@
 <table class="table table-hover align_top">
     <tbody>
         <tr>
-            <th>Flags</th>
-            <th>Protocol</th>
-            <th>Algorithm</th>
-            <th>Public key</th>
+            <th>{$LANG.rtr.flags}</th>
+            <th>{$LANG.rtr.protocol}</th>
+            <th>{$LANG.rtr.algorithm}</th>
+            <th>{$LANG.rtr.public_key}</th>
         </tr>
 
         {if $keyData}

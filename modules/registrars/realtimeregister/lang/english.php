@@ -54,6 +54,29 @@ $_LANG['rtr']['custom_handles']['custom_properties'] = 'Custom properties';
 $_LANG['rtr']['custom_handles']['close'] = 'Close';
 $_LANG['rtr']['custom_handles']['save'] = 'Save';
 $_LANG['rtr']['custom_handles']['error'] = 'Something went wrong, please try again after reviewing your data';
+$_LANG['rtr']['update_available'] = 'There is an update available for the Realtime Register plugin.';
+$_LANG['rtr']['update_notification']['prerelease'] = 'Prerelease';
+$_LANG['rtr']['update_notification']['view_update'] = 'View update';
+$_LANG['rtr']['update_notification']['newest'] = 'Newest version';
+
+$_LANG['rtr']['flags'] = 'Flags';
+$_LANG['rtr']['protocol'] = 'Protocol';
+$_LANG['rtr']['algorithm'] = 'Algorithm';
+$_LANG['rtr']['public_key'] = 'Public key';
+
+$_LANG['rtr']['date'] = 'Date';
+$_LANG['rtr']['action'] = 'Action';
+$_LANG['rtr']['status'] = 'Status';
+
+$_LANG['rtr']['transfer_log']['type'] = 'Type';
+$_LANG['rtr']['transfer_log']['message'] = 'Message';
+
+$_LANG['rtr']['actions']['import_domains'] = 'Import domains';
+$_LANG['rtr']['actions']['import_into_whmcs'] = 'Import domains/clients from RealtimeRegister into WHMCS';
+$_LANG['rtr']['actions']['sync_expire_dates'] = 'Sync Expiry Dates';
+$_LANG['rtr']['actions']['sync_all_expire_dates'] = 'Sync the expiry date for all domains in your WHMCS account';
+$_LANG['rtr']['actions']['change_autorenew_status'] = 'Change Auto Renew Status';
+$_LANG['rtr']['actions']['change_autorenew_to_false'] = 'Change the domains autorenew status to false at RealtimeRegister';
 
 include_once implode(
     DIRECTORY_SEPARATOR,

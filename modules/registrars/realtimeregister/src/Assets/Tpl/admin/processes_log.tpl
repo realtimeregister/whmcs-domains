@@ -1,9 +1,9 @@
 <table class="table table-hover align_top">
 	<tbody>
 		<tr>
-			<th>Date</th>
-			<th>Action</th>
-			<th>Status</th>
+			<th>{$LANG.rtr.date}</th>
+			<th>{$LANG.rtr.action}</th>
+			<th>{$LANG.rtr.status}</th>
 		</tr>
 		{if $processes}
 			{foreach from=$processes item=process}

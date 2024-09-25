@@ -1,10 +1,10 @@
 <table class="table table-hover align_top">
 	<tbody>
 		<tr>
-			<th>Date</th>
-			<th>Type</th>
-			<th>Status</th>
-			<th>Message</th>
+			<th>{$LANG.rtr.date}</th>
+			<th>{$LANG.rtr.tranfer_log.type}</th>
+			<th>{$LANG.rtr.status}</th>
+			<th>{$LANG.rtr.tranfer_log.message}</th>
 		</tr>
 
 		{if $logs}

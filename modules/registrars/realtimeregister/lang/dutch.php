@@ -53,6 +53,30 @@ $_LANG['rtr']['custom_handles']['close'] = 'Sluiten';
 $_LANG['rtr']['custom_handles']['save'] = 'Opslaan';
 $_LANG['rtr']['custom_handles']['error'] = 'Er ging iets mis, controlleer uw invoer en probeer opnieuw';
 
+$_LANG['rtr']['update_available'] = 'Er is een update beschikbaar van de Realtime Register plugin.';
+$_LANG['rtr']['update_notification']['prerelease'] = 'Prerelease';
+$_LANG['rtr']['update_notification']['view_update'] = 'Bekijk update';
+$_LANG['rtr']['update_notification']['newest'] = 'Nieuwste versie';
+
+$_LANG['rtr']['flags'] = 'Vlaggen';
+$_LANG['rtr']['protocol'] = 'Protocol';
+$_LANG['rtr']['algorithm'] = 'Algorithme';
+$_LANG['rtr']['public_key'] = 'Publieke sleutel';
+
+$_LANG['rtr']['date'] = 'Datum';
+$_LANG['rtr']['action'] = 'Actie';
+$_LANG['rtr']['status'] = 'Status';
+
+$_LANG['rtr']['transfer_log']['type'] = 'Type';
+$_LANG['rtr']['transfer_log']['message'] = 'Bericht';
+
+$_LANG['rtr']['actions']['import_domains'] = 'Importeer domeinen';
+$_LANG['rtr']['actions']['import_into_whmcs'] = 'Importeer domeinen/clienten vanuit RealtimeRegister naar WHMCS';
+$_LANG['rtr']['actions']['sync_expire_dates'] = 'Sync Verloopdatums';
+$_LANG['rtr']['actions']['sync_all_expire_dates'] = 'Sync de Renew date voor alle domeinen in uw WHMCS account';
+$_LANG['rtr']['actions']['change_autorenew_status'] = 'Verander Auto Renew Status';
+$_LANG['rtr']['actions']['change_autorenew_to_false'] = 'Verander van alle domeinen de autorenew status naar false bij RealtimeRegister';
+
 include_once implode(
     DIRECTORY_SEPARATOR,
     [ROOTDIR, 'modules', 'registrars', 'realtimeregister', 'lang', 'dutch.additional.php']

@@ -38,7 +38,7 @@ class ClientAreaHeadOutput extends Hook
         }
 
         $jsRouter = new JSRouter($vars);
-        App::assets()->addToJavascriptVariables('rtr-js', ['rtr' => $jsRouter->getJson()]);
+        App::assets()->addToJavascriptVariables('rtr.js', ['rtr' => $jsRouter->getJson()]);
     }
 
     /**

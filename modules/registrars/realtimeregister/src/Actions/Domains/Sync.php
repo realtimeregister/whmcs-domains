@@ -5,9 +5,13 @@ namespace RealtimeRegister\Actions\Domains;
 use Exception;
 use RealtimeRegister\Actions\Action;
 use RealtimeRegister\Enums\WhmcsDomainStatus;
+use RealtimeRegister\Exceptions\DomainNotFoundException;
 use RealtimeRegister\Models\Whmcs\Domain;
 use RealtimeRegister\Request;
 use SandwaveIo\RealtimeRegister\Domain\Enum\DomainStatusEnum;
+use SandwaveIo\RealtimeRegister\Exceptions\BadRequestException;
+use SandwaveIo\RealtimeRegister\Exceptions\ForbiddenException;
+use SandwaveIo\RealtimeRegister\Exceptions\UnauthorizedException;
 
 class Sync extends Action
 {
@@ -18,15 +22,19 @@ class Sync extends Action
     {
         $metadata = $this->metadata($request);
 
-        $domain = $this->domainInfo($request);
+        try {
+            $domain = $this->domainInfo($request);
 
-        $expiryDate = $domain->expiryDate;
+            $expiryDate = $domain->expiryDate;
 
-        if ($metadata->expiryDateOffset) {
-            $expiryDate = $expiryDate->add(new \DateInterval('PT' . $metadata->expiryDateOffset . 'S'));
+            if ($metadata->expiryDateOffset) {
+                $expiryDate = $expiryDate->add(new \DateInterval('PT' . $metadata->expiryDateOffset . 'S'));
+            }
+
+            $values = [];
+        } catch (BadRequestException | UnauthorizedException | ForbiddenException $exception) {
+            throw new DomainNotFoundException($exception);
         }
-
-        $values = [];
 
         if ($domain->autoRenewPeriod < 12 && $domain->autoRenew) {
             $whmcsDomain = Domain::query()->where('domain', $request->domain->name)->firstOrFail();

@@ -14,6 +14,7 @@ App::hook("AdminAreaHeadOutput", Hooks\CheckCredentials::class);
 App::hook("AdminHomepage", Hooks\SyncExpiry::class, 2);
 App::hook("AdminHomepage", Hooks\ImportDomains::class, 2);
 App::hook("AdminHomepage", Hooks\AutoRenewStatus::class, 2);
+App::hook(RealtimeRegister\Hooks\AdminClientDomainsTabFields::class);
 
 App::hook('ClientAreaHeadOutput', Hooks\Adac::class, 10);
 App::hook('ShoppingCartValidateCheckout', Hooks\ShoppingCartValidate::class);
@@ -35,3 +36,8 @@ App::hook('ClientAreaHeadOutput', Hooks\HeadAssets::class, 100);
 App::hook('ClientAreaFooterOutput', Hooks\FooterAssets::class, 100);
 App::hook('AdminAreaHeadOutput', Hooks\HeadAssets::class, 100);
 App::hook('AdminAreaFooterOutput', Hooks\FooterAssets::class, 100);
+
+// Search for updates
+App::hook('DailyCronJob', Hooks\Update\CheckForUpdates::class, 10);
+App::hook('AdminAreaHeaderOutput', Hooks\Update\Banner::class, 10);
+App::hook('AdminHomeWidgets', Hooks\Widgets\UpdateWidget::class, 40);

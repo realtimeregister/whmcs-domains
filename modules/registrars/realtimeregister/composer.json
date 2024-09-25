@@ -2,20 +2,17 @@
     "name": "registrars/realtimeregister",
     "type": "library",
     "version": "2.0.0",
+    "autoload": {
+        "psr-4": {
+            "RealtimeRegister\\": "src/"
+        }
+    },
     "repositories": [
         {
             "type": "vcs",
             "url": "https://github.com/realtimeregister/realtimeregister-php"
         }
     ],
-    "autoload": {
-        "psr-4": {
-            "RealtimeRegister\\": "src/"
-        },
-        "files": [
-            "src/helpers.php"
-        ]
-    },
     "autoload-dev": {
         "psr-4": {
             "Tests\\": "tests/"
@@ -38,9 +35,10 @@
     "minimum-stability": "stable",
     "require": {
         "php": "^7.4|^8.1",
-        "sandwave-io/realtimeregister-php": "dev-whmcs",
+        "sandwave-io/realtimeregister-php": "dev-master",
         "illuminate/cache": "^9",
-        "giggsey/libphonenumber-for-php-lite": "^8.13"
+        "giggsey/libphonenumber-for-php-lite": "^8.13",
+        "psr/log": "^1.0.0"
     },
     "require-dev": {
         "symfony/var-dumper": "^6.4",

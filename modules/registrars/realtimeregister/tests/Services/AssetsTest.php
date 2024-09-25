@@ -89,4 +89,14 @@ class AssetsTest extends TestCase
             $asset->renderHead()
         );
     }
+
+    public function testAddPrependHead()
+    {
+        $asset = new Assets();
+
+        $payload = '<script>Hello()</script>';
+        $asset->prependHead($payload);
+
+        $this->assertEquals($payload, $asset->renderHead());
+    }
 }

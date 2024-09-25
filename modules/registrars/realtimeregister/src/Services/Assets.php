@@ -28,7 +28,7 @@ final class Assets
             self::$head[] = $content;
         } else {
             $payload = [];
-            $payload['name'] = uniqid();
+            $payload['name'] = uniqid(more_entropy: true);
             $payload['location'] = ScriptLocationType::Header;
             $payload['type'] = 'inline';
             $payload['content'] = $content;
@@ -90,17 +90,21 @@ final class Assets
         $content = '';
 
         foreach ($assets as $asset) {
-            if ($asset['type'] === 'script') {
-                $content .= '<script src="' . self::getPath($this->getBasePath('/Assets/Js/' . $asset['name']))
-                . '?' . App::VERSION . '"></script>';
-                if (array_key_exists($asset['name'], self::$javascriptVariables)) {
-                    $content .= $this->renderJavascriptVariables($asset['name']);
+            if (is_array($asset)) {
+                if ($asset['type'] === 'script') {
+                    if (array_key_exists($asset['name'], self::$javascriptVariables)) {
+                        $content .= $this->renderJavascriptVariables($asset['name']);
+                    }
+                    $content .= '<script src="' . self::getPath($this->getBasePath('/Assets/Js/' . $asset['name']))
+                        . '?' . App::VERSION . '"></script>';
+                } elseif ($asset['type'] === 'style') {
+                    $content .= '<link href="' . self::getPath($this->getBasePath('/Assets/Css/' . $asset['name']))
+                        . '?' . App::VERSION . '" rel="stylesheet">';
+                } elseif ($asset['type'] === 'inline') {
+                    $content .= $asset['content'];
                 }
-            } elseif ($asset['type'] === 'style') {
-                $content .= '<link href="' . self::getPath($this->getBasePath('/Assets/Css/' . $asset['name']))
-                . '?' . App::VERSION . '" rel="stylesheet">';
-            } elseif ($asset['type'] === 'inline') {
-                $content .= $asset['content'];
+            } else {
+                $content .= $asset;
             }
         }
 

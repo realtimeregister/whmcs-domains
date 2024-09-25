@@ -21,6 +21,8 @@ if (!defined("WHMCS")) {
 require_once __DIR__ . '/vendor/autoload.php';
 require_once ROOTDIR . '/includes/registrarfunctions.php';
 
+new \RealtimeRegister\Services\Language(); // Load our own language strings before anything else
+
 $app = App::boot();
 
 function realtimeregister_version(): string
@@ -47,20 +49,15 @@ function realtimeregister_GetDomainInformation(array $params)
     return App::dispatch(GetDomainInformation::class, $params);
 }
 
-//function realtimeregister_GetNameservers(array $params)
-//{
-//    return App::dispatch(GetNameservers::class, $params);
-//}
-
 function realtimeregister_SaveNameservers(array $params)
 {
     return App::dispatch(SaveNameservers::class, $params);
 }
 
-//function realtimeregister_GetRegistrarLock(array $params)
-//{
-//    return App::dispatch(GetRegistrarLock::class, $params);
-//}
+function realtimeregister_GetRegistrarLock(array $params)
+{
+    return App::dispatch(\RealtimeRegister\Actions\Domains\GetRegistrarLock::class, $params);
+}
 
 function realtimeregister_SaveRegistrarLock(array $params)
 {
@@ -141,4 +138,34 @@ function realtimeregister_RenewDomain($params)
 function realtimeregister_TransferDomain($params)
 {
     return App::dispatch(\RealtimeRegister\Actions\Domains\TransferDomain::class, $params);
+}
+
+function realtimeregister_IDProtectToggle($params)
+{
+    return App::dispatch(\RealtimeRegister\Actions\Domains\IDProtection::class, $params);
+}
+
+function realtimeregister_ClientAreaCustomButtonArray($params)
+{
+    return App::dispatch(\RealtimeRegister\Actions\Domains\ClientAreaCustomButtonArray::class, $params);
+}
+
+function realtimeregister_ClientArea($params)
+{
+    return App::dispatch(\RealtimeRegister\Actions\Domains\ClientArea::class, $params);
+}
+
+function realtimeregister_ChildHosts($params)
+{
+    return App::dispatch(\RealtimeRegister\Actions\Domains\ChildHosts::class, $params);
+}
+
+function realtimeregister_DNSSec($params)
+{
+    return App::dispatch(\RealtimeRegister\Actions\Domains\DNSSec::class, $params);
+}
+
+function realtimeregister_TransferSync($params)
+{
+    return App::dispatch(\RealtimeRegister\Actions\Domains\TransferSync::class, $params);
 }

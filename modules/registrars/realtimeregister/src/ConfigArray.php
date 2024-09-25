@@ -182,11 +182,6 @@ If you do not use this option, the registrant details will be used for Admin, Bi
                 'FriendlyName' => '</br>',
                 'Type' => 'none',
             ],
-            // This next value is needed, but hidden by checkCredentials.js
-            'customHandles' => [
-                'FriendlyName' => 'Custom handles',
-                'Type' => 'text',
-            ]
         ];
     }
 }

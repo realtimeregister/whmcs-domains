@@ -11,7 +11,11 @@
                     <input type="hidden" name="typeOfForm" value="customPropertiesForm">
                     <input type="hidden" name="action" value="propertiesMutate"/>
                     <input type="hidden" name="module" value="realtimeregister" />
-                    <div id="waiting-for-input">{$LANG.rtr.custom_handles.please_wait}</div>
+                    <div id="waiting-for-input">
+                        <i class="fad fa-cog fa-spin fa-5x center-block"></i>
+                        <br>
+                        {$LANG.rtr.custom_handles.please_wait}
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">

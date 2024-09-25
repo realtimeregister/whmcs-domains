@@ -11,6 +11,10 @@ class Registrars extends Model
     public const TABLE_NAME = 'tblregistrars';
     protected $table = self::TABLE_NAME;
 
+    protected $fillable = ['registrar', 'setting', 'value'];
+
+    public $timestamps = false;
+
     /**
      * Scope a query to only include the current addon.
      */

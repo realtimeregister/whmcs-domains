@@ -67,14 +67,13 @@ $('#propertiesModal').on('shown.bs.modal', function () {
         }).then(async response => {
             let res = await response.json();
 
-            console.log(res);
             if (res.result === 'success') {
                 $('#propertiesModal').modal('hide');
+                closeButtonCustomProperties.removeEventListener('click', onClose);
             } else {
                 let item = document.querySelector('.bg-danger');
                 item.style = 'display:block; padding: 15px';
             }
-            closeButtonCustomProperties.removeEventListener('click', onClose);
         });
     }
 });

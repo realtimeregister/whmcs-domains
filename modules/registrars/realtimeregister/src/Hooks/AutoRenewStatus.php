@@ -13,9 +13,6 @@ class AutoRenewStatus extends Hook
 
     public function __invoke(DataObject $vars): void
     {
-        App::assets()->addScript("autoRenew.js");
-        App::assets()->addStyle("autorenew.css");
-
         if ($_POST['action'] === $this->ACTION && $_POST['module'] == 'realtimeregister') {
             if ($_POST['domain']) {
                 self::updateDomain($_POST['domain']);

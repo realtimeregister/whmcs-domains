@@ -20,7 +20,7 @@ class TransferDomain extends SyncExpiryDate
             list(
                 'registrant' => $registrant,
                 'contacts' => $contacts
-            ) = $this->generateContactsForDomain($request, $metadata);
+            ) = $this->generateContactsForDomain(request: $request, metadata: $metadata);
 
             App::client()->domains->transfer(
                 domainName: $domain->domainName(),

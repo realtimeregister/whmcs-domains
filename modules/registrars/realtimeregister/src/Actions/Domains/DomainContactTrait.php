@@ -3,6 +3,7 @@
 namespace RealtimeRegister\Actions\Domains;
 
 use RealtimeRegister\App;
+use RealtimeRegister\Hooks\CustomHandlesTrait;
 use RealtimeRegister\Request;
 use RealtimeRegister\Services\MetadataService;
 use SandwaveIo\RealtimeRegister\Domain\TLDInfo;
@@ -77,15 +78,26 @@ trait DomainContactTrait
 
         foreach (self::$CONTACT_ROLES as $role => $name) {
             $organizationAllowed = $metadata->{$name}->organizationAllowed;
-            $contacts[] = [
-                'role' => $role,
-                'handle' => $this->getOrCreateContact(
-                    clientId: $request->get('client_id'),
-                    contactId: $contactId,
-                    role: $role,
-                    organizationAllowed: $organizationAllowed
-                )
-            ];
+
+            if (
+                in_array($tldInfo->provider, $customHandles)
+                && array_key_exists($customHandles[$tldInfo->provider], $name)
+            ) {
+                $contacts[] = [
+                    'role' => $role,
+                    'handle' => $customHandles[$tldInfo->provider][$name]
+                ];
+            } else {
+                $contacts[] = [
+                    'role' => $role,
+                    'handle' => $this->getOrCreateContact(
+                        clientId: $request->get('client_id'),
+                        contactId: $contactId,
+                        role: $role,
+                        organizationAllowed: $organizationAllowed
+                    )
+                ];
+            }
         }
 
         return ['contacts' => $contacts, 'registrant' => $registrant];

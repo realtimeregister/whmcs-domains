@@ -11,6 +11,8 @@ use SandwaveIo\RealtimeRegister\Domain\TLDMetaData;
 
 trait DomainContactTrait
 {
+    use CustomHandlesTrait;
+
     /**
      * Add properties to contact if necessary
      */
@@ -76,12 +78,14 @@ trait DomainContactTrait
 
         $this->addProperties($request, $registrant, $tldInfo);
 
+        $customHandles = $this->getCustomHandles();
         foreach (self::$CONTACT_ROLES as $role => $name) {
             $organizationAllowed = $metadata->{$name}->organizationAllowed;
 
             if (
-                in_array($tldInfo->provider, $customHandles)
-                && array_key_exists($customHandles[$tldInfo->provider], $name)
+                array_key_exists($tldInfo->provider, $customHandles)
+                && array_key_exists($name, $customHandles[$tldInfo->provider])
+                && $customHandles[$tldInfo->provider][$name] !== ''
             ) {
                 $contacts[] = [
                     'role' => $role,

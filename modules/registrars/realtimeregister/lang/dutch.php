@@ -53,7 +53,8 @@ $_LANG['rtr']['custom_handles']['close'] = 'Sluiten';
 $_LANG['rtr']['custom_handles']['save'] = 'Opslaan';
 $_LANG['rtr']['custom_handles']['error'] = 'Er ging iets mis, controlleer uw invoer en probeer opnieuw';
 
-$_LANG['rtr']['update_available'] = 'Er is een update beschikbaar van de Realtime Register plugin.';
+$_LANG['rtr']['update_notification']['update_available']
+    = 'Er is een update beschikbaar van de Realtime Register plugin.';
 $_LANG['rtr']['update_notification']['prerelease'] = 'Prerelease';
 $_LANG['rtr']['update_notification']['view_update'] = 'Bekijk update';
 $_LANG['rtr']['update_notification']['newest'] = 'Nieuwste versie';

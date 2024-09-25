@@ -37,6 +37,9 @@ App::hook('ClientAreaFooterOutput', Hooks\FooterAssets::class, 100);
 App::hook('AdminAreaHeadOutput', Hooks\HeadAssets::class, 100);
 App::hook('AdminAreaFooterOutput', Hooks\FooterAssets::class, 100);
 
+App::hook('AdminAreaFooterOutput', Hooks\CustomHandles::class, 90);
+App::hook("AdminAreaHeadOutput", Hooks\CheckCredentials::class);
+
 // Search for updates
 App::hook('DailyCronJob', Hooks\Update\CheckForUpdates::class, 10);
 App::hook('AdminAreaHeaderOutput', Hooks\Update\Banner::class, 10);

@@ -47,6 +47,12 @@ $_LANG['rtr']['adac']['status']['5'] = "Onbekend";
 $_LANG['rtr_languagecode_label'] = "Selecteer taal code";
 $_LANG['rtr_languagecode_description'] = "";
 
+$_LANG['rtr']['custom_handles']['please_wait'] = 'Een moment geduld alstublieft, we laden de gegevens nu in..';
+$_LANG['rtr']['custom_handles']['custom_properties'] = 'Aangepaste eigenschappen';
+$_LANG['rtr']['custom_handles']['close'] = 'Sluiten';
+$_LANG['rtr']['custom_handles']['save'] = 'Opslaan';
+$_LANG['rtr']['custom_handles']['error'] = 'Er ging iets mis, controlleer uw invoer en probeer opnieuw';
+
 include_once implode(
     DIRECTORY_SEPARATOR,
     [ROOTDIR, 'modules', 'registrars', 'realtimeregister', 'lang', 'dutch.additional.php']

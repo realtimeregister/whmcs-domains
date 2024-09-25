@@ -14,8 +14,6 @@ class SyncExpiry extends Hook
 
     public function __invoke(DataObject $vars): void
     {
-        App::assets()->addScript("syncDomains.js");
-
         if ($_POST['action'] === $this->ACTION && $_POST['module'] == 'realtimeregister') {
             if ($_POST['domains']) {
                 self::syncDomains($_POST['domains']);

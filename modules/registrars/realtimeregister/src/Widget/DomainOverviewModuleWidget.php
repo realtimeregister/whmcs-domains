@@ -3,7 +3,6 @@
 namespace RealtimeRegister\Widget;
 
 use RealtimeRegister\App;
-use SandwaveIo\RealtimeRegister\Domain\Pagination;
 
 class DomainOverviewModuleWidget extends \WHMCS\Module\AbstractWidget
 {
@@ -17,17 +16,22 @@ class DomainOverviewModuleWidget extends \WHMCS\Module\AbstractWidget
 
     public function getData()
     {
-        $domainStatistics = App::client()->domains->list(limit:1);
-        return $domainStatistics->pagination;
+        try {
+            $domainStatistics = App::client()->domains->list(limit: 1);
+        } catch (\Exception) {
+            return 0;
+        }
+        return $domainStatistics->pagination->total;
     }
 
     public function generateOutput($data): string
     {
-        /**
- * @var Pagination $data
-*/
-
-        $number = number_format($data->total);
+        /** @var int $data */
+        if ($data === 0) {
+            $number = 'No';
+        } else {
+            $number = number_format($data);
+        }
         return <<<EOF
 <div class="panel panel-default">
     <div class="col-sm-12">

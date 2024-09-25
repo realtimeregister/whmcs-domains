@@ -6,8 +6,6 @@ use RealtimeRegister\Actions\Action;
 use RealtimeRegister\App;
 use RealtimeRegister\Models\Whmcs\Domain;
 use RealtimeRegister\Request;
-use SandwaveIo\RealtimeRegister\Exceptions\BadRequestException;
-use SandwaveIo\RealtimeRegister\Exceptions\NotFoundException;
 
 class AdminCustomButtonArray extends Action
 {

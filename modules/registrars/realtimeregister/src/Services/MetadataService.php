@@ -298,4 +298,19 @@ class MetadataService
     {
         return $this->provider;
     }
+
+    public static function getBulkData(): array
+    {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, App::metadataUrl());
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPGET, true);
+        curl_setopt($ch, CURLOPT_USERAGENT, 'Realtime Register WHMCS Client/' . App::VERSION);
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+        $response = json_decode($response, true);
+
+        return $response['hashes'];
+    }
 }

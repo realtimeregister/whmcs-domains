@@ -200,7 +200,7 @@ class Adac extends Hook
             App::assets()->addStyle('adac.css');
             App::assets()->addScript('adac.js', ScriptLocationType::Footer);
             App::assets()->addToJavascriptVariables(
-                'adac-js',
+                'adac.js',
                 [
                 'adacLang'       => $_LANG['rtr']['adac'],
                 'tldPrices'      => $build,

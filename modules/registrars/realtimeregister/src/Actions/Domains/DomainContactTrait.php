@@ -3,6 +3,7 @@
 namespace RealtimeRegister\Actions\Domains;
 
 use RealtimeRegister\App;
+use RealtimeRegister\Hooks\CustomHandlesTrait;
 use RealtimeRegister\Request;
 use RealtimeRegister\Services\MetadataService;
 use SandwaveIo\RealtimeRegister\Domain\TLDInfo;
@@ -10,6 +11,8 @@ use SandwaveIo\RealtimeRegister\Domain\TLDMetaData;
 
 trait DomainContactTrait
 {
+    use CustomHandlesTrait;
+
     /**
      * Add properties to contact if necessary
      */
@@ -75,17 +78,30 @@ trait DomainContactTrait
 
         $this->addProperties($request, $registrant, $tldInfo);
 
+        $customHandles = $this->getCustomHandles();
         foreach (self::$CONTACT_ROLES as $role => $name) {
             $organizationAllowed = $metadata->{$name}->organizationAllowed;
-            $contacts[] = [
-                'role' => $role,
-                'handle' => $this->getOrCreateContact(
-                    clientId: $request->get('client_id'),
-                    contactId: $contactId,
-                    role: $role,
-                    organizationAllowed: $organizationAllowed
-                )
-            ];
+
+            if (
+                array_key_exists($tldInfo->provider, $customHandles)
+                && array_key_exists($name, $customHandles[$tldInfo->provider])
+                && $customHandles[$tldInfo->provider][$name] !== ''
+            ) {
+                $contacts[] = [
+                    'role' => $role,
+                    'handle' => $customHandles[$tldInfo->provider][$name]
+                ];
+            } else {
+                $contacts[] = [
+                    'role' => $role,
+                    'handle' => $this->getOrCreateContact(
+                        clientId: $request->get('client_id'),
+                        contactId: $contactId,
+                        role: $role,
+                        organizationAllowed: $organizationAllowed
+                    )
+                ];
+            }
         }
 
         return ['contacts' => $contacts, 'registrant' => $registrant];

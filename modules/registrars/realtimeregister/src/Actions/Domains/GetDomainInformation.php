@@ -84,7 +84,7 @@ class GetDomainInformation extends Action
         $status = 'STATUS_INACTIVE';
 
         if (in_array('OK', $domain->status)) {
-            $status = 'STATUS_ACTIVE';
+            $status = 'Active';
         } elseif (in_array('EXPIRED', $domain->status)) {
             $status = 'STATUS_EXPIRED';
         } elseif (in_array('REDEMPTION_PERIOD', $domain->status)) {

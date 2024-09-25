@@ -74,4 +74,9 @@ class RegistrarConfig
             );
         }
     }
+
+    public function keepNameServers(): bool
+    {
+        return $this->get('transfer_keep_nameservers') === 'on';
+    }
 }

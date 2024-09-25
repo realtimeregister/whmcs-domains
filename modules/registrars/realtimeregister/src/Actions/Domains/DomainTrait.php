@@ -4,7 +4,7 @@ namespace RealtimeRegister\Actions\Domains;
 
 use Illuminate\Database\Capsule\Manager as Capsule;
 use RealtimeRegister\App;
-use RealtimeRegister\Entities\DataObject;
+use RealtimeRegister\Entities\Domain as DomainEntity;
 use RealtimeRegister\Models\RealtimeRegister\ContactMapping;
 use RealtimeRegister\Models\Whmcs\Configuration;
 use RealtimeRegister\Models\Whmcs\Domain;
@@ -12,8 +12,9 @@ use RealtimeRegister\Models\Whmcs\Orders;
 use RealtimeRegister\Models\Whmcs\Registrars;
 use RealtimeRegister\Services\ContactService;
 use RealtimeRegister\Services\MetadataService;
+use SandwaveIo\RealtimeRegister\Domain\Billable;
+use SandwaveIo\RealtimeRegister\Domain\DomainQuote;
 use SandwaveIo\RealtimeRegister\Domain\TLDMetaData;
-use RealtimeRegister\Entities\Domain as DomainEntity;
 
 trait DomainTrait
 {
@@ -203,5 +204,23 @@ trait DomainTrait
         }
 
         return $domainName;
+    }
+
+    protected function buildBillables(DomainQuote $quote): array
+    {
+        $billables = [];
+        if (!empty($quote->quote->billables) && $quote->quote->billables->count() > 1) {
+            /**
+             * @var Billable $billable
+             */
+            foreach ($quote->quote->billables as $billable) {
+                $billables[] = [
+                    'action' => $billable->action,
+                    'product' => $billable->product,
+                    'quantity' => $billable->quantity
+                ];
+            }
+        }
+        return $billables;
     }
 }

@@ -2,15 +2,13 @@
 
 namespace RealtimeRegister\Actions\Domains;
 
+use Illuminate\Database\Capsule\Manager as Capsule;
 use RealtimeRegister\Actions\Action;
 use RealtimeRegister\App;
 use RealtimeRegister\Request;
-use SandwaveIo\RealtimeRegister\Domain\Billable;
 use SandwaveIo\RealtimeRegister\Domain\BillableCollection;
 use SandwaveIo\RealtimeRegister\Domain\DomainContactCollection;
-use SandwaveIo\RealtimeRegister\Domain\DomainQuote;
 use SandwaveIo\RealtimeRegister\Domain\DomainRegistration;
-use Illuminate\Database\Capsule\Manager as Capsule;
 
 class RegisterWithBillables extends Action
 {
@@ -107,23 +105,5 @@ class RegisterWithBillables extends Action
         Capsule::table("tbldomains")->where('id', $params['id'] ?: $params['domainid'])->update($fields);
 
         return ['success' => true];
-    }
-
-    private function buildBillables(DomainQuote $quote): array
-    {
-        $billables = [];
-        if (!empty($quote->quote->billables) && $quote->quote->billables->count() > 1) {
-            /**
-             * @var Billable $billable
-             */
-            foreach ($quote->quote->billables as $billable) {
-                $billables[] = [
-                    'action' => $billable->action,
-                    'product' => $billable->product,
-                    'quantity' => $billable->quantity
-                ];
-            }
-        }
-        return $billables;
     }
 }

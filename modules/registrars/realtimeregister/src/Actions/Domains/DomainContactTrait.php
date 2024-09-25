@@ -59,10 +59,11 @@ trait DomainContactTrait
 
     protected function generateContactsForDomain(Request $request, TLDMetaData $metadata): array
     {
+        $clientId = $request->get('clientid') ?? $request->get('userid');
         $tldInfo = $this->tldInfo($request);
         // Check if we even need nameservers
         $orderId = App::localApi()->domain(
-            clientId: $request->get('clientid'),
+            clientId: $clientId,
             domainId: $request->get('domainid')
         )->get('orderid');
         $contactId = App::localApi()->order(id: $orderId)->get('contactid');
@@ -70,7 +71,7 @@ trait DomainContactTrait
         $contacts = [];
 
         $registrant = $this->getOrCreateContact(
-            clientId: $request->get('client_id'),
+            clientId: $clientId,
             contactId: $contactId,
             role: 'REGISTRANT',
             organizationAllowed: $metadata->registrant->organizationAllowed
@@ -83,7 +84,7 @@ trait DomainContactTrait
             $contacts[] = [
                 'role' => $role,
                 'handle' => $this->getOrCreateContact(
-                    clientId: $request->get('client_id'),
+                    clientId: $clientId,
                     contactId: $contactId,
                     role: $role,
                     organizationAllowed: $organizationAllowed

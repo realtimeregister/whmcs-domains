@@ -214,7 +214,7 @@ class MetadataService
                 preg_replace('/[^a-z0-9_]/', '', strtolower($propertyName)),
                 preg_replace('/[^a-z0-9_]/', '', strtolower($key))
             );
-            
+
             $options[] = self::strip($key) . '|' . self::strip($_LANG[$translationKey]);
         }
         return ',' . implode(',', $options);

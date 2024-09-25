@@ -41,7 +41,8 @@ foreach ($tlds as $tld) {
             $lines[] = "\n";
         }
     } catch (\Exception $e) {
-        logActivity("Exception in update_additional_fields while getting metadata for " . $tld . ": " . $e->getMessage());
+        logActivity("Exception in update_additional_fields while getting metadata for "
+            . $tld . ": " . $e->getMessage());
         continue;
     }
 }

@@ -1,6 +1,6 @@
 var statusMapping = {};
 
-if(adacLang.status != undefined) {
+if (adacLang.status != undefined) {
     statusMapping = adacLang.status;
 } else {
     statusMapping[0] = 'Checking...';
@@ -53,13 +53,12 @@ function ready(fn)
 {
     if (document.readyState != 'loading') {
         fn();
-    }
-    else if (document.addEventListener) {
+    } else if (document.addEventListener) {
         document.addEventListener('DOMContentLoaded', fn);
-    }
-    else {
+    } else {
         document.attachEvent(
-            'onreadystatechange', function () {
+            'onreadystatechange',
+            function () {
                 if (document.readyState != 'loading') {
                     fn();
                 }
@@ -105,12 +104,12 @@ var init = function () {
 
                 if (xhr.status == 200) {
                     adac.pollServer();
-                }
-                else {
+                } else {
                     setTimeout(
                         function () {
                             adac.pollServer();
-                        }, adac.RECONNECT_TIME
+                        },
+                        adac.RECONNECT_TIME
                     );
                 }
             }
@@ -119,7 +118,8 @@ var init = function () {
         adac.inputElement.onpaste = function (event) {
             setTimeout(
                 function () {
-                    adac.processInput.call(adac.inputElement, event, adac.inputElement.value); }, 0
+                    adac.processInput.call(adac.inputElement, event, adac.inputElement.value); },
+                0
             );
         };
 
@@ -153,12 +153,12 @@ var init = function () {
             adac.sendCommand = function (command) {
                 if (adac.connection.readyState === 1) {
                     adac.connection.send(JSON.stringify(command));
-                }
-                else {
+                } else {
                     setTimeout(
                         function () {
                             adac.sendCommand(command);
-                        }, 100
+                        },
+                        100
                     );
                 }
             };
@@ -190,7 +190,8 @@ var init = function () {
                                 console.log('ws connection retrying...');
                             }
                             setupWebsocketConnection();
-                        }, adac.RECONNECT_TIME
+                        },
+                        adac.RECONNECT_TIME
                     );
                 }
             };
@@ -221,7 +222,8 @@ var adac = {
             timer = setTimeout(
                 function () {
                     fn.apply(context, args);
-                }, delay
+                },
+                delay
             );
         };
     },
@@ -284,7 +286,8 @@ var adac = {
 
                 adac.preInput(this.value);
                 adac.processInput.call(this, event, this.value);
-            }, adac.DEBOUNCE_TIME
+            },
+            adac.DEBOUNCE_TIME
         );
 
         if (adac.categoriesElement) {
@@ -325,7 +328,6 @@ var adac = {
             };
 
             adac.sendCommand(command);
-
         }
 
         return false;
@@ -386,12 +388,11 @@ var adac = {
             div.id = 'domain-result-' + domainResult.domain_name;
             div.className = 'domain-option domain_status_' + domainResult.status;
             adac.resultsElement.appendChild(div);
-        }
-        else {
+        } else {
             div.className = 'domain-option domain_status_' + domainResult.status;
 
             // Premium label
-            if(domainResult.price != undefined) {
+            if (domainResult.price != undefined) {
                 document.getElementById('domain-name-' + domainResult.domain_name).innerHTML += ' <span class="label label-primary">' + premiumLang + '</span>';
             }
         }
@@ -424,8 +425,8 @@ var adac = {
             orderBtn.className = 'text-center col-xs-12 col-sm-4 col-md-3 col-lg-2';
             div.appendChild(orderBtn);
         } else {
-            if(tldPrices['' + suffixWithoutDot + ''] && tldPrices['' + suffixWithoutDot + ''].domainregister != undefined) {
-                if(domainResult.status == 1) {
+            if (tldPrices['' + suffixWithoutDot + ''] && tldPrices['' + suffixWithoutDot + ''].domainregister != undefined) {
+                if (domainResult.status == 1) {
                     var registerBtnClass = 'adac-register-domain btn btn-success';
                     if (domainResult.price != undefined) {
                         registerBtnClass += ' disabled';
@@ -440,7 +441,7 @@ var adac = {
                         }
                         orderBtn.innerHTML = '<a onclick="clickRegister(event, \'' + domainResult.domain_name + '\')" href="cart.php?a=add&domain=register&domains[]=' + domainResult.domain_name + '&domainsregperiod[' + domainResult.domain_name + ']=' + years + '" class="' + registerBtnClass + '" domain="' + domainResult.domain_name + '"><i class="fa fas fa-plus"></i> ' + registerLang + '</a>';
                     }
-                } else if(domainResult.status == 2) {
+                } else if (domainResult.status == 2) {
                     orderBtn.innerHTML = '<a class="adac-transfer-domain btn btn-primary transfer" href="cart.php?a=add&domain=transfer&query=' + domainResult.domain_name + '"><i class="fa fas fa-share fa-fw"></i> ' + transferLang + '</a>';
                 }
             }
@@ -456,7 +457,7 @@ var adac = {
         } else {
             var suffixWithoutDot = domainResult.suffix.split('.').join("");
 
-            if(tldPrices['' + suffixWithoutDot + ''] != undefined) {
+            if (tldPrices['' + suffixWithoutDot + ''] != undefined) {
                 var div = document.createElement('div');
                 div.className = 'suggestion suggestion_' + domainResult.status;
 
@@ -474,7 +475,7 @@ var adac = {
                 price = priceHtml(price, domainResult, status);
                 div.appendChild(price);
 
-                if(domainResult.status == 1 && tldPrices['' + suffixWithoutDot + ''] && tldPrices['' + suffixWithoutDot + ''].domainregister != undefined) {
+                if (domainResult.status == 1 && tldPrices['' + suffixWithoutDot + ''] && tldPrices['' + suffixWithoutDot + ''].domainregister != undefined) {
                     var orderBtn = document.createElement('div');
                     orderBtn.id = "order-" + domainResult.domain_name;
 
@@ -541,9 +542,11 @@ var adac = {
     ensureUUID: function () {
         if (localStorage.getItem('sessionId') === null) {
             localStorage.setItem(
-                'sessionId', 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(
-                    /[xy]/g, function (c) {
-                        var r = Math.random()*16|0,v=c=='x'?r:r&0x3|0x8;return v.toString(16);}
+                'sessionId',
+                'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(
+                    /[xy]/g,
+                    function (c) {
+                        var r = Math.random() * 16 | 0,v = c == 'x' ? r : r & 0x3 | 0x8;return v.toString(16);}
                 )
             );
         }
@@ -567,9 +570,9 @@ function domainHtml(domainName, domainResult)
     domainName.className = 'domain col-xs-12 col-sm-5 text-xs-center';
     domainName.innerHTML = '<span class="domain">' + domainWithoutExtension[0] + '</span><span class="extension">.' + domainResult.suffix + '</span>';
 
-    if (tldPrices['' + suffixWithoutDot + ''] != undefined 
-        && tldPrices['' + suffixWithoutDot + ''].group != undefined 
-        && tldPrices['' + suffixWithoutDot + ''].group != 'none' 
+    if (tldPrices['' + suffixWithoutDot + ''] != undefined
+        && tldPrices['' + suffixWithoutDot + ''].group != undefined
+        && tldPrices['' + suffixWithoutDot + ''].group != 'none'
         && tldPrices['' + suffixWithoutDot + ''].group != ''
     ) {
         var group = tldPrices['' + suffixWithoutDot + ''].group;
@@ -593,18 +596,18 @@ function domainHtml(domainName, domainResult)
 
 function priceHtml(price, domainResult, status)
 {
-    if(domainResult.status == 1 || domainResult.status == 2) {
-
+    if (domainResult.status == 1 || domainResult.status == 2) {
         var suffixWithoutDot = domainResult.suffix.split('.').join("");
 
-        if(domainResult.price != undefined) {
+        if (domainResult.price != undefined) {
             if (!premiumDomains) {
                 status.innerHTML = '<span class="label label label-warning">Taken</span>';
                 price.innerHTML = premiumNotSupportedLang;
             } else {
                 // Do ajax call to get premium price
                 $.post(
-                    document.location.href, {
+                    document.location.href,
+                    {
                         adacpremium: domainResult.domain_name,
                         adacpremiumprice: domainResult.price,
                         adacpremiumcurrency: domainResult.currency
@@ -627,11 +630,12 @@ function priceHtml(price, domainResult, status)
                                     'disabled'
                                 );
                             }
-                        }, "json"
+                        },
+                        "json"
                     );
                 price.innerHTML = '<i class=\'fa fa-spinner fa-spin \'></i>';
             }
-        } else if(tldPrices['' + suffixWithoutDot + ''] && tldPrices['' + suffixWithoutDot + ''].domainregister != undefined) {
+        } else if (tldPrices['' + suffixWithoutDot + ''] && tldPrices['' + suffixWithoutDot + ''].domainregister != undefined) {
             price.innerHTML = tldPrices['' + suffixWithoutDot + ''].domainregister;
         } else {
             price.innerHTML = 'N/A';

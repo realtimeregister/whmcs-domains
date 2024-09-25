@@ -15,7 +15,6 @@ use RuntimeException;
 use SandwaveIo\RealtimeRegister\IsProxy;
 use SandwaveIo\RealtimeRegister\RealtimeRegister;
 
-
 class App
 {
     public const NAME = 'realtimeregister';

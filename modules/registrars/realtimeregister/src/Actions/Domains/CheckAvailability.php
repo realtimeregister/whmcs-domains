@@ -86,7 +86,8 @@ class CheckAvailability extends Action
         return $results;
     }
 
-    public static function handleException(\Throwable $exception, array $params) : ResultsList {
+    public static function handleException(\Throwable $exception, array $params): ResultsList
+    {
         $resultList =  new ResultsList();
 
         $query = $_REQUEST['domain'];

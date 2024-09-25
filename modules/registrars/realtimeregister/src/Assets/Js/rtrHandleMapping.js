@@ -15,11 +15,13 @@ $(document).ready(
 
                 let options = {duration: 'fast', easing: 'linear'};
                 radio_contact.on(
-                    'click', function () {
+                    'click',
+                    function () {
                         contact_custom_fields.hide(options); }
                 );
                 c.find('input[type=radio][name^=wc][value=custom]').on(
-                    'click', function () {
+                    'click',
+                    function () {
                         contact_custom_fields.show(options);
                     }
                 );

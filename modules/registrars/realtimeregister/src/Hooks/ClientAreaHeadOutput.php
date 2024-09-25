@@ -52,16 +52,14 @@ class ClientAreaHeadOutput extends Hook
             try {
                 $domain = App::client()->domains->get($whmcs_domain['domainname']);
                 $contact_handles = ['Registrant' => self::getWhmcsCidFromHandle($domain->registrant)];
-                /**
- * @var DomainContact $contact
-*/
                 foreach ($domain->contacts as $contact) {
+                    /** @var DomainContact $contact */
                     $contact_handles[ucfirst(strtolower($contact->role))]
                         = self::getWhmcsCidFromHandle($contact->handle);
                 }
                 App::assets()->addScript('rtrHandleMapping.js');
                 app::assets()->addToJavascriptVariables(
-                    name: 'rtr-handle-mapping',
+                    name: 'rtrHandleMapping.js',
                     data: ['contact_ids' => array_filter($contact_handles)]
                 );
             } catch (\Exception) {

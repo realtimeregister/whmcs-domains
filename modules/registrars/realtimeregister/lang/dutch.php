@@ -1,4 +1,5 @@
 <?php
+
 /**
  * WHMCS Language File for RTR module
  * Dutch (nl)
@@ -46,4 +47,7 @@ $_LANG['rtr']['adac']['status']['5'] = "Onbekend";
 $_LANG['rtr_languagecode_label'] = "Selecteer taal code";
 $_LANG['rtr_languagecode_description'] = "";
 
-include_once implode(DIRECTORY_SEPARATOR, [ROOTDIR, 'modules', 'registrars', 'realtimeregister', 'lang', 'dutch.additional.php']);
+include_once implode(
+    DIRECTORY_SEPARATOR,
+    [ROOTDIR, 'modules', 'registrars', 'realtimeregister', 'lang', 'dutch.additional.php']
+);

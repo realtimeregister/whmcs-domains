@@ -23,6 +23,8 @@ class ImportDomains extends Hook
 
     public function __invoke(DataObject $vars): void
     {
+        App::assets()->addStyle("importdomains.css");
+
         if ($_REQUEST['action'] === $this->ACTION && $_REQUEST['module'] == 'realtimeregister') {
             self::importWizard();
         }

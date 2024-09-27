@@ -106,3 +106,27 @@ form .view-ips {
 .child-host__table td.remove {
     width: 20px;
 }
+
+.rtr-custom-properties {
+    background-color: #d9edf7;
+}
+
+.rtr-custom-properties:hover{
+    background-color: #96D5F5FF;
+    color: white;
+}
+
+.status {
+    border-radius: 5px;
+    padding: 5px;
+    color: white;
+}
+
+.status.success {
+    color: black;
+    background-color: #abf4bf;
+}
+
+.status.error {
+    background-color: #e85e5e;
+}

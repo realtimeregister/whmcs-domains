@@ -3,10 +3,10 @@
 namespace RealtimeRegister\Hooks;
 
 use RealtimeRegister\Actions\Domains\SmartyTrait;
+use RealtimeRegister\App;
 use RealtimeRegister\Entities\DataObject;
 use RealtimeRegister\Enums\ScriptLocationType;
 use RealtimeRegister\Models\Whmcs\Registrars;
-use RealtimeRegister\Services\Assets;
 use RealtimeRegister\Services\MetadataService;
 
 class CustomHandles extends Hook
@@ -59,8 +59,8 @@ class CustomHandles extends Hook
                 die;
             } else {
                 // Base of form is rendered here
-                $assets = new Assets();
-                $assets->addScript('customHandles.js', ScriptLocationType::Footer);
+                App::assets()->addStyle('style.css');
+                App::assets()->addScript('customHandles.js', ScriptLocationType::Footer);
 
                 return $this->render(
                     __DIR__ . '/../Assets/Tpl/admin/custom_handles.tpl',

@@ -1,11 +1,4 @@
-// Add menu option
-let menu = document.querySelector('#Menu-Addons').parentNode.querySelector('ul');
-
-let elm = document.createElement('li');
-elm.innerHTML = '<a id=#" data-toggle="modal" data-target="#propertiesModal">Custom properties override</a>';
-menu.appendChild(elm);
-
-$('#propertiesModal').on('shown.bs.modal', function () {
+$('#propertiesModal').on('shown.bs.modal', function (e) {
     const response = fetch(window.location.href, {
         method: 'POST',
         headers: {

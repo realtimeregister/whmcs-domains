@@ -5,7 +5,6 @@ namespace RealtimeRegister\Actions\Contacts;
 use RealtimeRegister\Actions\Action;
 use RealtimeRegister\App;
 use RealtimeRegister\Request;
-use RealtimeRegister\Services\MetadataService;
 use SandwaveIo\RealtimeRegister\Domain\Enum\DomainStatusEnum;
 
 class ResendValidation extends Action
@@ -17,7 +16,7 @@ class ResendValidation extends Action
             return ['success' => true, "message" => "Registrant is already validated"];
         }
 
-        $metadata = (new MetadataService($domain->domainName))->getMetadata();
+        $metadata = $this->metadata($request);
         App::client()->contacts->validate(
             App::registrarConfig()->customerHandle(),
             $domain->registrant,

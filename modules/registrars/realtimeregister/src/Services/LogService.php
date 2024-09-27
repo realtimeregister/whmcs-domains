@@ -12,7 +12,7 @@ class LogService
         ErrorLog::query()->insert(
             ["severity" => "error",
                 "exception_class" => get_class($e),
-                "message" => "RealtimeRegister: ". $message . ": " . $e,
+                "message" => "RealtimeRegister: " . $message . ": " . $e,
                 "filename" => $e->getFile(),
                 "line" => $e->getLine(),
                 "details" => $e->getTraceAsString(),
@@ -21,7 +21,8 @@ class LogService
         );
     }
 
-    public static function getErrors(int $limit = 500) : array  {
+    public static function getErrors(int $limit = 500): array
+    {
         return ErrorLog::query()
             ->where("severity", "=", "error")
             ->where("message", "LIKE", "RealtimeRegister: %")

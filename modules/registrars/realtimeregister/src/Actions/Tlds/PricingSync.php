@@ -8,8 +8,6 @@ use RealtimeRegister\Request;
 use RealtimeRegister\Services\MetadataService;
 use SandwaveIo\RealtimeRegister\Domain\Price;
 use SandwaveIo\RealtimeRegister\Domain\PriceCollection;
-use SandwaveIo\RealtimeRegister\Domain\Promo;
-use SandwaveIo\RealtimeRegister\Domain\PromoCollection;
 use WHMCS\Domain\TopLevel\ImportItem;
 use WHMCS\Domains\DomainLookup\ResultsList;
 
@@ -23,11 +21,6 @@ class PricingSync extends Action
         $results = new ResultsList();
 
         if (App::registrarConfig()->customerHandle() !== '') {
-            // First detect the promos
-            $promoPrices = $this->getPrices(
-                App::client()->customers->promoList(App::registrarConfig()->customerHandle())
-            );
-
             // Then, get the pricing
             $prices = $this->getPrices(App::client()->customers->priceList(App::registrarConfig()->customerHandle()));
 
@@ -42,14 +35,8 @@ class PricingSync extends Action
                 $item->setExtension($tld);
                 $item->setEppRequired($metadata->transferRequiresAuthcode);
                 if ($priceInfo['CREATE']) {
-                    // Check if we have a promo, if so, use that price
-                    if (array_key_exists($tld, $promoPrices)) {
-                        $item->setRegisterPrice(number_format($promoPrices[$tld]['CREATE']['price'] / 100, 2, '.', ''));
-                        $item->setCurrency($promoPrices[$tld]['CREATE']['currency']);
-                    } else {
-                        $item->setRegisterPrice(number_format($priceInfo['CREATE']['price'] / 100, 2, '.', ''));
-                        $item->setCurrency($priceInfo['CREATE']['currency']);
-                    }
+                    $item->setRegisterPrice(number_format($priceInfo['CREATE']['price'] / 100, 2, '.', ''));
+                    $item->setCurrency($priceInfo['CREATE']['currency']);
                 }
 
                 if ($priceInfo['RENEW']) {
@@ -78,11 +65,11 @@ class PricingSync extends Action
         }
     }
 
-    public function getPrices(PriceCollection|PromoCollection $priceList): array
+    public function getPrices(PriceCollection $priceList): array
     {
         $prices = [];
         $pricesSLD = [];
-        /** @var Price|Promo $priceItem */
+        /** @var Price $priceItem */
         foreach ($priceList as $priceItem) {
             if (!str_starts_with($priceItem->product, "domain_")) {
                 continue;

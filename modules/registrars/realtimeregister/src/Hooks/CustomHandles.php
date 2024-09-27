@@ -70,6 +70,7 @@ class CustomHandles extends Hook
                 );
             }
         }
+        return '';
     }
 
     private function fetchPropertiesFromRealtimeRegister(): array

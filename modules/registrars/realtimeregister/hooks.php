@@ -5,6 +5,8 @@ use RealtimeRegister\Hooks;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
+new \RealtimeRegister\Services\Language(); // Load our own language strings before anything else
+
 App::boot();
 
 App::hook(Hooks\PreRegistrarGetContactDetails::class);

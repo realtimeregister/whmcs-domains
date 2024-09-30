@@ -6,6 +6,7 @@ use RealtimeRegister\Actions\Action;
 use RealtimeRegister\App;
 use RealtimeRegister\Request;
 use RealtimeRegister\Services\Config\Config;
+use RealtimeRegister\Services\LogService;
 use RealtimeRegister\Services\MetadataService;
 use SandwaveIo\RealtimeRegister\Domain\IsProxyDomain;
 use WHMCS\Domains\DomainLookup\ResultsList;
@@ -102,7 +103,7 @@ class CheckAvailability extends Action
         $searchResult->setStatus(SearchResult::STATUS_UNKNOWN);
         $resultList->append($searchResult);
 
-        logActivity("Error while checking domain" . $query . ": " . $exception->getMessage());
+        LogService::logError($exception, "Error while checking domain " . $query);
 
         return $resultList;
     }

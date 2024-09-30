@@ -9,7 +9,7 @@ $('#propertiesModal').on('shown.bs.modal', function (e) {
             action: 'fetchProperties',
             module: 'realtimeregister',
         })
-    }).then(async (response) => {
+    }).then(async(response) => {
         const placeholder = document.getElementById('waiting-for-input');
 
         if (placeholder) {
@@ -47,7 +47,8 @@ $('#propertiesModal').on('shown.bs.modal', function (e) {
 
     closeButtonCustomProperties.addEventListener('click', onClose);
 
-    async function onClose(e) {
+    async function onClose(e)
+    {
         e.preventDefault();
 
         const response = fetch(window.location.href, {

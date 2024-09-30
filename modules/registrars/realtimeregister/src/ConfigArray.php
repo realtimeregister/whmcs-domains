@@ -39,10 +39,8 @@ class ConfigArray
             'check_credentials' => [
                 'FriendlyName' => "<br/>",
                 'Type' => 'none',
-                'Description' => '<button class="btn btn-xs check-connection rtr-custom-properties">
-                Check Connection
-            </button>
-<span class="credentials-result"></span>
+                'Description' => '<button class="btn btn-xs check-connection">Check Connection</button>
+                    <span class="credentials-result"></span>
                     <span class="btn btn-xs info rtr-custom-properties" 
                         data-toggle="modal" data-target="#propertiesModal">Custom properties override
                     </span>',

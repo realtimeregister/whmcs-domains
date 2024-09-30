@@ -19,6 +19,7 @@
   --------------------------------------------------------------------
  */
 
+use RealtimeRegister\Services\LogService;
 use RealtimeRegister\Services\MetadataService;
 
 $tlds = [];
@@ -50,9 +51,7 @@ foreach ($tlds as $tld) {
     try {
         $additional = (new MetadataService($tld))->getTldAdditionalFields();
     } catch (\Exception $e) {
-        logActivity(
-            "Error while getting additional fields for '" . $tld . "' for Realtime Register:" . $e->getMessage()
-        );
+        LogService::logError($e, "Error while getting additional fields for '" . $tld . "' for Realtime Register:");
         $additional = [];
     }
 

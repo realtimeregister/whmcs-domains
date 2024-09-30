@@ -11,6 +11,7 @@ use RealtimeRegister\Logger\DebugMailLogger;
 use RealtimeRegister\Models\RealtimeRegister\Cache;
 use RealtimeRegister\Services\Assets;
 use RealtimeRegister\Services\ContactService;
+use RealtimeRegister\Services\LogService;
 use RuntimeException;
 use SandwaveIo\RealtimeRegister\IsProxy;
 use SandwaveIo\RealtimeRegister\RealtimeRegister;
@@ -155,6 +156,8 @@ class App
             if ($catch) {
                 return $catch($exception, $params);
             }
+
+            LogService::logError($exception);
 
             if ($exception instanceof ActionFailedException) {
                 return $exception->response($action);

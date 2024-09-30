@@ -87,6 +87,16 @@ $_LANG['rtr']['actions']['change_autorenew_status'] = 'Change Auto Renew Status'
 $_LANG['rtr']['actions']['change_autorenew_to_false']
     = 'Change the domains autorenew status to false at RealtimeRegister';
 
+$_LANG['rtr']['errorlog'] = [
+    'details' => 'Error Log Details',
+    'filename' => 'Filename',
+    'classname' => 'Class Name',
+    'linenumber' => 'Line Number',
+    'message' => 'Message',
+    'time' => 'Time',
+    'stacktrace' => 'Stack Trace'
+];
+
 include_once implode(
     DIRECTORY_SEPARATOR,
     [ROOTDIR, 'modules', 'registrars', 'realtimeregister', 'lang', 'english.additional.php']

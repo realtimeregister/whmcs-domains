@@ -71,6 +71,13 @@ $_LANG['rtr']['status'] = 'Status';
 $_LANG['rtr']['transfer_log']['type'] = 'Type';
 $_LANG['rtr']['transfer_log']['message'] = 'Bericht';
 
+$_LANG['rtr']['promotions']['explanation'] = 'Dit zijn de huidige en toekomstige promoties';
+$_LANG['rtr']['promotions']['product'] = 'Product';
+$_LANG['rtr']['promotions']['price'] = 'Prijs';
+$_LANG['rtr']['promotions']['from_date'] = 'Begindatum';
+$_LANG['rtr']['promotions']['end_date'] = 'Einddatum';
+$_LANG['rtr']['promotions']['none'] = 'We hebben geen promoties gevonden';
+
 $_LANG['rtr']['actions']['import_domains'] = 'Importeer domeinen';
 $_LANG['rtr']['actions']['import_into_whmcs'] = 'Importeer domeinen/clienten vanuit RealtimeRegister naar WHMCS';
 $_LANG['rtr']['actions']['sync_expire_dates'] = 'Sync Verloopdatums';

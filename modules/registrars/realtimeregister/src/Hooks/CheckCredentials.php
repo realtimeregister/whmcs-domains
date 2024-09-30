@@ -25,13 +25,22 @@ class CheckCredentials extends Hook
             : $_POST['apiKey'];
 
         try {
-            App::standalone($apiKey, $_POST['ote'] === 'true')->brands->list($_POST['handle']);
-            $response = [
-                'status' => 'success',
-                'connection' => 'true',
-                'msg' => 'Connection Successful'
-            ];
+            $brands = App::standalone($apiKey, $_POST['ote'] === 'true')->brands->list($_POST['handle']);
+            if ($brands->count() == 0) {
+                $response = [
+                    'status' => 'error',
+                    'msg' => 'Customer not found',
+                    'code' => 404
+                ];
+            } else {
+                $response = [
+                    'status' => 'success',
+                    'connection' => 'true',
+                    'msg' => 'Connection Successful'
+                ];
+            }
         } catch (\Exception $e) {
+            logActivity("Error while checking connection for Realtime Register: " . $e->getMessage());
             $response = [
                 'status' => 'error',
                 'msg' => $e->getMessage(),

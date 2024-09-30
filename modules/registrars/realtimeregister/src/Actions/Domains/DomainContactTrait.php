@@ -40,6 +40,9 @@ trait DomainContactTrait
     protected static function getNewProperties(Request $request, TLDMetaData $metadata): array
     {
         $contactProperties = $metadata->contactProperties->toArray();
+        if (!$contactProperties) {
+            return [];
+        }
         $tldProperties = array_combine(array_column($contactProperties, 'name'), $contactProperties);
         $properties = [];
 
@@ -59,10 +62,11 @@ trait DomainContactTrait
 
     protected function generateContactsForDomain(Request $request, TLDMetaData $metadata): array
     {
+        $clientId = $request->get('clientid') ?? $request->get('userid');
         $tldInfo = $this->tldInfo($request);
         // Check if we even need nameservers
         $orderId = App::localApi()->domain(
-            clientId: $request->get('clientid'),
+            clientId: $clientId,
             domainId: $request->get('domainid')
         )->get('orderid');
         $contactId = App::localApi()->order(id: $orderId)->get('contactid');
@@ -70,7 +74,7 @@ trait DomainContactTrait
         $contacts = [];
 
         $registrant = $this->getOrCreateContact(
-            clientId: $request->get('client_id'),
+            clientId: $clientId,
             contactId: $contactId,
             role: 'REGISTRANT',
             organizationAllowed: $metadata->registrant->organizationAllowed
@@ -81,7 +85,6 @@ trait DomainContactTrait
         $customHandles = $this->getCustomHandles();
         foreach (self::$CONTACT_ROLES as $role => $name) {
             $organizationAllowed = $metadata->{$name}->organizationAllowed;
-
             if (
                 array_key_exists($tldInfo->provider, $customHandles)
                 && array_key_exists($name, $customHandles[$tldInfo->provider])

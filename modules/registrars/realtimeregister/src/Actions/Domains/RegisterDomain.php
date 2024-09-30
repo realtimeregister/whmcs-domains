@@ -36,6 +36,7 @@ class RegisterDomain extends Action
             'contacts' => $contacts
             ) = $this->generateContactsForDomain($request, $metadata);
 
+
         $parameters = [
             'domainName' => $domainName,
             'customer' => App::registrarConfig()->customerHandle(),
@@ -49,6 +50,7 @@ class RegisterDomain extends Action
         if ($domain->idnLanguage) {
             $parameters['languageCode'] = $domain->idnLanguage;
         }
+
 
         if ($request->get('premiumEnabled') === true && (int)$request->get('premiumCost') > 0) {
             $parameters['billables'] = BillableCollection::fromArray([

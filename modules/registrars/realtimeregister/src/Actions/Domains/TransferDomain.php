@@ -28,7 +28,8 @@ class TransferDomain extends SyncExpiryDate
                 registrant: $registrant,
                 authcode: $request->eppCode,
                 autoRenew: false,
-                contacts: DomainContactCollection::fromArray($contacts)
+                ns: App::registrarConfig()->keepNameServers() ? null : $domain->nameservers,
+                contacts: DomainContactCollection::fromArray($contacts),
             );
 
             return ['success' => true];

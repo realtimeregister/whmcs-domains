@@ -4,14 +4,14 @@ namespace RealtimeRegister\Actions\Domains;
 
 use Illuminate\Database\Capsule\Manager as Capsule;
 use RealtimeRegister\App;
-use RealtimeRegister\Entities\DataObject;
 use RealtimeRegister\Models\RealtimeRegister\ContactMapping;
 use RealtimeRegister\Models\Whmcs\Configuration;
 use RealtimeRegister\Models\Whmcs\Domain;
 use RealtimeRegister\Models\Whmcs\Orders;
-use RealtimeRegister\Models\Whmcs\Registrars;
 use RealtimeRegister\PunyCode;
 use RealtimeRegister\Services\ContactService;
+use SandwaveIo\RealtimeRegister\Domain\Billable;
+use SandwaveIo\RealtimeRegister\Domain\DomainQuote;
 use SandwaveIo\RealtimeRegister\Domain\TLDMetaData;
 
 trait DomainTrait
@@ -93,7 +93,7 @@ trait DomainTrait
 
     protected function getDomainNameservers(array $params, string $type = 'register'): array
     {
-        if ($type === 'transfer' && self::transferKeepNameservers()) {
+        if ($type === 'transfer' && App::registrarConfig()->keepNameServers()) {
             return array_merge($params, ['ns1' => '', 'ns2' => '', 'ns3' => '', 'ns4' => '', 'ns5' => '']);
         }
 
@@ -173,10 +173,21 @@ trait DomainTrait
         return $date;
     }
 
-    public static function transferKeepNameservers(): bool
+    private function buildBillables(DomainQuote $quote): array
     {
-        $config = Registrars::getRegistrarConfig(['transfer_keep_nameservers']);
-
-        return isset($config['transfer_keep_nameservers']) && $config['transfer_keep_nameservers'] === 'on';
+        $billables = [];
+        if (!empty($quote->quote->billables) && $quote->quote->billables->count() > 1) {
+            /**
+             * @var Billable $billable
+             */
+            foreach ($quote->quote->billables as $billable) {
+                $billables[] = [
+                    'action' => $billable->action,
+                    'product' => $billable->product,
+                    'quantity' => $billable->quantity
+                ];
+            }
+        }
+        return $billables;
     }
 }

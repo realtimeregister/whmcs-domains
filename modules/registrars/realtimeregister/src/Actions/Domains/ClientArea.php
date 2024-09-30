@@ -2,13 +2,13 @@
 
 namespace RealtimeRegister\Actions\Domains;
 
-use RealtimeRegister\Entities\DataObject;
-use RealtimeRegister\Hooks\Hook;
+use RealtimeRegister\Actions\Action;
+use RealtimeRegister\Request;
 use RealtimeRegister\Services\TemplateService;
 
-class ClientArea extends Hook
+class ClientArea extends Action
 {
-    public function __invoke(DataObject $vars): bool|string
+    public function __invoke(Request $request): bool | string
     {
         global $_LANG;
 
@@ -16,7 +16,7 @@ class ClientArea extends Hook
             'child_hosts_button.tpl',
             [
                 "fields" => [
-                    "domainid" => $vars->get('domainid'),
+                    "domainid" => $request->get('domainid'),
                     "LANG" => $_LANG
                 ]
             ]

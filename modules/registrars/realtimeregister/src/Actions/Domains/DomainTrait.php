@@ -4,6 +4,7 @@ namespace RealtimeRegister\Actions\Domains;
 
 use Illuminate\Database\Capsule\Manager as Capsule;
 use RealtimeRegister\App;
+use RealtimeRegister\Entities\DataObject;
 use RealtimeRegister\Models\RealtimeRegister\ContactMapping;
 use RealtimeRegister\Models\Whmcs\Configuration;
 use RealtimeRegister\Models\Whmcs\Domain;

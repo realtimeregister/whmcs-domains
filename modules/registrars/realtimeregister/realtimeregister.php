@@ -14,6 +14,8 @@ use RealtimeRegister\Actions\Domains\Sync;
 use RealtimeRegister\Actions\Domains\TransferWithBillables;
 use RealtimeRegister\App;
 use RealtimeRegister\ConfigArray;
+use WHMCS\Domains\DomainLookup\ResultsList;
+use WHMCS\Domains\DomainLookup\SearchResult;
 
 if (!defined("WHMCS")) {
     die("This file cannot be accessed directly");
@@ -36,9 +38,13 @@ function realtimeregister_getConfigArray(): array
     return (new ConfigArray())();
 }
 
-function realtimeregister_CheckAvailability(array $params)
+function realtimeregister_CheckAvailability(array $params): ResultsList
 {
-    return App::dispatch(CheckAvailability::class, $params);
+    return App::dispatch(
+        CheckAvailability::class,
+        $params,
+        ['RealtimeRegister\Actions\Domains\CheckAvailability', 'handleException']
+    );
 }
 
 function realtimeregister_GetDomainInformation(array $params)

@@ -4,6 +4,7 @@ namespace RealtimeRegister\Actions\Domains;
 
 use RealtimeRegister\Actions\Action;
 use RealtimeRegister\App;
+use RealtimeRegister\Models\Whmcs\DomainPricing;
 use RealtimeRegister\Request;
 
 class RenewDomain extends Action
@@ -37,10 +38,20 @@ class RenewDomain extends Action
             );
         }
 
-        $renewal = App::client()->domains->renew(
-            domain: $domain->domainName(),
-            period: $period,
-        );
+        /** @var DomainPricing $pricing */
+        $price = DomainPricing::query()->where(['extension' => '.' . $domain->tldPunyCode])->first();
+
+        if ($domain->isInRedemptionGracePeriod === true && (int)$price->redemption_grace_period_fee > -1) {
+            $renewal = App::client()->domains->restore(
+                domain: $domain->domainName(),
+                reason: 'Renewal requested of this domain by WHMCS user'
+            );
+        } else {
+            $renewal = App::client()->domains->renew(
+                domain: $domain->domainName(),
+                period: $period,
+            );
+        }
 
         try {
             if (function_exists('realtimeregister_after_RenewDomain')) {

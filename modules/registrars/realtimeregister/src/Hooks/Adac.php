@@ -6,10 +6,11 @@ use RealtimeRegister\App;
 use RealtimeRegister\Entities\DataObject;
 use RealtimeRegister\Enums\ScriptLocationType;
 use RealtimeRegister\Models\Whmcs\Configuration;
+use RealtimeRegister\Models\Whmcs\Currencies;
 use RealtimeRegister\Models\Whmcs\DomainPricing;
 use RealtimeRegister\Models\Whmcs\Pricing;
 use RealtimeRegister\Models\Whmcs\Registrars;
-use Realtimeregister\Services\ShoppingCartService;
+use RealtimeRegister\Services\ShoppingCartService;
 
 class Adac extends Hook
 {
@@ -51,13 +52,13 @@ class Adac extends Hook
 
                 // Get currency ID
                 $_SESSION['PremiumDomains'][$_POST['adacpremium']]['markupPrice'][1]['register']
-                    = new \WHMCS\View\Formatter\Pricse($price, $vars['currency']);
+                    = new \WHMCS\View\Formatter\Price($price, $vars['currency']);
                 $_SESSION['PremiumDomains'][$_POST['adacpremium']]['markupPrice'][1]['renew']
                     = new \WHMCS\View\Formatter\Price($price, $vars['currency']);
 
                 /**
                  * Counter-intuitive, but the markupPrice currency is set to the premium cost price currency in the
-                 * default WHMCS xflow,we mimic this behavior.
+                 * default WHMCS flow,we mimic this behavior.
                  */
                 $whmcsCurrencies = [];
                 foreach (localAPI('GetCurrencies', [])['currencies']['currency'] as $c) {
@@ -133,16 +134,10 @@ class Adac extends Hook
             }
         }
 
-        /**
- * @var Pricing[] $prices
-*/
-        $prices = Pricing::where('currency', $currency)->where(
-            function ($query) {
-                $query->where('type', 'domainregister')
-                    ->orWhere('type', 'domaintransfer')
-                    ->orWhere('type', 'domainrenew');
-            }
-        )->get();
+        $prices = Pricing::query()->where('currency', $currency)
+            ->whereIn('type', ['domainregister', 'domaintransfer', 'domainrenew'])
+            ->get();
+        $currency = Currencies::query()->where("id", '=', $currency)->first();
 
         if (!empty($prices)) {
             $build = [];
@@ -153,9 +148,9 @@ class Adac extends Hook
                 }
 
                 if (!($price['msetupfee'] < 0)) {
-                    $priceString = $price->getValutaAttribute();
+                    $priceString = $currency->prefix;
                     $priceString .= $price['msetupfee'];
-                    $priceString .= $price->getCurrencySuffixAttribute();
+                    $priceString .= $currency->suffix;
 
                     $build[$tldPricing[$price['relid']]]['group'] = $tldGroup[$tldPricing[$price['relid']]]['type'];
                     $build[$tldPricing[$price['relid']]]['group_title'] =
@@ -163,9 +158,9 @@ class Adac extends Hook
                     $build[$tldPricing[$price['relid']]]['interval'] = '12';
                     $build[$tldPricing[$price['relid']]][$price['type']] = $priceString;
                 } elseif (!($price['qsetupfee'] < 0)) {
-                    $priceString = $price->getValutaAttribute();
+                    $priceString = $currency->prefix;
                     $priceString .= $price['qsetupfee'];
-                    $priceString .= $price->getCurrencySuffixAttribute();
+                    $priceString .= $currency->suffix;
 
                     $build[$tldPricing[$price['relid']]]['group'] = $tldGroup[$tldPricing[$price['relid']]]['type'];
                     $build[$tldPricing[$price['relid']]]['group_title'] =
@@ -200,7 +195,7 @@ class Adac extends Hook
             App::assets()->addStyle('adac.css');
             App::assets()->addScript('adac.js', ScriptLocationType::Footer);
             App::assets()->addToJavascriptVariables(
-                'adac-js',
+                'adac.js',
                 [
                 'adacLang'       => $_LANG['rtr']['adac'],
                 'tldPrices'      => $build,

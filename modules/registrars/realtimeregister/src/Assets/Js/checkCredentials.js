@@ -38,9 +38,10 @@ $(document).ready(
                         btn.html(text);
                         btn.removeClass("disabled");
                         if (response.connection === "true") {
-                            result.html('<span class="status success">SUCCESSFUL</span>');
+                            btn.remove();
+                            result.html('<span class="status success">Check successful<br></span>');
                         } else {
-                            result.html('<span class="status error"><strong>FAILED:</strong> ' + response.msg + '</span>');
+                            result.html('<span class="status error"><strong>Check failed:</strong> ' + response.msg + '</span>');
                         }
                         btn.attr("disabled", false);
                     },

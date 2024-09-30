@@ -54,16 +54,26 @@ class AdminClientDomainsTabFields extends Hook
                     ['keyData' => $rtrDomain->keyData->entities]
                 );
             }
+
+            $fields['Status'] = $this->render(
+                __DIR__ . '/../Assets/Tpl/admin/status.tpl',
+                ['status' => $rtrDomain->status]
+            );
         } catch (\Exception) {
             # ignore
         }
+
         if (!empty($fields)) {
             $fields = array_merge(['' => '<h1>Information from Realtime Register:</h1>'], $fields);
         }
 
-        $metaData = (new MetadataService(App::registrarConfig()->get('tld_punycode')))->getMetadata();
+        $metaData = (new MetadataService($domainInfo->domain))->getMetadata();
 
-        if ($metaData->expiryDateOffset > 0) {
+        if (
+            $metaData->expiryDateOffset > 0
+            && $domainInfo->registrar === 'realtimeregister'
+            && $domainInfo->status === 'Active'
+        ) {
             $fields[''] = $fields[''] . '
             <script>
                 let newElm = document.createElement("i");

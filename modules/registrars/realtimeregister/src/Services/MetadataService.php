@@ -121,7 +121,7 @@ class MetadataService
         if ($properties) {
             foreach ($properties as $property) {
                 $default = array_key_exists($property['name'], $current) ? $current[$property['name']] : null;
-                $tldAdditionalFields[] = self::propertyToAdditionalField($this->tld, $property, $default);
+                $tldAdditionalFields[] = $this->propertyToAdditionalField($property, $default);
             }
         }
         return ['fields' => $tldAdditionalFields, 'applicableFor' => $this->info->applicableFor];
@@ -154,10 +154,10 @@ class MetadataService
         return sprintf('tld_%s_%s', strtolower($tld), preg_replace('/[^a-z0-9]/', '', strtolower($property_name)));
     }
 
-    private static function propertyToAdditionalField($tld, $property, $default = null): array
+    private function propertyToAdditionalField($property, $default = null): array
     {
         global $_LANG;
-        $langvar = self::toLangVar($tld, $property['name']);
+        $langvar = self::toLangVar($this->tld, $property['name']);
         $field = [
             'Name' => $property['name'],
             'LangVar' => $langvar . '_label',
@@ -173,7 +173,7 @@ class MetadataService
                 $field['Type'] = 'tickbox';
             } else {
                 $field['Type'] = 'dropdown';
-                $field['Options'] = self::arrayToOptions($property['values'], $property['name']);
+                $field['Options'] = $this->arrayToOptions($property['values'], $property['name']);
             }
         } else {
             $field['Type'] = 'text';
@@ -202,26 +202,20 @@ class MetadataService
         return array_intersect($bool ? ['true', 'y'] : ['false', 'n'], array_keys($propertyValues))[0];
     }
 
-    private static function arrayToOptions(array $propertyValues, string $propertyName): string
+    private function arrayToOptions(array $propertyValues, string $propertyName): string
     {
         global $_LANG;
 
         $options = [];
         foreach ($propertyValues as $key => $value) {
-            $translation = sprintf('tld_properties_%s', preg_replace('/[^a-z0-9_]/', '', strtolower($key)));
-
             $translationKey = sprintf(
-                'tld_properties_%s_%s',
+                'tld_%s_%s_%s',
+                strtolower($this->tld),
                 preg_replace('/[^a-z0-9_]/', '', strtolower($propertyName)),
                 preg_replace('/[^a-z0-9_]/', '', strtolower($key))
             );
 
-            if (!empty($_LANG[$translationKey])) {
-                $value = $_LANG[$translationKey];
-            } elseif (!empty($_LANG[$translation])) { // Fallback for when people used old translation keys
-                $value = $_LANG[$translation];
-            }
-            $options[] = self::strip($key) . '|' . self::strip($value);
+            $options[] = self::strip($key) . '|' . self::strip($_LANG[$translationKey]);
         }
         return ',' . implode(',', $options);
     }
@@ -297,5 +291,20 @@ class MetadataService
     public function getProvider(): string
     {
         return $this->provider;
+    }
+
+    public static function getBulkData(): array
+    {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, App::metadataUrl());
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPGET, true);
+        curl_setopt($ch, CURLOPT_USERAGENT, 'Realtime Register WHMCS Client/' . App::VERSION);
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+        $response = json_decode($response, true);
+
+        return $response['hashes'];
     }
 }

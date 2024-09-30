@@ -38,7 +38,8 @@
         "sandwave-io/realtimeregister-php": "dev-master",
         "illuminate/cache": "^9",
         "giggsey/libphonenumber-for-php-lite": "^8.13",
-        "psr/log": "^1.0.0"
+        "psr/log": "^1.0.0",
+        "guzzlehttp/guzzle": "7.5.0"
     },
     "require-dev": {
         "symfony/var-dumper": "^6.4",

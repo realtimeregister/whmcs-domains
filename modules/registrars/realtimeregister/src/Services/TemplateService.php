@@ -8,7 +8,10 @@ class TemplateService
 {
     public static function renderTemplate(string $templatePath, array $args = []): false|string
     {
+        global $_LANG;
         $smarty = new Smarty();
+
+        $args['LANG'] = $_LANG;
 
         foreach ($args as $key => $value) {
             $smarty->assign($key, $value);

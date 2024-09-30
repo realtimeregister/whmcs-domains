@@ -25,6 +25,9 @@ class App
     protected const IS_PROXY_HOST = "is.yoursrs.com";
     protected const IS_PROXY_HOST_TEST = "is.yoursrs-ote.com";
 
+    protected const METADATA_PROXY_URL = 'https://rtrdm.blob.core.windows.net/metadata-prod/bundle.json';
+    protected const METADATA_PROXY_URL_TEST = 'https://rtrdm.blob.core.windows.net/metadata-ote/bundle.json';
+
     protected readonly LocalApi $localApi;
     protected readonly RegistrarConfig $registrarConfig;
     protected readonly ContactService $contactService;
@@ -120,6 +123,11 @@ class App
         );
     }
 
+    public static function metadataUrl(): string
+    {
+        return App::registrarConfig()->isTest() ? self::METADATA_PROXY_URL_TEST : self::METADATA_PROXY_URL;
+    }
+
     protected function dispatchTo(string $action, array $params = [])
     {
         if (!class_exists($action)) {
@@ -145,7 +153,7 @@ class App
             return static::instance()->dispatchTo($action, $params);
         } catch (\Throwable $exception) {
             if ($catch) {
-                return $catch($exception);
+                return $catch($exception, $params);
             }
 
             if ($exception instanceof ActionFailedException) {

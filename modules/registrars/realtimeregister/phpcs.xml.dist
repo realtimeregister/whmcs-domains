@@ -4,7 +4,7 @@
     <description>PHPCS configuration file.</description>
     <file>tests</file>
     <file>src</file>
-
+    <file>lang</file>
     <exclude-pattern>*\.(css|js)$</exclude-pattern>
     <exclude-pattern>*/migrations/*php</exclude-pattern>
     <exclude-pattern>*/vendor/*</exclude-pattern>

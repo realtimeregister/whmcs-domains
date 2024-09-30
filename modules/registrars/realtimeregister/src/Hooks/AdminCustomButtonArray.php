@@ -6,6 +6,7 @@ use RealtimeRegister\Actions\Action;
 use RealtimeRegister\App;
 use RealtimeRegister\Models\Whmcs\Domain;
 use RealtimeRegister\Request;
+use SandwaveIo\RealtimeRegister\Domain\Enum\ResumeTypeEnum;
 
 class AdminCustomButtonArray extends Action
 {
@@ -28,20 +29,20 @@ class AdminCustomButtonArray extends Action
         }
 
         try {
-            if (empty($metadata)) {
-                return $adminButtons;
-            }
-
-            $domain = $request->params['sld'] . '.' . $request->params['tld'];
+            $domain = $request->domain->domainName();
             if (!empty($metadata->transferFOA)) {
                 $processes = App::client()->processes->list(
-                    1,
-                    0,
-                    null,
-                    ['action' => 'incomingInternalTransfer']
+                    parameters: [
+                        'status' => 'SUSPENDED',
+                        'action:in' => 'incomingInternalTransfer,incomingTransfer',
+                        "identifier:eq" => $request->domain->domainName()
+                    ]
                 );
 
-                if ($processes->count() > 0 && $processes->entities[0]->status === 'SUSPENDED') {
+                if (
+                    $processes->count() > 0
+                    && in_array(ResumeTypeEnum::TYPE_RESEND, $processes->entities[0]->resumeTypes ?? [])
+                ) {
                     $adminButtons['Resend FOA'] = "ResendTransfer";
                 }
             }

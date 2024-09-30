@@ -55,7 +55,11 @@ class Domain
             isIdn: $params['is_idn'] ?? null,
             isInGracePeriod: $params['isInGracePeriod'] ?? null,
             isInRedemptionGracePeriod: $params['isInRedemptionGracePeriod'] ?? null,
-            contactProperties: $params['additionalfields'] ?? []
+            contactProperties: array_filter(
+                $params['additionalfields'] ?? [],
+                fn($key) => $key !== 'languageCode',
+                ARRAY_FILTER_USE_KEY
+            )
         );
     }
 }

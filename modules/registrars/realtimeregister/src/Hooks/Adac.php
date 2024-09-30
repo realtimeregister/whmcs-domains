@@ -10,7 +10,7 @@ use RealtimeRegister\Models\Whmcs\Currencies;
 use RealtimeRegister\Models\Whmcs\DomainPricing;
 use RealtimeRegister\Models\Whmcs\Pricing;
 use RealtimeRegister\Models\Whmcs\Registrars;
-use Realtimeregister\Services\ShoppingCartService;
+use RealtimeRegister\Services\ShoppingCartService;
 
 class Adac extends Hook
 {
@@ -52,13 +52,13 @@ class Adac extends Hook
 
                 // Get currency ID
                 $_SESSION['PremiumDomains'][$_POST['adacpremium']]['markupPrice'][1]['register']
-                    = new \WHMCS\View\Formatter\Pricse($price, $vars['currency']);
+                    = new \WHMCS\View\Formatter\Price($price, $vars['currency']);
                 $_SESSION['PremiumDomains'][$_POST['adacpremium']]['markupPrice'][1]['renew']
                     = new \WHMCS\View\Formatter\Price($price, $vars['currency']);
 
                 /**
                  * Counter-intuitive, but the markupPrice currency is set to the premium cost price currency in the
-                 * default WHMCS xflow,we mimic this behavior.
+                 * default WHMCS flow,we mimic this behavior.
                  */
                 $whmcsCurrencies = [];
                 foreach (localAPI('GetCurrencies', [])['currencies']['currency'] as $c) {

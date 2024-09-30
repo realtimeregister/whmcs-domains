@@ -5,6 +5,7 @@ namespace RealtimeRegister\Actions\Domains;
 use RealtimeRegister\Actions\Action;
 use RealtimeRegister\App;
 use RealtimeRegister\Request;
+use SandwaveIo\RealtimeRegister\Domain\BillableCollection;
 use SandwaveIo\RealtimeRegister\Domain\DomainContactCollection;
 
 class RegisterDomain extends Action
@@ -35,6 +36,7 @@ class RegisterDomain extends Action
             'contacts' => $contacts
             ) = $this->generateContactsForDomain($request, $metadata);
 
+
         $parameters = [
             'domainName' => $domainName,
             'customer' => App::registrarConfig()->customerHandle(),
@@ -48,6 +50,17 @@ class RegisterDomain extends Action
         if ($domain->idnLanguage) {
             $parameters['languageCode'] = $domain->idnLanguage;
         }
+
+
+        if ($request->get('premiumEnabled') === true && (int)$request->get('premiumCost') > 0) {
+            $parameters['billables'] = BillableCollection::fromArray([
+                [ 'action' => 'CREATE',
+                    'product' => 'domain_' . $domain->tldPunyCode . '_premium',
+                    'quantity' => 1
+                ]
+            ]);
+        }
+
         App::client()->domains->register(...$parameters);
         return ['success' => true];
     }

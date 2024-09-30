@@ -3,12 +3,15 @@
 // phpcs:disable PSR1.Files.SideEffects
 
 use RealtimeRegister\Actions\Contacts\GetContactDetails;
+use RealtimeRegister\Actions\Contacts\ResendValidation;
 use RealtimeRegister\Actions\Contacts\SaveContactDetails;
 use RealtimeRegister\Actions\Domains\CheckAvailability;
 use RealtimeRegister\Actions\Domains\GetDomainInformation;
+use RealtimeRegister\Actions\Domains\ResendTransfer;
 use RealtimeRegister\Actions\Domains\SaveNameservers;
 use RealtimeRegister\Actions\Domains\SaveRegistrarLock;
 use RealtimeRegister\Actions\Domains\Sync;
+use RealtimeRegister\Actions\Domains\TransferWithBillables;
 use RealtimeRegister\App;
 use RealtimeRegister\ConfigArray;
 use WHMCS\Domains\DomainLookup\ResultsList;
@@ -107,17 +110,17 @@ function realtimeregister_RegisterWithBillables(array $params)
 
 function realtimeregister_TransferWithBillables($params)
 {
-    throw new Exception(__FUNCTION__ . ' is not implemented yet');
+    return App::dispatch(TransferWithBillables::class, $params);
 }
 
 function realtimeregister_ResendTransfer(array $params)
 {
-    throw new Exception(__FUNCTION__ . ' is not implemented yet');
+    return App::dispatch(ResendTransfer::class, $params);
 }
 
 function realtimeregister_ResendValidationMails(array $params)
 {
-    throw new Exception(__FUNCTION__ . ' is not implemented yet');
+    return App::dispatch(ResendValidation::class, $params);
 }
 
 function realtimeregister_GetEPPCode($params)

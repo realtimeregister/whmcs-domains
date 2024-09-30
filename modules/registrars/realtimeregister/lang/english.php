@@ -72,6 +72,13 @@ $_LANG['rtr']['status'] = 'Status';
 $_LANG['rtr']['transfer_log']['type'] = 'Type';
 $_LANG['rtr']['transfer_log']['message'] = 'Message';
 
+$_LANG['rtr']['promotions']['explanation'] = 'These are the current and/or upcoming promotions';
+$_LANG['rtr']['promotions']['product'] = 'Product';
+$_LANG['rtr']['promotions']['price'] = 'Price';
+$_LANG['rtr']['promotions']['from_date'] = 'Start date';
+$_LANG['rtr']['promotions']['end_date'] = 'End date';
+$_LANG['rtr']['promotions']['none'] = 'We didn\'t find any promotions';
+
 $_LANG['rtr']['actions']['import_domains'] = 'Import domains';
 $_LANG['rtr']['actions']['import_into_whmcs'] = 'Import domains/clients from RealtimeRegister into WHMCS';
 $_LANG['rtr']['actions']['sync_expire_dates'] = 'Sync Expiry Dates';

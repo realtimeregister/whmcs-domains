@@ -37,6 +37,17 @@ class Cache
 
     public static function boot(): void
     {
+        if (!Capsule::schema()->hasTable(Cache::TABLE_NAME)) {
+            Capsule::schema()->create(
+                Cache::TABLE_NAME,
+                function ($table) {
+                    $table->string('key')->unique();
+                    $table->text('value');
+                    $table->integer('expiration');
+                }
+            );
+        }
+
         $currentVersion = Registrars::query()
             ->where('registrar', 'realtimeregister')
             ->where('setting', 'active_version')

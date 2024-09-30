@@ -35,16 +35,5 @@ class AdminAreaPage extends Hook
                 }
             );
         }
-
-        if (!Capsule::schema()->hasTable(Cache::TABLE_NAME)) {
-            Capsule::schema()->create(
-                Cache::TABLE_NAME,
-                function ($table) {
-                    $table->string('key')->unique();
-                    $table->text('value');
-                    $table->integer('expiration');
-                }
-            );
-        }
     }
 }

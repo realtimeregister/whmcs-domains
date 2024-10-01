@@ -22,7 +22,7 @@ class PromoWidget extends \WHMCS\Module\AbstractWidget
     public function getData(): array
     {
         try {
-            $promotions = App::client()->customers->promoList(App::registrarConfig()->customerHandle())->entities;
+            $promotions = App::client()->customers->promoList(App::registrarConfig()->customerHandle())->toArray();
         } catch (\Exception) {
             return [];
         }

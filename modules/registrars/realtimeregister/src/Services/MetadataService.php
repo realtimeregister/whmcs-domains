@@ -29,7 +29,9 @@ class MetadataService
                 'tld.' . $this->tld,
                 MetadataService::DAY_MINUTES,
                 function () {
-                    $metadata = App::client()->tlds->info($this->tld);
+                    $queryTld = explode('.', $this->tld);
+                    $queryTld = array_pop($queryTld);
+                    $metadata = App::client()->tlds->info($queryTld);
                     foreach ($metadata->applicableFor as $app_tld) {
                         Cache::put('tld.' . $app_tld, $metadata->toArray(), MetadataService::DAY_MINUTES);
                     }

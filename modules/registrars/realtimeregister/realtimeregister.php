@@ -38,6 +38,16 @@ function realtimeregister_getConfigArray(): array
     return (new ConfigArray())();
 }
 
+function realtimeregister_config_validate(array $params)
+{
+    return App::dispatch(
+        action:\RealtimeRegister\Actions\ConfigurationValidation::class,
+        params: $params,
+        catch: [\RealtimeRegister\Actions\ConfigurationValidation::class, 'handleException']
+
+    );
+}
+
 function realtimeregister_CheckAvailability(array $params): ResultsList
 {
     return App::dispatch(

@@ -26,8 +26,10 @@ class RenewDomain extends Action
         } catch (\Exception $ex) {
             return [
                 'error' =>
-                    'Error while trying to execute the realtimeregister_before_RenewDomain hook: %s.',
-                $ex->getMessage()
+                    sprintf(
+                        'Error while trying to execute the realtimeregister_before_RenewDomain hook: %s.',
+                        $ex->getMessage()
+                    )
             ];
         }
 

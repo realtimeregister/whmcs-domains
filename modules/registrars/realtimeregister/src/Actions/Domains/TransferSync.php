@@ -38,8 +38,10 @@ class TransferSync extends Action
         } catch (\Exception $ex) {
             return [
                 'error' =>
-                    'trying connect to server: %s.',
-                $ex->getMessage()
+                    sprintf(
+                        'trying connect to server: %s.',
+                        $ex->getMessage()
+                    )
             ];
         }
 

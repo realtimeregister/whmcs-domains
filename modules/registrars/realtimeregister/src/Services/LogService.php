@@ -27,7 +27,7 @@ class LogService
             ->where("severity", "=", "error")
             ->where("message", "LIKE", "RealtimeRegister: %")
             ->orderBy("id", "desc")
-            ->limit(500)
+            ->limit($limit)
             ->get()
             ->toArray();
     }

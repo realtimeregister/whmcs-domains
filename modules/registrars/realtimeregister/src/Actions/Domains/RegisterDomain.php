@@ -67,7 +67,7 @@ class RegisterDomain extends Action
         if (is_array($domainRegistration->status)) {
             if (in_array(DomainStatusEnum::STATUS_OK, $domainRegistration->status)) {
                 return ['success' => true];
-            } else if (
+            } elseif (
                 count(
                     array_intersect(
                         [DomainStatusEnum::STATUS_INACTIVE, DomainStatusEnum::STATUS_PENDING_VALIDATION],

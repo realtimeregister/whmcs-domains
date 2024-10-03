@@ -44,7 +44,6 @@ function realtimeregister_config_validate(array $params)
         action:\RealtimeRegister\Actions\ConfigurationValidation::class,
         params: $params,
         catch: [\RealtimeRegister\Actions\ConfigurationValidation::class, 'handleException']
-
     );
 }
 

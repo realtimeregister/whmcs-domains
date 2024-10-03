@@ -89,8 +89,7 @@ class AdminClientDomainsTabFields extends Hook
                     let elm = document.getElementById("inputExpiryDate");
                     elm.style.display = "inherit";
                     elm.after(newElm);';
-            }
-            if (
+            } elseif (
                 /*
                  * See if we need the IDProtect button at all, there is no other way to hide this button via WHMCS
                  */

@@ -4,6 +4,7 @@ namespace RealtimeRegister\Actions;
 
 use RealtimeRegister\App;
 use RealtimeRegister\Request;
+use RealtimeRegister\Services\LogService;
 use WHMCS\Exception\Module\InvalidConfiguration;
 
 class ConfigurationValidation extends Action
@@ -22,6 +23,7 @@ class ConfigurationValidation extends Action
     public static function handleException(\Throwable $exception, array $params)
     {
         if ($exception) {
+            LogService::logError($exception);
             throw new \WHMCS\Exception\Module\InvalidConfiguration(
                 'Something went wrong checking your connection to the API of Realtime Register, '
                 . 'please check your credentials'

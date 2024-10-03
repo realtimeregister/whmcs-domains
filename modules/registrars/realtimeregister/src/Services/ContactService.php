@@ -425,7 +425,7 @@ class ContactService
                             handle: $handle
                         );
                     } catch (\Exception) {
-                        // ignore
+                        LogService::logError($ex);
                     }
 
                     throw $ex;

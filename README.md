@@ -1,26 +1,22 @@
-# whmcs
-
-### Discussions
-
-- Hebben we echt een aparte addon module nodig?
-- Moeten wij contacts handles zoeken wanneer wij ze lokaal nog niet hebben?
-
-### INFO
-https://developers.whmcs.com/domain-registrars/function-index/
-
-In de map `modules/realtimeregister/src/Actions` bevinden alle commandos die al zijn geïmplementeerd.
-
-In deze module gebruiken wij https://github.com/sandwave-io/realtimeregister-php.
-Deze kan nog wel verbeterd worden maar is grotendeels toereikend.
-
-
+# WHMCS module for Realtime Register API
+[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
+[![CI](https://github.com/realtimeregister/whmcs/actions/workflows/phpcs.yml/badge.svg)](https://github.com/realtimeregister/whmcs/actions/workflows/phpcs.yml)
 
 ### Features
-- [ ] Domain registration
-- [ ] Domain transfer
-- [ ] Domain check
+- [X] Domain registration
+- [X] Domain transfer
+- [X] Domain check
+- [X] Premium domain support
+- [X] Pricing sync with Realtime Register
+- [X] Override of handles
+- [X] DNSSec support
+- [X] Transfer in/out of domains
+- [X] Import of portfolio
+- [X] Additional fields support for all supported TLD's
+- [X] Overide possibilities for additional fields
 
-
-### Todo
-- Contact mutations needs to be handled. Old whmcs module has reference on how we to do it.
-- 
+We also provide widgets for you to use on your admin homepage:
+- Promotion overview
+- Your balance
+- Domainoverview 
+- Logfile overview specific for Realtime Register

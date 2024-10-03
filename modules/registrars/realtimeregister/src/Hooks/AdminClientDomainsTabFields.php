@@ -5,6 +5,7 @@ namespace RealtimeRegister\Hooks;
 use RealtimeRegister\Actions\Domains\SmartyTrait;
 use RealtimeRegister\App;
 use RealtimeRegister\Entities\DataObject;
+use RealtimeRegister\Enums\WhmcsDomainStatus;
 use RealtimeRegister\Models\Whmcs\Domain;
 use RealtimeRegister\Services\MetadataService;
 
@@ -69,23 +70,47 @@ class AdminClientDomainsTabFields extends Hook
 
         $metaData = (new MetadataService($domainInfo->domain))->getMetadata();
 
+        // Some special features, which can only be done by using javascript
         if (
-            $metaData->expiryDateOffset > 0
-            && $domainInfo->registrar === 'realtimeregister'
-            && $domainInfo->status === 'Active'
+            $domainInfo->registrar === 'realtimeregister'
         ) {
-            $fields[''] = $fields[''] . '
-            <script>
-                let newElm = document.createElement("i");
-                newElm.classList.add("fas","fa-info-circle");
-                newElm.style.marginLeft = "0.5em";
-                newElm.onclick = function() {alert("Expiry offset is ' . number_format($metaData->expiryDateOffset)
-                . ' seconds, which translates to '
-                . \Carbon\CarbonInterval::seconds($metaData->expiryDateOffset)->cascade()->forHumans() . '");}
-                let elm = document.getElementById("inputExpiryDate");
-                elm.style.display = "inherit";
-                elm.after(newElm);
-            </script>';
+            $script = null;
+            if ($domainInfo->status === 'Active' && $metaData->expiryDateOffset > 0) {
+                $script = /** @lang JavaScript */
+                    '
+                    let newElm = document.createElement("i");
+                    newElm.classList.add("fas","fa-info-circle");
+                    newElm.style.marginLeft = "0.5em";
+                    newElm.onclick = function() {
+                        alert("Expiry offset is ' . number_format($metaData->expiryDateOffset)
+                        . ' seconds, which translates to '
+                        . \Carbon\CarbonInterval::seconds($metaData->expiryDateOffset)->cascade()->forHumans() . '");
+                    };
+                    let elm = document.getElementById("inputExpiryDate");
+                    elm.style.display = "inherit";
+                    elm.after(newElm);';
+            }
+            if (
+                /*
+                 * See if we need the IDProtect button at all, there is no other way to hide this button via WHMCS
+                 */
+                in_array(
+                    $domainInfo->status,
+                    [
+                        WhmcsDomainStatus::Expired->value,
+                        WhmcsDomainStatus::PendingTransfer->value,
+                        WhmcsDomainStatus::Pending->value
+                    ]
+                )
+            ) {
+                $script = /** @lang JavaScript */
+                    'let elm = document.querySelector(\'[data-target="#modalIdProtectToggle"]\');
+                elm.style.display = "none";';
+            }
+
+            if ($script) {
+                $fields[''] = $fields[''] . '<script>' . $script . '</script>';
+            }
         }
         return $fields;
     }

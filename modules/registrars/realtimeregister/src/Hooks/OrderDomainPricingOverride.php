@@ -10,7 +10,7 @@ class OrderDomainPricingOverride extends Hook
 {
     use PunyCode;
 
-    public function __invoke(DataObject $vars): ?int
+    public function __invoke(DataObject $vars)
     {
         if ($vars['type'] === 'register') {
             $res = App::client()->domains->check($vars['domain']);

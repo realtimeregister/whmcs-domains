@@ -8,6 +8,7 @@ use RealtimeRegister\App;
 use RealtimeRegister\Exceptions\DomainNotFoundException;
 use RealtimeRegister\Models\Whmcs\Contact as ContactModel;
 use RealtimeRegister\Request;
+use RealtimeRegister\Services\LogService;
 use SandwaveIo\RealtimeRegister\Domain\DomainContact;
 use SandwaveIo\RealtimeRegister\Domain\DomainDetails;
 use SandwaveIo\RealtimeRegister\Domain\Enum\DomainContactRoleEnum;
@@ -23,6 +24,7 @@ class GetContactDetails extends Action
         try {
             $domain = $this->domainInfo($request);
         } catch (BadRequestException | DomainNotFoundException | UnauthorizedException $e) {
+            LogService::logError($e);
             return ['error' => sprintf('Error with domaininformation lookup: %s', $e->getMessage())];
         }
 

@@ -4,6 +4,7 @@ namespace RealtimeRegister;
 
 use Illuminate\Support\Collection;
 use RealtimeRegister\Entities\DataObject;
+use RealtimeRegister\Entities\WhmcsContact;
 
 class LocalApi
 {
@@ -94,18 +95,24 @@ class LocalApi
         do {
             $data = localAPI('GetContacts', ['userid' => $clientId, 'startnumber' => $start]);
 
-            $contact = collect($data['contacts']['contact'])->where('id', $contactId)->mapInto(DataObject::class);
+            $contact = collect($data['contacts']['contact'])->where('id', $contactId);
 
             if ($contact->isNotEmpty()) {
-                return $contact->first();
+                /** @var DataObject $result */
+                $result = $contact->first();
+
+                $result['phonenumberformatted'] = WhmcsContact::formatE164a($result['phonenumber']);
+
+                return new DataObject($result);
             }
 
             $start += (int)$data['numreturned'];
         } while ($start < (int)$data['totalresults']);
 
+        $data = localAPI('GetClientsDetails', ['clientid' => $clientId])['client'];
 
-
-        return new DataObject(localAPI('GetClientsDetails', ['clientid' => $clientId])['client']);
+        $data['phonenumberformatted'] = WhmcsContact::formatE164a($data['phonenumber']);
+        return new DataObject($data);
     }
 
     public function getContactById(int $contactId): ?DataObject

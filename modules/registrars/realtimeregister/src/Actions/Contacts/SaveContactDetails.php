@@ -297,8 +297,8 @@ class SaveContactDetails extends Action
 
         $domainName = $this->checkForPunyCode(
             new \RealtimeRegister\Entities\Domain(
-                $this->params['original']['domainname'],
-                $this->params['original']['tld']
+                name: $this->params['original']['domainname'],
+                tld: $this->params['original']['tld']
             )
         );
 

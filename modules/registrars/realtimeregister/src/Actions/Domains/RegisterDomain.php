@@ -7,6 +7,8 @@ use RealtimeRegister\App;
 use RealtimeRegister\Request;
 use SandwaveIo\RealtimeRegister\Domain\BillableCollection;
 use SandwaveIo\RealtimeRegister\Domain\DomainContactCollection;
+use SandwaveIo\RealtimeRegister\Domain\DomainRegistration;
+use SandwaveIo\RealtimeRegister\Domain\Enum\DomainStatusEnum;
 
 class RegisterDomain extends Action
 {
@@ -36,7 +38,6 @@ class RegisterDomain extends Action
             'contacts' => $contacts
             ) = $this->generateContactsForDomain($request, $metadata);
 
-
         $parameters = [
             'domainName' => $domainName,
             'customer' => App::registrarConfig()->customerHandle(),
@@ -51,7 +52,6 @@ class RegisterDomain extends Action
             $parameters['languageCode'] = $domain->idnLanguage;
         }
 
-
         if ($request->get('premiumEnabled') === true && (int)$request->get('premiumCost') > 0) {
             $parameters['billables'] = BillableCollection::fromArray([
                 [ 'action' => 'CREATE',
@@ -61,7 +61,23 @@ class RegisterDomain extends Action
             ]);
         }
 
-        App::client()->domains->register(...$parameters);
-        return ['success' => true];
+        /** @var DomainRegistration $domainRegistration */
+        $domainRegistration = App::client()->domains->register(...$parameters);
+
+        if (is_array($domainRegistration->status)) {
+            if (in_array(DomainStatusEnum::STATUS_OK, $domainRegistration->status)) {
+                return ['success' => true];
+            } elseif (
+                count(
+                    array_intersect(
+                        [DomainStatusEnum::STATUS_INACTIVE, DomainStatusEnum::STATUS_PENDING_VALIDATION],
+                        $domainRegistration->status
+                    )
+                ) > 0
+            ) {
+                return ['pending' => true];
+            }
+        }
+        return ['success' => false];
     }
 }

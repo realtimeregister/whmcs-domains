@@ -10,6 +10,7 @@ class Domain
         public readonly string $name,
         public readonly string $tld,
         public readonly array $nameservers = [],
+        public readonly ?int $id = null,
         public readonly ?Contact $registrant = null,
         public readonly ?Contact $admin = null,
         public readonly ?Contact $tech = null,
@@ -44,6 +45,7 @@ class Domain
                 $params['ns5'] ?? null,
                 ]
             ),
+            id: $params['id'] ?: ($params['domainid'] ?? null),
             registrant: Contact::fromWhmcs(ContactType::Registrant, $params),
             admin: Contact::fromWhmcs(ContactType::Admin, $params),
             tech: Contact::fromWhmcs(ContactType::Tech, $params),

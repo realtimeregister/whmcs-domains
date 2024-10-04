@@ -12,6 +12,7 @@ use SandwaveIo\RealtimeRegister\Domain\Enum\DomainStatusEnum;
 use SandwaveIo\RealtimeRegister\Exceptions\BadRequestException;
 use SandwaveIo\RealtimeRegister\Exceptions\ForbiddenException;
 use SandwaveIo\RealtimeRegister\Exceptions\UnauthorizedException;
+use Illuminate\Database\Capsule\Manager as Capsule;
 
 class Sync extends Action
 {
@@ -36,9 +37,9 @@ class Sync extends Action
             throw new DomainNotFoundException($exception);
         }
 
-        if ($domain->autoRenewPeriod < 12 && $domain->autoRenew) {
-            $whmcsDomain = Domain::query()->where('domain', $request->domain->name)->firstOrFail();
+        $whmcsDomain = Domain::query()->where('domain', $request->domain->domainName())->firstOrFail();
 
+        if ($domain->autoRenewPeriod < 12 && $domain->autoRenew) {
             if (strtotime($whmcsDomain->expirydate) >= strtotime($whmcsDomain->nextduedate)) {
                 return [];
             }
@@ -70,12 +71,28 @@ class Sync extends Action
         $status = WhmcsDomainStatus::fromDomainDetails($domain);
 
         if (
-            !in_array($status, [WhmcsDomainStatus::Active, WhmcsDomainStatus::Expired, WhmcsDomainStatus::Redemption])
+            !in_array(
+                $status,
+                [
+                    WhmcsDomainStatus::Active,
+                    WhmcsDomainStatus::Expired,
+                    WhmcsDomainStatus::Redemption,
+                    WhmcsDomainStatus::Pending
+                ]
+            )
         ) {
             throw new Exception(sprintf("Domain status %s", $status->value));
         }
 
-        $values[$status->value] = true;
+        if ($status->value === WhmcsDomainStatus::Pending->value) {
+            $values['active'] = false;
+            $values['cancelled'] = false;
+            $values['transferredAway'] = false;
+
+            Capsule::table('tbldomains')->where('id', $whmcsDomain->id)->update(['status' => 'Pending']);
+        } else {
+            $values[strtolower($status->value)] = true;
+        }
 
         try {
             if (function_exists('realtimeregister_after_Sync')) {
@@ -118,6 +135,15 @@ class Sync extends Action
 
         if (in_array(DomainStatusEnum::STATUS_PENDING_TRANSFER, $statuses)) {
             return 'Pending Transfer';
+        }
+
+        if (
+            array_intersect(
+                [DomainStatusEnum::STATUS_PENDING_VALIDATION, DomainStatusEnum::STATUS_PENDING_UPDATE],
+                $statuses
+            )
+        ) {
+            return 'Pending';
         }
 
         if (in_array(DomainStatusEnum::STATUS_EXPIRED, $statuses)) {

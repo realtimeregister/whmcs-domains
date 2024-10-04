@@ -46,6 +46,7 @@ class AdminClientDomainsTabFields extends Hook
             # ignore
         }
 
+        $rtrDomain = null;
         try {
             $rtrDomain = App::client()->domains->get($domainName);
 
@@ -75,20 +76,30 @@ class AdminClientDomainsTabFields extends Hook
             $domainInfo->registrar === 'realtimeregister'
         ) {
             $script = null;
-            if ($domainInfo->status === 'Active' && $metaData->expiryDateOffset > 0) {
+            if ($domainInfo->status === 'Active' && $metaData->expiryDateOffset > 0 && $rtrDomain) {
                 $script = /** @lang JavaScript */
                     '
-                    let newElm = document.createElement("i");
-                    newElm.classList.add("fas","fa-info-circle");
-                    newElm.style.marginLeft = "0.5em";
-                    newElm.onclick = function() {
-                        alert("Expiry offset is ' . number_format($metaData->expiryDateOffset)
-                        . ' seconds, which translates to '
-                        . \Carbon\CarbonInterval::seconds($metaData->expiryDateOffset)->cascade()->forHumans() . '");
-                    };
-                    let elm = document.getElementById("inputExpiryDate");
-                    elm.style.display = "inherit";
-                    elm.after(newElm);';
+                let newElm = document.createElement("i");
+                newElm.classList.add("fas","fa-info-circle");
+                newElm.style.marginLeft = "0.5em";
+                newElm.id = "expiryOffsetInformation";
+                newElm.setAttribute("data-toggle", "tooltip");
+                newElm.title = "Expiry offset is ' . number_format($metaData->expiryDateOffset)
+                    . ' seconds, which translates to '
+                    . \Carbon\CarbonInterval::seconds($metaData->expiryDateOffset)->cascade()->forHumans()
+                    . '. The renewal/delete window is '
+                    . \Carbon\Carbon::parse(
+                        ($rtrDomain->expiryDate->getTimestamp() - $metaData->expiryDateOffset)
+                    )->toDateTimeString()
+                    . ', the registry expirydate is '
+                    . \Carbon\Carbon::parse($rtrDomain->expiryDate->getTimestamp())->toDateTimeString() . '";
+                let elm = document.getElementById("inputExpiryDate");
+                elm.style.display = "inherit";
+                elm.after(newElm);
+                
+                $(function () {
+                    $("#expiryOffsetInformation").tooltip();
+                });';
             } elseif (
                 /*
                  * See if we need the IDProtect button at all, there is no other way to hide this button via WHMCS

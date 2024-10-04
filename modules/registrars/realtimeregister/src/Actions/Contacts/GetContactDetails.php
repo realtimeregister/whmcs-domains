@@ -8,6 +8,7 @@ use RealtimeRegister\App;
 use RealtimeRegister\Exceptions\DomainNotFoundException;
 use RealtimeRegister\Models\Whmcs\Contact as ContactModel;
 use RealtimeRegister\Request;
+use RealtimeRegister\Services\LogService;
 use SandwaveIo\RealtimeRegister\Domain\DomainContact;
 use SandwaveIo\RealtimeRegister\Domain\DomainDetails;
 use SandwaveIo\RealtimeRegister\Domain\Enum\DomainContactRoleEnum;
@@ -22,29 +23,30 @@ class GetContactDetails extends Action
     {
         try {
             $domain = $this->domainInfo($request);
-
-            $handles = json_encode(
-                [
-                ContactModel::ROLE_REGISTRANT => $this->fetchId($domain, DomainContactRoleEnum::ROLE_REGISTRANT),
-                ContactModel::ROLE_ADMIN => $this->fetchId($domain, DomainContactRoleEnum::ROLE_ADMIN),
-                ContactModel::ROLE_TECH => $this->fetchId($domain, DomainContactRoleEnum::ROLE_TECH),
-                ContactModel::ROLE_BILLING => $this->fetchId($domain, DomainContactRoleEnum::ROLE_BILLING)
-                ]
-            );
-
-            App::assets()->prependHead("<script>let contact_ids = $handles;</script>");
-
-            return array_filter(
-                [
-                ContactModel::ROLE_REGISTRANT => $this->fetchContact($domain, DomainContactRoleEnum::ROLE_REGISTRANT),
-                ContactModel::ROLE_ADMIN => $this->fetchContact($domain, DomainContactRoleEnum::ROLE_ADMIN),
-                ContactModel::ROLE_TECH => $this->fetchContact($domain, DomainContactRoleEnum::ROLE_TECH),
-                ContactModel::ROLE_BILLING => $this->fetchContact($domain, DomainContactRoleEnum::ROLE_BILLING)
-                ]
-            );
-        } catch (BadRequestException | UnauthorizedException $exception) {
-            throw new DomainNotFoundException($exception);
+        } catch (BadRequestException | DomainNotFoundException | UnauthorizedException $e) {
+            LogService::logError($e);
+            return ['error' => sprintf('Error with domaininformation lookup: %s', $e->getMessage())];
         }
+
+        $handles = json_encode(
+            [
+            ContactModel::ROLE_REGISTRANT => $this->fetchId($domain, DomainContactRoleEnum::ROLE_REGISTRANT),
+            ContactModel::ROLE_ADMIN => $this->fetchId($domain, DomainContactRoleEnum::ROLE_ADMIN),
+            ContactModel::ROLE_TECH => $this->fetchId($domain, DomainContactRoleEnum::ROLE_TECH),
+            ContactModel::ROLE_BILLING => $this->fetchId($domain, DomainContactRoleEnum::ROLE_BILLING)
+            ]
+        );
+
+        App::assets()->prependHead("<script>let contact_ids = $handles;</script>");
+
+        return array_filter(
+            [
+            ContactModel::ROLE_REGISTRANT => $this->fetchContact($domain, DomainContactRoleEnum::ROLE_REGISTRANT),
+            ContactModel::ROLE_ADMIN => $this->fetchContact($domain, DomainContactRoleEnum::ROLE_ADMIN),
+            ContactModel::ROLE_TECH => $this->fetchContact($domain, DomainContactRoleEnum::ROLE_TECH),
+            ContactModel::ROLE_BILLING => $this->fetchContact($domain, DomainContactRoleEnum::ROLE_BILLING)
+            ]
+        );
     }
 
     protected function fetchId(DomainDetails $domain, string $role): ?string

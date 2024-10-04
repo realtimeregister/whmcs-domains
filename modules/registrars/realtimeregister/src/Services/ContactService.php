@@ -390,48 +390,52 @@ class ContactService
      */
     public static function contactCreate(DataObject $rtrContact, ?TLDInfo $tldInfo, ?array $properties): string
     {
-        // Generate unique contact handle
-        $handle = uniqid(App::registrarConfig()->contactHandlePrefix() ?: 'srs_');
+        if (App::registrarConfig()->customerHandle() !== null && App::registrarConfig()->apiKey() !== null) {
+            // Generate unique contact handle
+            $handle = uniqid(App::registrarConfig()->contactHandlePrefix() ?: 'srs_');
 
-        // Filter empty values
-        $rtrContact = array_filter($rtrContact->getArrayCopy());
+            // Filter empty values
+            $rtrContact = array_filter($rtrContact->getArrayCopy());
 
-        $rtrContact['customer'] = App::registrarConfig()->customerHandle();
-        $rtrContact['handle'] = $handle;
+            $rtrContact['customer'] = App::registrarConfig()->customerHandle();
+            $rtrContact['handle'] = $handle;
 
-        // Set brand
-        $params = self::getDefaultParams();
-        if (!empty($params['brand'])) {
-            $rtrContact['brand'] = $params['brand'];
-        }
-
-        // Create contact at RTR
-        App::client()->contacts->create(...$rtrContact);
-
-        // Add properties
-        if ($properties) {
-            try {
-                App::client()->contacts->addProperties(
-                    customer: App::registrarConfig()->customerHandle(),
-                    handle: $handle,
-                    registry: $tldInfo->provider,
-                    properties: $properties
-                );
-            } catch (\Exception $ex) {
-                try {
-                    App::client()->contacts->delete(
-                        customer: App::registrarConfig()->customerHandle(),
-                        handle: $handle
-                    );
-                } catch (\Exception) {
-                    // ignore
-                }
-
-                throw $ex;
+            // Set brand
+            $params = self::getDefaultParams();
+            if (!empty($params['brand'])) {
+                $rtrContact['brand'] = $params['brand'];
             }
-        }
 
-        return $handle;
+            // Create contact at RTR
+            App::client()->contacts->create(...$rtrContact);
+
+            // Add properties
+            if ($properties) {
+                try {
+                    App::client()->contacts->addProperties(
+                        customer: App::registrarConfig()->customerHandle(),
+                        handle: $handle,
+                        registry: $tldInfo->provider,
+                        properties: $properties
+                    );
+                } catch (\Exception $ex) {
+                    try {
+                        App::client()->contacts->delete(
+                            customer: App::registrarConfig()->customerHandle(),
+                            handle: $handle
+                        );
+                    } catch (\Exception) {
+                        LogService::logError($ex);
+                    }
+
+                    throw $ex;
+                }
+            }
+
+            return $handle;
+        } else {
+            throw new \Exception('No credentials where available to do this action!');
+        }
     }
 
     /**

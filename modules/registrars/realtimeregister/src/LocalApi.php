@@ -111,7 +111,7 @@ class LocalApi
 
         $data = localAPI('GetClientsDetails', ['clientid' => $clientId])['client'];
 
-        $result['phonenumberformatted'] = WhmcsContact::formatE164a($data['phonenumber']);
+        $data['phonenumberformatted'] = WhmcsContact::formatE164a($data['phonenumber']);
         return new DataObject($data);
     }
 

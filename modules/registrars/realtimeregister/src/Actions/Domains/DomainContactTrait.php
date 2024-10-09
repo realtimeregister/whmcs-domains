@@ -32,7 +32,7 @@ trait DomainContactTrait
             return;
         }
 
-        if ($currentProperties != $newProperties) {
+        if (!empty($currentProperties) && !$currentProperties != $newProperties) {
             App::client()->contacts->updateProperties($customer, $handle, $tldInfo->provider, $newProperties);
         }
     }

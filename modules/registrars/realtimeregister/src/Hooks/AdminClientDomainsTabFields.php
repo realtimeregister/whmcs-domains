@@ -75,7 +75,11 @@ class AdminClientDomainsTabFields extends Hook
         if (
             $domainInfo->registrar === 'realtimeregister'
         ) {
-            $script = null;
+            // ID protection button already visible at registrar commands
+            $script = /** @lang JavaScript */
+                '$(function(){
+                    $("input[name=\'idprotection\']").parent("div").parent("div").parent("label").hide();
+                })';
             if ($domainInfo->status === 'Active' && $metaData->expiryDateOffset > 0 && $rtrDomain) {
                 $script = /** @lang JavaScript */
                     '

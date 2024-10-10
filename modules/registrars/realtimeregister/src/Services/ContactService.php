@@ -63,7 +63,7 @@ class ContactService
         ];
 
         if ($organizationAllowed) {
-            $realtimeRegisterContact['organization'] = $whmcsContact['organization'];
+            $realtimeRegisterContact['organization'] = $whmcsContact['companyname'];
         }
 
         return new DataObject($realtimeRegisterContact);

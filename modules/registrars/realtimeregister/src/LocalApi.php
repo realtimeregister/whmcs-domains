@@ -101,7 +101,7 @@ class LocalApi
                 /** @var DataObject $result */
                 $result = $contact->first();
 
-                $result['phonenumberformatted'] = WhmcsContact::formatE164a($result['phonenumber']);
+                $result['phonenumberformatted'] = WhmcsContact::formatE164a($result['phonenumber'], $result['country']);
 
                 return new DataObject($result);
             }
@@ -111,7 +111,7 @@ class LocalApi
 
         $data = localAPI('GetClientsDetails', ['clientid' => $clientId])['client'];
 
-        $data['phonenumberformatted'] = WhmcsContact::formatE164a($data['phonenumber']);
+        $data['phonenumberformatted'] = WhmcsContact::formatE164a($data['phonenumber'], $data['country']);
         return new DataObject($data);
     }
 

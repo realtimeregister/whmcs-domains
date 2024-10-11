@@ -63,10 +63,18 @@ $('#propertiesModal').on('shown.bs.modal', function (e) {
 
             if (res.result === 'success') {
                 $('#propertiesModal').modal('hide');
+                $('.bg-danger').hide();
+                $('.handles-message').hide();
+                $('.error-handles').hide();
+                $('.error-message').hide();
                 closeButtonCustomProperties.removeEventListener('click', onClose);
+            } else if (res.handles) {
+                $('.bg-danger').show();
+                $('.handles-message').show();
+                $('.error-handles').show().text(res.handles.join(', '))
             } else {
-                let item = document.querySelector('.bg-danger');
-                item.style = 'display:block; padding: 15px';
+                $('.bg-danger').show();
+                $('.error-message').show();
             }
         });
     }

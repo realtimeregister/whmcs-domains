@@ -41,9 +41,9 @@ class ConfigArray
                 'Type' => 'none',
                 'Description' => '<button class="btn btn-xs check-connection">Check Connection</button>
                     <span class="credentials-result"></span>
-                    <span class="btn btn-xs info rtr-custom-properties" 
+                    <button class="btn btn-xs info rtr-custom-properties" type="button" 
                         data-toggle="modal" data-target="#propertiesModal">Custom properties override
-                    </span>',
+                    </button>',
             ],
             /**
              * General settings.

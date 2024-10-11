@@ -127,7 +127,8 @@ class CustomHandles extends Hook
         return $specialMetadata;
     }
 
-    private static function checkHandleExists(array $customHandles) : array {
+    private static function checkHandleExists(array $customHandles): array
+    {
         $handles = array_reduce(
             array_values($customHandles),
             function ($acc, $contactHandles) {

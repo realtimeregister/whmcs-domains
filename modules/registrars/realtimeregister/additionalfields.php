@@ -23,14 +23,16 @@ use RealtimeRegister\Services\LogService;
 use RealtimeRegister\Services\MetadataService;
 
 $tlds = [];
+$languageCodes = [];
 
 if (isset($_SESSION['cart']['domains'])) {
-    $tlds = array_map(
-        function ($domain) {
-            return MetadataService::getTld($domain['domain']);
-        },
-        $_SESSION['cart']['domains']
-    );
+    foreach($_SESSION['cart']['domains'] as $domain) {
+        $tld = MetadataService::getTld($domain['domain']);
+        if ($domain['idnLanguage']) {
+            $languageCodes[$tld] = $domain['idnLanguage'];
+        }
+        $tlds[] = $tld;
+    }
 }
 
 if (!empty($_POST['domain']) && is_string($_POST['domain'])) {
@@ -49,7 +51,7 @@ $tlds = array_unique($tlds);
 
 foreach ($tlds as $tld) {
     try {
-        $additional = (new MetadataService($tld))->getTldAdditionalFields();
+        $additional = (new MetadataService($tld))->getTldAdditionalFields($languageCodes[$tld]);
     } catch (\Exception $e) {
         LogService::logError($e, "Error while getting additional fields for '" . $tld . "' for Realtime Register:");
         $additional = [];

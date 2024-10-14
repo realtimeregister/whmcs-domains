@@ -8,7 +8,6 @@ use TrueBV\Punycode;
 
 class OrderDomainPricingOverride extends Hook
 {
-
     public function __invoke(DataObject $vars)
     {
         $punyCode = new Punycode();

@@ -7,6 +7,7 @@ use RealtimeRegister\App;
 use RealtimeRegister\Entities\DataObject;
 use RealtimeRegister\Enums\WhmcsDomainStatus;
 use RealtimeRegister\Models\Whmcs\Domain;
+use RealtimeRegister\Services\LogService;
 use RealtimeRegister\Services\MetadataService;
 
 class AdminClientDomainsTabFields extends Hook
@@ -69,14 +70,23 @@ class AdminClientDomainsTabFields extends Hook
             $fields = array_merge(['' => '<h1>Information from Realtime Register:</h1>'], $fields);
         }
 
-        $metaData = (new MetadataService($domainInfo->domain))->getMetadata();
+        $metaData = null;
+        try {
+            $metaData = (new MetadataService($domainInfo->domain))->getMetadata();
+        } catch (\Exception $e) {
+            LogService::logError($e);
+        }
 
         // Some special features, which can only be done by using javascript
         if (
             $domainInfo->registrar === 'realtimeregister'
         ) {
-            $script = null;
-            if ($domainInfo->status === 'Active' && $metaData->expiryDateOffset > 0 && $rtrDomain) {
+            // ID protection button already visible at registrar commands
+            $script = /** @lang JavaScript */
+                '$(function(){
+                    $("input[name=\'idprotection\']").parent("div").parent("div").parent("label").hide();
+                });';
+            if ($metaData && $domainInfo->status === 'Active' && $metaData->expiryDateOffset > 0 && $rtrDomain) {
                 $script = /** @lang JavaScript */
                     '
                 let newElm = document.createElement("i");
@@ -113,7 +123,7 @@ class AdminClientDomainsTabFields extends Hook
                     ]
                 )
             ) {
-                $script = /** @lang JavaScript */
+                $script .= /** @lang JavaScript */
                     'let elm = document.querySelector(\'[data-target="#modalIdProtectToggle"]\');
                 elm.style.display = "none";';
             }

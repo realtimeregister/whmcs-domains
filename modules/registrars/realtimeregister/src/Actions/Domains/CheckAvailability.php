@@ -43,7 +43,6 @@ class CheckAvailability extends Action
             } else {
                 $tlds[] = $tld;
             }
-
         } else {
             // Add centralnic tld, when needed
             $tlds = array_keys($tldPricing);

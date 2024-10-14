@@ -68,7 +68,7 @@ class AdminCustomButtonArray extends Action
         return $adminButtons;
     }
 
-    public static function handleException(\Throwable $exception, array $params) : array
+    public static function handleException(\Throwable $exception, array $params): array
     {
         LogService::logError($exception);
         return [

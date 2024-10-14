@@ -76,7 +76,7 @@ class AdminClientDomainsTabFields extends Hook
         } catch (\Exception $e) {
             LogService::logError($e);
         }
-        
+
         // Some special features, which can only be done by using javascript
         if (
             $domainInfo->registrar === 'realtimeregister'

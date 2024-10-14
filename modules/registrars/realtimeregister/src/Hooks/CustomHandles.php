@@ -8,6 +8,7 @@ use RealtimeRegister\Entities\DataObject;
 use RealtimeRegister\Enums\ScriptLocationType;
 use RealtimeRegister\Models\Whmcs\Registrars;
 use RealtimeRegister\Services\MetadataService;
+use SandwaveIo\RealtimeRegister\Exceptions\BadRequestException;
 
 class CustomHandles extends Hook
 {
@@ -19,6 +20,12 @@ class CustomHandles extends Hook
         if (in_array('Configure Custom Client Fields', $vars->get('admin_perms'))) {
             // check if post, handle it, or add script & render template
             if ($_POST['action'] === 'propertiesMutate') {
+                $nonExistingHandles = self::checkHandleExists($_POST['prop']);
+                if (!empty($nonExistingHandles)) {
+                    echo json_encode(['result' => 'error', 'handles' => $nonExistingHandles]);
+                    die;
+                }
+
                 Registrars::updateOrCreate(
                     [
                         'registrar' => 'realtimeregister',
@@ -118,5 +125,36 @@ class CustomHandles extends Hook
             }
         }
         return $specialMetadata;
+    }
+
+    private static function checkHandleExists(array $customHandles): array
+    {
+        $handles = array_reduce(
+            array_values($customHandles),
+            function ($acc, $contactHandles) {
+                if ($contactHandles['techContacts'] && !in_array($contactHandles['techContacts'], $acc)) {
+                    $acc[] = $contactHandles['techContacts'];
+                }
+                if ($contactHandles['adminContacts'] && !in_array($contactHandles['adminContacts'], $acc)) {
+                    $acc[] = $contactHandles['adminContacts'];
+                }
+                if ($contactHandles['billingContacts'] && !in_array($contactHandles['billingContacts'], $acc)) {
+                    $acc[] = $contactHandles['billingContacts'];
+                }
+                return $acc;
+            },
+            []
+        );
+
+        $nonExistingHandles = [];
+
+        foreach ($handles as $handle) {
+            try {
+                App::client()->contacts->get(App::registrarConfig()->customerHandle(), $handle);
+            } catch (BadRequestException $e) {
+                $nonExistingHandles[] = $handle;
+            }
+        }
+        return $nonExistingHandles;
     }
 }

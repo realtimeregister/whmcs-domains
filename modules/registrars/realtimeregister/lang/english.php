@@ -51,9 +51,11 @@ $_LANG['rtr_languagecode_description'] = '';
 
 $_LANG['rtr']['custom_handles']['please_wait'] = 'Please wait while we load the content..';
 $_LANG['rtr']['custom_handles']['custom_properties'] = 'Custom properties';
+$_LANG['rtr']['custom_handles']['info'] = 'Custom handle override, the handles must exist at Realtime Register';
 $_LANG['rtr']['custom_handles']['close'] = 'Close';
 $_LANG['rtr']['custom_handles']['save'] = 'Save';
 $_LANG['rtr']['custom_handles']['error'] = 'Something went wrong, please try again after reviewing your data';
+$_LANG['rtr']['custom_handles']['handles'] = 'The following handles do not exist: ';
 $_LANG['rtr']['update_notification']['update_available']
     = 'There is an update available for the Realtime Register plugin.';
 $_LANG['rtr']['update_notification']['prerelease'] = 'Prerelease';

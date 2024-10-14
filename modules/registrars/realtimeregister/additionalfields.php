@@ -26,7 +26,7 @@ $tlds = [];
 $languageCodes = [];
 
 if (isset($_SESSION['cart']['domains'])) {
-    foreach($_SESSION['cart']['domains'] as $domain) {
+    foreach ($_SESSION['cart']['domains'] as $domain) {
         $tld = MetadataService::getTld($domain['domain']);
         if ($domain['idnLanguage']) {
             $languageCodes[$tld] = $domain['idnLanguage'];

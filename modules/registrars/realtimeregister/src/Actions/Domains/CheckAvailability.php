@@ -24,9 +24,20 @@ class CheckAvailability extends Action
 
         $tlds = [];
         $originalQuery = $_REQUEST['domain'];
+        $tldPricing = App::localApi()->getTldPricing();
 
         if ($originalQuery != $request->params['searchTerm']) {
             $tld = MetadataService::getTld($originalQuery);
+
+            if (!in_array($tld, array_keys($tldPricing))) {
+                $results = new ResultsList();
+                $searchResult = new SearchResult($request->get('searchTerm'), $tld);
+
+                $searchResult->setStatus(SearchResult::STATUS_UNKNOWN);
+                $results->append($searchResult);
+                return $results;
+            }
+
             if (Config::get('tldinfomapping.' . $tld) === 'centralnic') {
                 $tlds[] = $tld . '.centralnic';
             } else {
@@ -34,7 +45,6 @@ class CheckAvailability extends Action
             }
         } else {
             // Add centralnic tld, when needed
-            $tldPricing = App::localApi()->getTldPricing();
             $tlds = array_keys($tldPricing);
             foreach ($tlds as $key => $tld) {
                 if (Config::get('tldinfomapping.' . $tld) === 'centralnic') {
@@ -59,7 +69,7 @@ class CheckAvailability extends Action
                 match ($result->getStatus()) {
                     IsProxyDomain::STATUS_AVAILABLE => SearchResult::STATUS_NOT_REGISTERED,
                     IsProxyDomain::STATUS_NOT_AVAILABLE => SearchResult::STATUS_REGISTERED,
-                    default => SearchResult::STATUS_TLD_NOT_SUPPORTED
+                    default => SearchResult::STATUS_UNKNOWN
                 }
             );
 

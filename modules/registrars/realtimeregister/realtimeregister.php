@@ -93,7 +93,11 @@ function realtimeregister_Sync(array $params)
 
 function realtimeregister_AdminCustomButtonArray(array $params): array
 {
-    return App::dispatch(\RealtimeRegister\Hooks\AdminCustomButtonArray::class, $params);
+    return App::dispatch(
+        \RealtimeRegister\Hooks\AdminCustomButtonArray::class,
+        $params,
+        ['\RealtimeRegister\Hooks\AdminCustomButtonArray', 'handleException']
+    );
 }
 
 function realtimeregister_RegisterDomain(array $params)

@@ -16,37 +16,37 @@ trait DomainContactTrait
     /**
      * Add properties to contact if necessary
      */
-    protected static function addProperties(Request $request, string $handle, TLDInfo $tldInfo): void
+    protected static function addProperties(array $contactProperties, string $handle, TLDInfo $tldInfo): void
     {
         $customer = App::registrarConfig()->customerHandle();
-        if (empty($request->domain->contactProperties)) {
+        if (empty($contactProperties)) {
             return;
         }
 
         $currentContact = App::client()->contacts->get($customer, $handle);
         $currentProperties = ($currentContact->properties ?? [])[$tldInfo->provider] ?? [];
-        $newProperties = self::getNewProperties($request, $tldInfo->metadata);
+        $newProperties = self::getNewProperties($contactProperties, $tldInfo->metadata);
 
         if (empty($currentProperties) && !empty($newProperties)) {
             App::client()->contacts->addProperties($customer, $handle, $tldInfo->provider, $newProperties);
             return;
         }
 
-        if (!empty($currentProperties) && !$currentProperties != $newProperties) {
+        if (!empty($currentProperties) && $currentProperties != $newProperties) {
             App::client()->contacts->updateProperties($customer, $handle, $tldInfo->provider, $newProperties);
         }
     }
 
-    protected static function getNewProperties(Request $request, TLDMetaData $metadata): array
+    protected static function getNewProperties(array $contactProperties, TLDMetaData $metadata): array
     {
-        $contactProperties = $metadata->contactProperties?->toArray();
-        if (!$contactProperties) {
+        $metadataProperties = $metadata->contactProperties?->toArray();
+        if (!$metadataProperties) {
             return [];
         }
-        $tldProperties = array_combine(array_column($contactProperties, 'name'), $contactProperties);
+        $tldProperties = array_combine(array_column($metadataProperties, 'name'), $metadataProperties);
         $properties = [];
 
-        foreach ($request->domain->contactProperties as $property => $value) {
+        foreach ($contactProperties as $property => $value) {
             if ($property == 'languageCode' || !isset($tldProperties[$property])) {
                 continue;
             }
@@ -80,7 +80,7 @@ trait DomainContactTrait
             organizationAllowed: $metadata->registrant->organizationAllowed
         );
 
-        $this->addProperties($request, $registrant, $tldInfo);
+        self::addProperties($request->domain->contactProperties, $registrant, $tldInfo);
 
         $customHandles = $this->getCustomHandles();
         foreach (self::$CONTACT_ROLES as $role => $name) {

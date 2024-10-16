@@ -14,6 +14,7 @@ use RealtimeRegister\Actions\Domains\Sync;
 use RealtimeRegister\Actions\Domains\TransferWithBillables;
 use RealtimeRegister\App;
 use RealtimeRegister\ConfigArray;
+use RealtimeRegister\Exceptions\ActionFailedException;
 use WHMCS\Domains\DomainLookup\ResultsList;
 use WHMCS\Domains\DomainLookup\SearchResult;
 
@@ -63,6 +64,7 @@ function realtimeregister_GetDomainInformation(array $params)
 
 function realtimeregister_SaveNameservers(array $params)
 {
+    return ActionFailedException::forException( new \Exception("fuckup"))->response("a");
     return App::dispatch(SaveNameservers::class, $params);
 }
 

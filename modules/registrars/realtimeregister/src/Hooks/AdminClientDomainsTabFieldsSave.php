@@ -17,14 +17,13 @@ use TrueBV\Punycode;
 
 class AdminClientDomainsTabFieldsSave extends Hook
 {
-
     use DomainTrait;
     use DomainContactTrait;
 
     /**
      * @throws \Exception
      */
-    public function __invoke(DataObject $vars) : void
+    public function __invoke(DataObject $vars): void
     {
         $domain = App::localApi()->domain($vars['userid'], $vars['id']);
         $metadata = (new MetadataService((new Punycode())->encode($domain['domainname'])));
@@ -35,7 +34,8 @@ class AdminClientDomainsTabFieldsSave extends Hook
         }
 
         $newProperties = array_combine(
-            array_column($metadataProperties, 'name'), $vars['domainfield']
+            array_column($metadataProperties, 'name'),
+            $vars['domainfield']
         );
 
         $order = App::localApi()->order($domain['orderid']);
@@ -46,17 +46,18 @@ class AdminClientDomainsTabFieldsSave extends Hook
         )?->handle;
 
         if ($handle) {
-           try {
-             self::addProperties($newProperties, $handle, $metadata->getAll());
-           } catch (\Exception $e) {
-               LogService::logError($e);
-               self::revertChanges($handle, $metadata->getAll(), $vars['id']);
-               throw $e;
-           }
+            try {
+                self::addProperties($newProperties, $handle, $metadata->getAll());
+            } catch (\Exception $e) {
+                LogService::logError($e);
+                self::revertChanges($handle, $metadata->getAll(), $vars['id']);
+                throw $e;
+            }
         }
     }
 
-    private static function revertChanges($handle, $tldInfo, $domainId): void {
+    private static function revertChanges($handle, $tldInfo, $domainId): void
+    {
         $currentContact = App::client()->contacts->get(App::registrarConfig()->customerHandle(), $handle);
         $currentProperties = ($currentContact->properties ?? [])[$tldInfo->provider] ?? [];
         foreach ($currentProperties as $key => $value) {

@@ -64,7 +64,6 @@ function realtimeregister_GetDomainInformation(array $params)
 
 function realtimeregister_SaveNameservers(array $params)
 {
-    return ActionFailedException::forException( new \Exception("fuckup"))->response("a");
     return App::dispatch(SaveNameservers::class, $params);
 }
 

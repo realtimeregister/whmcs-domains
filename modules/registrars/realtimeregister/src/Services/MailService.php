@@ -1,6 +1,6 @@
 <?php
 
-namespace RealtimeRegister\Services;
+namespace RealtimeRegisterDomains\Services;
 
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;

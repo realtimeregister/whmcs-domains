@@ -1,16 +1,16 @@
 <?php
 
-namespace RealtimeRegister\Hooks;
+namespace RealtimeRegisterDomains\Hooks;
 
-use RealtimeRegister\App;
-use RealtimeRegister\Entities\DataObject;
-use RealtimeRegister\Enums\ScriptLocationType;
-use RealtimeRegister\Models\Whmcs\Configuration;
-use RealtimeRegister\Models\Whmcs\Currencies;
-use RealtimeRegister\Models\Whmcs\DomainPricing;
-use RealtimeRegister\Models\Whmcs\Pricing;
-use RealtimeRegister\Models\Whmcs\Registrars;
-use RealtimeRegister\Services\ShoppingCartService;
+use RealtimeRegisterDomains\App;
+use RealtimeRegisterDomains\Entities\DataObject;
+use RealtimeRegisterDomains\Enums\ScriptLocationType;
+use RealtimeRegisterDomains\Models\Whmcs\Configuration;
+use RealtimeRegisterDomains\Models\Whmcs\Currencies;
+use RealtimeRegisterDomains\Models\Whmcs\DomainPricing;
+use RealtimeRegisterDomains\Models\Whmcs\Pricing;
+use RealtimeRegisterDomains\Models\Whmcs\Registrars;
+use RealtimeRegisterDomains\Services\ShoppingCartService;
 
 class Adac extends Hook
 {

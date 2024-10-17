@@ -1,11 +1,11 @@
 <?php
 
-namespace RealtimeRegister\Actions\Contacts;
+namespace RealtimeRegisterDomains\Actions\Contacts;
 
-use RealtimeRegister\Actions\Action;
-use RealtimeRegister\App;
-use RealtimeRegister\Request;
-use SandwaveIo\RealtimeRegister\Domain\Enum\DomainStatusEnum;
+use RealtimeRegisterDomains\Actions\Action;
+use RealtimeRegisterDomains\App;
+use RealtimeRegisterDomains\Request;
+use RealtimeRegister\Domain\Enum\DomainStatusEnum;
 
 class ResendValidation extends Action
 {

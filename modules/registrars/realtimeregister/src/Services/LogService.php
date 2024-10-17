@@ -1,9 +1,9 @@
 <?php
 
-namespace RealtimeRegister\Services;
+namespace RealtimeRegisterDomains\Services;
 
 use Carbon\Carbon;
-use RealtimeRegister\Models\Whmcs\ErrorLog;
+use RealtimeRegisterDomains\Models\Whmcs\ErrorLog;
 
 class LogService
 {

@@ -1,11 +1,11 @@
 <?php
 
-namespace RealtimeRegister\Actions\Domains;
+namespace RealtimeRegisterDomains\Actions\Domains;
 
-use RealtimeRegister\Actions\Action;
-use RealtimeRegister\App;
-use RealtimeRegister\Request;
-use SandwaveIo\RealtimeRegister\Exceptions\RealtimeRegisterClientException;
+use RealtimeRegisterDomains\Actions\Action;
+use RealtimeRegisterDomains\App;
+use RealtimeRegisterDomains\Request;
+use RealtimeRegister\Exceptions\RealtimeRegisterClientException;
 
 class SaveNameservers extends Action
 {

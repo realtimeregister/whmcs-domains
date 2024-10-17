@@ -1,9 +1,9 @@
 <?php
 
-namespace RealtimeRegister\Services;
+namespace RealtimeRegisterDomains\Services;
 
-use RealtimeRegister\App;
-use RealtimeRegister\Models\Whmcs\Currencies;
+use RealtimeRegisterDomains\App;
+use RealtimeRegisterDomains\Models\Whmcs\Currencies;
 use Illuminate\Database\Capsule\Manager as Capsule;
 
 class ShoppingCartService

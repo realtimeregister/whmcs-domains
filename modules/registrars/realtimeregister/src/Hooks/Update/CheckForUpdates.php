@@ -1,10 +1,10 @@
 <?php
 
-namespace RealtimeRegister\Hooks\Update;
+namespace RealtimeRegisterDomains\Hooks\Update;
 
-use RealtimeRegister\Entities\DataObject;
-use RealtimeRegister\Hooks\Hook;
-use RealtimeRegister\Services\UpdateService;
+use RealtimeRegisterDomains\Entities\DataObject;
+use RealtimeRegisterDomains\Hooks\Hook;
+use RealtimeRegisterDomains\Services\UpdateService;
 
 class CheckForUpdates extends Hook
 {

@@ -1,19 +1,19 @@
 <?php
 
-namespace RealtimeRegister\Actions\Domains;
+namespace RealtimeRegisterDomains\Actions\Domains;
 
 use Illuminate\Database\Capsule\Manager as Capsule;
-use RealtimeRegister\App;
-use RealtimeRegister\Entities\DataObject;
-use RealtimeRegister\Models\RealtimeRegister\ContactMapping;
-use RealtimeRegister\Models\Whmcs\Configuration;
-use RealtimeRegister\Models\Whmcs\Domain;
-use RealtimeRegister\Models\Whmcs\Orders;
-use RealtimeRegister\PunyCode;
-use RealtimeRegister\Services\ContactService;
-use SandwaveIo\RealtimeRegister\Domain\Billable;
-use SandwaveIo\RealtimeRegister\Domain\DomainQuote;
-use SandwaveIo\RealtimeRegister\Domain\TLDMetaData;
+use RealtimeRegisterDomains\App;
+use RealtimeRegisterDomains\Entities\DataObject;
+use RealtimeRegisterDomains\Models\RealtimeRegister\ContactMapping;
+use RealtimeRegisterDomains\Models\Whmcs\Configuration;
+use RealtimeRegisterDomains\Models\Whmcs\Domain;
+use RealtimeRegisterDomains\Models\Whmcs\Orders;
+use RealtimeRegisterDomains\PunyCode;
+use RealtimeRegisterDomains\Services\ContactService;
+use RealtimeRegister\Domain\Billable;
+use RealtimeRegister\Domain\DomainQuote;
+use RealtimeRegister\Domain\TLDMetaData;
 
 trait DomainTrait
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace RealtimeRegister\Hooks;
+namespace RealtimeRegisterDomains\Hooks;
 
 trait FixAndDecodeJsonTrait
 {

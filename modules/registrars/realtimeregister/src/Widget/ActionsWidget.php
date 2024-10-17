@@ -1,8 +1,8 @@
 <?php
 
-namespace RealtimeRegister\Widget;
+namespace RealtimeRegisterDomains\Widget;
 
-use RealtimeRegister\Services\TemplateService;
+use RealtimeRegisterDomains\Services\TemplateService;
 
 class ActionsWidget extends \WHMCS\Module\AbstractWidget
 {

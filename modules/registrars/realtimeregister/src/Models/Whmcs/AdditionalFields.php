@@ -1,6 +1,6 @@
 <?php
 
-namespace RealtimeRegister\Models\Whmcs;
+namespace RealtimeRegisterDomains\Models\Whmcs;
 
 use Illuminate\Database\Eloquent\Model;
 

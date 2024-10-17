@@ -1,17 +1,17 @@
 <?php
 
-namespace RealtimeRegister\Actions\Domains;
+namespace RealtimeRegisterDomains\Actions\Domains;
 
 use Exception;
-use RealtimeRegister\Actions\Action;
-use RealtimeRegister\Enums\WhmcsDomainStatus;
-use RealtimeRegister\Exceptions\DomainNotFoundException;
-use RealtimeRegister\Models\Whmcs\Domain;
-use RealtimeRegister\Request;
-use SandwaveIo\RealtimeRegister\Domain\Enum\DomainStatusEnum;
-use SandwaveIo\RealtimeRegister\Exceptions\BadRequestException;
-use SandwaveIo\RealtimeRegister\Exceptions\ForbiddenException;
-use SandwaveIo\RealtimeRegister\Exceptions\UnauthorizedException;
+use RealtimeRegisterDomains\Actions\Action;
+use RealtimeRegisterDomains\Enums\WhmcsDomainStatus;
+use RealtimeRegisterDomains\Exceptions\DomainNotFoundException;
+use RealtimeRegisterDomains\Models\Whmcs\Domain;
+use RealtimeRegisterDomains\Request;
+use RealtimeRegister\Domain\Enum\DomainStatusEnum;
+use RealtimeRegister\Exceptions\BadRequestException;
+use RealtimeRegister\Exceptions\ForbiddenException;
+use RealtimeRegister\Exceptions\UnauthorizedException;
 use Illuminate\Database\Capsule\Manager as Capsule;
 
 class Sync extends Action

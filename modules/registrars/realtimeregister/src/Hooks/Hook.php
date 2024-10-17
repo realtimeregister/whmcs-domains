@@ -1,9 +1,9 @@
 <?php
 
-namespace RealtimeRegister\Hooks;
+namespace RealtimeRegisterDomains\Hooks;
 
-use RealtimeRegister\App;
-use RealtimeRegister\Contracts\InvokableHook;
+use RealtimeRegisterDomains\App;
+use RealtimeRegisterDomains\Contracts\InvokableHook;
 
 abstract class Hook implements InvokableHook
 {

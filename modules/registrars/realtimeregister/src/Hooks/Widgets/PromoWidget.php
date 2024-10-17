@@ -1,14 +1,14 @@
 <?php
 
-namespace RealtimeRegister\Hooks\Widgets;
+namespace RealtimeRegisterDomains\Hooks\Widgets;
 
-use RealtimeRegister\Entities\DataObject;
-use RealtimeRegister\Hooks\Hook;
+use RealtimeRegisterDomains\Entities\DataObject;
+use RealtimeRegisterDomains\Hooks\Hook;
 
 class PromoWidget extends Hook
 {
     public function __invoke(DataObject $vars)
     {
-        return new \RealtimeRegister\Widget\PromoWidget();
+        return new \RealtimeRegisterDomains\Widget\PromoWidget();
     }
 }

@@ -1,10 +1,10 @@
 <?php
 
-namespace RealtimeRegister\Hooks\Update;
+namespace RealtimeRegisterDomains\Hooks\Update;
 
-use RealtimeRegister\App;
-use RealtimeRegister\Entities\DataObject;
-use RealtimeRegister\Hooks\Hook;
+use RealtimeRegisterDomains\App;
+use RealtimeRegisterDomains\Entities\DataObject;
+use RealtimeRegisterDomains\Hooks\Hook;
 use Illuminate\Database\Capsule\Manager as Capsule;
 
 class Banner extends Hook

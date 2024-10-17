@@ -1,8 +1,8 @@
 <?php
 
-namespace RealtimeRegister\Widget;
+namespace RealtimeRegisterDomains\Widget;
 
-use RealtimeRegister\App;
+use RealtimeRegisterDomains\App;
 
 class DomainOverviewModuleWidget extends \WHMCS\Module\AbstractWidget
 {

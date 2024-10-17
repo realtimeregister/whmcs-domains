@@ -1,13 +1,13 @@
 <?php
 
-namespace RealtimeRegister\Hooks;
+namespace RealtimeRegisterDomains\Hooks;
 
-use RealtimeRegister\Actions\Action;
-use RealtimeRegister\App;
-use RealtimeRegister\Models\Whmcs\Domain;
-use RealtimeRegister\Request;
-use RealtimeRegister\Services\LogService;
-use SandwaveIo\RealtimeRegister\Domain\Enum\ResumeTypeEnum;
+use RealtimeRegisterDomains\Actions\Action;
+use RealtimeRegisterDomains\App;
+use RealtimeRegisterDomains\Models\Whmcs\Domain;
+use RealtimeRegisterDomains\Request;
+use RealtimeRegisterDomains\Services\LogService;
+use RealtimeRegister\Domain\Enum\ResumeTypeEnum;
 
 class AdminCustomButtonArray extends Action
 {
@@ -56,7 +56,7 @@ class AdminCustomButtonArray extends Action
                 if (in_array('PENDING_VALIDATION', $info->status)) {
                     $adminButtons['Resend validation mails'] = "ResendValidationMails";
                 }
-            } catch (\SandwaveIo\RealtimeRegister\Exceptions\NotFoundException $exception) {
+            } catch (\RealtimeRegister\Exceptions\NotFoundException $exception) {
                 // Don't care about this exception at this point in the code
             } catch (\Exception $ex) {
                 if (!str_contains($ex->getMessage(), 'Entity not found')) {

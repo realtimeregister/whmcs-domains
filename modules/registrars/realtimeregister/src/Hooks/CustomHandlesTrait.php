@@ -1,8 +1,8 @@
 <?php
 
-namespace RealtimeRegister\Hooks;
+namespace RealtimeRegisterDomains\Hooks;
 
-use RealtimeRegister\Models\Whmcs\Registrars;
+use RealtimeRegisterDomains\Models\Whmcs\Registrars;
 
 trait CustomHandlesTrait
 {

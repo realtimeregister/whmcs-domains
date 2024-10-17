@@ -63,7 +63,7 @@ class Domain
                 fn($key) => $key !== 'languageCode',
                 ARRAY_FILTER_USE_KEY
             ),
-            privacyProtect: $params['idprotection'] ?? $params['protectenable'] ?? false
+            privacyProtect: $params['protectenable'] ?? $params['idprotection'] ?? false
         );
     }
 }

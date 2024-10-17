@@ -22,7 +22,8 @@ class Domain
         public readonly ?bool $isIdn = null,
         public readonly ?bool $isInGracePeriod = null,
         public readonly ?bool $isInRedemptionGracePeriod = null,
-        public readonly array $contactProperties = []
+        public readonly array $contactProperties = [],
+        public readonly bool $privacyProtect = false
     ) {
     }
 
@@ -61,7 +62,8 @@ class Domain
                 $params['additionalfields'] ?? [],
                 fn($key) => $key !== 'languageCode',
                 ARRAY_FILTER_USE_KEY
-            )
+            ),
+            privacyProtect: $params['idprotection'] ?? $params['protectenable'] ?? false
         );
     }
 }

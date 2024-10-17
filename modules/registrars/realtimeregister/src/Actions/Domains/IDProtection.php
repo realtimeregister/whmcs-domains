@@ -13,7 +13,7 @@ class IDProtection extends Action
         try {
             App::client()->domains->update(
                 domainName: $request->domain->domainName(),
-                privacyProtect: (bool)$request->params['protectenable']
+                privacyProtect: $request->domain->privacyProtect
             );
         } catch (\Exception $exception) {
             return ['error' => sprintf('Error setting ID Protection on domain: %s', $exception->getMessage())];

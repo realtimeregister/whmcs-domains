@@ -9,6 +9,7 @@ use RealtimeRegister\Enums\WhmcsDomainStatus;
 use RealtimeRegister\Models\Whmcs\Domain;
 use RealtimeRegister\Services\LogService;
 use RealtimeRegister\Services\MetadataService;
+use function Symfony\Component\String\s;
 
 class AdminClientDomainsTabFields extends Hook
 {
@@ -60,7 +61,7 @@ class AdminClientDomainsTabFields extends Hook
 
             $fields['Status'] = $this->render(
                 __DIR__ . '/../Assets/Tpl/admin/status.tpl',
-                ['status' => $rtrDomain->status]
+                ['status' => array_map(fn($status) => self::getStatusDescription($status), $rtrDomain->status)]
             );
         } catch (\Exception) {
             # ignore
@@ -133,5 +134,14 @@ class AdminClientDomainsTabFields extends Hook
             }
         }
         return $fields;
+    }
+
+    private static function getStatusDescription(string $status) : string {
+        if ($status === 'PENDING_VALIDATION') {
+            return "PENDING VALIDATION: Domain registrant needs to verify contact details through email. 
+            To resend the contact validation email to the registrant email address, 
+            click the registrar command 'resend validation emails' button above.";
+        }
+        return $status;
     }
 }

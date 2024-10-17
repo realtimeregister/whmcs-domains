@@ -1,14 +1,14 @@
 <?php
 
-namespace RealtimeRegister\Actions\Domains;
+namespace RealtimeRegisterDomains\Actions\Domains;
 
-use RealtimeRegister\Actions\Action;
-use RealtimeRegister\App;
-use RealtimeRegister\Models\Whmcs\Domain as WhmcsDomain;
-use RealtimeRegister\Request;
-use SandwaveIo\RealtimeRegister\Exceptions\BadRequestException;
-use SandwaveIo\RealtimeRegister\Exceptions\ForbiddenException;
-use SandwaveIo\RealtimeRegister\Exceptions\UnauthorizedException;
+use RealtimeRegisterDomains\Actions\Action;
+use RealtimeRegisterDomains\App;
+use RealtimeRegisterDomains\Models\Whmcs\Domain as WhmcsDomain;
+use RealtimeRegisterDomains\Request;
+use RealtimeRegister\Exceptions\BadRequestException;
+use RealtimeRegister\Exceptions\ForbiddenException;
+use RealtimeRegister\Exceptions\UnauthorizedException;
 use WHMCS\Domain\Registrar\Domain;
 
 class GetDomainInformation extends Action
@@ -76,10 +76,10 @@ class GetDomainInformation extends Action
     }
 
     /**
-     * @param  \SandwaveIo\RealtimeRegister\Domain\DomainDetails $domain
+     * @param  \RealtimeRegister\Domain\DomainDetails $domain
      * @return string
      */
-    public function getWhmcsDomainStatus(\SandwaveIo\RealtimeRegister\Domain\DomainDetails $domain): string
+    public function getWhmcsDomainStatus(\RealtimeRegister\Domain\DomainDetails $domain): string
     {
         $status = 'STATUS_INACTIVE';
 

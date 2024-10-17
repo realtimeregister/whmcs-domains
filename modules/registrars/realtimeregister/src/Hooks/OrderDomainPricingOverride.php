@@ -1,10 +1,10 @@
 <?php
 
-namespace RealtimeRegister\Hooks;
+namespace RealtimeRegisterDomains\Hooks;
 
-use RealtimeRegister\App;
-use RealtimeRegister\Entities\DataObject;
-use RealtimeRegister\PunyCode;
+use RealtimeRegisterDomains\App;
+use RealtimeRegisterDomains\Entities\DataObject;
+use RealtimeRegisterDomains\PunyCode;
 
 class OrderDomainPricingOverride extends Hook
 {

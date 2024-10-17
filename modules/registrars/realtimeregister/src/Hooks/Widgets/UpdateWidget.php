@@ -1,15 +1,15 @@
 <?php
 
-namespace RealtimeRegister\Hooks\Widgets;
+namespace RealtimeRegisterDomains\Hooks\Widgets;
 
-use RealtimeRegister\Entities\DataObject;
-use RealtimeRegister\Hooks\Hook;
+use RealtimeRegisterDomains\Entities\DataObject;
+use RealtimeRegisterDomains\Hooks\Hook;
 use WHMCS\Module\AbstractWidget;
 
 class UpdateWidget extends Hook
 {
-    public function __invoke(DataObject $vars): \RealtimeRegister\Widget\UpdateWidget
+    public function __invoke(DataObject $vars): \RealtimeRegisterDomains\Widget\UpdateWidget
     {
-        return new \RealtimeRegister\Widget\UpdateWidget();
+        return new \RealtimeRegisterDomains\Widget\UpdateWidget();
     }
 }

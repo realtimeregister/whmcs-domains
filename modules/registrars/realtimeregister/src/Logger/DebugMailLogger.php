@@ -1,10 +1,10 @@
 <?php
 
-namespace RealtimeRegister\Logger;
+namespace RealtimeRegisterDomains\Logger;
 
 use Psr\Log\AbstractLogger;
-use RealtimeRegister\App;
-use RealtimeRegister\Services\MailService;
+use RealtimeRegisterDomains\App;
+use RealtimeRegisterDomains\Services\MailService;
 
 class DebugMailLogger extends AbstractLogger
 {

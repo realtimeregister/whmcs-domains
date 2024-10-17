@@ -1,9 +1,9 @@
 <?php
 
-namespace RealtimeRegister\Entities;
+namespace RealtimeRegisterDomains\Entities;
 
 use libphonenumber\PhoneNumberUtil;
-use SandwaveIo\RealtimeRegister\Domain\Contact as RtrContact;
+use RealtimeRegister\Domain\Contact as RtrContact;
 
 class WhmcsContact
 {

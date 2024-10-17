@@ -19,8 +19,8 @@
   --------------------------------------------------------------------
  */
 
-use RealtimeRegister\Services\LogService;
-use RealtimeRegister\Services\MetadataService;
+use RealtimeRegisterDomains\Services\LogService;
+use RealtimeRegisterDomains\Services\MetadataService;
 
 $tlds = [];
 

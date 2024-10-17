@@ -1,14 +1,14 @@
 <?php
 
-namespace RealtimeRegister\Hooks;
+namespace RealtimeRegisterDomains\Hooks;
 
-use RealtimeRegister\Actions\Domains\SmartyTrait;
-use RealtimeRegister\App;
-use RealtimeRegister\Entities\DataObject;
-use RealtimeRegister\Enums\WhmcsDomainStatus;
-use RealtimeRegister\Models\Whmcs\Domain;
-use RealtimeRegister\Services\LogService;
-use RealtimeRegister\Services\MetadataService;
+use RealtimeRegisterDomains\Actions\Domains\SmartyTrait;
+use RealtimeRegisterDomains\App;
+use RealtimeRegisterDomains\Entities\DataObject;
+use RealtimeRegisterDomains\Enums\WhmcsDomainStatus;
+use RealtimeRegisterDomains\Models\Whmcs\Domain;
+use RealtimeRegisterDomains\Services\LogService;
+use RealtimeRegisterDomains\Services\MetadataService;
 
 class AdminClientDomainsTabFields extends Hook
 {

@@ -1,14 +1,14 @@
 <?php
 
-namespace RealtimeRegister\Actions\Domains;
+namespace RealtimeRegisterDomains\Actions\Domains;
 
 use Illuminate\Database\Capsule\Manager as Capsule;
-use RealtimeRegister\Actions\Action;
-use RealtimeRegister\App;
-use RealtimeRegister\Request;
-use SandwaveIo\RealtimeRegister\Domain\BillableCollection;
-use SandwaveIo\RealtimeRegister\Domain\DomainContactCollection;
-use SandwaveIo\RealtimeRegister\Domain\DomainRegistration;
+use RealtimeRegisterDomains\Actions\Action;
+use RealtimeRegisterDomains\App;
+use RealtimeRegisterDomains\Request;
+use RealtimeRegister\Domain\BillableCollection;
+use RealtimeRegister\Domain\DomainContactCollection;
+use RealtimeRegister\Domain\DomainRegistration;
 
 class RegisterWithBillables extends Action
 {

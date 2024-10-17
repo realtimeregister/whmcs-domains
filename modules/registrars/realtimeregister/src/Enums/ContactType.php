@@ -1,6 +1,6 @@
 <?php
 
-namespace RealtimeRegister\Enums;
+namespace RealtimeRegisterDomains\Enums;
 
 enum ContactType: string
 {

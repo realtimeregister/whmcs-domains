@@ -1,8 +1,8 @@
 <?php
 
-namespace RealtimeRegister\Hooks;
+namespace RealtimeRegisterDomains\Hooks;
 
-use RealtimeRegister\Entities\DataObject;
+use RealtimeRegisterDomains\Entities\DataObject;
 
 class ClientAreaPage extends Hook
 {

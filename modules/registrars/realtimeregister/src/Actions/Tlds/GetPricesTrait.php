@@ -1,12 +1,12 @@
 <?php
 
-namespace RealtimeRegister\Actions\Tlds;
+namespace RealtimeRegisterDomains\Actions\Tlds;
 
-use RealtimeRegister\Services\MetadataService;
-use SandwaveIo\RealtimeRegister\Domain\Price;
-use SandwaveIo\RealtimeRegister\Domain\PriceCollection;
-use SandwaveIo\RealtimeRegister\Domain\Promo;
-use SandwaveIo\RealtimeRegister\Domain\PromoCollection;
+use RealtimeRegisterDomains\Services\MetadataService;
+use RealtimeRegister\Domain\Price;
+use RealtimeRegister\Domain\PriceCollection;
+use RealtimeRegister\Domain\Promo;
+use RealtimeRegister\Domain\PromoCollection;
 
 trait GetPricesTrait
 {

@@ -1,20 +1,20 @@
 <?php
 
-namespace RealtimeRegister;
+namespace RealtimeRegisterDomains;
 
-use RealtimeRegister\Contracts\InvokableAction;
-use RealtimeRegister\Contracts\InvokableHook;
-use RealtimeRegister\Entities\DataObject;
-use RealtimeRegister\Entities\RegistrarConfig;
-use RealtimeRegister\Exceptions\ActionFailedException;
-use RealtimeRegister\Logger\DebugMailLogger;
-use RealtimeRegister\Models\RealtimeRegister\Cache;
-use RealtimeRegister\Services\Assets;
-use RealtimeRegister\Services\ContactService;
-use RealtimeRegister\Services\LogService;
+use RealtimeRegisterDomains\Contracts\InvokableAction;
+use RealtimeRegisterDomains\Contracts\InvokableHook;
+use RealtimeRegisterDomains\Entities\DataObject;
+use RealtimeRegisterDomains\Entities\RegistrarConfig;
+use RealtimeRegisterDomains\Exceptions\ActionFailedException;
+use RealtimeRegisterDomains\Logger\DebugMailLogger;
+use RealtimeRegisterDomains\Models\RealtimeRegister\Cache;
+use RealtimeRegisterDomains\Services\Assets;
+use RealtimeRegisterDomains\Services\ContactService;
+use RealtimeRegisterDomains\Services\LogService;
 use RuntimeException;
-use SandwaveIo\RealtimeRegister\IsProxy;
-use SandwaveIo\RealtimeRegister\RealtimeRegister;
+use RealtimeRegister\IsProxy;
+use RealtimeRegister\RealtimeRegister;
 
 class App
 {
@@ -171,7 +171,7 @@ class App
     public static function dispatchHook(string $hook, array $arguments = [])
     {
         if (!class_exists($hook)) {
-            $hook = '\RealtimeRegister\Hooks\\' . ucfirst($hook);
+            $hook = '\RealtimeRegisterDomains\Hooks\\' . ucfirst($hook);
         }
 
         if (!class_exists($hook)) {

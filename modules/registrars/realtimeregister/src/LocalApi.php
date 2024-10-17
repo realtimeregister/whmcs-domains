@@ -1,10 +1,10 @@
 <?php
 
-namespace RealtimeRegister;
+namespace RealtimeRegisterDomains;
 
 use Illuminate\Support\Collection;
-use RealtimeRegister\Entities\DataObject;
-use RealtimeRegister\Entities\WhmcsContact;
+use RealtimeRegisterDomains\Entities\DataObject;
+use RealtimeRegisterDomains\Entities\WhmcsContact;
 
 class LocalApi
 {

@@ -1,25 +1,25 @@
 <?php
 
-namespace RealtimeRegister\Actions\Contacts;
+namespace RealtimeRegisterDomains\Actions\Contacts;
 
 use Illuminate\Support\Arr;
-use RealtimeRegister\Actions\Action;
-use RealtimeRegister\App;
-use RealtimeRegister\Entities\DataObject;
-use RealtimeRegister\Exceptions\DomainNotFoundException;
-use RealtimeRegister\Models\RealtimeRegister\ContactMapping;
-use RealtimeRegister\Models\Whmcs\Contact as ContactModel;
-use RealtimeRegister\Models\Whmcs\Domain;
-use RealtimeRegister\PunyCode;
-use RealtimeRegister\Request;
-use Realtimeregister\Services\ContactService;
-use SandwaveIo\RealtimeRegister\Domain\Contact;
-use SandwaveIo\RealtimeRegister\Domain\DomainContact;
-use SandwaveIo\RealtimeRegister\Domain\DomainContactCollection;
-use SandwaveIo\RealtimeRegister\Domain\Enum\DomainContactRoleEnum;
-use SandwaveIo\RealtimeRegister\Domain\TLDInfo;
-use SandwaveIo\RealtimeRegister\Exceptions\BadRequestException;
-use SandwaveIo\RealtimeRegister\Exceptions\UnauthorizedException;
+use RealtimeRegisterDomains\Actions\Action;
+use RealtimeRegisterDomains\App;
+use RealtimeRegisterDomains\Entities\DataObject;
+use RealtimeRegisterDomains\Exceptions\DomainNotFoundException;
+use RealtimeRegisterDomains\Models\RealtimeRegister\ContactMapping;
+use RealtimeRegisterDomains\Models\Whmcs\Contact as ContactModel;
+use RealtimeRegisterDomains\Models\Whmcs\Domain;
+use RealtimeRegisterDomains\PunyCode;
+use RealtimeRegisterDomains\Request;
+use RealtimeRegisterDomains\Services\ContactService;
+use RealtimeRegister\Domain\Contact;
+use RealtimeRegister\Domain\DomainContact;
+use RealtimeRegister\Domain\DomainContactCollection;
+use RealtimeRegister\Domain\Enum\DomainContactRoleEnum;
+use RealtimeRegister\Domain\TLDInfo;
+use RealtimeRegister\Exceptions\BadRequestException;
+use RealtimeRegister\Exceptions\UnauthorizedException;
 use WHMCS\View\Template\AssetUtil;
 
 class SaveContactDetails extends Action
@@ -296,7 +296,7 @@ class SaveContactDetails extends Action
         }
 
         $domainName = $this->checkForPunyCode(
-            new \RealtimeRegister\Entities\Domain(
+            new \RealtimeRegisterDomains\Entities\Domain(
                 name: $this->params['original']['domainname'],
                 tld: $this->params['original']['tld']
             )

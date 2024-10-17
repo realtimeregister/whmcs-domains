@@ -1,12 +1,12 @@
 <?php
 
-namespace RealtimeRegister\Actions\Contacts;
+namespace RealtimeRegisterDomains\Actions\Contacts;
 
 use Illuminate\Support\Arr;
-use SandwaveIo\RealtimeRegister\Domain\Contact;
-use SandwaveIo\RealtimeRegister\Domain\DomainContact;
-use SandwaveIo\RealtimeRegister\Domain\DomainDetails;
-use SandwaveIo\RealtimeRegister\Domain\Enum\DomainContactRoleEnum;
+use RealtimeRegister\Domain\Contact;
+use RealtimeRegister\Domain\DomainContact;
+use RealtimeRegister\Domain\DomainDetails;
+use RealtimeRegister\Domain\Enum\DomainContactRoleEnum;
 
 trait ContactDetailsTrait
 {

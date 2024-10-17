@@ -1,9 +1,9 @@
 <?php
 
-namespace RealtimeRegister\Hooks;
+namespace RealtimeRegisterDomains\Hooks;
 
-use RealtimeRegister\Entities\DataObject;
-use Realtimeregister\Services\ShoppingCartService;
+use RealtimeRegisterDomains\Entities\DataObject;
+use RealtimeRegisterDomains\Services\ShoppingCartService;
 
 class UserLogin extends Hook
 {

@@ -1,14 +1,14 @@
 <?php
 
-namespace RealtimeRegister\Actions\Domains;
+namespace RealtimeRegisterDomains\Actions\Domains;
 
-use RealtimeRegister\Actions\Action;
-use RealtimeRegister\App;
-use RealtimeRegister\Models\Whmcs\Domain;
-use RealtimeRegister\Models\Whmcs\Orders;
-use RealtimeRegister\Request;
-use SandwaveIo\RealtimeRegister\Domain\BillableCollection;
-use SandwaveIo\RealtimeRegister\Domain\DomainContactCollection;
+use RealtimeRegisterDomains\Actions\Action;
+use RealtimeRegisterDomains\App;
+use RealtimeRegisterDomains\Models\Whmcs\Domain;
+use RealtimeRegisterDomains\Models\Whmcs\Orders;
+use RealtimeRegisterDomains\Request;
+use RealtimeRegister\Domain\BillableCollection;
+use RealtimeRegister\Domain\DomainContactCollection;
 
 class TransferWithBillables extends Action
 {

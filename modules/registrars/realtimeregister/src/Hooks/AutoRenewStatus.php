@@ -1,11 +1,11 @@
 <?php
 
-namespace RealtimeRegister\Hooks;
+namespace RealtimeRegisterDomains\Hooks;
 
-use RealtimeRegister\App;
-use RealtimeRegister\Entities\DataObject;
-use RealtimeRegister\Models\Whmcs\Domain;
-use RealtimeRegister\Services\TemplateService;
+use RealtimeRegisterDomains\App;
+use RealtimeRegisterDomains\Entities\DataObject;
+use RealtimeRegisterDomains\Models\Whmcs\Domain;
+use RealtimeRegisterDomains\Services\TemplateService;
 
 class AutoRenewStatus extends Hook
 {

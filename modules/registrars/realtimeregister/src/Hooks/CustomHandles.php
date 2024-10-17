@@ -1,14 +1,14 @@
 <?php
 
-namespace RealtimeRegister\Hooks;
+namespace RealtimeRegisterDomains\Hooks;
 
-use RealtimeRegister\Actions\Domains\SmartyTrait;
-use RealtimeRegister\App;
-use RealtimeRegister\Entities\DataObject;
-use RealtimeRegister\Enums\ScriptLocationType;
-use RealtimeRegister\Models\Whmcs\Registrars;
-use RealtimeRegister\Services\MetadataService;
-use SandwaveIo\RealtimeRegister\Exceptions\BadRequestException;
+use RealtimeRegisterDomains\Actions\Domains\SmartyTrait;
+use RealtimeRegisterDomains\App;
+use RealtimeRegisterDomains\Entities\DataObject;
+use RealtimeRegisterDomains\Enums\ScriptLocationType;
+use RealtimeRegisterDomains\Models\Whmcs\Registrars;
+use RealtimeRegisterDomains\Services\MetadataService;
+use RealtimeRegister\Exceptions\BadRequestException;
 
 class CustomHandles extends Hook
 {

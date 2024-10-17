@@ -1,10 +1,10 @@
 <?php
 
-namespace RealtimeRegister\Widget;
+namespace RealtimeRegisterDomains\Widget;
 
-use RealtimeRegister\Actions\Tlds\GetPricesTrait;
-use RealtimeRegister\App;
-use RealtimeRegister\Services\TemplateService;
+use RealtimeRegisterDomains\Actions\Tlds\GetPricesTrait;
+use RealtimeRegisterDomains\App;
+use RealtimeRegisterDomains\Services\TemplateService;
 
 class PromoWidget extends \WHMCS\Module\AbstractWidget
 {

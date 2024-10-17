@@ -266,8 +266,7 @@ class MetadataService
         $providers = Cache::remember(
             "rtrProviders",
             self::DAY_MINUTES,
-            fn () =>
-            App::client()->providers->export(parameters: ["fields" => "tlds"])
+            fn () => App::client()->providers->export(parameters: ["fields" => "tlds"])
         );
         return array_map(
             fn($tld) => $tld['name'],

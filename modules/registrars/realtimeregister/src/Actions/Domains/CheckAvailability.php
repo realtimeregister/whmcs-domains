@@ -77,14 +77,18 @@ class CheckAvailability extends Action
 
             if (isset($extra['type'], $extra['price'], $extra['currency']) && $extra['type'] === 'premium') {
                 $searchResult->setPremiumDomain(true);
-                $searchResult->setPremiumCostPricing(
-                    [
-                        'register' => number_format(($extra['price'] / 100), 2, '.', ''),
-                        'renew' => number_format(($extra['price'] / 100), 2, '.', ''),
-                        'CurrencyCode' => $extra['currency']
-                    ]
-                );
+                $metadata = (new MetadataService($tld))->getMetadata();
+                $premiumCostPricing = [
+                    'register' => number_format(($extra['price'] / 100), 2, '.', ''),
+                    'CurrencyCode' => $extra['currency']
+                ];
+                if ($metadata->premiumSupport === 'REGULAR') {
+                    $premiumCostPricing['renew'] =
+                        number_format(($extra['price'] / 100), 2, '.', '');
+                }
+                $searchResult->setPremiumCostPricing($premiumCostPricing);
             }
+
             // clean centralnic from tlds
             if (str_ends_with($searchResult->getTopLevel(), '.centralnic')) {
                 $searchResult->setTopLevel(str_replace('.centralnic', '', $searchResult->getTopLevel()));

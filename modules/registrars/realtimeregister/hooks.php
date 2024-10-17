@@ -46,5 +46,3 @@ App::hook('AdminAreaHeadOutput', Hooks\CustomHandles::class);
 App::hook('DailyCronJob', Hooks\Update\CheckForUpdates::class, 10);
 App::hook('AdminAreaHeaderOutput', Hooks\Update\Banner::class, 10);
 App::hook('AdminHomeWidgets', Hooks\Widgets\UpdateWidget::class, 40);
-
-App::hook(Hooks\OrderDomainPricingOverride::class);

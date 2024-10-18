@@ -1,9 +1,9 @@
 <?php
 
-namespace RealtimeRegister\Services;
+namespace RealtimeRegisterDomains\Services;
 
-use RealtimeRegister\App;
-use RealtimeRegister\Enums\ScriptLocationType;
+use RealtimeRegisterDomains\App;
+use RealtimeRegisterDomains\Enums\ScriptLocationType;
 
 final class Assets
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace RealtimeRegister;
+namespace RealtimeRegisterDomains;
 
 class ConfigArray
 {

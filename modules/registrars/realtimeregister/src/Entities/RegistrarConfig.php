@@ -1,10 +1,10 @@
 <?php
 
-namespace RealtimeRegister\Entities;
+namespace RealtimeRegisterDomains\Entities;
 
 use Illuminate\Support\Arr;
-use RealtimeRegister\App;
-use RealtimeRegister\Request;
+use RealtimeRegisterDomains\App;
+use RealtimeRegisterDomains\Request;
 
 class RegistrarConfig
 {

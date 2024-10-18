@@ -1,15 +1,15 @@
 <?php
 
-namespace RealtimeRegister\Services;
+namespace RealtimeRegisterDomains\Services;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Arr;
-use RealtimeRegister\App;
-use RealtimeRegister\Entities\DataObject;
-use RealtimeRegister\Entities\WhmcsContact;
-use RealtimeRegister\LocalApi;
-use RealtimeRegister\Models\RealtimeRegister\ContactMapping;
-use SandwaveIo\RealtimeRegister\Domain\TLDInfo;
+use RealtimeRegisterDomains\App;
+use RealtimeRegisterDomains\Entities\DataObject;
+use RealtimeRegisterDomains\Entities\WhmcsContact;
+use RealtimeRegisterDomains\LocalApi;
+use RealtimeRegisterDomains\Models\RealtimeRegister\ContactMapping;
+use RealtimeRegister\Domain\TLDInfo;
 
 class ContactService
 {

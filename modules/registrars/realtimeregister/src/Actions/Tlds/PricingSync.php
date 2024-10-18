@@ -1,11 +1,11 @@
 <?php
 
-namespace RealtimeRegister\Actions\Tlds;
+namespace RealtimeRegisterDomains\Actions\Tlds;
 
-use RealtimeRegister\Actions\Action;
-use RealtimeRegister\App;
-use RealtimeRegister\Request;
-use RealtimeRegister\Services\MetadataService;
+use RealtimeRegisterDomains\Actions\Action;
+use RealtimeRegisterDomains\App;
+use RealtimeRegisterDomains\Request;
+use RealtimeRegisterDomains\Services\MetadataService;
 use WHMCS\Domain\TopLevel\ImportItem;
 use WHMCS\Domains\DomainLookup\ResultsList;
 

@@ -1,21 +1,21 @@
 <?php
 
-namespace RealtimeRegister\Hooks;
+namespace RealtimeRegisterDomains\Hooks;
 
 use JetBrains\PhpStorm\NoReturn;
-use RealtimeRegister\App;
-use RealtimeRegister\Entities\DataObject;
-use RealtimeRegister\Models\RealtimeRegister\Cache;
-use RealtimeRegister\Models\Whmcs\AdditionalFields;
-use RealtimeRegister\Models\Whmcs\Admin;
-use RealtimeRegister\Models\Whmcs\Client;
-use RealtimeRegister\Models\Whmcs\Configuration;
-use RealtimeRegister\Models\Whmcs\Domain;
-use RealtimeRegister\Models\Whmcs\DomainPricing;
-use RealtimeRegister\Models\Whmcs\PaymentGateway;
-use RealtimeRegister\Services\Config\Config;
-use RealtimeRegister\Services\MetadataService;
-use RealtimeRegister\Services\TemplateService;
+use RealtimeRegisterDomains\App;
+use RealtimeRegisterDomains\Entities\DataObject;
+use RealtimeRegisterDomains\Models\RealtimeRegister\Cache;
+use RealtimeRegisterDomains\Models\Whmcs\AdditionalFields;
+use RealtimeRegisterDomains\Models\Whmcs\Admin;
+use RealtimeRegisterDomains\Models\Whmcs\Client;
+use RealtimeRegisterDomains\Models\Whmcs\Configuration;
+use RealtimeRegisterDomains\Models\Whmcs\Domain;
+use RealtimeRegisterDomains\Models\Whmcs\DomainPricing;
+use RealtimeRegisterDomains\Models\Whmcs\PaymentGateway;
+use RealtimeRegisterDomains\Services\Config\Config;
+use RealtimeRegisterDomains\Services\MetadataService;
+use RealtimeRegisterDomains\Services\TemplateService;
 
 class ImportDomains extends Hook
 {

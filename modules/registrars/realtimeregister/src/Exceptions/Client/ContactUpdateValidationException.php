@@ -1,6 +1,6 @@
 <?php
 
-namespace RealtimeRegister\Exceptions\Client;
+namespace RealtimeRegisterDomains\Exceptions\Client;
 
 class ContactUpdateValidationException extends \RuntimeException
 {

@@ -1,13 +1,13 @@
 <?php
 
-namespace RealtimeRegister\Actions\Domains;
+namespace RealtimeRegisterDomains\Actions\Domains;
 
-use RealtimeRegister\App;
-use RealtimeRegister\Hooks\CustomHandlesTrait;
-use RealtimeRegister\Request;
-use RealtimeRegister\Services\MetadataService;
-use SandwaveIo\RealtimeRegister\Domain\TLDInfo;
-use SandwaveIo\RealtimeRegister\Domain\TLDMetaData;
+use RealtimeRegisterDomains\App;
+use RealtimeRegisterDomains\Hooks\CustomHandlesTrait;
+use RealtimeRegisterDomains\Request;
+use RealtimeRegisterDomains\Services\MetadataService;
+use RealtimeRegister\Domain\TLDInfo;
+use RealtimeRegister\Domain\TLDMetaData;
 
 trait DomainContactTrait
 {

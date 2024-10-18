@@ -1,10 +1,10 @@
 <?php
 
-namespace RealtimeRegister\Actions;
+namespace RealtimeRegisterDomains\Actions;
 
-use RealtimeRegister\App;
-use RealtimeRegister\Request;
-use RealtimeRegister\Services\LogService;
+use RealtimeRegisterDomains\App;
+use RealtimeRegisterDomains\Request;
+use RealtimeRegisterDomains\Services\LogService;
 use WHMCS\Exception\Module\InvalidConfiguration;
 
 class ConfigurationValidation extends Action

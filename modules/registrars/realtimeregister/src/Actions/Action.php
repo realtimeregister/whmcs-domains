@@ -1,18 +1,18 @@
 <?php
 
-namespace RealtimeRegister\Actions;
+namespace RealtimeRegisterDomains\Actions;
 
 use Illuminate\Database\Capsule\Manager;
-use RealtimeRegister\Actions\Domains\DomainTrait;
-use RealtimeRegister\App;
-use RealtimeRegister\Contracts\InvokableAction;
-use RealtimeRegister\Models\RealtimeRegister\Cache;
-use RealtimeRegister\Request;
-use RealtimeRegister\Services\MetadataService;
-use SandwaveIo\RealtimeRegister\Domain\Contact;
-use SandwaveIo\RealtimeRegister\Domain\DomainDetails;
-use SandwaveIo\RealtimeRegister\Domain\TLDInfo;
-use SandwaveIo\RealtimeRegister\Domain\TLDMetaData;
+use RealtimeRegisterDomains\Actions\Domains\DomainTrait;
+use RealtimeRegisterDomains\App;
+use RealtimeRegisterDomains\Contracts\InvokableAction;
+use RealtimeRegisterDomains\Models\RealtimeRegister\Cache;
+use RealtimeRegisterDomains\Request;
+use RealtimeRegisterDomains\Services\MetadataService;
+use RealtimeRegister\Domain\Contact;
+use RealtimeRegister\Domain\DomainDetails;
+use RealtimeRegister\Domain\TLDInfo;
+use RealtimeRegister\Domain\TLDMetaData;
 
 abstract class Action implements InvokableAction
 {

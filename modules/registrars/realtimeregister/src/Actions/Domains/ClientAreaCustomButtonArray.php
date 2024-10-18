@@ -1,10 +1,10 @@
 <?php
 
-namespace RealtimeRegister\Actions\Domains;
+namespace RealtimeRegisterDomains\Actions\Domains;
 
-use RealtimeRegister\Actions\Action;
-use RealtimeRegister\Models\Whmcs\Registrars;
-use RealtimeRegister\Request;
+use RealtimeRegisterDomains\Actions\Action;
+use RealtimeRegisterDomains\Models\Whmcs\Registrars;
+use RealtimeRegisterDomains\Request;
 
 class ClientAreaCustomButtonArray extends Action
 {

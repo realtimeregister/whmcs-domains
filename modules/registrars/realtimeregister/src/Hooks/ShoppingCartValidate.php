@@ -1,9 +1,9 @@
 <?php
 
-namespace RealtimeRegister\Hooks;
+namespace RealtimeRegisterDomains\Hooks;
 
-use RealtimeRegister\Entities\DataObject;
-use RealtimeRegister\Services\ShoppingCartService;
+use RealtimeRegisterDomains\Entities\DataObject;
+use RealtimeRegisterDomains\Services\ShoppingCartService;
 
 class ShoppingCartValidate extends Hook
 {

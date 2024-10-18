@@ -1,6 +1,6 @@
 <?php
 
-namespace RealtimeRegister\Services\Config;
+namespace RealtimeRegisterDomains\Services\Config;
 
 use ArrayAccess;
 use Illuminate\Support\Arr;

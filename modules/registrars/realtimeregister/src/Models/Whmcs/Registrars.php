@@ -1,6 +1,6 @@
 <?php
 
-namespace RealtimeRegister\Models\Whmcs;
+namespace RealtimeRegisterDomains\Models\Whmcs;
 
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Illuminate\Database\Eloquent\Builder;

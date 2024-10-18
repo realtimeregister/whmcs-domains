@@ -1,13 +1,13 @@
 <?php
 
-namespace RealtimeRegister\Services;
+namespace RealtimeRegisterDomains\Services;
 
-use RealtimeRegister\App;
-use RealtimeRegister\Models\RealtimeRegister\Cache;
-use RealtimeRegister\Models\Whmcs\DomainPricing;
-use RealtimeRegister\Services\Config\Config;
-use SandwaveIo\RealtimeRegister\Domain\TLDInfo;
-use SandwaveIo\RealtimeRegister\Domain\TLDMetaData;
+use RealtimeRegisterDomains\App;
+use RealtimeRegisterDomains\Models\RealtimeRegister\Cache;
+use RealtimeRegisterDomains\Models\Whmcs\DomainPricing;
+use RealtimeRegisterDomains\Services\Config\Config;
+use RealtimeRegister\Domain\TLDInfo;
+use RealtimeRegister\Domain\TLDMetaData;
 
 class MetadataService
 {

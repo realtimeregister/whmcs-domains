@@ -1,8 +1,8 @@
 <?php
 
-namespace RealtimeRegister\Services;
+namespace RealtimeRegisterDomains\Services;
 
-use RealtimeRegister\Entities\DataObject;
+use RealtimeRegisterDomains\Entities\DataObject;
 
 class JSRouter
 {

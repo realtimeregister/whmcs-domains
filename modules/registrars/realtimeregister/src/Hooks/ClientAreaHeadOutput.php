@@ -1,12 +1,12 @@
 <?php
 
-namespace RealtimeRegister\Hooks;
+namespace RealtimeRegisterDomains\Hooks;
 
-use RealtimeRegister\App;
-use RealtimeRegister\Entities\DataObject;
-use RealtimeRegister\Services\JSRouter;
-use RealtimeRegister\Services\MetadataService;
-use SandwaveIo\RealtimeRegister\Domain\DomainContact;
+use RealtimeRegisterDomains\App;
+use RealtimeRegisterDomains\Entities\DataObject;
+use RealtimeRegisterDomains\Services\JSRouter;
+use RealtimeRegisterDomains\Services\MetadataService;
+use RealtimeRegister\Domain\DomainContact;
 
 class ClientAreaHeadOutput extends Hook
 {
@@ -70,7 +70,7 @@ class ClientAreaHeadOutput extends Hook
 
     public static function getWhmcsCidFromHandle(string $handle): ?string
     {
-        $map = (new \RealtimeRegister\Services\ContactService())->fetchMappingByHandle($handle);
+        $map = (new \RealtimeRegisterDomains\Services\ContactService())->fetchMappingByHandle($handle);
 
         if (!$map) {
             return null;

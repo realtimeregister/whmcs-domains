@@ -1,18 +1,16 @@
 <?php
 
-namespace RealtimeRegister\Hooks;
+namespace RealtimeRegisterDomains\Hooks;
 
 use RealtimeRegisterDomains\Actions\Domains\DomainContactTrait;
 use RealtimeRegisterDomains\Actions\Domains\DomainTrait;
 use RealtimeRegisterDomains\App;
 use RealtimeRegisterDomains\Entities\DataObject;
-use RealtimeRegisterDomains\Hooks\Hook;
 use RealtimeRegisterDomains\Models\Whmcs\AdditionalFields;
 use RealtimeRegisterDomains\Services\ContactService;
 use RealtimeRegisterDomains\Services\LogService;
 use RealtimeRegisterDomains\Services\MetadataService;
 use TrueBV\Punycode;
-
 
 class AdminClientDomainsTabFieldsSave extends Hook
 {

@@ -1,14 +1,14 @@
 <?php
 
-namespace RealtimeRegister\Actions\Domains;
+namespace RealtimeRegisterDomains\Actions\Domains;
 
-use RealtimeRegister\Actions\Action;
-use RealtimeRegister\App;
-use RealtimeRegister\Request;
-use RealtimeRegister\Services\Config\Config;
-use RealtimeRegister\Services\LogService;
-use RealtimeRegister\Services\MetadataService;
-use SandwaveIo\RealtimeRegister\Domain\IsProxyDomain;
+use RealtimeRegisterDomains\Actions\Action;
+use RealtimeRegisterDomains\App;
+use RealtimeRegisterDomains\Request;
+use RealtimeRegisterDomains\Services\Config\Config;
+use RealtimeRegisterDomains\Services\LogService;
+use RealtimeRegisterDomains\Services\MetadataService;
+use RealtimeRegister\Domain\IsProxyDomain;
 use WHMCS\Domains\DomainLookup\ResultsList;
 use WHMCS\Domains\DomainLookup\SearchResult;
 

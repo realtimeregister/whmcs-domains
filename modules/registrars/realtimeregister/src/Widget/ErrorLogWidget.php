@@ -1,9 +1,9 @@
 <?php
 
-namespace RealtimeRegister\Widget;
+namespace RealtimeRegisterDomains\Widget;
 
-use RealtimeRegister\Services\LogService;
-use RealtimeRegister\Services\TemplateService;
+use RealtimeRegisterDomains\Services\LogService;
+use RealtimeRegisterDomains\Services\TemplateService;
 
 class ErrorLogWidget extends \WHMCS\Module\AbstractWidget
 {

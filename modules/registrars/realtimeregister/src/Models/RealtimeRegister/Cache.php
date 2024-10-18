@@ -1,13 +1,13 @@
 <?php
 
-namespace RealtimeRegister\Models\RealtimeRegister;
+namespace RealtimeRegisterDomains\Models\RealtimeRegister;
 
 use Illuminate\Cache\ArrayStore;
 use Illuminate\Cache\DatabaseStore;
 use Illuminate\Cache\Repository;
 use Illuminate\Database\Capsule\Manager as Capsule;
-use RealtimeRegister\App;
-use RealtimeRegister\Models\Whmcs\Registrars;
+use RealtimeRegisterDomains\App;
+use RealtimeRegisterDomains\Models\Whmcs\Registrars;
 
 class Cache
 {

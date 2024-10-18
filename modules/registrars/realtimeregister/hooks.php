@@ -1,11 +1,11 @@
 <?php
 
-use RealtimeRegister\App;
-use RealtimeRegister\Hooks;
+use RealtimeRegisterDomains\App;
+use RealtimeRegisterDomains\Hooks;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-new \RealtimeRegister\Services\Language(); // Load our own language strings before anything else
+new \RealtimeRegisterDomains\Services\Language(); // Load our own language strings before anything else
 
 App::boot();
 
@@ -16,7 +16,7 @@ App::hook("AdminAreaHeadOutput", Hooks\CheckCredentials::class);
 App::hook("AdminHomepage", Hooks\SyncExpiry::class, 2);
 App::hook("AdminHomepage", Hooks\ImportDomains::class, 2);
 App::hook("AdminHomepage", Hooks\AutoRenewStatus::class, 2);
-App::hook(RealtimeRegister\Hooks\AdminClientDomainsTabFields::class);
+App::hook(RealtimeRegisterDomains\Hooks\AdminClientDomainsTabFields::class);
 
 App::hook('ClientAreaHeadOutput', Hooks\Adac::class, 10);
 App::hook('ShoppingCartValidateCheckout', Hooks\ShoppingCartValidate::class);

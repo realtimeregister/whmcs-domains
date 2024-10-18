@@ -1,19 +1,19 @@
 <?php
 
-namespace RealtimeRegister\Actions\Contacts;
+namespace RealtimeRegisterDomains\Actions\Contacts;
 
 use Illuminate\Support\Arr;
-use RealtimeRegister\Actions\Action;
-use RealtimeRegister\App;
-use RealtimeRegister\Exceptions\DomainNotFoundException;
-use RealtimeRegister\Models\Whmcs\Contact as ContactModel;
-use RealtimeRegister\Request;
-use RealtimeRegister\Services\LogService;
-use SandwaveIo\RealtimeRegister\Domain\DomainContact;
-use SandwaveIo\RealtimeRegister\Domain\DomainDetails;
-use SandwaveIo\RealtimeRegister\Domain\Enum\DomainContactRoleEnum;
-use SandwaveIo\RealtimeRegister\Exceptions\BadRequestException;
-use SandwaveIo\RealtimeRegister\Exceptions\UnauthorizedException;
+use RealtimeRegisterDomains\Actions\Action;
+use RealtimeRegisterDomains\App;
+use RealtimeRegisterDomains\Exceptions\DomainNotFoundException;
+use RealtimeRegisterDomains\Models\Whmcs\Contact as ContactModel;
+use RealtimeRegisterDomains\Request;
+use RealtimeRegisterDomains\Services\LogService;
+use RealtimeRegister\Domain\DomainContact;
+use RealtimeRegister\Domain\DomainDetails;
+use RealtimeRegister\Domain\Enum\DomainContactRoleEnum;
+use RealtimeRegister\Exceptions\BadRequestException;
+use RealtimeRegister\Exceptions\UnauthorizedException;
 
 class GetContactDetails extends Action
 {

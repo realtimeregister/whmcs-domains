@@ -1,9 +1,9 @@
 <?php
 
-namespace RealtimeRegister\Enums;
+namespace RealtimeRegisterDomains\Enums;
 
-use SandwaveIo\RealtimeRegister\Domain\DomainDetails;
-use SandwaveIo\RealtimeRegister\Domain\Enum\DomainStatusEnum;
+use RealtimeRegister\Domain\DomainDetails;
+use RealtimeRegisterDomainsRealtimeRegister\Domain\Enum\DomainStatusEnum;
 
 enum WhmcsDomainStatus: string
 {

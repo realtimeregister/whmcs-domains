@@ -1,10 +1,10 @@
 <?php
 
-namespace RealtimeRegister\Actions\Domains;
+namespace RealtimeRegisterDomains\Actions\Domains;
 
-use RealtimeRegister\App;
-use RealtimeRegister\Request;
-use SandwaveIo\RealtimeRegister\Domain\DomainContactCollection;
+use RealtimeRegisterDomains\App;
+use RealtimeRegisterDomains\Request;
+use RealtimeRegister\Domain\DomainContactCollection;
 
 class TransferDomain extends SyncExpiryDate
 {

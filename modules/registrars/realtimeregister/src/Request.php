@@ -1,9 +1,9 @@
 <?php
 
-namespace RealtimeRegister;
+namespace RealtimeRegisterDomains;
 
 use Illuminate\Support\Arr;
-use RealtimeRegister\Entities\Domain;
+use RealtimeRegisterDomains\Entities\Domain;
 
 class Request
 {

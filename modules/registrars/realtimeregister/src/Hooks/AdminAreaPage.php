@@ -1,12 +1,12 @@
 <?php
 
-namespace RealtimeRegister\Hooks;
+namespace RealtimeRegisterDomains\Hooks;
 
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Illuminate\Database\Schema\Blueprint;
-use RealtimeRegister\Entities\DataObject;
-use RealtimeRegister\Models\RealtimeRegister\Cache;
-use RealtimeRegister\Models\RealtimeRegister\ContactMapping;
+use RealtimeRegisterDomains\Entities\DataObject;
+use RealtimeRegisterDomains\Models\RealtimeRegister\Cache;
+use RealtimeRegisterDomains\Models\RealtimeRegister\ContactMapping;
 
 class AdminAreaPage extends Hook
 {

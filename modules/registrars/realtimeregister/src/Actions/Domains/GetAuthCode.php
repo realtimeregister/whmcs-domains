@@ -1,12 +1,12 @@
 <?php
 
-namespace RealtimeRegister\Actions\Domains;
+namespace RealtimeRegisterDomains\Actions\Domains;
 
-use RealtimeRegister\Actions\Action;
-use RealtimeRegister\Request;
-use SandwaveIo\RealtimeRegister\Exceptions\BadRequestException;
-use SandwaveIo\RealtimeRegister\Exceptions\ForbiddenException;
-use SandwaveIo\RealtimeRegister\Exceptions\UnauthorizedException;
+use RealtimeRegisterDomains\Actions\Action;
+use RealtimeRegisterDomains\Request;
+use RealtimeRegister\Exceptions\BadRequestException;
+use RealtimeRegister\Exceptions\ForbiddenException;
+use RealtimeRegister\Exceptions\UnauthorizedException;
 
 class GetAuthCode extends Action
 {

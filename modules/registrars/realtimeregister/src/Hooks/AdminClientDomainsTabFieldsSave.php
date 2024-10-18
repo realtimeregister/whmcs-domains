@@ -2,18 +2,17 @@
 
 namespace RealtimeRegister\Hooks;
 
-use RealtimeRegister\Actions\Domains\DomainContactTrait;
-use RealtimeRegister\Actions\Domains\DomainTrait;
-use RealtimeRegister\App;
-use RealtimeRegister\Entities\DataObject;
-use RealtimeRegister\Models\RealtimeRegister\ContactMapping;
-use RealtimeRegister\Models\Whmcs\AdditionalFields;
-use RealtimeRegister\Models\Whmcs\Domain;
-use RealtimeRegister\Request;
-use RealtimeRegister\Services\ContactService;
-use RealtimeRegister\Services\LogService;
-use RealtimeRegister\Services\MetadataService;
+use RealtimeRegisterDomains\Actions\Domains\DomainContactTrait;
+use RealtimeRegisterDomains\Actions\Domains\DomainTrait;
+use RealtimeRegisterDomains\App;
+use RealtimeRegisterDomains\Entities\DataObject;
+use RealtimeRegisterDomains\Hooks\Hook;
+use RealtimeRegisterDomains\Models\Whmcs\AdditionalFields;
+use RealtimeRegisterDomains\Services\ContactService;
+use RealtimeRegisterDomains\Services\LogService;
+use RealtimeRegisterDomains\Services\MetadataService;
 use TrueBV\Punycode;
+
 
 class AdminClientDomainsTabFieldsSave extends Hook
 {

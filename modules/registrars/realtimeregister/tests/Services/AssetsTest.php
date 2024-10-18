@@ -3,9 +3,9 @@
 namespace Tests\Services;
 
 use PHPUnit\Framework\TestCase;
-use RealtimeRegister\App;
-use RealtimeRegister\Enums\ScriptLocationType;
-use RealtimeRegister\Services\Assets;
+use RealtimeRegisterDomains\App;
+use RealtimeRegisterDomains\Enums\ScriptLocationType;
+use RealtimeRegisterDomains\Services\Assets;
 
 class AssetsTest extends TestCase
 {

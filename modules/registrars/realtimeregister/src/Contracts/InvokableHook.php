@@ -1,10 +1,9 @@
 <?php
 
-namespace RealtimeRegister\Contracts;
+namespace RealtimeRegisterDomains\Contracts;
 
-use RealtimeRegister\App;
-use RealtimeRegister\Entities\DataObject;
-use RealtimeRegister\Request;
+use RealtimeRegisterDomains\App;
+use RealtimeRegisterDomains\Entities\DataObject;
 
 interface InvokableHook
 {

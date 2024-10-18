@@ -1,8 +1,8 @@
 <?php
 
-namespace RealtimeRegister\Entities;
+namespace RealtimeRegisterDomains\Entities;
 
-use RealtimeRegister\Enums\ContactType;
+use RealtimeRegisterDomains\Enums\ContactType;
 
 class Domain
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace RealtimeRegister\Entities;
+namespace RealtimeRegisterDomains\Entities;
 
 use Illuminate\Support\Arr;
 

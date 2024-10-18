@@ -1,9 +1,9 @@
 <?php
 
-namespace RealtimeRegister\Hooks;
+namespace RealtimeRegisterDomains\Hooks;
 
-use RealtimeRegister\Entities\DataObject;
-use RealtimeRegister\Services\Assets;
+use RealtimeRegisterDomains\Entities\DataObject;
+use RealtimeRegisterDomains\Services\Assets;
 
 class FooterAssets extends Hook
 {

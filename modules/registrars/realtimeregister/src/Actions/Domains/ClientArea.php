@@ -1,10 +1,10 @@
 <?php
 
-namespace RealtimeRegister\Actions\Domains;
+namespace RealtimeRegisterDomains\Actions\Domains;
 
-use RealtimeRegister\Actions\Action;
-use RealtimeRegister\Request;
-use RealtimeRegister\Services\TemplateService;
+use RealtimeRegisterDomains\Actions\Action;
+use RealtimeRegisterDomains\Request;
+use RealtimeRegisterDomains\Services\TemplateService;
 
 class ClientArea extends Action
 {

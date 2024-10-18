@@ -2,19 +2,18 @@
 
 // phpcs:disable PSR1.Files.SideEffects
 
-use RealtimeRegister\Actions\Contacts\GetContactDetails;
-use RealtimeRegister\Actions\Contacts\ResendValidation;
-use RealtimeRegister\Actions\Contacts\SaveContactDetails;
-use RealtimeRegister\Actions\Domains\CheckAvailability;
-use RealtimeRegister\Actions\Domains\GetDomainInformation;
-use RealtimeRegister\Actions\Domains\ResendTransfer;
-use RealtimeRegister\Actions\Domains\SaveNameservers;
-use RealtimeRegister\Actions\Domains\SaveRegistrarLock;
-use RealtimeRegister\Actions\Domains\Sync;
-use RealtimeRegister\Actions\Domains\TransferWithBillables;
-use RealtimeRegister\App;
-use RealtimeRegister\ConfigArray;
-use RealtimeRegister\Exceptions\ActionFailedException;
+use RealtimeRegisterDomains\Actions\Contacts\GetContactDetails;
+use RealtimeRegisterDomains\Actions\Contacts\ResendValidation;
+use RealtimeRegisterDomains\Actions\Contacts\SaveContactDetails;
+use RealtimeRegisterDomains\Actions\Domains\CheckAvailability;
+use RealtimeRegisterDomains\Actions\Domains\GetDomainInformation;
+use RealtimeRegisterDomains\Actions\Domains\ResendTransfer;
+use RealtimeRegisterDomains\Actions\Domains\SaveNameservers;
+use RealtimeRegisterDomains\Actions\Domains\SaveRegistrarLock;
+use RealtimeRegisterDomains\Actions\Domains\Sync;
+use RealtimeRegisterDomains\Actions\Domains\TransferWithBillables;
+use RealtimeRegisterDomains\App;
+use RealtimeRegisterDomains\ConfigArray;
 use WHMCS\Domains\DomainLookup\ResultsList;
 use WHMCS\Domains\DomainLookup\SearchResult;
 
@@ -25,7 +24,7 @@ if (!defined("WHMCS")) {
 require_once __DIR__ . '/vendor/autoload.php';
 require_once ROOTDIR . '/includes/registrarfunctions.php';
 
-new \RealtimeRegister\Services\Language(); // Load our own language strings before anything else
+new \RealtimeRegisterDomains\Services\Language(); // Load our own language strings before anything else
 
 $app = App::boot();
 
@@ -42,9 +41,9 @@ function realtimeregister_getConfigArray(): array
 function realtimeregister_config_validate(array $params)
 {
     return App::dispatch(
-        action:\RealtimeRegister\Actions\ConfigurationValidation::class,
+        action:\RealtimeRegisterDomains\Actions\ConfigurationValidation::class,
         params: $params,
-        catch: [\RealtimeRegister\Actions\ConfigurationValidation::class, 'handleException']
+        catch: [\RealtimeRegisterDomains\Actions\ConfigurationValidation::class, 'handleException']
     );
 }
 
@@ -53,7 +52,7 @@ function realtimeregister_CheckAvailability(array $params): ResultsList
     return App::dispatch(
         CheckAvailability::class,
         $params,
-        ['RealtimeRegister\Actions\Domains\CheckAvailability', 'handleException']
+        [\RealtimeRegisterDomains\Actions\Domains\CheckAvailability::class, 'handleException']
     );
 }
 
@@ -69,7 +68,7 @@ function realtimeregister_SaveNameservers(array $params)
 
 function realtimeregister_GetRegistrarLock(array $params)
 {
-    return App::dispatch(\RealtimeRegister\Actions\Domains\GetRegistrarLock::class, $params);
+    return App::dispatch(\RealtimeRegisterDomains\Actions\Domains\GetRegistrarLock::class, $params);
 }
 
 function realtimeregister_SaveRegistrarLock(array $params)
@@ -95,31 +94,31 @@ function realtimeregister_Sync(array $params)
 function realtimeregister_AdminCustomButtonArray(array $params): array
 {
     return App::dispatch(
-        \RealtimeRegister\Hooks\AdminCustomButtonArray::class,
+        \RealtimeRegisterDomains\Hooks\AdminCustomButtonArray::class,
         $params,
-        ['\RealtimeRegister\Hooks\AdminCustomButtonArray', 'handleException']
+        [\RealtimeRegisterDomains\Hooks\AdminCustomButtonArray::class, 'handleException']
     );
 }
 
 function realtimeregister_RegisterDomain(array $params)
 {
-    return App::dispatch(\RealtimeRegister\Actions\Domains\RegisterDomain::class, $params);
+    return App::dispatch(\RealtimeRegisterDomains\Actions\Domains\RegisterDomain::class, $params);
 }
 
 function realtimeregister_GetTldPricing(array $params)
 {
-    return App::dispatch(\RealtimeRegister\Actions\Tlds\PricingSync::class, $params);
+    return App::dispatch(\RealtimeRegisterDomains\Actions\Tlds\PricingSync::class, $params);
 }
 
 // Custom functions
 function realtimeregister_SyncExpiryDate($params)
 {
-    return App::dispatch(\RealtimeRegister\Actions\Domains\SyncExpiryDate::class, $params);
+    return App::dispatch(\RealtimeRegisterDomains\Actions\Domains\SyncExpiryDate::class, $params);
 }
 
 function realtimeregister_RegisterWithBillables(array $params)
 {
-    return App::dispatch(\RealtimeRegister\Actions\Domains\RegisterWithBillables::class, $params);
+    return App::dispatch(\RealtimeRegisterDomains\Actions\Domains\RegisterWithBillables::class, $params);
 }
 
 function realtimeregister_TransferWithBillables($params)
@@ -139,50 +138,50 @@ function realtimeregister_ResendValidationMails(array $params)
 
 function realtimeregister_GetEPPCode($params)
 {
-    return App::dispatch(\RealtimeRegister\Actions\Domains\GetAuthCode::class, $params);
+    return App::dispatch(\RealtimeRegisterDomains\Actions\Domains\GetAuthCode::class, $params);
 }
 
 function realtimeregister_RequestDelete($params)
 {
-    return App::dispatch(\RealtimeRegister\Actions\Domains\Delete::class, $params);
+    return App::dispatch(\RealtimeRegisterDomains\Actions\Domains\Delete::class, $params);
 }
 
 function realtimeregister_RenewDomain($params)
 {
-    return App::dispatch(\RealtimeRegister\Actions\Domains\RenewDomain::class, $params);
+    return App::dispatch(\RealtimeRegisterDomains\Actions\Domains\RenewDomain::class, $params);
 }
 
 function realtimeregister_TransferDomain($params)
 {
-    return App::dispatch(\RealtimeRegister\Actions\Domains\TransferDomain::class, $params);
+    return App::dispatch(\RealtimeRegisterDomains\Actions\Domains\TransferDomain::class, $params);
 }
 
 function realtimeregister_IDProtectToggle($params)
 {
-    return App::dispatch(\RealtimeRegister\Actions\Domains\IDProtection::class, $params);
+    return App::dispatch(\RealtimeRegisterDomains\Actions\Domains\IDProtection::class, $params);
 }
 
 function realtimeregister_ClientAreaCustomButtonArray($params)
 {
-    return App::dispatch(\RealtimeRegister\Actions\Domains\ClientAreaCustomButtonArray::class, $params);
+    return App::dispatch(\RealtimeRegisterDomains\Actions\Domains\ClientAreaCustomButtonArray::class, $params);
 }
 
 function realtimeregister_ClientArea($params)
 {
-    return App::dispatch(\RealtimeRegister\Actions\Domains\ClientArea::class, $params);
+    return App::dispatch(\RealtimeRegisterDomains\Actions\Domains\ClientArea::class, $params);
 }
 
 function realtimeregister_ChildHosts($params)
 {
-    return App::dispatch(\RealtimeRegister\Actions\Domains\ChildHosts::class, $params);
+    return App::dispatch(\RealtimeRegisterDomains\Actions\Domains\ChildHosts::class, $params);
 }
 
 function realtimeregister_DNSSec($params)
 {
-    return App::dispatch(\RealtimeRegister\Actions\Domains\DNSSec::class, $params);
+    return App::dispatch(\RealtimeRegisterDomains\Actions\Domains\DNSSec::class, $params);
 }
 
 function realtimeregister_TransferSync($params)
 {
-    return App::dispatch(\RealtimeRegister\Actions\Domains\TransferSync::class, $params);
+    return App::dispatch(\RealtimeRegisterDomains\Actions\Domains\TransferSync::class, $params);
 }

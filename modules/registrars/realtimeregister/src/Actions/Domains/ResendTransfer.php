@@ -1,11 +1,11 @@
 <?php
 
-namespace RealtimeRegister\Actions\Domains;
+namespace RealtimeRegisterDomains\Actions\Domains;
 
-use RealtimeRegister\Actions\Action;
-use RealtimeRegister\App;
-use RealtimeRegister\Request;
-use SandwaveIo\RealtimeRegister\Domain\Enum\ResumeTypeEnum;
+use RealtimeRegisterDomains\Actions\Action;
+use RealtimeRegisterDomains\App;
+use RealtimeRegisterDomains\Request;
+use RealtimeRegister\Domain\Enum\ResumeTypeEnum;
 
 class ResendTransfer extends Action
 {

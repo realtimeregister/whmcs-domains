@@ -1,11 +1,11 @@
 <?php
 
-namespace RealtimeRegister\Actions\Domains;
+namespace RealtimeRegisterDomains\Actions\Domains;
 
-use RealtimeRegister\Actions\Action;
-use RealtimeRegister\App;
-use RealtimeRegister\Models\Whmcs\DomainPricing;
-use RealtimeRegister\Request;
+use RealtimeRegisterDomains\Actions\Action;
+use RealtimeRegisterDomains\App;
+use RealtimeRegisterDomains\Models\Whmcs\DomainPricing;
+use RealtimeRegisterDomains\Request;
 
 class RenewDomain extends Action
 {

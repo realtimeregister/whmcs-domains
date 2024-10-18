@@ -1,10 +1,10 @@
 <?php
 
-namespace RealtimeRegister\Actions\Domains;
+namespace RealtimeRegisterDomains\Actions\Domains;
 
-use RealtimeRegister\Actions\Action;
-use RealtimeRegister\Request;
-use SandwaveIo\RealtimeRegister\Exceptions\BadRequestException;
+use RealtimeRegisterDomains\Actions\Action;
+use RealtimeRegisterDomains\Request;
+use RealtimeRegister\Exceptions\BadRequestException;
 
 class GetNameservers extends Action
 {

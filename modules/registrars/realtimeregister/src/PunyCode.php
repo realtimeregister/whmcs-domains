@@ -1,9 +1,9 @@
 <?php
 
-namespace RealtimeRegister;
+namespace RealtimeRegisterDomains;
 
-use RealtimeRegister\Entities\Domain as DomainEntity;
-use RealtimeRegister\Services\MetadataService;
+use RealtimeRegisterDomains\Entities\Domain as DomainEntity;
+use RealtimeRegisterDomains\Services\MetadataService;
 
 trait PunyCode
 {

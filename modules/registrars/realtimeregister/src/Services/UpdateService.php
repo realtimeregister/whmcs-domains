@@ -1,9 +1,9 @@
 <?php
 
-namespace RealtimeRegister\Services;
+namespace RealtimeRegisterDomains\Services;
 
 use Illuminate\Database\Capsule\Manager as Capsule;
-use RealtimeRegister\App;
+use RealtimeRegisterDomains\App;
 
 class UpdateService
 {

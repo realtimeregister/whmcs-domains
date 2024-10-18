@@ -4,16 +4,16 @@ namespace RealtimeRegisterDomains\Hooks;
 
 use RealtimeRegisterDomains\App;
 use RealtimeRegisterDomains\Entities\DataObject;
-use RealtimeRegisterDomains\PunyCode;
+use TrueBV\Punycode;
 
 class OrderDomainPricingOverride extends Hook
 {
-    use PunyCode;
-
     public function __invoke(DataObject $vars)
     {
+        $punyCode = new Punycode();
+
         if ($vars['type'] === 'register') {
-            $res = App::client()->domains->check($vars['domain']);
+            $res = App::client()->domains->check($punyCode->encode($vars['domain']));
 
             if ($res->price !== null) {
                 return $res->price;

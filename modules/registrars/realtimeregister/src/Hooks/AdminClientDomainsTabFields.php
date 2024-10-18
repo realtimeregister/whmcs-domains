@@ -10,7 +10,6 @@ use RealtimeRegister\Models\Whmcs\Domain;
 use RealtimeRegister\Services\LogService;
 use RealtimeRegister\Services\MetadataService;
 
-
 class AdminClientDomainsTabFields extends Hook
 {
     use SmartyTrait;

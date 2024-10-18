@@ -10,7 +10,6 @@ use RealtimeRegister\Models\Whmcs\Domain;
 use RealtimeRegister\Services\LogService;
 use RealtimeRegister\Services\MetadataService;
 
-use function Symfony\Component\String\s;
 
 class AdminClientDomainsTabFields extends Hook
 {

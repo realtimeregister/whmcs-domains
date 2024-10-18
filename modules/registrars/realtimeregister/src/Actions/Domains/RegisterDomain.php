@@ -46,7 +46,7 @@ class RegisterDomain extends Action
             'autoRenew' => false,
             'ns' => $domain->nameservers,
             'contacts' => DomainContactCollection::fromArray($contacts),
-            'privacyProtect'=> $domain->privacyProtect
+            'privacyProtect' => $domain->privacyProtect
         ];
 
         if ($domain->idnLanguage) {

@@ -9,8 +9,6 @@ use TrueBV\Punycode;
 
 class OrderDomainPricingOverride extends Hook
 {
-    use PunyCode;
-
     public function __invoke(DataObject $vars)
     {
         if ($vars['type'] === 'register' && str_contains($_SERVER['REQUEST_URI'], '/admin/ordersadd.php')) {

@@ -3,7 +3,7 @@
         {foreach from=$logs key=$i item=log}
             <div class="log">
                 <small class="log-created">{$log.created_at}</small>
-                <button onclick="onAction('{$i}')" class="log-details btn btn-default block"><small>Show Details</small></button>
+                <button onclick="onLogClick('{$i}')" class="log-details btn btn-default block"><small>Show Details</small></button>
                 <span class="log-message">{$log.message}</span>
             </div>
             <hr/>
@@ -48,7 +48,7 @@
         const logModal = $('.log-modal-container');
         const logs = {$logsJSON};
 
-        function onAction(i) {
+        function onLogClick(i) {
             $('.log-filename').text(logs[i].filename);
             $('.log-classname').text(logs[i].exception_class);
             $('.log-message').text(logs[i].message);

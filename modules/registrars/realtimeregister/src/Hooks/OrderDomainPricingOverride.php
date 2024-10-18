@@ -11,7 +11,7 @@ class OrderDomainPricingOverride extends Hook
 {
     use PunyCode;
 
-    public function __invoke(DataObject $vars) : ?array
+    public function __invoke(DataObject $vars): ?array
     {
         if ($vars['type'] === 'register' && str_contains($_SERVER['REQUEST_URI'], '/admin/ordersadd.php')) {
             $res = App::client()->domains->check($vars['domain']);

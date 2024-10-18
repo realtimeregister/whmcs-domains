@@ -96,7 +96,7 @@ class MetadataService
         return end($domain_parts);
     }
 
-    public function getTldAdditionalFields(): array
+    public function getTldAdditionalFields(?string $defaultLanguageCode): array
     {
         global $_LANG;
         if (!self::isRtr($this->tld)) {
@@ -107,13 +107,22 @@ class MetadataService
         $tldAdditionalFields = [];
 
         if (!empty($languageCodes)) {
-            $tldAdditionalFields[] = [
+            $entry = [
                 'Name' => 'languageCode',
                 'LangVar' => 'rtr_languagecode_label',
                 'Description' => $_LANG['rtr_languagecode_description'],
                 'Type' => 'dropdown',
                 'Options' => ',' . implode(',', array_keys($languageCodes)),
             ];
+            if ($defaultLanguageCode) {
+                foreach ($languageCodes as $languageCode) {
+                    if (strtolower($languageCode) == $defaultLanguageCode) {
+                        $entry['Default'] = $languageCode;
+                        break;
+                    }
+                }
+            }
+            $tldAdditionalFields[] = $entry;
         }
 
         $properties = $this->get('contactProperties');

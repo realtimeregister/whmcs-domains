@@ -45,7 +45,8 @@ class RegisterDomain extends Action
             'period' => $period,
             'autoRenew' => false,
             'ns' => $domain->nameservers,
-            'contacts' => DomainContactCollection::fromArray($contacts)
+            'contacts' => DomainContactCollection::fromArray($contacts),
+            'privacyProtect' => $domain->privacyProtect
         ];
 
         if ($domain->idnLanguage) {
@@ -64,20 +65,10 @@ class RegisterDomain extends Action
         /** @var DomainRegistration $domainRegistration */
         $domainRegistration = App::client()->domains->register(...$parameters);
 
-        if (is_array($domainRegistration->status)) {
-            if (in_array(DomainStatusEnum::STATUS_OK, $domainRegistration->status)) {
-                return ['success' => true];
-            } elseif (
-                count(
-                    array_intersect(
-                        [DomainStatusEnum::STATUS_INACTIVE, DomainStatusEnum::STATUS_PENDING_VALIDATION],
-                        $domainRegistration->status
-                    )
-                ) > 0
-            ) {
-                return ['pending' => true];
-            }
+        if ($domainRegistration->expiryDate) {
+            return ['success' => true];
         }
-        return ['success' => false];
+
+        return ['pending' => true];
     }
 }

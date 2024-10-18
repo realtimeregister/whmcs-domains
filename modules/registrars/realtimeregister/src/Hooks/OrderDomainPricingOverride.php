@@ -4,20 +4,21 @@ namespace RealtimeRegisterDomains\Hooks;
 
 use RealtimeRegisterDomains\App;
 use RealtimeRegisterDomains\Entities\DataObject;
-use RealtimeRegisterDomains\PunyCode;
 use RealtimeRegisterDomains\Services\MetadataService;
+use TrueBV\Punycode;
 
 class OrderDomainPricingOverride extends Hook
 {
     use PunyCode;
 
-    public function __invoke(DataObject $vars): ?array
+    public function __invoke(DataObject $vars)
     {
         if ($vars['type'] === 'register' && str_contains($_SERVER['REQUEST_URI'], '/admin/ordersadd.php')) {
-            $res = App::client()->domains->check($vars['domain']);
+            $domain = (new Punycode())->encode($vars['domain']);
+            $res = App::client()->domains->check($domain);
 
             if ($res->price !== null) {
-                $metadata = (new MetadataService($vars['domain']))->getMetadata();
+                $metadata = (new MetadataService($domain))->getMetadata();
                 $price = ['firstPaymentAmount' => $res->price];
                 if ($metadata->premiumSupport === 'REGULAR') {
                     $price['recurringAmount'] = $res->price;

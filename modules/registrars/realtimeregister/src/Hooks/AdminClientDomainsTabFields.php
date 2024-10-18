@@ -9,6 +9,7 @@ use RealtimeRegister\Enums\WhmcsDomainStatus;
 use RealtimeRegister\Models\Whmcs\Domain;
 use RealtimeRegister\Services\LogService;
 use RealtimeRegister\Services\MetadataService;
+
 use function Symfony\Component\String\s;
 
 class AdminClientDomainsTabFields extends Hook
@@ -136,7 +137,8 @@ class AdminClientDomainsTabFields extends Hook
         return $fields;
     }
 
-    private static function getStatusDescription(string $status) : string {
+    private static function getStatusDescription(string $status): string
+    {
         if ($status === 'PENDING_VALIDATION') {
             return "PENDING VALIDATION: Domain registrant needs to verify contact details through email. 
             To resend the contact validation email to the registrant email address, 

@@ -11,7 +11,6 @@ use TrueBV\Punycode;
 
 class ClientAreaPageDomainDetails extends Hook
 {
-
     public function __invoke(DataObject $vars): array
     {
         try {

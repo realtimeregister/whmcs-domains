@@ -77,6 +77,5 @@ class JSRouter
         } catch (\Exception $e) {
             LogService::logError($e);
         }
-        
     }
 }

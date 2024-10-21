@@ -52,6 +52,6 @@ App::hook(Hooks\OrderDomainPricingOverride::class);
 App::hook(Hooks\AdminClientDomainsTabFieldsSave::class);
 
 // Hooks incompatible with invokable hook
-add_hook('ClientAreaPrimarySidebar', 1, function(MenuItem $primarySidebar) {
+add_hook('ClientAreaPrimarySidebar', 1, function (MenuItem $primarySidebar) {
     (new Hooks\Client\ClientAreaPrimarySidebar())($primarySidebar, Menu::context('domain'));
 });

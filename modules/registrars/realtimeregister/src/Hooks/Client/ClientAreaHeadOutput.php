@@ -9,6 +9,7 @@ use RealtimeRegisterDomains\Hooks\Hook;
 use RealtimeRegisterDomains\Services\JSRouter;
 use RealtimeRegisterDomains\Services\LogService;
 use RealtimeRegisterDomains\Services\MetadataService;
+
 use function RealtimeRegisterDomains\Hooks\localAPI;
 
 class ClientAreaHeadOutput extends Hook

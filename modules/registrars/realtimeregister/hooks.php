@@ -49,7 +49,5 @@ App::hook('AdminHomeWidgets', Hooks\Widgets\UpdateWidget::class, 40);
 App::hook(Hooks\OrderDomainPricingOverride::class);
 App::hook(Hooks\AdminClientDomainsTabFieldsSave::class);
 
-App::hook(Hooks\OrderDomainPricingOverride::class);
-App::hook(Hooks\AdminClientDomainsTabFieldsSave::class);
 App::hook('ShoppingCartValidateCheckout', Hooks\ValidateDomain::class);
 App::hook('ShoppingCartValidateDomainsConfig', Hooks\ValidateDomain::class);

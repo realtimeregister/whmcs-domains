@@ -2,6 +2,7 @@
 
 namespace RealtimeRegisterDomains\Hooks;
 
+use RealtimeRegister\Domain\Enum\DomainStatusEnum;
 use RealtimeRegisterDomains\Actions\Domains\SmartyTrait;
 use RealtimeRegisterDomains\App;
 use RealtimeRegisterDomains\Entities\DataObject;
@@ -81,11 +82,20 @@ class AdminClientDomainsTabFields extends Hook
         if (
             $domainInfo->registrar === 'realtimeregister'
         ) {
+            $hasTransferLock = in_array(
+                DomainStatusEnum::STATUS_CLIENT_TRANSFER_PROHIBITED,
+                    $rtrDomain?->status ?? []
+            );
             // ID protection button already visible at registrar commands
             $script = /** @lang JavaScript */
                 '$(function(){
                     $("input[name=\'idprotection\']").parent("div").parent("div").parent("label").hide();
                 });';
+            $script .=
+                '$(function(){
+                     $("input[name=\'lockstatus\']").prop("checked", ' . ($hasTransferLock ? 'true' : 'false') . ');
+                     $("input[name=\'oldlockstatus\']").val(' . ($hasTransferLock ? '"locked"' : '"unlocked"') . ')' .
+                    '});';
             if ($metaData && $domainInfo->status === 'Active' && $metaData->expiryDateOffset > 0 && $rtrDomain) {
                 $script = /** @lang JavaScript */
                     '

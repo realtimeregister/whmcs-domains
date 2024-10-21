@@ -19,7 +19,10 @@ class ValidateDomain extends Hook
                 try {
                     $metadata = (new MetadataService((new Punycode())->encode($domain['domain'])))->getMetadata();
                     if (count($nameservers) < $metadata->nameservers->min && $metadata->nameservers->required) {
-                        $errors[] = $domain['domain'] . ' needs at least ' . $metadata->nameservers->min . ' nameservers';
+                        $errors[] = $domain['domain']
+                            . ' needs at least '
+                            . $metadata->nameservers->min
+                            . ' nameservers';
                     }
                 } catch (\Exception $e) {
                     LogService::logError($e);

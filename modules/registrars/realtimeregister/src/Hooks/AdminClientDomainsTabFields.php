@@ -84,7 +84,7 @@ class AdminClientDomainsTabFields extends Hook
         ) {
             $hasTransferLock = in_array(
                 DomainStatusEnum::STATUS_CLIENT_TRANSFER_PROHIBITED,
-                    $rtrDomain?->status ?? []
+                $rtrDomain?->status ?? []
             );
             // ID protection button already visible at registrar commands
             $script = /** @lang JavaScript */

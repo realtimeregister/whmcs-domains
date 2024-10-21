@@ -66,13 +66,17 @@ class JSRouter
         if (empty($params['domain'])) {
             return;
         }
-        $metaData = (new MetadataService(MetadataService::getTld($params['domain'])))->getMetadata();
-
-        if (!$metaData->registrantChangeApprovalRequired) {
-            $this->setController('noLockSupport');
+        try {
+            $metaData = (new MetadataService(MetadataService::getTld($params['domain'])))->getMetadata();
+            if (!$metaData->registrantChangeApprovalRequired) {
+                $this->setController('noLockSupport');
+            }
+            if (in_array(12, $metaData->renewDomainPeriods) && count($metaData->renewDomainPeriods) === 1) {
+                $this->setController('removeRenewButton');
+            }
+        } catch (\Exception $e) {
+            LogService::logError($e);
         }
-        if (in_array(12, $metaData->renewDomainPeriods) && count($metaData->renewDomainPeriods) === 1) {
-            $this->setController('removeRenewButton');
-        }
+        
     }
 }

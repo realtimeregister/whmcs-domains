@@ -28,8 +28,8 @@ class ActionFailedException extends \RuntimeException
         ];
     }
 
-    public static function forException(\Throwable $exception): static
+    public static function forException(\Throwable $exception, ?string $message = null): static
     {
-        return new static($exception->getMessage(), $exception->getCode(), $exception);
+        return new static($message ?: $exception->getMessage(), $exception->getCode(), $exception);
     }
 }

@@ -2,13 +2,13 @@
 
 namespace RealtimeRegisterDomains\Actions\Domains;
 
+use RealtimeRegister\Domain\IsProxyDomain;
 use RealtimeRegisterDomains\Actions\Action;
 use RealtimeRegisterDomains\App;
 use RealtimeRegisterDomains\Request;
 use RealtimeRegisterDomains\Services\Config\Config;
 use RealtimeRegisterDomains\Services\LogService;
 use RealtimeRegisterDomains\Services\MetadataService;
-use RealtimeRegister\Domain\IsProxyDomain;
 use WHMCS\Domains\DomainLookup\ResultsList;
 use WHMCS\Domains\DomainLookup\SearchResult;
 
@@ -22,43 +22,30 @@ class CheckAvailability extends Action
             $isProxy->enable('premium');
         }
 
-        $tlds = [];
-        $originalQuery = $_REQUEST['domain'];
+        $tldsToInclude = $request->params['tldsToInclude'];
         $tldPricing = App::localApi()->getTldPricing();
+        $tlds = [];
+        $tldPricing = array_keys($tldPricing);
+        $results = new ResultsList();
 
-        if ($originalQuery != $request->params['searchTerm']) {
-            $tld = MetadataService::getTld($originalQuery);
-
-            if (!in_array($tld, array_keys($tldPricing))) {
-                $results = new ResultsList();
+        foreach ($tldsToInclude as $key => $tld) {
+            if (!in_array(ltrim($tld, '.'), $tldPricing)) {
                 $searchResult = new SearchResult($request->get('searchTerm'), $tld);
-
                 $searchResult->setStatus(SearchResult::STATUS_UNKNOWN);
                 $results->append($searchResult);
-                return $results;
+                continue;
             }
-
             if (Config::get('tldinfomapping.' . $tld) === 'centralnic') {
-                $tlds[] = $tld . '.centralnic';
+                $tlds[$key] = $tld . '.centralnic';
             } else {
-                $tlds[] = $tld;
-            }
-        } else {
-            // Add centralnic tld, when needed
-            $tlds = array_keys($tldPricing);
-            foreach ($tlds as $key => $tld) {
-                if (Config::get('tldinfomapping.' . $tld) === 'centralnic') {
-                    $tlds[$key] = $tld . '.centralnic';
-                } else {
-                    $tlds[$key] = $tld;
-                }
+                $tlds[$key] = $tld;
             }
         }
+
         $isProxyDomains = $isProxy->checkMany(
             $request->get('searchTerm'),
             array_map(fn(string $tld) => ltrim($tld, '.'), $tlds)
         );
-        $results = new ResultsList();
 
         foreach ($isProxyDomains as $result) {
             $tld = trim(strstr($result->getDomain(), '.'), '.');
@@ -111,7 +98,7 @@ class CheckAvailability extends Action
         if ($query !== $searchTerm) {
             $searchResult = new SearchResult($searchTerm, "." . MetadataService::getTld($query));
         } else {
-            $searchResult = new SearchResult($searchTerm, array_keys(App::localApi()->getTldPricing())[0]);
+            $searchResult = new SearchResult($searchTerm, $params['tldsToInclude'][0]);
         }
 
         $searchResult->setStatus(SearchResult::STATUS_UNKNOWN);

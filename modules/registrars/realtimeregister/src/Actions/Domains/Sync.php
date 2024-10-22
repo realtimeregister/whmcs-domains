@@ -3,7 +3,6 @@
 namespace RealtimeRegisterDomains\Actions\Domains;
 
 use Exception;
-use JetBrains\PhpStorm\NoReturn;
 use RealtimeRegister\Domain\Enum\DomainStatusEnum;
 use RealtimeRegister\Exceptions\BadRequestException;
 use RealtimeRegister\Exceptions\ForbiddenException;
@@ -181,13 +180,12 @@ class Sync extends Action
         return 'Active';
     }
 
-    #[NoReturn] private static function persistStatus(Request $request, int $domainId, string $status): void
+    private static function persistStatus(Request $request, int $domainId, string $status): void
     {
         Domain::query()->where('id', $domainId)->update(['status' => $status]);
         $url = 'clientsdomains.php?userid=' . $request->params['userid'] . '&id=' . $request->params['domainid'];
 
         // Refresh WHMCS because else you wont see the new status
         header("refresh: 0; url = " . $url);
-        die;
     }
 }

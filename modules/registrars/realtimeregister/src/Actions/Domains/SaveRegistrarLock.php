@@ -2,14 +2,14 @@
 
 namespace RealtimeRegisterDomains\Actions\Domains;
 
-use RealtimeRegisterDomains\Actions\Action;
-use RealtimeRegisterDomains\App;
-use RealtimeRegisterDomains\Exceptions\DomainNotFoundException;
-use RealtimeRegisterDomains\Request;
 use RealtimeRegister\Domain\Enum\DomainStatusEnum;
 use RealtimeRegister\Exceptions\BadRequestException;
 use RealtimeRegister\Exceptions\ForbiddenException;
 use RealtimeRegister\Exceptions\UnauthorizedException;
+use RealtimeRegisterDomains\Actions\Action;
+use RealtimeRegisterDomains\App;
+use RealtimeRegisterDomains\Exceptions\DomainNotFoundException;
+use RealtimeRegisterDomains\Request;
 
 class SaveRegistrarLock extends Action
 {
@@ -31,7 +31,7 @@ class SaveRegistrarLock extends Action
                 statuses: array_values($statuses)
             );
 
-            return ['success' => 'success'];
+            return ['success' => true];
         } catch (BadRequestException | UnauthorizedException | ForbiddenException $exception) {
             throw new DomainNotFoundException($exception);
         }

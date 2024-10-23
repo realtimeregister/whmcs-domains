@@ -26,13 +26,13 @@ class AdminClientDomainsTabFieldsSave extends Hook
         $metadata = (new MetadataService((new Punycode())->encode($domain['domainname'])));
         $metadataProperties = $metadata->getMetadata()->contactProperties?->toArray();
 
-        if (!$metadataProperties) {
+        if (!$metadataProperties || !$vars['domainfield']) {
             return;
         }
 
         $newProperties = array_combine(
             array_column($metadataProperties, 'name'),
-            $vars['domainfield']
+            $vars['domainfield'] ?? []
         );
 
         $order = App::localApi()->order($domain['orderid']);

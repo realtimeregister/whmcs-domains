@@ -2,12 +2,12 @@
 
 namespace RealtimeRegisterDomains\Services;
 
+use RealtimeRegister\Domain\TLDInfo;
+use RealtimeRegister\Domain\TLDMetaData;
 use RealtimeRegisterDomains\App;
 use RealtimeRegisterDomains\Models\RealtimeRegister\Cache;
 use RealtimeRegisterDomains\Models\Whmcs\DomainPricing;
 use RealtimeRegisterDomains\Services\Config\Config;
-use RealtimeRegister\Domain\TLDInfo;
-use RealtimeRegister\Domain\TLDMetaData;
 
 class MetadataService
 {
@@ -115,6 +115,7 @@ class MetadataService
                 'Options' => ',' . implode(',', array_keys($languageCodes)),
             ];
             if ($defaultLanguageCode) {
+                $entry['Required'] = true;
                 foreach ($languageCodes as $languageCode) {
                     if (strtolower($languageCode) == $defaultLanguageCode) {
                         $entry['Default'] = $languageCode;

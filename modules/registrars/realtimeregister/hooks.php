@@ -2,6 +2,7 @@
 
 use RealtimeRegisterDomains\App;
 use RealtimeRegisterDomains\Hooks;
+use Whmcs\View\Menu\Item as MenuItem;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
@@ -23,9 +24,10 @@ App::hook('ShoppingCartValidateCheckout', Hooks\ShoppingCartValidate::class);
 App::hook('ShoppingCartValidateDomainsConfig', Hooks\ShoppingCartValidate::class);
 App::hook(Hooks\UserLogin::class);
 
-App::hook(Hooks\ClientAreaPage::class);
+App::hook(Hooks\Client\ClientAreaPage::class);
 App::hook(Hooks\ContactEdit::class);
-App::hook('ClientAreaHeadOutput', Hooks\ClientAreaHeadOutput::class, 20);
+App::hook('ClientAreaHeadOutput', Hooks\Client\ClientAreaHeadOutput::class, 20);
+App::hook(Hooks\Client\ClientAreaPageDomainDetails::class);
 
 App::hook('AdminHomeWidgets', Hooks\Widgets\ActionsWidget::class);
 App::hook('AdminHomeWidgets', Hooks\Widgets\DomainOverviewWidget::class);
@@ -51,3 +53,8 @@ App::hook(Hooks\AdminClientDomainsTabFieldsSave::class);
 
 App::hook('ShoppingCartValidateCheckout', Hooks\ValidateDomain::class);
 App::hook('ShoppingCartValidateDomainsConfig', Hooks\ValidateDomain::class);
+
+// Hooks incompatible with invokable hook
+add_hook('ClientAreaPrimarySidebar', 1, function (MenuItem $primarySidebar) {
+    (new Hooks\Client\ClientAreaPrimarySidebar())($primarySidebar, Menu::context('domain'));
+});

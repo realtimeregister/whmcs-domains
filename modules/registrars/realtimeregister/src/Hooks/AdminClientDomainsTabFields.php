@@ -34,11 +34,15 @@ class AdminClientDomainsTabFields extends Hook
         }
 
         try {
-            $processes = App::client()->processes->export([
-                'fields' => 'createdDate,action,status',
-                'order' => '-createdDate',
-                'identifier:eq' => $domainName
-            ]);
+            $processes = array_map(
+                fn($process) => [...$process, 'link' => App::portalUrl() . '/app/process/' . $process['id']],
+                App::client()->processes->export([
+                    'fields' => 'createdDate,action,status,id',
+                    'order' => '-createdDate',
+                    'identifier:eq' => $domainName
+                ])
+            );
+
             if (!empty($processes)) {
                 $fields['Processes'] = $this->render(__DIR__ . '/../Assets/Tpl/admin/processes_log.tpl', [
                     'processes' => $processes,

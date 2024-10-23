@@ -1,3 +1,6 @@
+<p>
+	{$LANG.rtr.process.info}
+</p>
 <table class="table table-hover align_top">
 	<tbody>
 		<tr>
@@ -7,7 +10,7 @@
 		</tr>
 		{if $processes}
 			{foreach from=$processes item=process}
-				<tr>
+				<tr class="clickable-row" data-href="{$process.link}">
 					<td class="nowrap">{$process.createdDate|date_format:"l Y-m-d H:i:s"}</td>
 					<td>{$process.action}</td>
 					<td>{$process.status}</td>
@@ -16,3 +19,17 @@
 		{/if}
 	</tbody>
 </table>
+
+<script>
+	$(function () {
+		$(".clickable-row").click(function() {
+			window.open($(this).data("href"), '_blank')
+		});
+	})
+</script>
+
+<style>
+	.clickable-row:hover {
+		cursor: pointer;
+	}
+</style>

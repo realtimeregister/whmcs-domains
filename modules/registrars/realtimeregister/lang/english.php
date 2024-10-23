@@ -99,6 +99,9 @@ $_LANG['rtr']['errorlog'] = [
     'stacktrace' => 'Stack Trace'
 ];
 
+$_LANG['rtr']['process']['info'] = 'For more information on any process in the listing, click the corresponding row to 
+navigate to the  process in the Realtime Register Domain Manager.';
+
 include_once implode(
     DIRECTORY_SEPARATOR,
     [ROOTDIR, 'modules', 'registrars', 'realtimeregister', 'lang', 'english.additional.php']

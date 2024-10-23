@@ -29,6 +29,9 @@ class App
     protected const METADATA_PROXY_URL = 'https://rtrdm.blob.core.windows.net/metadata-prod/bundle.json';
     protected const METADATA_PROXY_URL_TEST = 'https://rtrdm.blob.core.windows.net/metadata-ote/bundle.json';
 
+    protected const PORTAL_URL = 'https://dm.realtimeregister.com';
+    protected const PORTAL_URL_TEST = 'https://dm.yoursrs-ote.com';
+
     protected readonly LocalApi $localApi;
     protected readonly RegistrarConfig $registrarConfig;
     protected readonly ContactService $contactService;
@@ -133,6 +136,11 @@ class App
 
     public static function toPunyCode(string $domain) {
         return static::instance()->punyCode->encode($domain);
+    }
+
+    public static function portalUrl(): string
+    {
+        return App::registrarConfig()->isTest() ? self::PORTAL_URL_TEST : self::PORTAL_URL;
     }
 
     protected function dispatchTo(string $action, array $params = [])

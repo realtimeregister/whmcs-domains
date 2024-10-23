@@ -12,7 +12,6 @@ class ValidateDomain extends Hook
 
     public function __invoke(DataObject $vars)
     {
-
         $errors = [];
         $nameservers = self::getNameServersFromCart();
         if (!empty($_SESSION['cart']['domains'])) {

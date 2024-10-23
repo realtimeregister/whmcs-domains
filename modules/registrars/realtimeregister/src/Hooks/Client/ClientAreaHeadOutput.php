@@ -1,12 +1,16 @@
 <?php
 
-namespace RealtimeRegisterDomains\Hooks;
+namespace RealtimeRegisterDomains\Hooks\Client;
 
+use RealtimeRegister\Domain\DomainContact;
 use RealtimeRegisterDomains\App;
 use RealtimeRegisterDomains\Entities\DataObject;
+use RealtimeRegisterDomains\Hooks\Hook;
 use RealtimeRegisterDomains\Services\JSRouter;
+use RealtimeRegisterDomains\Services\LogService;
 use RealtimeRegisterDomains\Services\MetadataService;
-use RealtimeRegister\Domain\DomainContact;
+
+use function RealtimeRegisterDomains\Hooks\localAPI;
 
 class ClientAreaHeadOutput extends Hook
 {
@@ -19,12 +23,15 @@ class ClientAreaHeadOutput extends Hook
             $dateToCheck = strtotime('+1 month', time());
             foreach ($smarty->tpl_vars['renewalsData']->value as &$renewal) {
                 $tld = substr($renewal['tld'], 1);
-                $metaData = (new MetadataService($tld))->getMetadata();
-
-                if (MetadataService::isRtr($tld) && !in_array('RENEW', $metaData->featuresAvailable)) {
-                    if ($renewal['expiryDate']->timestamp > $dateToCheck) {
-                        $renewal['eligibleForRenewal'] = false;
+                try {
+                    $metaData = (new MetadataService($tld))->getMetadata();
+                    if (MetadataService::isRtr($tld) && !in_array('RENEW', $metaData->featuresAvailable)) {
+                        if ($renewal['expiryDate']->timestamp > $dateToCheck) {
+                            $renewal['eligibleForRenewal'] = false;
+                        }
                     }
+                } catch (\Exception $e) {
+                    LogService::logError($e);
                 }
             }
         }

@@ -20,7 +20,7 @@ class AdminCustomButtonArray extends Action
 
         $adminButtons = [
             "Sync expiry date" => "SyncExpiryDate",
-            "Sync domain" => "Sync"
+            "Sync domain" => "ManualSync"
         ];
 
         $whmcsDomain = Domain::find($request->params['domainid']);

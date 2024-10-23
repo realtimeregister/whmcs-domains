@@ -3,16 +3,18 @@
 namespace RealtimeRegisterDomains\Actions\Domains;
 
 use Exception;
-use RealtimeRegisterDomains\Actions\Action;
-use RealtimeRegisterDomains\Enums\WhmcsDomainStatus;
-use RealtimeRegisterDomains\Exceptions\DomainNotFoundException;
-use RealtimeRegisterDomains\Models\Whmcs\Domain;
-use RealtimeRegisterDomains\Request;
 use RealtimeRegister\Domain\Enum\DomainStatusEnum;
 use RealtimeRegister\Exceptions\BadRequestException;
 use RealtimeRegister\Exceptions\ForbiddenException;
 use RealtimeRegister\Exceptions\UnauthorizedException;
-use Illuminate\Database\Capsule\Manager as Capsule;
+use RealtimeRegisterDomains\Actions\Action;
+use RealtimeRegisterDomains\App;
+use RealtimeRegisterDomains\Enums\WhmcsDomainStatus;
+use RealtimeRegisterDomains\Exceptions\DomainNotFoundException;
+use RealtimeRegisterDomains\Models\Whmcs\Domain;
+use RealtimeRegisterDomains\Request;
+use RealtimeRegisterDomains\Services\LogService;
+use TrueBV\Punycode;
 
 class Sync extends Action
 {
@@ -22,6 +24,7 @@ class Sync extends Action
     public function __invoke(Request $request)
     {
         $metadata = $this->metadata($request);
+        $persist = $request->params['persist'];
 
         try {
             $domain = $this->domainInfo($request);
@@ -34,6 +37,13 @@ class Sync extends Action
 
             $values = [];
         } catch (BadRequestException | UnauthorizedException | ForbiddenException $exception) {
+            $whmcsDomain = Domain::query()->where('domain', $request->domain->domainName())->firstOrFail();
+            if (self::checkForOutgoingTransfer($request)) {
+                if ($persist) {
+                    self::persistStatus($request, $whmcsDomain->id, "Transferred Away");
+                }
+                return ["transferredAway" => true];
+            }
             throw new DomainNotFoundException($exception);
         }
 
@@ -88,10 +98,12 @@ class Sync extends Action
             $values['active'] = false;
             $values['cancelled'] = false;
             $values['transferredAway'] = false;
-
-            Capsule::table('tbldomains')->where('id', $whmcsDomain->id)->update(['status' => 'Pending']);
         } else {
             $values[strtolower($status->value)] = true;
+        }
+
+        if ($persist) {
+            self::persistStatus($request, $whmcsDomain->id, $status->value);
         }
 
         try {
@@ -99,6 +111,7 @@ class Sync extends Action
                 return realtimeregister_after_Sync($request->params, $values);
             }
         } catch (\Exception $ex) {
+            LogService::logError($ex);
             return [
                 'error' => sprintf(
                     'Error while trying to execute the realtimeregister_after_Sync hook: %s.',
@@ -109,6 +122,20 @@ class Sync extends Action
 
         return $values;
     }
+
+    private static function checkForOutgoingTransfer(Request $request): bool
+    {
+        $domain = $request->domain->punyCode == null
+            ? (new Punycode())->encode($request->domain->domainName())
+            : $request->domain->punyCode;
+        return App::client()->processes->list(parameters:
+            ["identifier:eq" => $domain,
+                "status" => "COMPLETED",
+                "action:in" => "outgoingTransfer,outgoingInternalTransfer"
+            ])->count() > 0;
+    }
+
+
 
     protected function syncDueDate(string $date): string
     {
@@ -151,5 +178,14 @@ class Sync extends Action
         }
 
         return 'Active';
+    }
+
+    private static function persistStatus(Request $request, int $domainId, string $status): void
+    {
+        Domain::query()->where('id', $domainId)->update(['status' => $status]);
+        $url = 'clientsdomains.php?userid=' . $request->params['userid'] . '&id=' . $request->params['domainid'];
+
+        // Refresh WHMCS because else you wont see the new status
+        header("refresh: 0; url = " . $url);
     }
 }

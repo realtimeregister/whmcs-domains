@@ -7,10 +7,12 @@ use RealtimeRegisterDomains\Actions\Contacts\ResendValidation;
 use RealtimeRegisterDomains\Actions\Contacts\SaveContactDetails;
 use RealtimeRegisterDomains\Actions\Domains\CheckAvailability;
 use RealtimeRegisterDomains\Actions\Domains\GetDomainInformation;
+use RealtimeRegisterDomains\Actions\Domains\RegisterDomain;
 use RealtimeRegisterDomains\Actions\Domains\ResendTransfer;
 use RealtimeRegisterDomains\Actions\Domains\SaveNameservers;
 use RealtimeRegisterDomains\Actions\Domains\SaveRegistrarLock;
 use RealtimeRegisterDomains\Actions\Domains\Sync;
+use RealtimeRegisterDomains\Actions\Domains\TransferDomain;
 use RealtimeRegisterDomains\Actions\Domains\TransferWithBillables;
 use RealtimeRegisterDomains\App;
 use RealtimeRegisterDomains\ConfigArray;
@@ -49,11 +51,7 @@ function realtimeregister_config_validate(array $params)
 
 function realtimeregister_CheckAvailability(array $params): ResultsList
 {
-    return App::dispatch(
-        CheckAvailability::class,
-        $params,
-        [\RealtimeRegisterDomains\Actions\Domains\CheckAvailability::class, 'handleException']
-    );
+    return App::dispatch(CheckAvailability::class, $params, [CheckAvailability::class, 'handleException']);
 }
 
 function realtimeregister_GetDomainInformation(array $params)
@@ -91,6 +89,11 @@ function realtimeregister_Sync(array $params)
     return App::dispatch(Sync::class, $params);
 }
 
+function realtimeregister_ManualSync(array $params)
+{
+    return App::dispatch(Sync::class, [...$params, 'persist' => true]);
+}
+
 function realtimeregister_AdminCustomButtonArray(array $params): array
 {
     return App::dispatch(
@@ -102,7 +105,7 @@ function realtimeregister_AdminCustomButtonArray(array $params): array
 
 function realtimeregister_RegisterDomain(array $params)
 {
-    return App::dispatch(\RealtimeRegisterDomains\Actions\Domains\RegisterDomain::class, $params);
+    return App::dispatch(RegisterDomain::class);
 }
 
 function realtimeregister_GetTldPricing(array $params)
@@ -153,7 +156,7 @@ function realtimeregister_RenewDomain($params)
 
 function realtimeregister_TransferDomain($params)
 {
-    return App::dispatch(\RealtimeRegisterDomains\Actions\Domains\TransferDomain::class, $params);
+    return App::dispatch(TransferDomain::class, $params, [TransferDomain::class, 'handleException']);
 }
 
 function realtimeregister_IDProtectToggle($params)

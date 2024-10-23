@@ -3,7 +3,7 @@
 namespace RealtimeRegisterDomains\Enums;
 
 use RealtimeRegister\Domain\DomainDetails;
-use RealtimeRegisterDomainsRealtimeRegister\Domain\Enum\DomainStatusEnum;
+use RealtimeRegister\Domain\Enum\DomainStatusEnum;
 
 enum WhmcsDomainStatus: string
 {

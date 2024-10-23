@@ -105,7 +105,7 @@ function realtimeregister_AdminCustomButtonArray(array $params): array
 
 function realtimeregister_RegisterDomain(array $params)
 {
-    return App::dispatch(RegisterDomain::class);
+    return App::dispatch(RegisterDomain::class, $params);
 }
 
 function realtimeregister_GetTldPricing(array $params)

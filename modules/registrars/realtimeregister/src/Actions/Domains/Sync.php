@@ -176,10 +176,10 @@ class Sync extends Action
         return 'Active';
     }
 
-    private static function persist(Request $request, int $domainId, string $status, ?\DateTime $expiryDate = null): void
+    private static function persist(Request $request, int $domainId, string $status, ?\DateTime $newExpiry = null): void
     {
-        if ($expiryDate) {
-            Domain::query()->where('id', $domainId)->update(['status' => $status, 'expiryDate' => $expiryDate]);
+        if ($newExpiry) {
+            Domain::query()->where('id', $domainId)->update(['status' => $status, 'expiryDate' => $newExpiry]);
         } else {
             Domain::query()->where('id', $domainId)->update(['status' => $status]);
         }

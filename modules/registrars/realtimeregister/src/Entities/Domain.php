@@ -32,7 +32,7 @@ class Domain
         return $this->punyCode ?? $this->unicodeDomain();
     }
 
-    public function unicodeDomain() : string
+    public function unicodeDomain(): string
     {
         return $this->name . '.' . $this->tld;
     }

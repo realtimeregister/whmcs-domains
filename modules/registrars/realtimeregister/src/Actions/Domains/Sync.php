@@ -34,7 +34,6 @@ class Sync extends Action
             if ($metadata->expiryDateOffset) {
                 $expiryDate = $expiryDate->add(new \DateInterval('PT' . $metadata->expiryDateOffset . 'S'));
             }
-
         } catch (BadRequestException | UnauthorizedException | ForbiddenException $exception) {
             $whmcsDomain = Domain::query()->where('domain', $request->domain->unicodeDomain())->firstOrFail();
             if (self::checkForOutgoingTransfer($request)) {

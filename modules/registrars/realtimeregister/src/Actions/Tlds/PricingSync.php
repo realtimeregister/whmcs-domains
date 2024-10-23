@@ -57,6 +57,21 @@ class PricingSync extends Action
                         $item->setGraceFeeDays($metadata->autoRenewGracePeriod);
                     }
                 }
+
+                if ($metadata->createDomainPeriods) {
+                    $minYears = -1;
+                    $maxYears = -1;
+                    foreach ($metadata->createDomainPeriods as $period) {
+                        if ($period % 12 == 0) {
+                            if ($minYears === -1) {
+                                $minYears = $period / 12;
+                            }
+                            $maxYears = $period / 12;
+                        }
+                    }
+                    $item->setMinYears($minYears);
+                    $item->setMaxYears($maxYears);
+                }
                 $results[] = $item;
             }
             return $results;

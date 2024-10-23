@@ -101,11 +101,11 @@ class AdminClientDomainsTabFields extends Hook
                             }';
             }
 
-            $script .= 
+            $script .=
                      '$("input[name=\'lockstatus\']").prop("checked", ' . ($hasTransferLock ? 'true' : 'false') . ');
                      $("input[name=\'oldlockstatus\']").val(' . ($hasTransferLock ? '"locked"' : '"unlocked"') . ')' .
                     '});';
-            
+
             if ($metaData && $domainInfo->status === 'Active' && $metaData->expiryDateOffset > 0 && $rtrDomain) {
                 $script = /** @lang JavaScript */
                     '

@@ -25,7 +25,7 @@ use WHMCS\View\Template\AssetUtil;
 class SaveContactDetails extends Action
 {
     use ContactDetailsTrait;
-    
+
     protected array $roles = [
         ContactModel::ROLE_REGISTRANT => DomainContactRoleEnum::ROLE_REGISTRANT,
         ContactModel::ROLE_ADMIN => DomainContactRoleEnum::ROLE_ADMIN,

@@ -8,7 +8,6 @@ use RealtimeRegisterDomains\Models\Whmcs\Currencies;
 
 class ShoppingCartService
 {
-
     /**
      * @throws \Exception
      */

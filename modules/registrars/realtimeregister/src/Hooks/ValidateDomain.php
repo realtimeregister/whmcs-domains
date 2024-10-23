@@ -9,7 +9,6 @@ use RealtimeRegisterDomains\Services\MetadataService;
 
 class ValidateDomain extends Hook
 {
-
     public function __invoke(DataObject $vars)
     {
         $errors = [];

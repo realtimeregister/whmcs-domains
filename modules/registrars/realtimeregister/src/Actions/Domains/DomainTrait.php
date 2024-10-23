@@ -17,7 +17,6 @@ use RealtimeRegisterDomains\Services\ContactService;
 
 trait DomainTrait
 {
-
     protected static array $CONTACT_ROLES = [
         "TECH" => "techContacts",
         "ADMIN" => "adminContacts",

@@ -135,7 +135,8 @@ class App
         return App::registrarConfig()->isTest() ? self::METADATA_PROXY_URL_TEST : self::METADATA_PROXY_URL;
     }
 
-    public static function toPunyCode(string $domain): string {
+    public static function toPunyCode(string $domain): string
+    {
         return static::instance()->punyCode->encode($domain);
     }
 

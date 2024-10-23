@@ -15,6 +15,7 @@ use RealtimeRegisterDomains\Services\Assets;
 use RealtimeRegisterDomains\Services\ContactService;
 use RealtimeRegisterDomains\Services\LogService;
 use RuntimeException;
+use TrueBV\Punycode;
 
 class App
 {
@@ -22,7 +23,7 @@ class App
     public const VERSION = '2.0.0';
 
     protected const API_URL = "https://api.yoursrs.com/";
-    protected const API_URL_TEST = "host.docker.internal:8003";
+    protected const API_URL_TEST = "https://api.yoursrs-ote.com/";
     protected const IS_PROXY_HOST = "is.yoursrs.com";
     protected const IS_PROXY_HOST_TEST = "is.yoursrs-ote.com";
 
@@ -42,7 +43,7 @@ class App
 
     protected static bool $booted = false;
     protected Assets $assets;
-    protected readonly \TrueBV\Punycode $punyCode;
+    protected readonly Punycode $punyCode;
 
     public function __construct()
     {
@@ -50,7 +51,7 @@ class App
         $this->registrarConfig = new RegistrarConfig();
         $this->contactService = new ContactService();
         $this->assets = new Assets();
-        $this->punyCode = new \TrueBV\Punycode();
+        $this->punyCode = new Punycode();
     }
 
     public static function boot(): App
@@ -124,7 +125,7 @@ class App
         }
 
         return static::$isProxy = new IsProxy(
-            apiKey: "cGlldGVyamFuL2FkbWluOrcOQbo4Mi8bN8Ck2VpToNW7eggL6Q6fpDSqWGs0TOKQ",
+            apiKey: App::registrarConfig()->apiKey(),
             host: App::registrarConfig()->isTest() ? self::IS_PROXY_HOST_TEST : self::IS_PROXY_HOST
         );
     }
@@ -134,7 +135,7 @@ class App
         return App::registrarConfig()->isTest() ? self::METADATA_PROXY_URL_TEST : self::METADATA_PROXY_URL;
     }
 
-    public static function toPunyCode(string $domain) {
+    public static function toPunyCode(string $domain): string {
         return static::instance()->punyCode->encode($domain);
     }
 

@@ -14,7 +14,6 @@ use RealtimeRegisterDomains\Exceptions\DomainNotFoundException;
 use RealtimeRegisterDomains\Models\Whmcs\Domain;
 use RealtimeRegisterDomains\Request;
 use RealtimeRegisterDomains\Services\LogService;
-use TrueBV\Punycode;
 
 class Sync extends Action
 {
@@ -125,9 +124,7 @@ class Sync extends Action
 
     private static function checkForOutgoingTransfer(Request $request): bool
     {
-        $domain = $request->domain->punyCode == null
-            ? (new Punycode())->encode($request->domain->domainName())
-            : $request->domain->punyCode;
+        $domain = $request->domain->domainName();
         return App::client()->processes->list(parameters:
             ["identifier:eq" => $domain,
                 "status" => "COMPLETED",

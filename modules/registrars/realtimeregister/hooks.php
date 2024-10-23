@@ -20,8 +20,6 @@ App::hook("AdminHomepage", Hooks\AutoRenewStatus::class, 2);
 App::hook(RealtimeRegisterDomains\Hooks\AdminClientDomainsTabFields::class);
 
 App::hook('ClientAreaHeadOutput', Hooks\Adac::class, 10);
-App::hook('ShoppingCartValidateCheckout', Hooks\ShoppingCartValidate::class);
-App::hook('ShoppingCartValidateDomainsConfig', Hooks\ShoppingCartValidate::class);
 App::hook(Hooks\UserLogin::class);
 
 App::hook(Hooks\Client\ClientAreaPage::class);

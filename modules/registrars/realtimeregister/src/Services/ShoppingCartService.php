@@ -2,50 +2,12 @@
 
 namespace RealtimeRegisterDomains\Services;
 
+use Illuminate\Database\Capsule\Manager as Capsule;
 use RealtimeRegisterDomains\App;
 use RealtimeRegisterDomains\Models\Whmcs\Currencies;
-use Illuminate\Database\Capsule\Manager as Capsule;
 
 class ShoppingCartService
 {
-    public static function validateCartDomains(): array
-    {
-        $errors = [];
-
-        if (isset($_SESSION['cart']) && !empty($_SESSION['cart']['domains'])) {
-            foreach ($_SESSION['cart']['domains'] as $domain) {
-                $domainName = $domain['domain'];
-                try {
-                    $metaData = (new MetadataService(MetadataService::getTld($domainName)))->getMetadata();
-                    if ($metaData->domainSyntax->languageCodes) {
-                        $languageCodes = $metaData->domainSyntax->languageCodes->toArray();
-                    }
-                } catch (\Exception $ex) {
-                    continue;
-                }
-
-                if (in_array('fields', $domain, true) && is_array($domain['fields'])) {
-                    $domainFields = array_values($domain['fields']);
-                    $languageCode = array_shift($domainFields);
-
-                    if ($languageCode == 'Choose language code') {
-                        $languageCode = '';
-                    }
-
-                    if (
-                        $languageCodes && !$languageCode && (!preg_match(
-                            '/^([0-9a-z\-]+\.)+([a-z\-]+|xn--[a-z0-9\-]+)$/',
-                            $domainName
-                        ) || str_starts_with($domainName, 'xn--'))
-                    ) {
-                        $errors[] = 'Language code is required (' . $domainName . ')';
-                    }
-                }
-            }
-        }
-
-        return $errors;
-    }
 
     /**
      * @throws \Exception

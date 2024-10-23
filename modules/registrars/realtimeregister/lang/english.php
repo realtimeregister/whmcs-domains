@@ -46,7 +46,7 @@ $_LANG['rtr']['adac']['status']['5'] = "unknown";
 
 
 // Additional domain fields
-$_LANG['rtr_languagecode_label'] = 'Select Language Code';
+$_LANG['rtr_languagecode_label'] = 'Language Code';
 $_LANG['rtr_languagecode_description'] = '';
 
 $_LANG['rtr']['custom_handles']['please_wait'] = 'Please wait while we load the content..';

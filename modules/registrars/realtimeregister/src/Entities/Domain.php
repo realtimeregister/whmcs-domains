@@ -51,7 +51,7 @@ class Domain
             admin: Contact::fromWhmcs(ContactType::Admin, $params),
             tech: Contact::fromWhmcs(ContactType::Tech, $params),
             billing: Contact::fromWhmcs(ContactType::Billing, $params),
-            idnLanguage: ($params['additionalfields'] ?? [])['languageCode'],
+            idnLanguage: ($params['additionalfields'] ?? [])['languageCode'] ?? null,
             punyCode: $params['domain_punycode'] ?? null,
             namePunyCode: $params['sld_punycode'] ?? null,
             tldPunyCode: $params['tld_punycode'] ?? null,

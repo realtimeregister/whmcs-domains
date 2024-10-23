@@ -3,6 +3,9 @@
 namespace RealtimeRegisterDomains\Actions\Domains;
 
 use Illuminate\Database\Capsule\Manager as Capsule;
+use RealtimeRegister\Domain\Billable;
+use RealtimeRegister\Domain\DomainQuote;
+use RealtimeRegister\Domain\TLDMetaData;
 use RealtimeRegisterDomains\App;
 use RealtimeRegisterDomains\Entities\DataObject;
 use RealtimeRegisterDomains\Models\RealtimeRegister\ContactMapping;
@@ -11,13 +14,9 @@ use RealtimeRegisterDomains\Models\Whmcs\Domain;
 use RealtimeRegisterDomains\Models\Whmcs\Orders;
 use RealtimeRegisterDomains\PunyCode;
 use RealtimeRegisterDomains\Services\ContactService;
-use RealtimeRegister\Domain\Billable;
-use RealtimeRegister\Domain\DomainQuote;
-use RealtimeRegister\Domain\TLDMetaData;
 
 trait DomainTrait
 {
-    use PunyCode;
 
     protected static array $CONTACT_ROLES = [
         "TECH" => "techContacts",

@@ -11,7 +11,7 @@
     $(document).ready(
         function () {
             // Remove language code selection when not needed
-            $('#frmConfigureDomains').find('> .row > div:contains("Select Language Code")').parent().each(
+            $('#frmConfigureDomains').find('> .row > div:contains("Language Code")').parent().each(
                 function () {
                     let self = $(this);
                     let domain = self.prevAll('.sub-heading').first().find('span').text();

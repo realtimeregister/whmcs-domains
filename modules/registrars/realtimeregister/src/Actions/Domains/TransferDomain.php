@@ -2,9 +2,11 @@
 
 namespace RealtimeRegisterDomains\Actions\Domains;
 
-use RealtimeRegisterDomains\App;
-use RealtimeRegisterDomains\Request;
 use RealtimeRegister\Domain\DomainContactCollection;
+use RealtimeRegisterDomains\App;
+use RealtimeRegisterDomains\Exceptions\ActionFailedException;
+use RealtimeRegisterDomains\Request;
+use RealtimeRegisterDomains\Services\LogService;
 
 class TransferDomain extends SyncExpiryDate
 {
@@ -16,31 +18,32 @@ class TransferDomain extends SyncExpiryDate
         $metadata = $this->metadata($request);
         $domain = $request->domain;
 
-        try {
-            list(
-                'registrant' => $registrant,
-                'contacts' => $contacts
-            ) = $this->generateContactsForDomain(request: $request, metadata: $metadata);
+        list(
+            'registrant' => $registrant,
+            'contacts' => $contacts
+        ) = $this->generateContactsForDomain(request: $request, metadata: $metadata);
 
-            App::client()->domains->transfer(
-                domainName: $domain->domainName(),
-                customer: App::registrarConfig()->customerHandle(),
-                registrant: $registrant,
-                authcode: $request->eppCode,
-                autoRenew: false,
-                ns: App::registrarConfig()->keepNameServers() ? null : $domain->nameservers,
-                contacts: DomainContactCollection::fromArray($contacts),
-            );
+        App::client()->domains->transfer(
+            domainName: $domain->domainName(),
+            customer: App::registrarConfig()->customerHandle(),
+            registrant: $registrant,
+            authcode: $request->eppCode,
+            autoRenew: false,
+            ns: App::registrarConfig()->keepNameServers() ? null : $domain->nameservers,
+            contacts: DomainContactCollection::fromArray($contacts),
+        );
 
-            return ['success' => true];
-        } catch (\Exception $ex) {
-            return [
-                'error' => sprintf(
-                    'Error transferring domain %s. Error details: %s.',
-                    $request->domain->domainName(),
-                    $ex->getMessage()
-                )
-            ];
-        }
+        return ['success' => true];
+    }
+
+    public static function handleException(\Throwable $exception, array $params): array
+    {
+        $message = str_contains($exception->getMessage(), "not possible with statuses '[CLIENT_TRANSFER_PROHIBITED]")
+            ? $exception->getMessage() . ". Remove the transferlock with the current registrar and retry the transfer."
+            : $exception->getMessage();
+
+        LogService::logError($exception, $message);
+
+        return ActionFailedException::forException($exception, $message)->response("RegisterDomain");
     }
 }

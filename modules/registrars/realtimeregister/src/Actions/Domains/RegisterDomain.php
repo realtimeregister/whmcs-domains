@@ -2,13 +2,12 @@
 
 namespace RealtimeRegisterDomains\Actions\Domains;
 
-use RealtimeRegisterDomains\Actions\Action;
-use RealtimeRegisterDomains\App;
-use RealtimeRegisterDomains\Request;
 use RealtimeRegister\Domain\BillableCollection;
 use RealtimeRegister\Domain\DomainContactCollection;
 use RealtimeRegister\Domain\DomainRegistration;
-use RealtimeRegister\Domain\Enum\DomainStatusEnum;
+use RealtimeRegisterDomains\Actions\Action;
+use RealtimeRegisterDomains\App;
+use RealtimeRegisterDomains\Request;
 
 class RegisterDomain extends Action
 {

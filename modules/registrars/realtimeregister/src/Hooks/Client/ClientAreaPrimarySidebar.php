@@ -10,9 +10,9 @@ use Whmcs\View\Menu\Item as MenuItem;
 
 class ClientAreaPrimarySidebar
 {
-    public function __invoke(MenuItem $primarySidebar, ?Domain $domain): void
+    public function __invoke(MenuItem $primarySidebar, mixed $domain): void
     {
-        if (!$domain) {
+        if (!$domain instanceof Domain) {
             return;
         }
         try {

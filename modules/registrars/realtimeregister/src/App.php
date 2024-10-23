@@ -2,6 +2,8 @@
 
 namespace RealtimeRegisterDomains;
 
+use RealtimeRegister\IsProxy;
+use RealtimeRegister\RealtimeRegister;
 use RealtimeRegisterDomains\Contracts\InvokableAction;
 use RealtimeRegisterDomains\Contracts\InvokableHook;
 use RealtimeRegisterDomains\Entities\DataObject;
@@ -13,8 +15,6 @@ use RealtimeRegisterDomains\Services\Assets;
 use RealtimeRegisterDomains\Services\ContactService;
 use RealtimeRegisterDomains\Services\LogService;
 use RuntimeException;
-use RealtimeRegister\IsProxy;
-use RealtimeRegister\RealtimeRegister;
 
 class App
 {
@@ -28,6 +28,9 @@ class App
 
     protected const METADATA_PROXY_URL = 'https://rtrdm.blob.core.windows.net/metadata-prod/bundle.json';
     protected const METADATA_PROXY_URL_TEST = 'https://rtrdm.blob.core.windows.net/metadata-ote/bundle.json';
+
+    protected const PORTAL_URL = 'https://dm.realtimeregister.com';
+    protected const PORTAL_URL_TEST = 'https://dm.yoursrs-ote.com';
 
     protected readonly LocalApi $localApi;
     protected readonly RegistrarConfig $registrarConfig;
@@ -127,6 +130,11 @@ class App
     public static function metadataUrl(): string
     {
         return App::registrarConfig()->isTest() ? self::METADATA_PROXY_URL_TEST : self::METADATA_PROXY_URL;
+    }
+
+    public static function portalUrl(): string
+    {
+        return App::registrarConfig()->isTest() ? self::PORTAL_URL_TEST : self::PORTAL_URL;
     }
 
     protected function dispatchTo(string $action, array $params = [])

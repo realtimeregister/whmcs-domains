@@ -89,6 +89,11 @@ function realtimeregister_Sync(array $params)
     return App::dispatch(Sync::class, $params);
 }
 
+function realtimeregister_ManualSync(array $params)
+{
+    return App::dispatch(Sync::class, [...$params, 'persist' => true]);
+}
+
 function realtimeregister_AdminCustomButtonArray(array $params): array
 {
     return App::dispatch(

@@ -2,12 +2,12 @@
 
 namespace RealtimeRegisterDomains\Hooks;
 
+use RealtimeRegister\Domain\Enum\ResumeTypeEnum;
 use RealtimeRegisterDomains\Actions\Action;
 use RealtimeRegisterDomains\App;
 use RealtimeRegisterDomains\Models\Whmcs\Domain;
 use RealtimeRegisterDomains\Request;
 use RealtimeRegisterDomains\Services\LogService;
-use RealtimeRegister\Domain\Enum\ResumeTypeEnum;
 
 class AdminCustomButtonArray extends Action
 {
@@ -20,7 +20,7 @@ class AdminCustomButtonArray extends Action
 
         $adminButtons = [
             "Sync expiry date" => "SyncExpiryDate",
-            "Sync domain" => "Sync"
+            "Sync domain" => "ManualSync"
         ];
 
         $whmcsDomain = Domain::find($request->params['domainid']);

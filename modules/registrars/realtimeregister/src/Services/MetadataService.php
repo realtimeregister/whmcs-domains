@@ -115,6 +115,7 @@ class MetadataService
                 'Options' => ',' . implode(',', array_keys($languageCodes)),
             ];
             if ($defaultLanguageCode) {
+                $entry['Required'] = true;
                 foreach ($languageCodes as $languageCode) {
                     if (strtolower($languageCode) == $defaultLanguageCode) {
                         $entry['Default'] = $languageCode;

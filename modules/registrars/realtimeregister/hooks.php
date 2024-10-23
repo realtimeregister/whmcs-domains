@@ -51,6 +51,9 @@ App::hook('AdminHomeWidgets', Hooks\Widgets\UpdateWidget::class, 40);
 App::hook(Hooks\OrderDomainPricingOverride::class);
 App::hook(Hooks\AdminClientDomainsTabFieldsSave::class);
 
+App::hook('ShoppingCartValidateCheckout', Hooks\ValidateDomain::class);
+App::hook('ShoppingCartValidateDomainsConfig', Hooks\ValidateDomain::class);
+
 // Hooks incompatible with invokable hook
 add_hook('ClientAreaPrimarySidebar', 1, function (MenuItem $primarySidebar) {
     (new Hooks\Client\ClientAreaPrimarySidebar())($primarySidebar, Menu::context('domain'));

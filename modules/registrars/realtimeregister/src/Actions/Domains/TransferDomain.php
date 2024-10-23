@@ -3,12 +3,13 @@
 namespace RealtimeRegisterDomains\Actions\Domains;
 
 use RealtimeRegister\Domain\DomainContactCollection;
+use RealtimeRegisterDomains\Actions\Action;
 use RealtimeRegisterDomains\App;
 use RealtimeRegisterDomains\Exceptions\ActionFailedException;
 use RealtimeRegisterDomains\Request;
 use RealtimeRegisterDomains\Services\LogService;
 
-class TransferDomain extends SyncExpiryDate
+class TransferDomain extends Action
 {
     use DomainTrait;
     use DomainContactTrait;

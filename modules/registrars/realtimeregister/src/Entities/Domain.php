@@ -29,7 +29,12 @@ class Domain
 
     public function domainName(): string
     {
-        return $this->punyCode ?? $this->name . '.' . $this->tld;
+        return $this->punyCode ?? $this->unicodeDomain();
+    }
+
+    public function unicodeDomain() : string
+    {
+        return $this->name . '.' . $this->tld;
     }
 
     public static function fromWhmcs(array $params): static

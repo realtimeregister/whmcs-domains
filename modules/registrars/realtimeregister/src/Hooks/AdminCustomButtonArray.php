@@ -19,7 +19,6 @@ class AdminCustomButtonArray extends Action
         $metadata = $this->metadata($request);
 
         $adminButtons = [
-            "Sync expiry date" => "SyncExpiryDate",
             "Sync domain" => "ManualSync"
         ];
 

@@ -96,7 +96,7 @@ class AdminClientDomainsTabFields extends Hook
                     $("input[name=\'idprotection\']").parent("div").parent("div").parent("label").hide();';
 
             if ($rtrDomain) {
-                $script .= 'if($("form").find("tr:contains(\'Language Code\')").length) {
+                $script .= 'if($("form").find("tr:contains(\'Language Code\')").length > 1) {
                                 $("select[name=\'domainfield[0]\']").prop("disabled", true);
                             }';
             }

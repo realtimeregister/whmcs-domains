@@ -2,13 +2,14 @@
 
 namespace RealtimeRegisterDomains\Hooks;
 
+use RealtimeRegisterDomains\App;
 use RealtimeRegisterDomains\Entities\DataObject;
 use RealtimeRegisterDomains\Services\LogService;
 use RealtimeRegisterDomains\Services\MetadataService;
-use TrueBV\Punycode;
 
 class ValidateDomain extends Hook
 {
+
     public function __invoke(DataObject $vars)
     {
 
@@ -17,7 +18,7 @@ class ValidateDomain extends Hook
         if (!empty($_SESSION['cart']['domains'])) {
             foreach ($_SESSION['cart']['domains'] as $domain) {
                 try {
-                    $metadata = (new MetadataService((new Punycode())->encode($domain['domain'])))->getMetadata();
+                    $metadata = (new MetadataService(App::toPunycode($domain['domain'])))->getMetadata();
                     if (count($nameservers) < $metadata->nameservers->min && $metadata->nameservers->required) {
                         $errors[] = $domain['domain']
                             . ' needs at least '

@@ -2,13 +2,12 @@
 
 namespace RealtimeRegisterDomains\Actions\Domains;
 
-use RealtimeRegisterDomains\Actions\Action;
-use RealtimeRegisterDomains\App;
-use RealtimeRegisterDomains\Request;
 use RealtimeRegister\Domain\BillableCollection;
 use RealtimeRegister\Domain\DomainContactCollection;
 use RealtimeRegister\Domain\DomainRegistration;
-use RealtimeRegister\Domain\Enum\DomainStatusEnum;
+use RealtimeRegisterDomains\Actions\Action;
+use RealtimeRegisterDomains\App;
+use RealtimeRegisterDomains\Request;
 
 class RegisterDomain extends Action
 {
@@ -24,7 +23,7 @@ class RegisterDomain extends Action
         $metadata = $tldInfo->metadata;
         $domain = $request->domain;
 
-        $domainName = $this->checkForPunyCode($domain);
+        $domainName = $domain->domainName();
 
         $period = $request->get('regperiod') * 12;
         if (!in_array($period, $metadata->createDomainPeriods)) {

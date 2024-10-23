@@ -3,6 +3,13 @@
 namespace RealtimeRegisterDomains\Actions\Contacts;
 
 use Illuminate\Support\Arr;
+use RealtimeRegister\Domain\Contact;
+use RealtimeRegister\Domain\DomainContact;
+use RealtimeRegister\Domain\DomainContactCollection;
+use RealtimeRegister\Domain\Enum\DomainContactRoleEnum;
+use RealtimeRegister\Domain\TLDInfo;
+use RealtimeRegister\Exceptions\BadRequestException;
+use RealtimeRegister\Exceptions\UnauthorizedException;
 use RealtimeRegisterDomains\Actions\Action;
 use RealtimeRegisterDomains\App;
 use RealtimeRegisterDomains\Entities\DataObject;
@@ -13,13 +20,6 @@ use RealtimeRegisterDomains\Models\Whmcs\Domain;
 use RealtimeRegisterDomains\PunyCode;
 use RealtimeRegisterDomains\Request;
 use RealtimeRegisterDomains\Services\ContactService;
-use RealtimeRegister\Domain\Contact;
-use RealtimeRegister\Domain\DomainContact;
-use RealtimeRegister\Domain\DomainContactCollection;
-use RealtimeRegister\Domain\Enum\DomainContactRoleEnum;
-use RealtimeRegister\Domain\TLDInfo;
-use RealtimeRegister\Exceptions\BadRequestException;
-use RealtimeRegister\Exceptions\UnauthorizedException;
 use WHMCS\View\Template\AssetUtil;
 
 class SaveContactDetails extends Action
@@ -57,6 +57,7 @@ class SaveContactDetails extends Action
             $updatedContacts = [];
             $deleteContacts = [];
 
+
             foreach ($this->roles as $whmcsRole => $role) {
                 // Role is not present
                 if (!$request->input('wc.' . $whmcsRole)) {
@@ -93,17 +94,13 @@ class SaveContactDetails extends Action
                             $properties
                         );
                     } else {
-                        try {
-                            $newHandle = ContactService::getOrCreateDomainContact(
-                                clientId: $clientId,
-                                contactId: $contactId,
-                                role: $role,
-                                tldInfo: $tldInfo,
-                                organizationAllowed: $organizationAllowed
-                            );
-                        } catch (\Exception $exception) {
-                            dd($exception);
-                        }
+                        $newHandle = ContactService::getOrCreateDomainContact(
+                            clientId: $clientId,
+                            contactId: $contactId,
+                            role: $role,
+                            tldInfo: $tldInfo,
+                            organizationAllowed: $organizationAllowed
+                        );
                     }
 
                     if ($currentHandle != $newHandle) {
@@ -192,7 +189,6 @@ class SaveContactDetails extends Action
                     throw $ex;
                 }
             }
-
             // Update contacts, if needed
             if ($updatedContacts) {
                 foreach ($updatedContacts as $handle => $diff) {
@@ -237,7 +233,7 @@ class SaveContactDetails extends Action
         return $diff;
     }
 
-    public function getProperties(TLDInfo $tldInfo): array
+    public function getProperties(TLDInfo $tldInfo): ?array
     {
         $properties = ['registry' => $tldInfo->provider, 'properties' => []];
 
@@ -251,6 +247,9 @@ class SaveContactDetails extends Action
             if (!empty($value) && array_key_exists($property, $tld_properties)) {
                 $properties['properties'][$property] = $value;
             }
+        }
+        if (empty($properties['properties'])) {
+            return null;
         }
         return $properties;
     }
@@ -295,12 +294,7 @@ class SaveContactDetails extends Action
                 ];
         }
 
-        $domainName = $this->checkForPunyCode(
-            new \RealtimeRegisterDomains\Entities\Domain(
-                name: $this->params['original']['domainname'],
-                tld: $this->params['original']['tld']
-            )
-        );
+        $domainName = App::toPunyCode($this->params['original']['domainname']);
 
         $params = $domain;
         $params['domainName'] = $domainName;

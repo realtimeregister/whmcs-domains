@@ -3,12 +3,12 @@
 namespace RealtimeRegisterDomains\Actions\Domains;
 
 use Illuminate\Database\Capsule\Manager as Capsule;
-use RealtimeRegisterDomains\Actions\Action;
-use RealtimeRegisterDomains\App;
-use RealtimeRegisterDomains\Request;
 use RealtimeRegister\Domain\BillableCollection;
 use RealtimeRegister\Domain\DomainContactCollection;
 use RealtimeRegister\Domain\DomainRegistration;
+use RealtimeRegisterDomains\Actions\Action;
+use RealtimeRegisterDomains\App;
+use RealtimeRegisterDomains\Request;
 
 class RegisterWithBillables extends Action
 {
@@ -20,7 +20,7 @@ class RegisterWithBillables extends Action
         $metadata = $this->metadata($request);
 
         try {
-            $domainName = $this->checkForPunyCode($request->domain);
+            $domainName = $request->domain->domainName();
 
             $orderId = App::localApi()->domain(
                 clientId: $request->get('userid'),

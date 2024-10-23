@@ -47,9 +47,7 @@ class TransferSync extends Action
 
         // Lets check transfer information.
         try {
-            $transferInfo = App::client()->domains->transferInfo(
-                $this->checkForPunyCode($request->domain)
-            );
+            $transferInfo = App::client()->domains->transferInfo($request->domain->domainName());
             $message = $this->transferStatusMessages[$transferInfo->status];
             // Lets process COMPLETED transfer status.
             if ($transferInfo->status == 'completed') {

@@ -2,12 +2,12 @@
 
 namespace RealtimeRegisterDomains\Hooks;
 
+use RealtimeRegister\Domain\Enum\ResumeTypeEnum;
 use RealtimeRegisterDomains\Actions\Action;
 use RealtimeRegisterDomains\App;
 use RealtimeRegisterDomains\Models\Whmcs\Domain;
 use RealtimeRegisterDomains\Request;
 use RealtimeRegisterDomains\Services\LogService;
-use RealtimeRegister\Domain\Enum\ResumeTypeEnum;
 
 class AdminCustomButtonArray extends Action
 {
@@ -73,7 +73,7 @@ class AdminCustomButtonArray extends Action
         LogService::logError($exception);
         return [
             "success" => false,
-            sprintf('Error retrieving information about domain: %s.', $exception->getMessage())
+            "message" => sprintf('Error retrieving information about domain: %s.', $exception->getMessage())
         ];
     }
 }

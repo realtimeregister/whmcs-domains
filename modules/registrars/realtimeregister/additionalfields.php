@@ -22,6 +22,7 @@
 use RealtimeRegisterDomains\Services\LogService;
 use RealtimeRegisterDomains\Services\MetadataService;
 
+$skip = ['nl'];
 $tlds = [];
 $languageCodes = [];
 
@@ -50,6 +51,9 @@ if (!empty($dom) && is_string($dom)) {
 $tlds = array_unique($tlds);
 
 foreach ($tlds as $tld) {
+    if (in_array($tld, $skip)) {
+        continue;
+    }
     try {
         $additional = (new MetadataService($tld))->getTldAdditionalFields($languageCodes[$tld]);
     } catch (\Exception $e) {
@@ -72,20 +76,12 @@ foreach ($tlds as $tld) {
         );
     }
 
-    if (empty($fields)) {
-        continue;
-    }
-
     $additionaldomainfields['.' . $tld] = $fields;
+
     // Add 'applicable' TLD's, mainly for SLD support
     foreach ($additional['applicableFor'] as $item) {
         $additionaldomainfields['.' . $item] = $fields;
     }
-}
-
-// Unset NL metadata
-if (!empty($additionaldomainfields['.nl'])) {
-    unset($additionaldomainfields['.nl']);
 }
 
 if (!empty($additionaldomainfields['.eu'])) {

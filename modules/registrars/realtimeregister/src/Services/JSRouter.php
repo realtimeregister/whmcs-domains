@@ -24,14 +24,6 @@ class JSRouter
     }
 
     /**
-     * Return encoded json.
-     */
-    public function getJson(): string
-    {
-        return json_encode($this->json);
-    }
-
-    /**
      * Set JS controller.
      */
     private function setController($controller): void

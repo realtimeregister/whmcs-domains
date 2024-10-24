@@ -8,6 +8,12 @@
     </div>
 {/if}
 
+{if $saved}
+    <div class="alert alert-success alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <strong>{$LANG.rtr.saved}</strong>
+    </div>
+{/if}
 
 <ul class="list-group child-host mb-3">
     {foreach from=$hosts key=i item=host}
@@ -20,7 +26,7 @@
             <div>
                 <h6 class="my-0" style="font-weight: bold; padding-bottom: 15px; border-bottom: 1px solid whitesmoke;">{$host->hostName}
                     <a href="#" data-ns="{$host->hostName}" style="float: right;" class="btn btn-danger btn-xs delete-ns"><i
-                                class="text-danger glyphicon glyphicon-remove"></i> {$LANG.rtr.deletehost}</a>
+                                class="text-danger fas fa-trash fa-white"></i> {$LANG.rtr.deletehost}</a>
                 </h6>
             </div>
 
@@ -55,7 +61,7 @@
                             </td>
                             <td class='remove'>
                                 {if $i}
-                                    <a href="#" class="text-danger remove-ip"><i class="glyphicon glyphicon-remove"></i></a>
+                                    <a href="#" class="text-danger remove-ip"><i class="fas fa-trash"></i></a>
                                 {/if}
                             </td>
                         </tr>
@@ -63,7 +69,7 @@
                     <tr>
                         <td>
                             {if $totalIPS < 13}
-                                <a href="#" class="btn btn-default add-ip">{$LANG.rtr.add_ip}</a>
+                                <button type="button" class="btn btn-default add-ip">{$LANG.rtr.add_ip}</button>
                             {/if}
                         </td>
                     </tr>

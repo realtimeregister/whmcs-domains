@@ -25,16 +25,17 @@ class AdminClientDomainsTabFieldsSave extends Hook
 
         // See if the domain is still in our portfolio
         if ($domain && $domain->get('registrar') === 'realtimeregister') {
-            $metadata = (new MetadataService(App::toPunycode($domain['domainname'])));
+            $metadata = (new MetadataService(App::toPunyCode($domain['domainname'])));
             $metadataProperties = $metadata->getMetadata()->contactProperties?->toArray();
 
             if (!$metadataProperties || !$vars['domainfield']) {
                 return;
             }
 
-            $newProperties = array_combine(
-                array_column($metadataProperties, 'name'),
-                $vars['domainfield'] ?? []
+            $newProperties = array_filter(
+                array_combine(array_column(self::getFieldNames($vars['id']), 'name'), $vars['domainfield'] ?? []),
+                fn($key) => $key !== 'languageCode',
+                ARRAY_FILTER_USE_KEY
             );
 
             $order = App::localApi()->order($domain['orderid']);
@@ -54,6 +55,15 @@ class AdminClientDomainsTabFieldsSave extends Hook
                 }
             }
         }
+    }
+
+    private static function getFieldNames(int $domainId): array
+    {
+        return AdditionalFields::query()
+            ->select(["name"])
+            ->where("domainid", '=', $domainId)
+            ->get()
+            ->toArray();
     }
 
     private static function revertChanges($handle, $tldInfo, $domainId): void

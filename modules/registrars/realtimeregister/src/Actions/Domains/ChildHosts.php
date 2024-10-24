@@ -2,10 +2,10 @@
 
 namespace RealtimeRegisterDomains\Actions\Domains;
 
+use RealtimeRegister\Domain\DnsHostAddressCollection;
 use RealtimeRegisterDomains\Actions\Action;
 use RealtimeRegisterDomains\App;
 use RealtimeRegisterDomains\Request;
-use RealtimeRegister\Domain\DnsHostAddressCollection;
 
 class ChildHosts extends Action
 {
@@ -16,6 +16,8 @@ class ChildHosts extends Action
         $domainid = $request->params['domainid'];
         $domainname = $request->params['domainname'];
         $message = '';
+        $saved = false;
+
         try {
             $domainInfo = $this->domainInfo($request);
             $domain = $domainInfo->domainName;
@@ -27,6 +29,7 @@ class ChildHosts extends Action
             try {
                 if (isset($_POST['hostAction']) && isset($_POST['hostName']) && is_string($_POST['hostName'])) {
                     if ($_POST['hostAction'] == "delete") {
+                        $saved = true;
                         if (!in_array($_POST['hostName'], $domainInfo->childHosts)) {
                             throw new \Exception(
                                 sprintf("Host '%s' is not a subordinate host of '%s'", $_POST['hostName'], $domainname)
@@ -37,6 +40,7 @@ class ChildHosts extends Action
                     }
 
                     if ($_POST['hostAction'] == "create") {
+                        $saved = true;
                         $hostName = $_POST['hostName'] . '.' . $domainname;
 
                         if (!$this->isSubordinateHost($hostName, $domainname)) {
@@ -60,7 +64,7 @@ class ChildHosts extends Action
                                     ]
                                 )
                             );
-                            $domainInfo['childHosts'][] = $hostName;
+                            $domainInfo->childHosts[] = $hostName;
                         } else {
                             throw new \Exception("Invalid IP address information provided.");
                         }
@@ -72,6 +76,7 @@ class ChildHosts extends Action
 
             try {
                 if (isset($_POST['hostAction']) && $_POST['hostAction'] == "update") {
+                    $saved = true;
                     if (
                         !isset($_POST['host']) || !is_array($_POST['host']) || !isset($_POST['ipVersion'])
                         || !is_array($_POST['ipVersion'])
@@ -93,8 +98,6 @@ class ChildHosts extends Action
                         }
                     }
                     App::client()->hosts->update($_POST['hostName'], DnsHostAddressCollection::fromArray($addresses));
-                    header('Location: ' . html_entity_decode($_SERVER['REQUEST_URI']));
-                    exit;
                 }
             } catch (\Exception $ex) {
                 $message = sprintf("Error while updating the host: %s", $ex->getMessage());
@@ -117,6 +120,7 @@ class ChildHosts extends Action
                 'content' => $this->render(__DIR__ . '/../../Assets/Tpl/child_hosts_form.tpl', [
                     'hosts' => $hosts,
                     'error' => $message,
+                    'saved' => $message ? false : $saved,
                     'domainName' => $domain,
                     'domainId' => $domainid,
                 ]),

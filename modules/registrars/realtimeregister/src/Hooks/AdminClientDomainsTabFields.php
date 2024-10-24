@@ -97,7 +97,7 @@ class AdminClientDomainsTabFields extends Hook
 
             if ($rtrDomain) {
                 $script .= 'if($("form").find("tr:contains(\'Language Code\')").length > 1) {
-                                $("select[name=\'domainfield[0]\']").prop("disabled", true);
+                                $("select[name=\'domainfield[0]\'] option:not([selected=\'selected\'])").remove();
                             }';
             }
 

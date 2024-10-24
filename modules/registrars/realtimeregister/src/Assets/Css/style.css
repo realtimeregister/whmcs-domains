@@ -130,3 +130,7 @@ form .view-ips {
 .status.error {
     background-color: #e85e5e;
 }
+
+.fa-white {
+    color: white !important;
+}

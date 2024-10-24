@@ -147,9 +147,7 @@
                 }
             );
 
-            $(document).on(
-                'click',
-                '.add-ip',
+            $('.add-ip').on('click',
                 function (e) {
                     e.preventDefault();
                     let total = $(this).closest('form').find('input[name="totalIPS"]').val();
@@ -192,7 +190,7 @@
                         )
                         .append(
                             $('<td class="remove">')
-                            .append('<a href="#" class="text-danger remove-ip"><i class="glyphicon glyphicon-remove"></i></a>')
+                            .append('<a href="#" class="text-danger remove-ip"><i class="fas fa-trash"></i></a>')
                         )
                     );
 

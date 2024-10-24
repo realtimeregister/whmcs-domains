@@ -97,4 +97,12 @@ if (!empty($additionaldomainfields['.eu'])) {
     }
 }
 
+if (!empty($additionaldomainfields['.coop'])) {
+    foreach ($additionaldomainfields['.coop'] as $i => $field) {
+        if ($field['Name'] === 'coopAcceptRequirements') {
+            $additionaldomainfields['.coop'][$i]['Required'] = true;
+        }
+    }
+}
+
 MetadataService::removeDefaultFields($additionaldomainfields);

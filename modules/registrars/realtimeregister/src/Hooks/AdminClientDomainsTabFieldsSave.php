@@ -22,32 +22,36 @@ class AdminClientDomainsTabFieldsSave extends Hook
     public function __invoke(DataObject $vars): void
     {
         $domain = App::localApi()->domain($vars['userid'], $vars['id']);
-        $metadata = (new MetadataService(App::toPunyCode(($domain['domainname']))));
-        $metadataProperties = $metadata->getMetadata()->contactProperties?->toArray();
 
-        if (!$metadataProperties || !$vars['domainfield']) {
-            return;
-        }
+        // See if the domain is still in our portfolio
+        if ($domain && $domain->get('registrar') === 'realtimeregister') {
+            $metadata = (new MetadataService(App::toPunycode($domain['domainname'])));
+            $metadataProperties = $metadata->getMetadata()->contactProperties?->toArray();
 
-        $newProperties = array_combine(
-            array_column($metadataProperties, 'name'),
-            $vars['domainfield'] ?? []
-        );
+            if (!$metadataProperties || !$vars['domainfield']) {
+                return;
+            }
 
-        $order = App::localApi()->order($domain['orderid']);
-        $handle = ContactService::getContactMapping(
-            $vars['userid'],
-            $order['contactid'],
-            $metadata->getMetadata()->registrant->organizationAllowed
-        )?->handle;
+            $newProperties = array_combine(
+                array_column($metadataProperties, 'name'),
+                $vars['domainfield'] ?? []
+            );
 
-        if ($handle) {
-            try {
-                self::addProperties($newProperties, $handle, $metadata->getAll());
-            } catch (\Exception $e) {
-                LogService::logError($e);
-                self::revertChanges($handle, $metadata->getAll(), $vars['id']);
-                throw $e;
+            $order = App::localApi()->order($domain['orderid']);
+            $handle = ContactService::getContactMapping(
+                $vars['userid'],
+                $order['contactid'],
+                $metadata->getMetadata()->registrant->organizationAllowed
+            )?->handle;
+
+            if ($handle) {
+                try {
+                    self::addProperties($newProperties, $handle, $metadata->getAll());
+                } catch (\Exception $e) {
+                    LogService::logError($e);
+                    self::revertChanges($handle, $metadata->getAll(), $vars['id']);
+                    throw $e;
+                }
             }
         }
     }

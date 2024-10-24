@@ -24,6 +24,7 @@ class Sync extends Action
     {
         $metadata = $this->metadata($request);
         $persist = $request->params['persist'];
+        $values = [];
 
         try {
             $domain = $this->domainInfo($request);
@@ -33,20 +34,18 @@ class Sync extends Action
             if ($metadata->expiryDateOffset) {
                 $expiryDate = $expiryDate->add(new \DateInterval('PT' . $metadata->expiryDateOffset . 'S'));
             }
-
-            $values = [];
         } catch (BadRequestException | UnauthorizedException | ForbiddenException $exception) {
-            $whmcsDomain = Domain::query()->where('domain', $request->domain->domainName())->firstOrFail();
+            $whmcsDomain = Domain::query()->where('domain', $request->domain->unicodeDomain())->firstOrFail();
             if (self::checkForOutgoingTransfer($request)) {
                 if ($persist) {
-                    self::persistStatus($request, $whmcsDomain->id, "Transferred Away");
+                    self::persist($request, $whmcsDomain->id, "Transferred Away");
                 }
                 return ["transferredAway" => true];
             }
             throw new DomainNotFoundException($exception);
         }
 
-        $whmcsDomain = Domain::query()->where('domain', $request->domain->domainName())->firstOrFail();
+        $whmcsDomain = Domain::query()->where('domain', $request->domain->unicodeDomain())->firstOrFail();
 
         if ($domain->autoRenewPeriod < 12 && $domain->autoRenew) {
             if (strtotime($whmcsDomain->expirydate) >= strtotime($whmcsDomain->nextduedate)) {
@@ -102,7 +101,7 @@ class Sync extends Action
         }
 
         if ($persist) {
-            self::persistStatus($request, $whmcsDomain->id, $status->value);
+            self::persist($request, $whmcsDomain->id, $status->value, $expiryDate);
         }
 
         try {
@@ -177,10 +176,17 @@ class Sync extends Action
         return 'Active';
     }
 
-    private static function persistStatus(Request $request, int $domainId, string $status): void
+    private static function persist(Request $request, int $domainId, string $status, ?\DateTime $newExpiry = null): void
     {
-        Domain::query()->where('id', $domainId)->update(['status' => $status]);
-        $url = 'clientsdomains.php?userid=' . $request->params['userid'] . '&id=' . $request->params['domainid'];
+        if ($newExpiry) {
+            Domain::query()->where('id', $domainId)->update(['status' => $status, 'expiryDate' => $newExpiry]);
+        } else {
+            Domain::query()->where('id', $domainId)->update(['status' => $status]);
+        }
+        $url = 'clientsdomains.php?userid=' . $request->params['userid']
+            . '&id='
+            . $request->params['domainid']
+            . '&conf=success';
 
         // Refresh WHMCS because else you wont see the new status
         header("refresh: 0; url = " . $url);

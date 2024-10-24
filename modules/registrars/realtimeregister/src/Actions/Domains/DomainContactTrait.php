@@ -2,12 +2,12 @@
 
 namespace RealtimeRegisterDomains\Actions\Domains;
 
+use RealtimeRegister\Domain\TLDInfo;
+use RealtimeRegister\Domain\TLDMetaData;
 use RealtimeRegisterDomains\App;
 use RealtimeRegisterDomains\Hooks\CustomHandlesTrait;
 use RealtimeRegisterDomains\Request;
 use RealtimeRegisterDomains\Services\MetadataService;
-use RealtimeRegister\Domain\TLDInfo;
-use RealtimeRegister\Domain\TLDMetaData;
 
 trait DomainContactTrait
 {

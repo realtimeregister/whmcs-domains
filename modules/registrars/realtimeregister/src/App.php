@@ -15,6 +15,7 @@ use RealtimeRegisterDomains\Services\Assets;
 use RealtimeRegisterDomains\Services\ContactService;
 use RealtimeRegisterDomains\Services\LogService;
 use RuntimeException;
+use TrueBV\Punycode;
 
 class App
 {
@@ -42,6 +43,7 @@ class App
 
     protected static bool $booted = false;
     protected Assets $assets;
+    protected readonly Punycode $punyCode;
 
     public function __construct()
     {
@@ -49,6 +51,7 @@ class App
         $this->registrarConfig = new RegistrarConfig();
         $this->contactService = new ContactService();
         $this->assets = new Assets();
+        $this->punyCode = new Punycode();
     }
 
     public static function boot(): App
@@ -130,6 +133,11 @@ class App
     public static function metadataUrl(): string
     {
         return App::registrarConfig()->isTest() ? self::METADATA_PROXY_URL_TEST : self::METADATA_PROXY_URL;
+    }
+
+    public static function toPunyCode(string $domain): string
+    {
+        return static::instance()->punyCode->encode($domain);
     }
 
     public static function portalUrl(): string

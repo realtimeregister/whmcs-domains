@@ -4,12 +4,12 @@ namespace RealtimeRegisterDomains\Services;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Arr;
+use RealtimeRegister\Domain\TLDInfo;
 use RealtimeRegisterDomains\App;
 use RealtimeRegisterDomains\Entities\DataObject;
 use RealtimeRegisterDomains\Entities\WhmcsContact;
 use RealtimeRegisterDomains\LocalApi;
 use RealtimeRegisterDomains\Models\RealtimeRegister\ContactMapping;
-use RealtimeRegister\Domain\TLDInfo;
 
 class ContactService
 {
@@ -84,7 +84,7 @@ class ContactService
             contactId: $contactId,
             organizationAllowed: $organizationAllowed,
             properties: $properties
-        );
+        )->handle;
 
         if ($handle) {
             // Check if we need to add properties

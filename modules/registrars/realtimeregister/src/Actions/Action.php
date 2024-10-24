@@ -3,16 +3,16 @@
 namespace RealtimeRegisterDomains\Actions;
 
 use Illuminate\Database\Capsule\Manager;
+use RealtimeRegister\Domain\Contact;
+use RealtimeRegister\Domain\DomainDetails;
+use RealtimeRegister\Domain\TLDInfo;
+use RealtimeRegister\Domain\TLDMetaData;
 use RealtimeRegisterDomains\Actions\Domains\DomainTrait;
 use RealtimeRegisterDomains\App;
 use RealtimeRegisterDomains\Contracts\InvokableAction;
 use RealtimeRegisterDomains\Models\RealtimeRegister\Cache;
 use RealtimeRegisterDomains\Request;
 use RealtimeRegisterDomains\Services\MetadataService;
-use RealtimeRegister\Domain\Contact;
-use RealtimeRegister\Domain\DomainDetails;
-use RealtimeRegister\Domain\TLDInfo;
-use RealtimeRegister\Domain\TLDMetaData;
 
 abstract class Action implements InvokableAction
 {
@@ -24,7 +24,7 @@ abstract class Action implements InvokableAction
 
     protected function domainInfo(Request $request): DomainDetails
     {
-        $domainName = $this->checkForPunyCode($request->domain);
+        $domainName = $request->domain->domainName();
         return Cache::request()->rememberForever(
             'domain-info:' . $domainName,
             function () use ($request, $domainName) {
@@ -35,7 +35,7 @@ abstract class Action implements InvokableAction
 
     protected function forgetDomainInfo(Request $request): bool
     {
-        return Cache::request()->forget('domain-info:' . $this->checkForPunyCode($request->domain));
+        return Cache::request()->forget('domain-info:' . $request->domain->domainName());
     }
 
     public function contactInfo(string $handle): Contact

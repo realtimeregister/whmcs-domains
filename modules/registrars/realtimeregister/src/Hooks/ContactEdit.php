@@ -5,6 +5,7 @@ namespace RealtimeRegisterDomains\Hooks;
 use RealtimeRegisterDomains\App;
 use RealtimeRegisterDomains\Entities\DataObject;
 use RealtimeRegisterDomains\Entities\WhmcsContact;
+use RealtimeRegisterDomains\Services\LogService;
 
 class ContactEdit extends Hook
 {
@@ -32,7 +33,7 @@ class ContactEdit extends Hook
                         ...$diff
                     );
                 } catch (\Exception $exception) {
-                    // @todo: Handle bad requests
+                    LogService::logError($exception, $diff['addressLine']);
                     throw $exception;
                 }
             }

@@ -23,7 +23,7 @@ class RegisterDomain extends Action
         $metadata = $tldInfo->metadata;
         $domain = $request->domain;
 
-        $domainName = $this->checkForPunyCode($domain);
+        $domainName = $domain->domainName();
 
         $period = $request->get('regperiod') * 12;
         if (!in_array($period, $metadata->createDomainPeriods)) {

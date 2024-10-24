@@ -102,8 +102,8 @@ class MetadataService
         if (!self::isRtr($this->tld)) {
             return [];
         }
-
         $languageCodes = $this->get('domainSyntax')['languageCodes'];
+
         $tldAdditionalFields = [];
 
         if (!empty($languageCodes)) {
@@ -116,7 +116,7 @@ class MetadataService
             ];
             if ($defaultLanguageCode) {
                 $entry['Required'] = true;
-                foreach ($languageCodes as $languageCode) {
+                foreach (array_keys($languageCodes) as $languageCode) {
                     if (strtolower($languageCode) == $defaultLanguageCode) {
                         $entry['Default'] = $languageCode;
                         break;

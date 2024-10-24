@@ -54,7 +54,7 @@ class AdminClientDomainsTabFields extends Hook
 
         $rtrDomain = null;
         try {
-            $rtrDomain = App::client()->domains->get($domainName);
+            $rtrDomain = App::client()->domains->get(App::toPunyCode($domainName));
 
             if (!empty($rtrDomain->keyData)) {
                 $fields['DNSSec'] = $this->render(
@@ -67,7 +67,7 @@ class AdminClientDomainsTabFields extends Hook
                 __DIR__ . '/../Assets/Tpl/admin/status.tpl',
                 ['status' => array_map(fn($status) => self::getStatusDescription($status), $rtrDomain->status)]
             );
-        } catch (\Exception) {
+        } catch (\Exception $e) {
             # ignore
         }
 
@@ -91,15 +91,21 @@ class AdminClientDomainsTabFields extends Hook
                 $rtrDomain?->status ?? []
             );
             // ID protection button already visible at registrar commands
-            $script = /** @lang JavaScript */
+            $script =
                 '$(function(){
-                    $("input[name=\'idprotection\']").parent("div").parent("div").parent("label").hide();
-                });';
+                    $("input[name=\'idprotection\']").parent("div").parent("div").parent("label").hide();';
+
+            if ($rtrDomain) {
+                $script .= 'if($("form").find("tr:contains(\'Language Code\')").length > 1) {
+                                $("select[name=\'domainfield[0]\']").prop("disabled", true);
+                            }';
+            }
+
             $script .=
-                '$(function(){
-                     $("input[name=\'lockstatus\']").prop("checked", ' . ($hasTransferLock ? 'true' : 'false') . ');
+                     '$("input[name=\'lockstatus\']").prop("checked", ' . ($hasTransferLock ? 'true' : 'false') . ');
                      $("input[name=\'oldlockstatus\']").val(' . ($hasTransferLock ? '"locked"' : '"unlocked"') . ')' .
                     '});';
+
             if ($metaData && $domainInfo->status === 'Active' && $metaData->expiryDateOffset > 0 && $rtrDomain) {
                 $script = /** @lang JavaScript */
                     '

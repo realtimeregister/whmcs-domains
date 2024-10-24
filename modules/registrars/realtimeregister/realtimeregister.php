@@ -113,12 +113,6 @@ function realtimeregister_GetTldPricing(array $params)
     return App::dispatch(\RealtimeRegisterDomains\Actions\Tlds\PricingSync::class, $params);
 }
 
-// Custom functions
-function realtimeregister_SyncExpiryDate($params)
-{
-    return App::dispatch(\RealtimeRegisterDomains\Actions\Domains\SyncExpiryDate::class, $params);
-}
-
 function realtimeregister_RegisterWithBillables(array $params)
 {
     return App::dispatch(\RealtimeRegisterDomains\Actions\Domains\RegisterWithBillables::class, $params);

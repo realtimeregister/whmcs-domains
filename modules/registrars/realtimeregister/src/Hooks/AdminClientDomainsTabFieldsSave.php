@@ -10,7 +10,6 @@ use RealtimeRegisterDomains\Models\Whmcs\AdditionalFields;
 use RealtimeRegisterDomains\Services\ContactService;
 use RealtimeRegisterDomains\Services\LogService;
 use RealtimeRegisterDomains\Services\MetadataService;
-use TrueBV\Punycode;
 
 class AdminClientDomainsTabFieldsSave extends Hook
 {
@@ -26,7 +25,7 @@ class AdminClientDomainsTabFieldsSave extends Hook
 
         // See if the domain is still in our portfolio
         if ($domain && $domain->get('registrar') === 'realtimeregister') {
-            $metadata = (new MetadataService((new Punycode())->encode($domain['domainname'])));
+            $metadata = (new MetadataService(App::toPunycode($domain['domainname'])));
             $metadataProperties = $metadata->getMetadata()->contactProperties?->toArray();
 
             if (!$metadataProperties || !$vars['domainfield']) {

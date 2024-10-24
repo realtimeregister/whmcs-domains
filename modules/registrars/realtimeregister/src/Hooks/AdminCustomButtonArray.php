@@ -19,7 +19,6 @@ class AdminCustomButtonArray extends Action
         $metadata = $this->metadata($request);
 
         $adminButtons = [
-            "Sync expiry date" => "SyncExpiryDate",
             "Sync domain" => "ManualSync"
         ];
 
@@ -73,7 +72,7 @@ class AdminCustomButtonArray extends Action
         LogService::logError($exception);
         return [
             "success" => false,
-            sprintf('Error retrieving information about domain: %s.', $exception->getMessage())
+            "message" => sprintf('Error retrieving information about domain: %s.', $exception->getMessage())
         ];
     }
 }

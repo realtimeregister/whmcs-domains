@@ -33,8 +33,8 @@ class AdminClientDomainsTabFieldsSave extends Hook
             }
 
             $newProperties = array_filter(
-                array_combine(array_column(self::getFieldNames($vars['id']), 'name'), $vars['domainfield'] ?? []
-            ), fn($key) => $key !== 'languageCode',
+                array_combine(array_column(self::getFieldNames($vars['id']), 'name'), $vars['domainfield'] ?? []),
+                fn($key) => $key !== 'languageCode',
                 ARRAY_FILTER_USE_KEY
             );
 

@@ -5,7 +5,7 @@ $(document).ready(
                 let c = $(this);
                 let radio_contact = c.find('input[type=radio][name^=wc][value=contact]');
                 let role = radio_contact.attr('name').match(/\[([^\]]+)/)[1];
-                let contact_custom_fields = c.find('> .form-group');
+                let contact_custom_fields = c.find('> .form');
 
                 if (contact_ids[role]) {
                     radio_contact.click();
@@ -25,6 +25,19 @@ $(document).ready(
                         contact_custom_fields.show(options);
                     }
                 );
+            }
+        );
+
+        $('#tabRegistrant,#tabAdmin,#tabTechnical,#tabBilling').each(
+            function () {
+                let c = $(this);
+                let radio_contact = c.find('input[type=radio][name^=wc][value=contact]');
+                let role = radio_contact.attr('name').match(/\[([^\]]+)/)[1];
+
+                if (contact_ids[role]) {
+                    radio_contact.click();
+                    c.find('select[name^=sel] option[value=' + contact_ids[role] + ']').prop('selected', true);
+                }
             }
         )
     }

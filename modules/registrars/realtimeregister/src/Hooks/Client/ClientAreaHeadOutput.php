@@ -2,7 +2,6 @@
 
 namespace RealtimeRegisterDomains\Hooks\Client;
 
-use RealtimeRegister\Domain\DomainContact;
 use RealtimeRegisterDomains\App;
 use RealtimeRegisterDomains\Entities\DataObject;
 use RealtimeRegisterDomains\Hooks\Hook;
@@ -38,49 +37,7 @@ class ClientAreaHeadOutput extends Hook
         App::assets()->addScript("rtrClient.js");
         App::assets()->addStyle('style.css');
 
-        if ($vars['action'] === 'domaincontacts') {
-            self::initHandleMapping($_GET['domainid'] ?: $vars['domainid']);
-        }
-
         $jsRouter = new JSRouter($vars);
         App::assets()->addToJavascriptVariables('rtr.js', ['rtr' => $jsRouter->json]);
-    }
-
-    /**
-     * @param int $domainid
-     */
-    public static function initHandleMapping($domainid): void
-    {
-        $whcmsDomain = App::localApi()->domains(['domainid' => $domainid])['domain'];
-
-        if (MetadataService::isRtr(MetadataService::getTld($whcmsDomain['domainname']))) {
-            try {
-                $domain = App::client()->domains->get($whcmsDomain['domainname']);
-                $contact_handles = ['Registrant' => self::getWhmcsCidFromHandle($domain->registrant)];
-                foreach ($domain->contacts as $contact) {
-                    /** @var DomainContact $contact */
-                    $contact_handles[ucfirst(strtolower($contact->role))]
-                        = self::getWhmcsCidFromHandle($contact->handle);
-                }
-                App::assets()->addScript('rtrHandleMapping.js');
-                App::assets()->addToJavascriptVariables(
-                    name: 'rtrHandleMapping.js',
-                    data: ['contact_ids' => array_filter($contact_handles)]
-                );
-            } catch (\Exception) {
-                // pass
-            }
-        }
-    }
-
-    public static function getWhmcsCidFromHandle(string $handle): ?string
-    {
-        $map = App::contacts()->fetchMappingByHandle($handle);
-
-        if (!$map) {
-            return null;
-        }
-
-        return !empty($map->contactid) ? sprintf("c%s", $map->contactid) : sprintf("u%s", $map->userid);
     }
 }

@@ -15,14 +15,14 @@ class PromoWidget extends \WHMCS\Module\AbstractWidget
     protected $weight = 150;
     protected $columns = 1;
     protected $height = 150;
-    protected $cache = true;
+    protected $cache = false;
     protected $cacheExpiry = 60 * 60 * 24; // One day
     protected $requiredPermission = '';
 
     public function getData(): array
     {
         try {
-            $promotions = App::client()->customers->promoList(App::registrarConfig()->customerHandle())->toArray();
+            $promotions = App::client()->customers->promoList(App::registrarConfig()->customerHandle());
         } catch (\Exception) {
             return [];
         }

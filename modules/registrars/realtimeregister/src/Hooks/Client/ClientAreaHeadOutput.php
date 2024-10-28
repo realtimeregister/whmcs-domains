@@ -10,8 +10,6 @@ use RealtimeRegisterDomains\Services\JSRouter;
 use RealtimeRegisterDomains\Services\LogService;
 use RealtimeRegisterDomains\Services\MetadataService;
 
-use function RealtimeRegisterDomains\Hooks\localAPI;
-
 class ClientAreaHeadOutput extends Hook
 {
     public function __invoke(DataObject $vars)
@@ -53,11 +51,11 @@ class ClientAreaHeadOutput extends Hook
      */
     public static function initHandleMapping($domainid): void
     {
-        $whmcs_domain = localAPI('GetClientsDomains', ['domainid' => $domainid])['domains']['domain'][0];
+        $whcmsDomain = App::localApi()->domains(['domainid' => $domainid])['domain'];
 
-        if (MetadataService::isRtr($whmcs_domain)) {
+        if (MetadataService::isRtr(MetadataService::getTld($whcmsDomain['domainname']))) {
             try {
-                $domain = App::client()->domains->get($whmcs_domain['domainname']);
+                $domain = App::client()->domains->get($whcmsDomain['domainname']);
                 $contact_handles = ['Registrant' => self::getWhmcsCidFromHandle($domain->registrant)];
                 foreach ($domain->contacts as $contact) {
                     /** @var DomainContact $contact */
@@ -65,7 +63,7 @@ class ClientAreaHeadOutput extends Hook
                         = self::getWhmcsCidFromHandle($contact->handle);
                 }
                 App::assets()->addScript('rtrHandleMapping.js');
-                app::assets()->addToJavascriptVariables(
+                App::assets()->addToJavascriptVariables(
                     name: 'rtrHandleMapping.js',
                     data: ['contact_ids' => array_filter($contact_handles)]
                 );

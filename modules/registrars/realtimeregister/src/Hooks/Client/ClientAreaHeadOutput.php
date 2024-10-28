@@ -75,7 +75,7 @@ class ClientAreaHeadOutput extends Hook
 
     public static function getWhmcsCidFromHandle(string $handle): ?string
     {
-        $map = (new \RealtimeRegisterDomains\Services\ContactService())->fetchMappingByHandle($handle);
+        $map = App::contacts()->fetchMappingByHandle($handle);
 
         if (!$map) {
             return null;

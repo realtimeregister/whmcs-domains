@@ -153,7 +153,7 @@ class ContactService
         /**
          * @noinspection PhpIncompatibleReturnTypeInspection
          */
-        return ContactMapping::query()->where(column: 'handle', value: $handle)->first();
+        return ContactMapping::query()->where('handle', '=', $handle)->first();
     }
 
     public function handleHasMapping(string $handle): bool

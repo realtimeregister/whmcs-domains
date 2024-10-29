@@ -12,9 +12,9 @@ use RealtimeRegisterDomains\Services\MetadataService;
 
 class ValidateDomain extends Hook
 {
-
     use CustomHandlesTrait;
     use DomainTrait;
+
     public function __invoke(DataObject $vars)
     {
         $errors = [];
@@ -38,7 +38,7 @@ class ValidateDomain extends Hook
         string $domain,
         array $nameservers,
         array &$errors
-    ) : void {
+    ): void {
         if (count($nameservers) < $metadata->nameservers->min && $metadata->nameservers->required) {
             $errors[] = "'$domain'" . ' needs at least ' . $metadata->nameservers->min . ' nameservers';
         }
@@ -57,10 +57,11 @@ class ValidateDomain extends Hook
             return;
         }
         foreach (self::$CONTACT_ROLES as $name => $role) {
-            if ($this->handleOverride($name) ||
-                (array_key_exists($tldInfo->provider, $customHandles)
-                && array_key_exists($name, $customHandles[$tldInfo->provider])
-                && $customHandles[$tldInfo->provider][$name] !== '')
+            if (
+                $this->handleOverride($name) ||
+                (array_key_exists($tldInfo->provider, $customHandles) &&
+                array_key_exists($name, $customHandles[$tldInfo->provider]) &&
+                $customHandles[$tldInfo->provider][$name] !== '')
             ) {
                 continue;
             }

@@ -22,7 +22,7 @@ class TransferDomain extends Action
         list(
             'registrant' => $registrant,
             'contacts' => $contacts
-        ) = $this->generateContactsForDomain(request: $request, metadata: $metadata);
+            ) = $this->generateContactsForDomain(request: $request, metadata: $metadata);
 
         App::client()->domains->transfer(
             domainName: $domain->domainName(),
@@ -39,7 +39,11 @@ class TransferDomain extends Action
 
     public static function handleException(\Throwable $exception, array $params): array
     {
-        $message = str_contains($exception->getMessage(), "not possible with statuses '[CLIENT_TRANSFER_PROHIBITED]")
+        $message = preg_match(
+            "/not possible with statuses "
+            . "'\[(?:CLIENT|SERVER)_TRANSFER_PROHIBITED(?:, (?:CLIENT|SERVER)_TRANSFER_PROHIBITED)?]'/",
+            $exception->getMessage()
+        )
             ? $exception->getMessage() . ". Remove the transferlock with the current registrar and retry the transfer."
             : $exception->getMessage();
 

@@ -11,6 +11,7 @@ use RealtimeRegister\Domain\TLDInfo;
 use RealtimeRegister\Exceptions\BadRequestException;
 use RealtimeRegister\Exceptions\UnauthorizedException;
 use RealtimeRegisterDomains\Actions\Action;
+use RealtimeRegisterDomains\Actions\Domains\DomainContactTrait;
 use RealtimeRegisterDomains\App;
 use RealtimeRegisterDomains\Entities\DataObject;
 use RealtimeRegisterDomains\Exceptions\DomainNotFoundException;
@@ -25,6 +26,7 @@ use WHMCS\View\Template\AssetUtil;
 class SaveContactDetails extends Action
 {
     use ContactDetailsTrait;
+    use DomainContactTrait;
 
     protected array $roles = [
         ContactModel::ROLE_REGISTRANT => DomainContactRoleEnum::ROLE_REGISTRANT,
@@ -82,25 +84,15 @@ class SaveContactDetails extends Action
                     // A contact (or client) was selected
                     $selected = $_POST['sel'][$whmcsRole];
                     $contactId = (int)str_starts_with($selected, 'c') ? ltrim($selected, 'c') : 0;
-
-                    if ($role == DomainContactRoleEnum::ROLE_REGISTRANT) {
-                        $properties = $this->getProperties($tldInfo);
-                        $newHandle = ContactService::getOrCreateRegistrantContact(
-                            $clientId,
-                            $contactId,
-                            $organizationAllowed,
-                            $tldInfo,
-                            $properties
-                        );
-                    } else {
-                        $newHandle = ContactService::getOrCreateDomainContact(
-                            clientId: $clientId,
-                            contactId: $contactId,
-                            role: $role,
-                            tldInfo: $tldInfo,
-                            organizationAllowed: $organizationAllowed
-                        );
-                    }
+                    $properties = $this->getProperties($tldInfo);
+                    $newHandle = ContactService::getOrCreateContact(
+                        $clientId,
+                        $contactId,
+                        $role,
+                        $organizationAllowed,
+                        $tldInfo,
+                        $properties
+                    );
 
                     if ($currentHandle != $newHandle) {
                         $newDomainContacts[$role] = $newHandle;
@@ -116,14 +108,14 @@ class SaveContactDetails extends Action
                         $organizationAllowed
                     );
 
-                    if (ContactMapping::where('handle', $currentHandle)->first()) {
+                    if (ContactMapping::query()->where('handle', '=', $currentHandle)->first()) {
                         /*
                          * There is a mapping for the current contact in this role. This means that a custom set of
                          * contact details is specified for the first time. We create a new contact in this case, which
                          * won't be mapped, because there is no corresponding contact or client.
                          */
-                        $properties = $role == DomainContactRoleEnum::ROLE_REGISTRANT ? $this->getProperties($tldInfo)
-                            : null;
+
+                        $properties = $this->getProperties($tldInfo);
                         $newDomainContacts[$role] = ContactService::contactCreate(
                             rtrContact: new DataObject($newContact),
                             tldInfo: $tldInfo,
@@ -232,53 +224,13 @@ class SaveContactDetails extends Action
         return $diff;
     }
 
-    public function getProperties(TLDInfo $tldInfo): ?array
+    public function getProperties(TLDInfo $tldInfo): array
     {
-        $properties = ['registry' => $tldInfo->provider, 'properties' => []];
-
-        foreach ($this->params['additionalfields'] as $property => $value) {
-            if ($property == 'languageCode' || !isset($tld_properties->{$property})) {
-                continue;
-            }
-            if ($this->propertyIsBool($tld_properties[$property])) {
-                $value = $this->getPropertyBoolValue($tld_properties->{$property}['values'], $value == 'on');
-            }
-            if (!empty($value) && array_key_exists($property, $tld_properties)) {
-                $properties['properties'][$property] = $value;
-            }
-        }
-        if (empty($properties['properties'])) {
-            return null;
-        }
-        return $properties;
+        return [
+            'registry' => $tldInfo->provider,
+            'properties' => self::getNewProperties($this->params['additionalfields'], $tldInfo->metadata)
+        ];
     }
-
-    private function propertyIsBool($property): bool
-    {
-        if (!isset($property['values'])) {
-            return false;
-        } elseif (count($property['values']) == 1 && array_keys($property['values'])[0] == 'true') {
-            return true;
-        } elseif (count($property['values']) == 2) {
-            $sorted = $property['values'];
-            sort($sorted);
-            $sorted = strtolower(implode($sorted));
-            if ($sorted == 'ny' || $sorted == 'falsetrue') {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private function getPropertyBoolValue($propertyValues, $bool)
-    {
-        $boolValues = $bool ? ['true', 'y'] : ['false', 'n'];
-        $arr = array_filter(array_keys($propertyValues), function ($v) use ($boolValues) {
-            return in_array(strtolower($v), $boolValues);
-        });
-        return empty($arr) ? '' : array_shift($arr);
-    }
-
     public function domainUpdate($domain = []): void
     {
         if ($domain['privacyProtect']) {

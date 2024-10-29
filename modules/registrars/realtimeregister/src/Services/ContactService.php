@@ -72,23 +72,30 @@ class ContactService
     /**
      * @throws \Exception
      */
-    public static function getOrCreateRegistrantContact(
+    public static function getOrCreateContact(
         int $clientId,
         int $contactId,
+        string $role,
         bool $organizationAllowed,
         TLDInfo $tldInfo,
         ?array $properties = null
     ): ?string {
-        $handle = ContactService::getRtrContactHandle(
-            clientId: $clientId,
-            contactId: $contactId,
-            organizationAllowed: $organizationAllowed,
-            properties: $properties
-        )->handle;
+        $handle = ContactService::getConfiguredRoleHandle($role);
+
+        if (!$handle) {
+            $contact = ContactService::getRtrContactHandle(
+                clientId: $clientId,
+                contactId: $contactId,
+                organizationAllowed: $organizationAllowed,
+                properties: $properties
+            );
+
+            $handle = $contact->handle;
+        }
 
         if ($handle) {
             // Check if we need to add properties
-            if ($properties['properties']) {
+            if ($properties && $properties['properties']) {
                 $rtrContact = App::client()->contacts->get(App::registrarConfig()->customerHandle(), $handle);
 
                 if (!$rtrContact->properties[$properties['registry']]) {
@@ -96,7 +103,7 @@ class ContactService
                         customer: App::registrarConfig()->customerHandle(),
                         handle: $handle,
                         registry: $tldInfo->provider,
-                        properties: $properties
+                        properties: $properties['properties']
                     );
                 } elseif ($rtrContact->properties[$properties['registry']] != $properties['properties']) {
                     /**
@@ -173,6 +180,8 @@ class ContactService
         );
     }
 
+
+    //TODO caching?
     /**
      * @throws \Exception
      */
@@ -410,13 +419,13 @@ class ContactService
             App::client()->contacts->create(...$rtrContact);
 
             // Add properties
-            if ($properties) {
+            if ($properties && $properties['properties']) {
                 try {
                     App::client()->contacts->addProperties(
                         customer: App::registrarConfig()->customerHandle(),
                         handle: $handle,
                         registry: $tldInfo->provider,
-                        properties: $properties
+                        properties: $properties['properties']
                     );
                 } catch (\Exception $ex) {
                     try {
@@ -485,50 +494,5 @@ class ContactService
         }
 
         return $rtr_contact;
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public static function getOrCreateDomainContact(
-        $clientId,
-        int | string $contactId,
-        mixed $role,
-        $tldInfo,
-        bool $organizationAllowed,
-        ?array $properties = null
-    ): string {
-        $handle = ContactService::getConfiguredRoleHandle($role);
-
-        if (!$handle) {
-            $contact = ContactService::getRtrContactHandle(
-                clientId: $clientId,
-                contactId: $contactId,
-                organizationAllowed: $organizationAllowed,
-                properties: $properties
-            );
-
-            $handle = $contact->handle;
-        }
-
-        if ($handle) {
-            return $handle;
-        }
-
-        $handle = ContactService::createRtrContactFromWhmcsContact(
-            clientId: $clientId,
-            contactId: $contactId,
-            organizationAllowed: $organizationAllowed,
-            tldInfo: $tldInfo,
-            properties: $properties
-        );
-        ContactService::storeContactMapping(
-            clientId: $clientId,
-            contactId: $contactId,
-            handle: $handle,
-            organizationAllowed: $organizationAllowed
-        );
-
-        return $handle;
     }
 }

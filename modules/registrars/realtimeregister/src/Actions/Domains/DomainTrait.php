@@ -12,7 +12,6 @@ use RealtimeRegisterDomains\Models\RealtimeRegister\ContactMapping;
 use RealtimeRegisterDomains\Models\Whmcs\Configuration;
 use RealtimeRegisterDomains\Models\Whmcs\Domain;
 use RealtimeRegisterDomains\Models\Whmcs\Orders;
-use RealtimeRegisterDomains\PunyCode;
 use RealtimeRegisterDomains\Services\ContactService;
 
 trait DomainTrait
@@ -23,15 +22,20 @@ trait DomainTrait
         "BILLING" => "billingContacts"
     ];
 
-    protected function getOrCreateContact(int $clientId, int $contactId, string $role, bool $organizationAllowed)
+    // Check if we override the handle in the settings
+    protected function handleOverride(string $role): string
     {
-        // Check if we override the handle in the settings
-        $handle = match ($role) {
+        return match ($role) {
             'ADMIN' => $this->app->registrarConfig()->get('handle'),
             'BILLING' => $this->app->registrarConfig()->get('handle_billing'),
             'TECH' => $this->app->registrarConfig()->get('handle_tech'),
             default => null,
         };
+    }
+
+    protected function getOrCreateContact(int $clientId, int $contactId, string $role, bool $organizationAllowed)
+    {
+        $handle = $this->handleOverride($role);
 
         if ($handle) {
             return $handle;

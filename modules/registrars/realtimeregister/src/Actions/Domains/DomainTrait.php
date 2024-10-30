@@ -23,7 +23,7 @@ trait DomainTrait
     ];
 
     // Check if we override the handle in the settings
-    protected function handleOverride(string $role): string
+    protected function handleOverride(string $role): ?string
     {
         return match ($role) {
             'ADMIN' => $this->app->registrarConfig()->get('handle'),

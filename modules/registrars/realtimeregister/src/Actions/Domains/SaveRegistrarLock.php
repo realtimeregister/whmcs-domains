@@ -31,6 +31,12 @@ class SaveRegistrarLock extends Action
                 statuses: array_values($statuses)
             );
 
+            if ($_REQUEST['action'] == 'domaindetails') {
+                $url = 'clientarea.php?action=domaindetails&id=' . $_REQUEST['id'] . '#tabReglock';
+
+                // Refresh WHMCS because else you wont see the new status
+                header("refresh: 0; url = " . $url);
+            }
             return ['success' => true];
         } catch (BadRequestException | UnauthorizedException | ForbiddenException $exception) {
             throw new DomainNotFoundException($exception);

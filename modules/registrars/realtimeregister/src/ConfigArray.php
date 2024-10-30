@@ -42,7 +42,7 @@ class ConfigArray
                 'Description' => '<button class="btn btn-xs check-connection">Check Connection</button>
                     <span class="credentials-result"></span>
                     <button class="btn btn-xs info rtr-custom-properties" type="button" 
-                        data-toggle="modal" data-target="#propertiesModal">Custom properties override
+                        data-toggle="modal" data-target="#propertiesModal">Contact Handles Override
                     </button>',
             ],
             /**

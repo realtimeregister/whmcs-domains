@@ -79,7 +79,6 @@
                             class: 'form-control'
                         }
                     ), algorithmsOptions = [
-                    {key: '1', text: '1 (RSA/MD5)'},
                     {key: '3', text: '3 (DSA/SHA1)'},
                     {key: '5', text: '5 (RSA/SHA-1)'},
                     {key: '6', text: '6 (DSA-NSEC3-SHA1)'},

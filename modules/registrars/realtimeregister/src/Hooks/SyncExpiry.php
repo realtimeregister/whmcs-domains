@@ -5,6 +5,7 @@ namespace RealtimeRegisterDomains\Hooks;
 use RealtimeRegisterDomains\App;
 use RealtimeRegisterDomains\Entities\DataObject;
 use RealtimeRegisterDomains\Models\Whmcs\Domain;
+use RealtimeRegisterDomains\Services\LogService;
 use RealtimeRegisterDomains\Services\MetadataService;
 use RealtimeRegisterDomains\Services\TemplateService;
 
@@ -45,7 +46,13 @@ class SyncExpiry extends Hook
     {
         $updated = 0;
         foreach ($domains as $domain) {
-            $newExpiryDate = (new MetadataService($domain['domainName']))->getOffsetExpiryDate($domain['expiryDate']);
+            try {
+                $newExpiryDate = (new MetadataService($domain['domainName']))->getOffsetExpiryDate($domain['expiryDate']);
+            } catch (\Exception $e) {
+                LogService::logError($e);
+                continue;
+            }
+
             $updated += Domain::query()
                 ->where('domain', '=', $domain['domainName'])
                 ->update(["expiryDate" => $newExpiryDate]);

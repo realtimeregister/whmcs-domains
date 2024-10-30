@@ -84,7 +84,7 @@
                 domains: chunk
             },
             function (response) {
-                processed += CHUNK_SIZE;
+                processed += chunk.length;
                 updated += response.updated;
                 setProgress(domains.length, processed);
                 $('.processed-domains').text('Processed domains: ' + processed + "/" + domains.length);
@@ -95,7 +95,7 @@
                     $('.domains-skipped').text("Domains skipped: " + (processed - updated));
                     progressComplete();
                 } else {
-                    executeChunk(i + CHUNK_SIZE);
+                    executeChunk(i + chunk.length);
                 }
             },
             "json"

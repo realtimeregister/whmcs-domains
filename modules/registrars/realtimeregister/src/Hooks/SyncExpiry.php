@@ -47,7 +47,8 @@ class SyncExpiry extends Hook
         $updated = 0;
         foreach ($domains as $domain) {
             try {
-                $newExpiryDate = (new MetadataService($domain['domainName']))->getOffsetExpiryDate($domain['expiryDate']);
+                $newExpiryDate = (new MetadataService($domain['domainName']))
+                    ->getOffsetExpiryDate($domain['expiryDate']);
             } catch (\Exception $e) {
                 LogService::logError($e);
                 continue;

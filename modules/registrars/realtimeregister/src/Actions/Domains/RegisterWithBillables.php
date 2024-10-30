@@ -94,11 +94,13 @@ class RegisterWithBillables extends Action
 
             $registeredDomain = App::client()->domains->register(...$parameters);
         } catch (\Exception $ex) {
-            return sprintf(
-                'Error creating domain %s. Error details: %s.',
-                $registeredDomain->domainName,
-                $ex->getMessage()
-            );
+            return [
+                'error' => sprintf(
+                    'Error creating domain %s. Error details: %s.',
+                    $registeredDomain->domainName,
+                    $ex->getMessage()
+                )
+            ];
         }
 
         $fields = $this->getDueAndExpireDate(expiryDate: $registeredDomain->expiryDate, metadata: $metadata);

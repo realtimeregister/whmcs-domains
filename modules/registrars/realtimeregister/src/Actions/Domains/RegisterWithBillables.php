@@ -9,6 +9,7 @@ use RealtimeRegister\Domain\DomainRegistration;
 use RealtimeRegisterDomains\Actions\Action;
 use RealtimeRegisterDomains\App;
 use RealtimeRegisterDomains\Request;
+use RealtimeRegisterDomains\Services\LogService;
 
 class RegisterWithBillables extends Action
 {
@@ -66,6 +67,7 @@ class RegisterWithBillables extends Action
                 App::client()->domains->register(...$parameters)
             );
         } catch (\Exception $ex) {
+            LogService::logError($ex);
             return ['error' => $ex->getMessage()];
         }
 
@@ -94,11 +96,14 @@ class RegisterWithBillables extends Action
 
             $registeredDomain = App::client()->domains->register(...$parameters);
         } catch (\Exception $ex) {
-            return sprintf(
-                'Error creating domain %s. Error details: %s.',
-                $registeredDomain->domainName,
-                $ex->getMessage()
-            );
+            LogService::logError($ex);
+            return [
+                'error' => sprintf(
+                    'Error creating domain %s. Error details: %s.',
+                    $registeredDomain->domainName,
+                    $ex->getMessage()
+                )
+            ];
         }
 
         $fields = $this->getDueAndExpireDate(expiryDate: $registeredDomain->expiryDate, metadata: $metadata);

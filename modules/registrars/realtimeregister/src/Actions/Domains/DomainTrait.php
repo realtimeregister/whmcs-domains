@@ -175,13 +175,13 @@ trait DomainTrait
     private function buildBillables(DomainQuote $quote): array
     {
         $billables = [];
-        if (!empty($quote->quote->billables) && $quote->quote->billables->count() > 1) {
+        if (!empty($quote->quote->billables) && $quote->quote->billables->count() >= 1) {
             /**
              * @var Billable $billable
              */
             foreach ($quote->quote->billables as $billable) {
                 $billables[] = [
-                    'action' => $billable->action,
+                    'action' => $billable->action->value,
                     'product' => $billable->product,
                     'quantity' => $billable->quantity
                 ];

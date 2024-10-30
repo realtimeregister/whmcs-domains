@@ -40,10 +40,7 @@ class ConfigArray
                 'FriendlyName' => "<br/>",
                 'Type' => 'none',
                 'Description' => '<button class="btn btn-xs check-connection">Check Connection</button>
-                    <span class="credentials-result"></span>
-                    <button class="btn btn-xs info rtr-custom-properties" type="button" 
-                        data-toggle="modal" data-target="#propertiesModal">Contact Handles Override
-                    </button>',
+                    <span class="credentials-result"></span>',
             ],
             /**
              * General settings.
@@ -137,6 +134,13 @@ If you do not use this option, the registrant details will be used for Admin, Bi
                 'Type' => 'text',
                 'Size' => '20',
                 'Description' => 'Optionally override the default contact handle for Tech.',
+            ],
+            'contact_handles' => [
+                'FriendlyName' => "<br/>",
+                'Type' => 'none',
+                'Description' => '<button class="btn btn-xs info rtr-custom-properties" type="button" 
+                        data-toggle="modal" data-target="#propertiesModal">Contact Handles Override
+                    </button>',
             ],
             'INFO_REGISTRATION_EMPTY_LINE' => [
                 'FriendlyName' => '</br>',

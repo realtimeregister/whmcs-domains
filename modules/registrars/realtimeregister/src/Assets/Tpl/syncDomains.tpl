@@ -13,9 +13,11 @@
         <p class="text-muted">
             Domains present at Realtime Register: {{count($fields['rtrDomains'])}}
         </p>
+    {else}
+        <p>
+            It seems your WHMCS installation is up to date with RealtimeRegister. You don't have to use this function, but it won't hurt either.
+        </p>
     {/if}
-
-
 
     <div class="rtr-progress-bar">
         <div class="progress-label">Loading...</div>

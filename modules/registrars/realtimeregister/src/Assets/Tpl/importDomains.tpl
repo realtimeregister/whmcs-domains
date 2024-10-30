@@ -33,7 +33,7 @@
                 <h2>Setup</h2>
                 <form class="step-one-form">
                     <fieldset class="form-group">
-                        <label for="paymentMethod">Domain import method *</label>
+                        <label for="domainselection_all">Domain import method *</label>
 
                         <div class="form-check">
                             <label class="form-check-label">
@@ -92,7 +92,7 @@
                     <hr>
 
                     <fieldset class="form-group">
-                        <label for="paymentMethod">Brand import method *</label>
+                        <label for="brandselection_default">Client import method *</label>
 
                         <div class="form-check">
                             <label class="form-check-label">

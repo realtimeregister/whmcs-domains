@@ -26,10 +26,10 @@ trait DomainTrait
     protected function handleOverride(string $role): ?string
     {
         return match ($role) {
-            'ADMIN' => $this->app->registrarConfig()->get('handle'),
-            'BILLING' => $this->app->registrarConfig()->get('handle_billing'),
-            'TECH' => $this->app->registrarConfig()->get('handle_tech'),
-            default => null,
+            'ADMIN' => App::registrarConfig()->get('handle'),
+            'BILLING' => App::registrarConfig()->get('handle_billing'),
+            'TECH' => App::registrarConfig()->get('handle_tech'),
+            default => null
         };
     }
 

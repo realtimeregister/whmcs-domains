@@ -12,6 +12,7 @@ use RealtimeRegisterDomains\Services\MetadataService;
 trait DomainContactTrait
 {
     use CustomHandlesTrait;
+    use DomainTrait;
 
     /**
      * Add properties to contact if necessary
@@ -26,7 +27,7 @@ trait DomainContactTrait
         $currentContact = App::client()->contacts->get($customer, $handle);
         $currentProperties = ($currentContact->properties ?? [])[$tldInfo->provider] ?? [];
         $newProperties = self::getNewProperties($contactProperties, $tldInfo->metadata);
-
+        
         if (empty($currentProperties) && !empty($newProperties)) {
             App::client()->contacts->addProperties($customer, $handle, $tldInfo->provider, $newProperties);
             return;
@@ -95,14 +96,18 @@ trait DomainContactTrait
                     'handle' => $customHandles[$tldInfo->provider][$name]
                 ];
             } else {
+                $handle = $this->getOrCreateContact(
+                    clientId: $request->get('client_id'),
+                    contactId: $contactId,
+                    role: $role,
+                    organizationAllowed: $organizationAllowed
+                );
+                if (!$this->handleOverride($role)) {
+                    self::addProperties($request->domain->contactProperties, $handle, $tldInfo);
+                }
                 $contacts[] = [
                     'role' => $role,
-                    'handle' => $this->getOrCreateContact(
-                        clientId: $request->get('client_id'),
-                        contactId: $contactId,
-                        role: $role,
-                        organizationAllowed: $organizationAllowed
-                    )
+                    'handle' => $handle
                 ];
             }
         }

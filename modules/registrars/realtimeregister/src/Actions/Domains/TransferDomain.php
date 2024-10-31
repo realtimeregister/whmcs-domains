@@ -40,7 +40,7 @@ class TransferDomain extends Action
     public static function handleException(\Throwable $exception, array $params): array
     {
         $message = preg_match(
-            "/not possible with statuses "
+            "/not possible (?:for a domain )?with statuses "
             . "'\[(?:CLIENT|SERVER)_TRANSFER_PROHIBITED(?:, (?:CLIENT|SERVER)_TRANSFER_PROHIBITED)?]'/",
             $exception->getMessage()
         )

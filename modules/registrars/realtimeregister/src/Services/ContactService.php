@@ -83,14 +83,12 @@ class ContactService
         $handle = ContactService::getConfiguredRoleHandle($role);
 
         if (!$handle) {
-            $contact = ContactService::getRtrContactHandle(
+            $handle = ContactService::getRtrContactHandle(
                 clientId: $clientId,
                 contactId: $contactId,
                 organizationAllowed: $organizationAllowed,
                 properties: $properties
             );
-
-            $handle = $contact->handle;
         }
 
         if ($handle) {
@@ -207,18 +205,16 @@ class ContactService
             $queryParameters['organization:null'] = '';
         }
 
+        $mappedHandles = ContactMapping::all()->pluck('handle')->toArray();
+
         $queryParameters = array_merge($queryParameters, [
             'order' => '-createdDate',
-            'export' => true,
-            'fields' => 'handle',
-            'limit' => 100
+            'fields' => 'handle'
         ]);
-        $result = App::client()->contacts->list(
+        $result = App::client()->contacts->export(
             customer: App::registrarConfig()->customerHandle(),
             parameters: $queryParameters
         );
-
-        $mappedHandles = ContactMapping::all()->pluck('handle')->toArray();
 
         /**
          * We store the first matched contact. If properties are given, we try to find a match for these as well. If
@@ -234,7 +230,7 @@ class ContactService
                 continue;
             }
 
-            if (!$firstMatched && (!$properties || ($properties && !$entity->properties[$properties['registry']]))) {
+            if (!$firstMatched && (!$properties || (!$entity->properties[$properties['registry']]))) {
                 $firstMatched = $entity;
             }
 
@@ -246,7 +242,7 @@ class ContactService
             }
         }
 
-        return $firstMatched->handle;
+        return $firstMatched?->handle;
     }
 
     public static function storeContactMapping(
@@ -323,11 +319,11 @@ class ContactService
         int $contactId,
         bool $organizationAllowed,
         ?array $properties = null
-    ): ContactMapping | string | null {
-        $handle = ContactService::getContactMapping($clientId, $contactId, $organizationAllowed);
+    ): ?string {
+        $contact = ContactService::getContactMapping($clientId, $contactId, $organizationAllowed);
 
-        if ($handle) {
-            return $handle;
+        if ($contact) {
+            return $contact->handle;
         }
 
         $whmcsContact = ContactService::getWhmcsContact(clientId: $clientId, contactId: $contactId);
@@ -346,10 +342,9 @@ class ContactService
                 handle: $handle,
                 organizationAllowed: $organizationAllowed
             );
-            return $handle;
         }
 
-        return null;
+        return $handle;
     }
 
     /**
@@ -357,6 +352,7 @@ class ContactService
      */
     public static function getWhmcsContact(int $clientId, int $contactId): array
     {
+
         if ($contactId) {
             $whmcsContact = LocalApi::getContactDetails(clientId: $clientId, contactId: $contactId);
         } else {

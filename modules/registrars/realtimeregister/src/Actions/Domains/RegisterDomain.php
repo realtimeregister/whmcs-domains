@@ -48,7 +48,7 @@ class RegisterDomain extends Action
             'privacyProtect' => $domain->privacyProtect
         ];
 
-        if ($domain->idnLanguage) {
+        if ($domain->idnLanguage && $domain->isIdn) {
             $parameters['languageCode'] = $domain->idnLanguage;
         }
 

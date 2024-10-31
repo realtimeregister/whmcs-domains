@@ -27,7 +27,7 @@ trait DomainContactTrait
         $currentContact = App::client()->contacts->get($customer, $handle);
         $currentProperties = ($currentContact->properties ?? [])[$tldInfo->provider] ?? [];
         $newProperties = self::getNewProperties($contactProperties, $tldInfo->metadata);
-        
+
         if (empty($currentProperties) && !empty($newProperties)) {
             App::client()->contacts->addProperties($customer, $handle, $tldInfo->provider, $newProperties);
             return;

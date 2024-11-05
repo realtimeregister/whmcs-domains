@@ -31,10 +31,6 @@ class OrderDomainPricingOverride extends Hook
         }
         return null;
     }
-
-    private static function getPrice(DataObject $vars) {
-
-    }
 }
 
 

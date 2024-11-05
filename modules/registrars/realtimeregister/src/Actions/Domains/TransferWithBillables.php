@@ -2,13 +2,13 @@
 
 namespace RealtimeRegisterDomains\Actions\Domains;
 
+use RealtimeRegister\Domain\BillableCollection;
+use RealtimeRegister\Domain\DomainContactCollection;
 use RealtimeRegisterDomains\Actions\Action;
 use RealtimeRegisterDomains\App;
 use RealtimeRegisterDomains\Models\Whmcs\Domain;
 use RealtimeRegisterDomains\Models\Whmcs\Orders;
 use RealtimeRegisterDomains\Request;
-use RealtimeRegister\Domain\BillableCollection;
-use RealtimeRegister\Domain\DomainContactCollection;
 
 class TransferWithBillables extends Action
 {
@@ -28,7 +28,7 @@ class TransferWithBillables extends Action
             ) = $this->generateContactsForDomain($request, $metadata);
 
         $whmcsDomain = Domain::query()->find($request->params['domainid']);
-        $order = Orders::query()->find($whmcsDomain->orderid)->first();
+        $order = Orders::query()->find($whmcsDomain->orderid);
         $parameters = [
             'domainName' => $domain->domainName(),
             'customer' => App::registrarConfig()->customerHandle(),

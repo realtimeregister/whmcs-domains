@@ -97,7 +97,7 @@ trait DomainContactTrait
                 ];
             } else {
                 $handle = $this->getOrCreateContact(
-                    clientId: $request->get('client_id'),
+                    clientId: $clientId,
                     contactId: $contactId,
                     role: $role,
                     organizationAllowed: $organizationAllowed

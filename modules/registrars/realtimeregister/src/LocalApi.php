@@ -83,9 +83,9 @@ class LocalApi
         )->first();
     }
 
-    public static function getClient(int $clientId): DataObject
+    public static function getClient(int $clientId): array
     {
-        return new DataObject(localAPI('GetClientDetails', ['id' => $clientId])['client']);
+        return localAPI('GetClientsDetails', ['clientid' => $clientId])['client'];
     }
 
     public function getContact(int $clientId, int $contactId): ?DataObject

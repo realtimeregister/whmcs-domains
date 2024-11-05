@@ -118,6 +118,11 @@ function realtimeregister_RegisterWithBillables(array $params)
     return App::dispatch(\RealtimeRegisterDomains\Actions\Domains\RegisterWithBillables::class, $params);
 }
 
+function realtimeregister_RenewDomainWithBillables(array $params)
+{
+    return App::dispatch(\RealtimeRegisterDomains\Actions\Domains\RenewDomainWithBillables::class, $params);
+}
+
 function realtimeregister_TransferWithBillables($params)
 {
     return App::dispatch(TransferWithBillables::class, $params);

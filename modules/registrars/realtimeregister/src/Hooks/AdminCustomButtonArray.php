@@ -32,6 +32,8 @@ class AdminCustomButtonArray extends Action
             }
         }
 
+        $adminButtons['Renew and accept billables'] = "RenewDomainWithBillables";
+
         $domain = $request->domain->domainName();
         if (!empty($metadata->transferFOA)) {
             $processes = App::client()->processes->list(

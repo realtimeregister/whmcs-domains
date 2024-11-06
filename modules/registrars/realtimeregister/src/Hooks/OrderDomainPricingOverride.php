@@ -11,8 +11,10 @@ class OrderDomainPricingOverride extends Hook
 {
     public function __invoke(DataObject $vars)
     {
-        if ($vars['type'] == 'transfer'
-            || ($vars['type'] === 'register' && str_contains($_SERVER['REQUEST_URI'], '/admin/ordersadd.php'))) {
+        if (
+            $vars['type'] == 'transfer'
+            || ($vars['type'] === 'register' && str_contains($_SERVER['REQUEST_URI'], '/admin/ordersadd.php'))
+        ) {
             try {
                 $domain = App::toPunyCode($vars['domain']);
                 $res = App::client()->domains->check($domain);
@@ -32,5 +34,3 @@ class OrderDomainPricingOverride extends Hook
         return null;
     }
 }
-
-

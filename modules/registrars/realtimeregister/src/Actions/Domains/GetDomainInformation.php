@@ -49,11 +49,11 @@ class GetDomainInformation extends Action
         } catch (BadRequestException | UnauthorizedException | ForbiddenException) {
             $whmcsDomain = App::localApi()->domain($request->params['userid'], $request->params['domainid']);
             $order = App::localApi()->order($whmcsDomain['orderid'], $request->params['userid']);
-            if (($order['status'] ==  'Pending')) {
-                $nameservers = array_reduce(
-                    explode(",", $order['nameservers']),
-                    fn($nameservers, $ns) => [...$nameservers, "ns" . (count($nameservers) + 1) => $ns],
-                    []
+            if (($order['status'] == 'Pending')) {
+                $nameserverList = explode(",", $order['nameservers']);
+                $nameservers = array_combine(
+                    array_map(fn($i) => "ns" . ($i + 1), array_keys($nameserverList)),
+                    $nameserverList
                 );
                 return (new Domain())
                     ->setDomain($domain->domainName)

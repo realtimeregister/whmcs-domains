@@ -56,7 +56,7 @@ class GetDomainInformation extends Action
                     $nameserverList
                 );
                 return (new Domain())
-                    ->setDomain($domain->domainName)
+                    ->setDomain($whmcsDomain['domain'])
                     ->setNameservers($nameservers);
             }
         }

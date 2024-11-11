@@ -2,13 +2,12 @@
 
 namespace RealtimeRegisterDomains\Actions\Domains;
 
-use RealtimeRegisterDomains\Actions\Action;
-use RealtimeRegisterDomains\App;
-use RealtimeRegisterDomains\Models\Whmcs\Domain as WhmcsDomain;
-use RealtimeRegisterDomains\Request;
 use RealtimeRegister\Exceptions\BadRequestException;
 use RealtimeRegister\Exceptions\ForbiddenException;
 use RealtimeRegister\Exceptions\UnauthorizedException;
+use RealtimeRegisterDomains\Actions\Action;
+use RealtimeRegisterDomains\App;
+use RealtimeRegisterDomains\Request;
 use WHMCS\Domain\Registrar\Domain;
 
 class GetDomainInformation extends Action
@@ -48,31 +47,20 @@ class GetDomainInformation extends Action
                     ['Registrant' => ['First Name', 'Last Name', 'Organization Name', 'Email']]
                 );
         } catch (BadRequestException | UnauthorizedException | ForbiddenException) {
-            try {
-                $transferInformation = App::client()->domains->transferInfo($request->domain->domainName());
-                switch ($transferInformation->status) {
-                    case 'outgoingTransfer':
-                    case 'outgoingInternalTransfer':
-                        WhmcsDomain::where(
-                            'domain',
-                            $request->domain->domainName()
-                        )->update(['status' => 'Transferred Away']);
-                        break;
-                    case 'autoDelete':
-                        WhmcsDomain::where('domain', $request->domain->domainName())->update(['status' => 'Cancelled']);
-                        break;
-                    case 'pending':
-                        WhmcsDomain::where(
-                            'domain',
-                            $request->domain->domainName()
-                        )->update(['status' => 'Pending Transfer']);
-                }
-            } catch (\Exception) {
-                // Fallback to DomainNotFoundException
+            $whmcsDomain = App::localApi()->domain($request->params['userid'], $request->params['domainid']);
+            $order = App::localApi()->order($whmcsDomain['orderid'], $request->params['userid']);
+            if (($order['status'] == 'Pending')) {
+                $nameserverList = explode(",", $order['nameservers']);
+                $nameservers = array_combine(
+                    array_map(fn($i) => "ns" . ($i + 1), array_keys($nameserverList)),
+                    $nameserverList
+                );
+                return (new Domain())
+                    ->setDomain($whmcsDomain['domain'])
+                    ->setNameservers($nameservers);
             }
-
-            return ['error' => 'This domain isn\'t registrered with us (anymore)'];
         }
+        return ['error' => 'This domain isn\'t registrered with us (anymore)'];
     }
 
     /**

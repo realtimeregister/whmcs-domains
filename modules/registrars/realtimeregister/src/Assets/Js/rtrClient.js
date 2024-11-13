@@ -1,9 +1,5 @@
 (function ($) {
     // Controllers format: rtr.routes.<controller>.
-
-    rtr.routes.noLockSupport = function () {
-        $('[name="reglock"]').hide();
-    };
     rtr.routes.removeRenewButton = function () {
         $('[href="cart.php?gid=renewals"]').hide();
     };

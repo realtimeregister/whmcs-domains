@@ -111,7 +111,7 @@ class RegisterWithBillables extends Action
             $fields = $this->getDueAndExpireDate(expiryDate: $registeredDomain->expiryDate, metadata: $metadata);
             Domain::query()->where('id', $params['domainid'])->update($fields);
         }
-        
+
         return ['success' => true];
     }
 }

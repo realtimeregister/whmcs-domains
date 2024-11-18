@@ -9,9 +9,9 @@ use RealtimeRegister\Domain\TLDMetaData;
 use RealtimeRegisterDomains\App;
 use RealtimeRegisterDomains\Entities\DataObject;
 use RealtimeRegisterDomains\Models\RealtimeRegister\ContactMapping;
-use RealtimeRegisterDomains\Models\Whmcs\Configuration;
 use RealtimeRegisterDomains\Models\Whmcs\Domain;
 use RealtimeRegisterDomains\Models\Whmcs\Orders;
+use RealtimeRegisterDomains\Request;
 use RealtimeRegisterDomains\Services\ContactService;
 
 trait DomainTrait
@@ -94,34 +94,21 @@ trait DomainTrait
         return $contact->handle;
     }
 
-    protected function getDomainNameservers(array $params, string $type = 'register'): array
+    protected function getDomainNameservers(Request $request): array
     {
-        if ($type === 'transfer' && App::registrarConfig()->keepNameServers()) {
-            return array_merge($params, ['ns1' => '', 'ns2' => '', 'ns3' => '', 'ns4' => '', 'ns5' => '']);
+        if (!empty($request->domain->nameservers)) {
+            return $request->domain->nameservers;
         }
-
-        $whmcsDomain = Domain::query()->find($params['domainid']);
+        $whmcsDomain = Domain::query()->find($request->params['domainid']);
         if (!empty($whmcsDomain['orderid'])) {
             $order = Orders::query()->find($whmcsDomain['orderid']);
 
             if ($order['nameservers']) {
-                foreach (explode(',', $order['nameservers']) as $key => $nameserver) {
-                    $params['ns' . ($key + 1)] = $nameserver;
-                }
-                return $params;
+                return explode(',', $order['nameservers']);
             }
         }
 
-        return array_merge(
-            $params,
-            [
-                'ns1' => Configuration::query()->where('setting', 'DefaultNameserver1')->value('value'),
-                'ns2' => Configuration::query()->where('setting', 'DefaultNameserver2')->value('value'),
-                'ns3' => Configuration::query()->where('setting', 'DefaultNameserver3')->value('value'),
-                'ns4' => Configuration::query()->where('setting', 'DefaultNameserver4')->value('value'),
-                'ns5' => Configuration::query()->where('setting', 'DefaultNameserver5')->value('value')
-            ]
-        );
+        return [];
     }
 
     /**

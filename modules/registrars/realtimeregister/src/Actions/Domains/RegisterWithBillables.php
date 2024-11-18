@@ -2,12 +2,12 @@
 
 namespace RealtimeRegisterDomains\Actions\Domains;
 
-use Illuminate\Database\Capsule\Manager as Capsule;
 use RealtimeRegister\Domain\BillableCollection;
 use RealtimeRegister\Domain\DomainContactCollection;
 use RealtimeRegister\Domain\DomainRegistration;
 use RealtimeRegisterDomains\Actions\Action;
 use RealtimeRegisterDomains\App;
+use RealtimeRegisterDomains\Models\Whmcs\Domain;
 use RealtimeRegisterDomains\Request;
 use RealtimeRegisterDomains\Services\LogService;
 
@@ -17,8 +17,9 @@ class RegisterWithBillables extends Action
 
     public function __invoke(Request $request): array|string
     {
-        $params = $this->getDomainNameservers(params: $request->params);
+        $params = $request->params;
         $metadata = $this->metadata($request);
+        $ns = $this->getDomainNameservers($request);
 
         try {
             $domainName = $request->domain->domainName();
@@ -54,7 +55,7 @@ class RegisterWithBillables extends Action
                 'domainName' => $domainName,
                 'customer' => App::registrarConfig()->customerHandle(),
                 'registrant' => $registrant,
-
+                'ns' => $ns,
                 'contacts' => DomainContactCollection::fromArray($contacts),
                 'isQuote' => true,
             ];
@@ -85,7 +86,7 @@ class RegisterWithBillables extends Action
                 'domainName' => $domainName,
                 'customer' => App::registrarConfig()->customerHandle(),
                 'registrant' => $registrant,
-
+                'ns' => $ns,
                 'contacts' => DomainContactCollection::fromArray($contacts),
                 'billables' => BillableCollection::fromArray($billables),
             ];
@@ -106,8 +107,10 @@ class RegisterWithBillables extends Action
             ];
         }
 
-        $fields = $this->getDueAndExpireDate(expiryDate: $registeredDomain->expiryDate, metadata: $metadata);
-        Capsule::table("tbldomains")->where('id', $params['id'] ?: $params['domainid'])->update($fields);
+        if ($registeredDomain->expiryDate) {
+            $fields = $this->getDueAndExpireDate(expiryDate: $registeredDomain->expiryDate, metadata: $metadata);
+            Domain::query()->where('id', $params['domainid'])->update($fields);
+        }
 
         return ['success' => true];
     }

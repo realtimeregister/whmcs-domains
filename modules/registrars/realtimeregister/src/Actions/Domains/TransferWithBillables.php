@@ -22,6 +22,7 @@ class TransferWithBillables extends Action
     {
         $metadata = $this->metadata($request);
         $domain = $request->domain;
+        $ns = $this->getDomainNameservers($request);
         list(
             'registrant' => $registrant,
             'contacts' => $contacts
@@ -33,7 +34,7 @@ class TransferWithBillables extends Action
             'domainName' => $domain->domainName(),
             'customer' => App::registrarConfig()->customerHandle(),
             'registrant' => $registrant,
-            'ns' => App::registrarConfig()->keepNameServers() ? null : $domain->nameservers,
+            'ns' => App::registrarConfig()->keepNameServers() ? null : $ns,
             'authcode' => html_entity_decode(unserialize($order->transfersecret)[$domain->domainName()]),
             'autoRenew' => false,
             'contacts' => DomainContactCollection::fromArray($contacts),

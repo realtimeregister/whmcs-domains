@@ -96,7 +96,7 @@ trait DomainTrait
 
     protected function getDomainNameservers(Request $request): array
     {
-        if ($request->domain->nameservers) {
+        if (!empty($request->domain->nameservers)) {
             return $request->domain->nameservers;
         }
         $whmcsDomain = Domain::query()->find($request->params['domainid']);

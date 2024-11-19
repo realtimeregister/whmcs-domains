@@ -33,6 +33,8 @@ class App
     protected const PORTAL_URL = 'https://dm.realtimeregister.com';
     protected const PORTAL_URL_TEST = 'https://dm.yoursrs-ote.com';
 
+    public const USAGE_DATA_URL = 'https://realtimeregister.com/whmcs-update/' . self::NAME . '/version';
+
     protected readonly LocalApi $localApi;
     protected readonly RegistrarConfig $registrarConfig;
     protected readonly ContactService $contactService;

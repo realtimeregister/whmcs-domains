@@ -294,7 +294,7 @@ class MetadataService
 
     public function getOffsetExpiryDate(string $expiryDate): string
     {
-        $offset = $this->get("expiryDateOffset") || 0;
+        $offset = $this->get("expiryDateOffset") ?? 0;
 
         return date("Y-m-d", strtotime($expiryDate . " - " . ((int)$offset) . " seconds"));
     }

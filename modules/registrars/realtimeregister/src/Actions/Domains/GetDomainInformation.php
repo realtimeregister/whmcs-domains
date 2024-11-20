@@ -28,7 +28,7 @@ class GetDomainInformation extends Action
             $expiryDate = $domain->expiryDate;
 
             if ($metadata->expiryDateOffset) {
-                $expiryDate = $expiryDate->add(new \DateInterval('PT' . $metadata->expiryDateOffset . 'S'));
+                $expiryDate = $expiryDate->sub(new \DateInterval('PT' . $metadata->expiryDateOffset . 'S'));
             }
 
             return (new Domain())

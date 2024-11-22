@@ -11,7 +11,6 @@ use RealtimeRegisterDomains\Services\LogService;
 
 class SaveNameservers extends Action
 {
-
     use DomainTrait;
 
     public function __invoke(Request $request): array

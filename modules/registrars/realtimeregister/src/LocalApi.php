@@ -83,7 +83,8 @@ class LocalApi
         )->first();
     }
 
-    public function getDomainOrder(int $domainId, int $clientId = null): ?DataObject {
+    public function getDomainOrder(int $domainId, int $clientId = null): ?DataObject
+    {
         $domain = $this->domain($clientId, $domainId);
         if ($domain == null) {
             return null;

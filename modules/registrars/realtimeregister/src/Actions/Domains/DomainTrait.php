@@ -103,13 +103,13 @@ trait DomainTrait
         if (!empty($domainOrder['nameservers'])) {
             return explode(',', $domainOrder['nameservers']);
         }
-        return array_filter([
+        return array_values(array_filter([
             Configuration::query()->where('setting', 'DefaultNameserver1')->value('value'),
             Configuration::query()->where('setting', 'DefaultNameserver2')->value('value'),
             Configuration::query()->where('setting', 'DefaultNameserver3')->value('value'),
             Configuration::query()->where('setting', 'DefaultNameserver4')->value('value'),
             Configuration::query()->where('setting', 'DefaultNameserver5')->value('value')
-        ]);
+        ]));
     }
 
     /**

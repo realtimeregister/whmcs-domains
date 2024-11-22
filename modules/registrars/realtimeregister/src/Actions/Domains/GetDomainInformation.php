@@ -12,8 +12,8 @@ use WHMCS\Domain\Registrar\Domain;
 
 class GetDomainInformation extends Action
 {
-
     use DomainTrait;
+
     public function __invoke(Request $request)
     {
         $metadata = $this->metadata($request);

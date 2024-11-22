@@ -4,7 +4,6 @@ namespace RealtimeRegisterDomains\Actions\Domains;
 
 use RealtimeRegisterDomains\Actions\Action;
 use RealtimeRegisterDomains\App;
-use RealtimeRegisterDomains\Models\Whmcs\DomainPricing;
 use RealtimeRegisterDomains\Request;
 
 class RenewDomain extends Action
@@ -14,7 +13,7 @@ class RenewDomain extends Action
     /**
      * @throws \Exception
      */
-    public function __invoke(Request $request)
+    public function __invoke(Request $request): array
     {
         $metadata = $this->metadata($request);
         $domain = $request->domain;
@@ -40,13 +39,15 @@ class RenewDomain extends Action
             );
         }
 
-        /** @var DomainPricing $pricing */
-        $price = DomainPricing::query()->where(['extension' => '.' . $domain->tldPunyCode])->first();
-
-        if ($domain->isInRedemptionGracePeriod === true && (int)$price->redemption_grace_period_fee > -1) {
+        /*
+         * Because we can't be sure the correct price is imported (because it can be manually changed, or isn't
+         * imported yet, the following call will throw an exception, if there is a price for the restore. This should
+         * be handled by the admin.
+         */
+        if ($domain->isInRedemptionGracePeriod === true) {
             $renewal = App::client()->domains->restore(
                 domain: $domain->domainName(),
-                reason: 'Renewal requested of this domain by WHMCS user'
+                reason: 'Restore requested of this domain by WHMCS user'
             );
         } else {
             $renewal = App::client()->domains->renew(
@@ -67,5 +68,7 @@ class RenewDomain extends Action
                 )
             ];
         }
+
+        return ['success' => true,  'message' => 'The domain has been renewed'];
     }
 }

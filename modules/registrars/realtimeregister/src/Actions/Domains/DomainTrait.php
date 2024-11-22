@@ -9,8 +9,7 @@ use RealtimeRegister\Domain\TLDMetaData;
 use RealtimeRegisterDomains\App;
 use RealtimeRegisterDomains\Entities\DataObject;
 use RealtimeRegisterDomains\Models\RealtimeRegister\ContactMapping;
-use RealtimeRegisterDomains\Models\Whmcs\Domain;
-use RealtimeRegisterDomains\Models\Whmcs\Orders;
+use RealtimeRegisterDomains\Models\Whmcs\Configuration;
 use RealtimeRegisterDomains\Request;
 use RealtimeRegisterDomains\Services\ContactService;
 
@@ -94,21 +93,23 @@ trait DomainTrait
         return $contact->handle;
     }
 
-    protected function getDomainNameservers(Request $request): array
+    protected function getDomainNameservers(Request $request, DataObject $order = null): array
     {
         if (!empty($request->domain->nameservers)) {
             return $request->domain->nameservers;
         }
-        $whmcsDomain = Domain::query()->find($request->params['domainid']);
-        if (!empty($whmcsDomain['orderid'])) {
-            $order = Orders::query()->find($whmcsDomain['orderid']);
-
-            if ($order['nameservers']) {
-                return explode(',', $order['nameservers']);
-            }
+        $domainOrder = $order ?? App::localApi()
+            ->getDomainOrder($request->params['domainid'], $request->params['userid']);
+        if (!empty($domainOrder['nameservers'])) {
+            return explode(',', $domainOrder['nameservers']);
         }
-
-        return [];
+        return array_filter([
+            Configuration::query()->where('setting', 'DefaultNameserver1')->value('value'),
+            Configuration::query()->where('setting', 'DefaultNameserver2')->value('value'),
+            Configuration::query()->where('setting', 'DefaultNameserver3')->value('value'),
+            Configuration::query()->where('setting', 'DefaultNameserver4')->value('value'),
+            Configuration::query()->where('setting', 'DefaultNameserver5')->value('value')
+        ]);
     }
 
     /**

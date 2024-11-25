@@ -7,6 +7,7 @@
 - [X] Domain transfer
 - [X] Domain check
 - [X] Domain renew/restore
+- [X] IDN Domains 
 - [X] Premium domain support
 - [X] Pricing sync with Realtime Register
 - [X] Override of handles (either in general or per provider)

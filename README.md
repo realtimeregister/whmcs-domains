@@ -29,4 +29,4 @@ We also provide widgets for you to use on your admin homepage:
 - Access to WHMCS admin area
 
 ### WIKI
-Check [WIKI](https://github.com/realtimeregister/whmcs/wiki) for manuals and description of all features
+Check out our [WIKI](https://github.com/realtimeregister/whmcs/wiki) for manuals and description of all features

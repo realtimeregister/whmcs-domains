@@ -12,6 +12,7 @@
 - [X] Pricing sync with Realtime Register
 - [X] Override of handles (either in general or per provider)
 - [X] DNSSec support
+- [X] Child hosts
 - [X] Transfer in/out of domains
 - [X] Import of portfolio
 - [X] Bulk Sync

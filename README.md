@@ -24,8 +24,9 @@ We also provide widgets for you to use on your admin homepage:
 - Domainoverview 
 - Error Log
 
-Prerequisites
+### Prerequisites
+- Account at [realtimeregister.com](https://realtimeregister.com) with ability to create an API key
+- Access to WHMCS admin area
 
-    Account at realtimeregister.com with possibilty of creating an API key
-    Access to WHMCS admin area
-
+### WIKI
+Check [WIKI](https://github.com/realtimeregister/whmcs/wiki) for manuals and description of all features

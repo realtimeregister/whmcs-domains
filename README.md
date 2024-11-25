@@ -6,17 +6,20 @@
 - [X] Domain registration
 - [X] Domain transfer
 - [X] Domain check
+- [X] Domain renew/restore
 - [X] Premium domain support
 - [X] Pricing sync with Realtime Register
-- [X] Override of handles
+- [X] Override of handles (either in general or per provider)
 - [X] DNSSec support
 - [X] Transfer in/out of domains
 - [X] Import of portfolio
+- [X] Bulk Sync
 - [X] Additional fields support for all supported TLD's
-- [X] Overide possibilities for additional fields
 
 We also provide widgets for you to use on your admin homepage:
 - Promotion overview
 - Your balance
 - Domainoverview 
-- Logfile overview specific for Realtime Register
+- Error Log
+
+

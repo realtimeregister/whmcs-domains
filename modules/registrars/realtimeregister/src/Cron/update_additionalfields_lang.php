@@ -34,7 +34,7 @@ foreach ($tlds as $tld) {
 
                 if ($property['values']) {
                     foreach ($property['values'] as $key => $value) {
-                        $lines[] = sprintf($entry, $langvar . '_' . $key, $value);
+                        $lines[] = sprintf($entry, $langvar . '_' . $key, addcslashes($value, "'"));
                     }
                 }
             }

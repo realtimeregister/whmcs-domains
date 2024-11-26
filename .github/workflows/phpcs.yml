@@ -24,7 +24,7 @@ jobs:
         with:
           php_version: 8.1
           path: modules/registrars/realtimeregister
-          ignore: modules/registrars/realtimeregister/vendor,modules/registrars/realtimergister/lang
+          ignore: modules/registrars/realtimeregister/vendor,modules/registrars/realtimeregister/lang
           extensions: php
           standard: PSR12
 

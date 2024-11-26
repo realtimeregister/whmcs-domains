@@ -12,6 +12,8 @@ use WHMCS\Domain\Registrar\Domain;
 
 class GetDomainInformation extends Action
 {
+    use DomainTrait;
+
     public function __invoke(Request $request)
     {
         $metadata = $this->metadata($request);
@@ -47,16 +49,15 @@ class GetDomainInformation extends Action
                     ['Registrant' => ['First Name', 'Last Name', 'Organization Name', 'Email']]
                 );
         } catch (BadRequestException | UnauthorizedException | ForbiddenException) {
-            $whmcsDomain = App::localApi()->domain($request->params['userid'], $request->params['domainid']);
-            $order = App::localApi()->order($whmcsDomain['orderid'], $request->params['userid']);
+            $order = App::localApi()->getDomainOrder($request->params['domainid'], $request->params['userid']);
             if (($order['status'] == 'Pending')) {
-                $nameserverList = explode(",", $order['nameservers']);
+                $nameserverList = $this->getDomainNameservers($request, $order);
                 $nameservers = array_combine(
                     array_map(fn($i) => "ns" . ($i + 1), array_keys($nameserverList)),
                     $nameserverList
                 );
                 return (new Domain())
-                    ->setDomain($whmcsDomain['domain'])
+                    ->setDomain($request->domain->domainName())
                     ->setNameservers($nameservers);
             }
         }

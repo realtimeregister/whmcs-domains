@@ -8,4 +8,5 @@ class Orders extends Model
 {
     public const TABLE_NAME = 'tblorders';
     protected $table = self::TABLE_NAME;
+    public $timestamps = false;
 }

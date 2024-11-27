@@ -39,7 +39,7 @@
         </div>
     </div>
 
-    <div class="modal-container modal fade">
+    <div class="modal-container modal fade" id="import-modal">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -55,11 +55,11 @@
 
 <script type="text/javascript">
     const module = 'realtimeregister';
-    const modal = $('.modal-container');
+    const modal = $('#import-modal');
 
     function onAction(element, action) {
-        const contentArea = $('.modal-body');
-        $('.modal-title').text(element.title);
+        const contentArea = $('#import-modal .modal-body');
+        modal.find('.modal-title').text(element.title);
 
         $.post(
             window.location.href,

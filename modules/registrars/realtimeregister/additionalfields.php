@@ -24,6 +24,7 @@ use RealtimeRegisterDomains\Services\MetadataService;
 
 // Use this variable to skip getting the metadata for any tld's, add custom fields at the bottom of the file
 $skip = ['nl'];
+
 $tlds = [];
 $languageCodes = [];
 
@@ -106,7 +107,7 @@ if (!empty($additionaldomainfields['.coop'])) {
     }
 }
 
-/* Add custom fields here, example
+/* Add custom fields here (not translations), example
    $additionaldomainfields[".nl"][] = [
     "Name" => "Name1",
     "LangVar" => "langvar_1",

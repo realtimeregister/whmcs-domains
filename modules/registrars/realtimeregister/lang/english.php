@@ -102,7 +102,7 @@ $_LANG['rtr']['errorlog'] = [
 ];
 
 $_LANG['rtr']['process']['info'] = 'For more information on any process in the listing, click the corresponding row to 
-navigate to the  process in the Realtime Register Domain Manager.';
+navigate to the  process in the Realtime Register Portal.';
 
 include_once implode(
     DIRECTORY_SEPARATOR,

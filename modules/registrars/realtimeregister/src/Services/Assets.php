@@ -45,11 +45,21 @@ final class Assets
         $payload['type'] = 'script';
 
         if ($scriptLocationType === ScriptLocationType::Header) {
-            $this->addToHeader($payload);
+            $this->addItemIfNotExists(self::$head, $name, $payload, [$this, 'addToHeader']);
         } else {
-            $this->addToFooter($payload);
+            $this->addItemIfNotExists(self::$footer, $name, $payload, [$this, 'addToFooter']);
         }
         return $this;
+    }
+
+    private function addItemIfNotExists(array $list, string $name, array $payload, callable $addMethod): void
+    {
+        foreach ($list as $item) {
+            if ($item['name'] === $name) {
+                return;
+            }
+        }
+        $addMethod($payload);
     }
 
     private static function getPath(string $path): string

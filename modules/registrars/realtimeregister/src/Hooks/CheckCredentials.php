@@ -11,9 +11,8 @@ class CheckCredentials extends Hook
 
     public function __invoke(DataObject $vars): void
     {
-        App::assets()->addScript("checkCredentials.js");
-
         if ($_POST['action'] === $this->ACTION && $_POST['module'] == 'realtimeregister') {
+            App::assets()->addScript("checkCredentials.js");
             self::checkConnection();
         }
     }

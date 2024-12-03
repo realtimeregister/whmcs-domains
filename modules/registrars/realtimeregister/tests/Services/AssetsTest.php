@@ -99,4 +99,18 @@ class AssetsTest extends TestCase
 
         $this->assertEquals($payload, $asset->renderHead());
     }
+
+    public function testAddSameItemMultipleTimes()
+    {
+        $asset = new Assets();
+        $asset->addScript('Hello.js');
+        $asset->addScript('Hello.js');
+        $asset->addScript('Hello.js');
+
+        $this->assertEquals(
+            '<script src="/modules/registrars/' . App::NAME . '/src/Assets/Js/Hello.js?'
+            . App::VERSION . '"></script>',
+            $asset->renderHead()
+        );
+    }
 }

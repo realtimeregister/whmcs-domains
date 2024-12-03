@@ -1,4 +1,6 @@
 <?php
+// phpcs:ignoreFile
+
 /**
  * WHMCS Language File for RTR module additional domain fields
  * English (en)

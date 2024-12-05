@@ -1,97 +1,192 @@
 <div class="log-container">
-    {if $logs}
-        {foreach from=$logs key=$i item=log}
-            <div class="log">
-                <small class="log-created">{$log.created_at}</small>
-                <button onclick="onLogClick('{$i}')" class="log-details btn btn-default block"><small>Show Details</small></button>
-                <span class="log-message">{$log.message}</span>
-            </div>
-            <hr/>
-        {/foreach}
-        <div class="log-modal-container modal fade">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                    aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">{$LANG.rtr.errorlog.details}</h4>
+    <form class="form-inline mx-1_5 pb-1" id="log-search-form">
+        <div class="form-group">
+            <input id="log-search-term" class="form-control" placeholder="{$LANG.rtr.widgets.errorlog.search_placeholder}">
+        </div>
+        <button id="log-search-submit" type="button" class="btn btn-default">{$LANG.rtr.widgets.errorlog.search}</button>
+    </form>
+    <div id="log-overview" class="mx-1_5">
+        <span id="results-log-waiting-for-input">{$LANG.rtr.widgets.errorlog.loader}</span>
+        <div id="results-log-page"></div>
+        <div>
+            <input id="current-log-page" type="hidden" value="1">
+            <button id="previous-log-page" class="btn btn-default">{$LANG.rtr.widgets.errorlog.previous}</button>
+            <button id="next-log-page" class="btn btn-default">{$LANG.rtr.widgets.errorlog.next}</button>
+        </div>
+        <div class="alert alert-success hidden" id="results-log-empty" style="margin: 1em;">{$LANG.rtr.widgets.errorlog.empty}</div>
+    </div>
+
+    <div class="modal fade" id="log-modal" tabindex="-1" role="dialog" aria-labelledby="myLogModalLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="{$LANG.rtr.widgets.errorlog.close}"><span
+                                aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">{$LANG.rtr.widgets.errorlog.details}</h4>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <strong>{$LANG.rtr.widgets.errorlog.filename}: </strong><span class="log-filename"></span>
                     </div>
-                    <div class="modal-body log-modal">
-                        <div>
-                            <strong>{$LANG.rtr.errorlog.filename}: </strong><span class="log-filename"></span>
-                        </div>
-                        <div>
-                            <strong>{$LANG.rtr.errorlog.classname}: </strong><span class="log-classname"></span>
-                        </div>
-                        <div>
-                            <strong>{$LANG.rtr.errorlog.linenumber}: </strong><span class="log-linenumber"></span>
-                        </div>
-                        <div>
-                            <strong>{$LANG.rtr.errorlog.message}: </strong><span class="log-message"></span>
-                        </div>
-                        <div>
-                            <strong>{$LANG.rtr.errorlog.time}: </strong><span class="log-time"></span>
-                        </div>
-                        <div>
-                            <strong class="block">{$LANG.rtr.errorlog.stacktrace}: </strong><span class="stacktrace"></span>
-                        </div>
+                    <div>
+                        <strong>{$LANG.rtr.widgets.errorlog.classname}: </strong><span class="log-classname"></span>
+                    </div>
+                    <div>
+                        <strong>{$LANG.rtr.widgets.errorlog.linenumber}: </strong><span class="log-linenumber"></span>
+                    </div>
+                    <div>
+                        <strong>{$LANG.rtr.widgets.errorlog.message}: </strong><span class="log-message"></span>
+                    </div>
+                    <div>
+                        <strong>{$LANG.rtr.widgets.errorlog.time}: </strong><span class="log-time"></span>
+                    </div>
+                    <div>
+                        <strong class="block">{$LANG.rtr.widgets.errorlog.stacktrace}: </strong><span class="stacktrace"></span>
                     </div>
                 </div>
             </div>
         </div>
-    {else}
-        <div class="alert alert-success" style="margin: 1em;">No errors have been detected!</div>
-    {/if}
+    </div>
 </div>
-{if $logs}
-    <script>
-        const logModal = $('.log-modal-container');
-        const logs = {$logsJSON};
+<script>
+    const logModal = $('#log-modal');
+    let logs = new Map();
 
-        function onLogClick(i) {
-            $('.log-filename').text(logs[i].filename);
-            $('.log-classname').text(logs[i].exception_class);
-            $('.log-message').text(logs[i].message);
-            $('.log-linenumber').text(logs[i].line);
-            $('.log-time').text(logs[i].created_at);
+    function onLogClick(elm) {
+        let i = elm.target.getAttribute('data-log-id');
+        let logItem = logs.get(parseInt(i));
 
-            $('.stacktrace').html(logs[i].details.split("\n").join("<br/>"));
-            logModal.modal("show");
-        }
-    </script>
+        $('#log-modal .log-filename').text(logItem.filename);
+        $('#log-modal .log-classname').text(logItem.exception_class);
+        $('#log-modal .log-message').text(logItem.message);
+        $('#log-modal .log-linenumber').text(logItem.line);
+        $('#log-modal .log-time').text(logItem.created_at);
 
-    <style>
-        .log-container {
-            height: 500px;
-            overflow-y: scroll;
+        $('#log-modal .stacktrace').html(logItem.details.split("\n").join("<br>"));
+        logModal.modal("show");
+    }
 
-            &:first-child {
-                margin-top: 1rem;
+    const logSearchButton = document.getElementById('log-search-submit');
+    document.getElementById('next-log-page').addEventListener('click', function () {
+        let currentPage = parseInt(document.getElementById('current-log-page').value);
+        fetchContent(currentPage + 1, document.getElementById('log-search-term').value);
+    });
+
+    document.getElementById('previous-log-page').addEventListener('click', function () {
+        let currentPage = parseInt(document.getElementById('current-log-page').value);
+        fetchContent(currentPage - 1, document.getElementById('log-search-term').value);
+    });
+
+    const placeholder = document.getElementById('results-log-waiting-for-input');
+
+    const resultLogPage = document.getElementById('results-log-page');
+
+    function fetchContent(pageId, query) {
+        document.getElementById('results-log-waiting-for-input').classList.remove('hidden');
+        document.getElementById('log-search-form').disabled = true;
+        fetch(window.location.href, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({
+                action: 'fetchErrorLogEntries',
+                module: 'realtimeregister',
+                pageId: pageId,
+                searchTerm: query
+            })
+        }).then(async(asyncResponse) => {
+            const response = await asyncResponse.json();
+            if (response.result === 'success') {
+                logs.clear();
+                resultLogPage.innerHTML = '';
+
+                response.logEntries.forEach(log => {
+                    let elm = document.createElement('div');
+                    elm.className = 'log';
+
+                    let smallElm = document.createElement('span');
+                    smallElm.className = 'log-created';
+                    smallElm.innerText = log.created_at;
+                    elm.appendChild(smallElm);
+
+                    let buttonElm = document.createElement('button');
+                    buttonElm.classList.add(...['log-details', 'btn', 'btn-default', 'block']);
+                    buttonElm.innerHTML = '<small data-log-id="' + log.id + '">{$LANG.rtr.widgets.errorlog.show_detail}</small>';
+                    buttonElm.setAttribute('data-log-id', log.id);
+                    buttonElm.addEventListener('click', onLogClick);
+                    elm.appendChild(buttonElm);
+
+                    let logMessageElm = document.createElement('span');
+                    logMessageElm.classList.add('log-message');
+                    logMessageElm.innerHTML = log.message;
+                    elm.appendChild(logMessageElm);
+
+                    elm.appendChild(document.createElement('hr'));
+
+                    resultLogPage.appendChild(elm);
+
+                    logs.set(log.id, log);
+                });
+
+                document.getElementById('previous-log-page').classList.add('hidden');
+                document.getElementById('next-log-page').classList.add('hidden');
+                if (response.pageId > 1) {
+                   document.getElementById('previous-log-page').classList.remove('hidden');
+                }
+                if (response.hasMorePages === true) {
+                   document.getElementById('next-log-page').classList.remove('hidden');
+                }
+                document.getElementById('results-log-waiting-for-input').classList.add('hidden');
+
+                if (pageId === 1 && response.logEntries.length === 0) {
+                    document.getElementById('results-log-empty').className.remove('hidden');
+                }
             }
+            document.getElementById('log-search-form').disabled = false;
+        });
+    }
+    // Initial request
+    fetchContent(1, document.getElementById('log-search-term').value);
+</script>
+
+<style>
+    .log-container {
+        height: 500px;
+        overflow-y: scroll;
+
+        &:first-child {
+            margin-top: 1rem;
         }
-        .log {
-            position: relative;
-            padding: 0 1.5rem;
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-        .log-created {
-            position: absolute;
-            left: 1.5rem;
-        }
-        .log-details {
-            cursor: pointer;
-            align-self: end;
-            padding: 0 12px;
-        }
-        .log-modal {
-            display: flex;
-            flex-direction: column;
-            gap: 0.3rem;
-        }
-        .block {
-            display: block;
-        }
-    </style>
-{/if}
+    }
+    .log {
+        position: relative;
+        padding: 0 1.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    .log-created {
+        position: absolute;
+        left: 1.5rem;
+    }
+    .log-details {
+        cursor: pointer;
+        align-self: end;
+        padding: 0 12px;
+    }
+    .block {
+        display: block;
+    }
+
+    .mx-1_5 {
+        margin-left: 1.5rem;
+        margin-right: 1.5rem;
+    }
+
+    .pb-1 {
+        padding-bottom: 1rem;
+    }
+
+</style>

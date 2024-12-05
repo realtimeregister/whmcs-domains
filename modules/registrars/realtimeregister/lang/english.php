@@ -91,14 +91,22 @@ $_LANG['rtr']['actions']['change_autorenew_status'] = 'Change Auto Renew Status'
 $_LANG['rtr']['actions']['change_autorenew_to_false']
     = 'Change the domains autorenew status to false at RealtimeRegister';
 
-$_LANG['rtr']['errorlog'] = [
+$_LANG['rtr']['widgets']['errorlog'] = [
     'details' => 'Error Log Details',
     'filename' => 'Filename',
     'classname' => 'Class Name',
     'linenumber' => 'Line Number',
     'message' => 'Message',
     'time' => 'Time',
-    'stacktrace' => 'Stack Trace'
+    'stacktrace' => 'Stack Trace',
+    'search_placeholder' => 'Type your searchstring...',
+    'previous' => 'Previous',
+    'next' => 'Next',
+    'search' => 'Search',
+    'loader' => 'Please wait while the data is loading...',
+    'empty' => 'No errors have been detected!',
+    'show_detail' => 'Show details',
+    'close' => 'Close',
 ];
 
 $_LANG['rtr']['process']['info'] = 'For more information on any process in the listing, click the corresponding row to 

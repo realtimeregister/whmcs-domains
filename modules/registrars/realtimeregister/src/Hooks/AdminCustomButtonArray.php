@@ -5,6 +5,7 @@ namespace RealtimeRegisterDomains\Hooks;
 use RealtimeRegister\Domain\Enum\ResumeTypeEnum;
 use RealtimeRegisterDomains\Actions\Action;
 use RealtimeRegisterDomains\App;
+use RealtimeRegisterDomains\Enums\ScriptLocationType;
 use RealtimeRegisterDomains\Models\Whmcs\Domain;
 use RealtimeRegisterDomains\Request;
 use RealtimeRegisterDomains\Services\LogService;
@@ -65,6 +66,8 @@ class AdminCustomButtonArray extends Action
                 }
             }
         }
+
+        App::assets()->addScript('renew.js', ScriptLocationType::Footer);
 
         return $adminButtons;
     }

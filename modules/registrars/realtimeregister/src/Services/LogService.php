@@ -3,14 +3,18 @@
 namespace RealtimeRegisterDomains\Services;
 
 use Carbon\Carbon;
+use Illuminate\Contracts\Pagination\Paginator;
 use RealtimeRegisterDomains\Models\Whmcs\ErrorLog;
 
 class LogService
 {
+    private static int $pageSize = 25;
+
     public static function logError(\Throwable $e, string $message = ""): void
     {
         ErrorLog::query()->insert(
-            ["severity" => "error",
+            [
+                "severity" => "error",
                 "exception_class" => get_class($e),
                 "message" => "RealtimeRegister: " . $message . ": " . $e,
                 "filename" => $e->getFile(),
@@ -21,14 +25,17 @@ class LogService
         );
     }
 
-    public static function getErrors(int $limit = 500): array
+    public static function getErrors(int $pageId = 1, string $searchTerm = ''): Paginator
     {
         return ErrorLog::query()
             ->where("severity", "=", "error")
             ->where("message", "LIKE", "RealtimeRegister: %")
             ->orderBy("id", "desc")
-            ->limit($limit)
-            ->get()
-            ->toArray();
+            ->simplePaginate(
+                self::$pageSize,
+                ['id', 'severity', 'exception_class', 'message', 'filename', 'line', 'details', 'created_at'],
+                'page',
+                $pageId
+            );
     }
 }

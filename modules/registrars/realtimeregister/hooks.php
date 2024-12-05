@@ -41,6 +41,7 @@ App::hook('AdminAreaHeadOutput', Hooks\HeadAssets::class, 100);
 App::hook('AdminAreaFooterOutput', Hooks\FooterAssets::class, 100);
 
 App::hook('AdminAreaHeadOutput', Hooks\CustomHandles::class);
+App::hook('AdminAreaHeadOutput', Hooks\Admin\ErrorLogQuery::class, 100);
 
 App::hook('DailyCronJob', Hooks\Update\CheckForUpdates::class, 10);
 App::hook('DailyCronJob', Hooks\Update\SendUsageData::class, 20);

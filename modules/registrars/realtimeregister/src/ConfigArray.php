@@ -136,7 +136,7 @@ If you do not use this option, the registrant details will be used for Admin, Bi
                 'Description' => 'Optionally override the default contact handle for Tech.',
             ],
             'contact_handles' => [
-                'FriendlyName' => "<br/>",
+                'FriendlyName' => "Registry specific default Admin, Billing and Tech contacts",
                 'Type' => 'none',
                 'Description' => '<button class="btn btn-xs info rtr-custom-properties" type="button" 
                         data-toggle="modal" data-target="#propertiesModal">Contact Handles Override

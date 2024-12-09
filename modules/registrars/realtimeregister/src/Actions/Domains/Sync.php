@@ -47,29 +47,27 @@ class Sync extends Action
 
         $whmcsDomain = Domain::query()->where('domain', $request->domain->unicodeDomain())->firstOrFail();
 
+        try {
+            if (function_exists('realtimeregister_before_Sync')) {
+                $values = realtimeregister_before_Sync($values, $request->params, $metadata, $domain);
+            }
+        } catch (\Exception $ex) {
+            return [
+                'error' => sprintf(
+                    'Error while trying to execute the realtimeregister_before_Sync hook: %s.',
+                    $ex->getMessage()
+                )
+            ];
+        }
+
         if ($domain->autoRenewPeriod < 12 && $domain->autoRenew) {
-            if (strtotime($whmcsDomain->expirydate) >= strtotime($whmcsDomain->nextduedate)) {
+            if (strtotime($domain->expiryDate) >= strtotime($whmcsDomain->nextduedate)) {
                 return [];
             }
+        }
 
-            try {
-                if (function_exists('realtimeregister_before_Sync')) {
-                    $values = realtimeregister_before_Sync($values, $request->params, $metadata, $domain);
-                }
-            } catch (\Exception $ex) {
-                return [
-                    'error' => sprintf(
-                        'Error while trying to execute the realtimeregister_before_Sync hook: %s.',
-                        $ex->getMessage()
-                    )
-                ];
-            }
-
-            if (strtotime($expiryDate->format('Y-m-d')) < strtotime($whmcsDomain->nextduedate)) {
-                return ['expirydate' => $this->syncDueDate($whmcsDomain->nextduedate)];
-            }
-
-            return ['expirydate' => $expiryDate->format('Y-m-d')];
+        if (strtotime($expiryDate->format('Y-m-d')) < strtotime($whmcsDomain->nextduedate)) {
+            $values['expirydate'] = $this->syncDueDate($expiryDate->format('Y-m-d'));
         }
 
         if ($expiryDate->format('Y-m-d') != '0000-00-00') {
@@ -101,7 +99,13 @@ class Sync extends Action
         }
 
         if ($persist) {
-            self::persist($request, $whmcsDomain->id, $status->value, $expiryDate);
+            self::persist(
+                $request,
+                $whmcsDomain->id,
+                $status->value,
+                $expiryDate,
+                $this->syncDueDate($domain->expiryDate->format('Y-m-d'))
+            );
         }
 
         try {
@@ -176,13 +180,24 @@ class Sync extends Action
         return 'Active';
     }
 
-    private static function persist(Request $request, int $domainId, string $status, ?\DateTime $newExpiry = null): void
-    {
+    private static function persist(
+        Request $request,
+        int $domainId,
+        string $status,
+        ?\DateTime $newExpiry = null,
+        string $nextDueDate = null
+    ): void {
+        $values = [
+            'status' => $status,
+        ];
         if ($newExpiry) {
-            Domain::query()->where('id', $domainId)->update(['status' => $status, 'expiryDate' => $newExpiry]);
-        } else {
-            Domain::query()->where('id', $domainId)->update(['status' => $status]);
+            $values['expirydate'] = $newExpiry->format('Y-m-d');
         }
+        if ($nextDueDate) {
+            $values['nextduedate'] = $nextDueDate;
+        }
+
+        Domain::query()->where('id', $domainId)->update($values);
         $url = 'clientsdomains.php?userid=' . $request->params['userid']
             . '&id='
             . $request->params['domainid']

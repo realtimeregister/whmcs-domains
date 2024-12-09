@@ -13,7 +13,8 @@ class ErrorLogQuery extends Hook
         if (in_array('Configure Custom Client Fields', $vars->get('admin_perms'))) {
             if ($_POST['action'] === 'fetchErrorLogEntries') {
                 $pageId = array_key_exists('pageId', $_REQUEST) ? (int)$_REQUEST['pageId'] : 1;
-                $logData = LogService::getErrors($pageId);
+                $searchTerm = array_key_exists('searchTerm', $_REQUEST) ? (string)$_REQUEST['searchTerm'] : '';
+                $logData = LogService::getErrors($pageId, $searchTerm);
 
                 echo json_encode(
                     [

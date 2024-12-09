@@ -52,6 +52,18 @@
     const logModal = $('#log-modal');
     let logs = new Map();
 
+    const debounce = (callback, wait) => {
+        let timeoutId = null;
+
+        return (...args) => {
+            window.clearTimeout(timeoutId);
+
+            timeoutId = window.setTimeout(() => {
+                callback.apply(null, args);
+            }, wait);
+        };
+    }
+
     function onLogClick(elm) {
         let i = elm.target.getAttribute('data-log-id');
         let logItem = logs.get(parseInt(i));
@@ -77,6 +89,16 @@
         fetchContent(currentPage - 1, document.getElementById('log-search-term').value);
     });
 
+    document.getElementById('log-search-term').addEventListener('keyup', debounce(() => {
+        document.getElementById('current-log-page').value = '1';
+        fetchContent(1, document.getElementById('log-search-term').value);
+    }, 250));
+
+    document.getElementById('log-search-submit').addEventListener('click', function () {
+        document.getElementById('current-log-page').value = '1';
+        fetchContent(1, document.getElementById('log-search-term').value);
+    });
+
     const placeholder = document.getElementById('results-log-waiting-for-input');
 
     const resultLogPage = document.getElementById('results-log-page');
@@ -84,6 +106,7 @@
     function fetchContent(pageId, query) {
         document.getElementById('results-log-waiting-for-input').classList.remove('hidden');
         document.getElementById('log-search-form').disabled = true;
+        document.getElementById('results-log-page').style.opacity = 0.3;
         fetch(window.location.href, {
             method: 'POST',
             headers: {
@@ -143,6 +166,7 @@
                 if (pageId === 1 && response.logEntries.length === 0) {
                     document.getElementById('results-log-empty').className.remove('hidden');
                 }
+                document.getElementById('results-log-page').style.opacity = 1;
             }
             document.getElementById('log-search-form').disabled = false;
         });

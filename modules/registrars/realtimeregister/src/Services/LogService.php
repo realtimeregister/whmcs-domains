@@ -29,7 +29,7 @@ class LogService
     {
         return ErrorLog::query()
             ->where("severity", "=", "error")
-            ->where("message", "LIKE", "RealtimeRegister: %")
+            ->where("message", "LIKE", "RealtimeRegister: %" . ($searchTerm ? $searchTerm . "%" : ''))
             ->orderBy("id", "desc")
             ->simplePaginate(
                 self::$pageSize,

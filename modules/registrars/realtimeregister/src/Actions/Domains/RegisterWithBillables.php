@@ -34,8 +34,8 @@ class RegisterWithBillables extends Action
             $registrant = $this->getOrCreateContact(
                 clientId: $request->get('userid'),
                 contactId: $contactId,
-                role: 'ADMIN',
-                organizationAllowed: $metadata->registrant->organizationAllowed
+                organizationAllowed: $metadata->registrant->organizationAllowed,
+                role: 'ADMIN'
             );
             $contacts = [];
             foreach (self::$CONTACT_ROLES as $role => $name) {
@@ -45,8 +45,8 @@ class RegisterWithBillables extends Action
                     'handle' => $this->getOrCreateContact(
                         clientId: $request->get('userid'),
                         contactId: $contactId,
-                        role: $role,
-                        organizationAllowed: $organizationAllowed
+                        organizationAllowed: $organizationAllowed,
+                        role: $role
                     )
                 ];
             }

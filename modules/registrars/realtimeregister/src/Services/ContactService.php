@@ -144,13 +144,7 @@ class ContactService
      */
     public function fetchMappingByContactId(int $userId, int $contactId): Collection
     {
-        return ContactMapping::query()->where(
-            column: 'userid',
-            value: $userId
-        )->where(
-            column: 'contactid',
-            value: $contactId
-        )->get();
+        return ContactMapping::query()->where([['userid',$userId],['contactid',$contactId]])->get();
     }
 
     public function fetchMappingByHandle(string $handle): ?ContactMapping

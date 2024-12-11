@@ -32,12 +32,14 @@ trait DomainTrait
         };
     }
 
-    protected function getOrCreateContact(int $clientId, int $contactId, string $role, bool $organizationAllowed)
+    protected function getOrCreateContact(int $clientId, int $contactId, bool $organizationAllowed, string $role = null)
     {
-        $handle = $this->handleOverride($role);
+        if ($role) {
+            $handle = $this->handleOverride($role);
 
-        if ($handle) {
-            return $handle;
+            if ($handle) {
+                return $handle;
+            }
         }
 
         // Check if we have a contact mapping

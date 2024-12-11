@@ -77,8 +77,8 @@ trait DomainContactTrait
         $registrant = $this->getOrCreateContact(
             clientId: $clientId,
             contactId: $contactId,
-            role: 'REGISTRANT',
-            organizationAllowed: $metadata->registrant->organizationAllowed
+            organizationAllowed: $metadata->registrant->organizationAllowed,
+            role: 'REGISTRANT'
         );
 
         self::addProperties($request->domain->contactProperties, $registrant, $tldInfo);
@@ -99,8 +99,8 @@ trait DomainContactTrait
                 $handle = $this->getOrCreateContact(
                     clientId: $clientId,
                     contactId: $contactId,
-                    role: $role,
-                    organizationAllowed: $organizationAllowed
+                    organizationAllowed: $organizationAllowed,
+                    role: $role
                 );
                 if (!$this->handleOverride($role)) {
                     self::addProperties($request->domain->contactProperties, $handle, $tldInfo);

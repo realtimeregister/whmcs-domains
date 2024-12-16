@@ -24,6 +24,11 @@ App::hook(Hooks\UserLogin::class);
 
 App::hook(Hooks\Client\ClientAreaPage::class);
 App::hook(Hooks\ContactEdit::class);
+App::hook(Hooks\ContactDelete::class);
+
+App::hook('ClientEdit', Hooks\ContactEdit::class);
+App::hook('ClientDelete', Hooks\ContactDelete::class);
+
 App::hook('ClientAreaHeadOutput', Hooks\Client\ClientAreaHeadOutput::class, 20);
 App::hook(Hooks\Client\ClientAreaPageDomainDetails::class);
 

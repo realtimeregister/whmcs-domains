@@ -126,9 +126,7 @@ if (!empty($additionaldomainfields) && defined('CLIENTAREA') && CLIENTAREA === t
     if ($requiredAdditionalFields === '') {
         foreach ($additionaldomainfields as $tld => $fields) {
             foreach ($fields as $key => $field) {
-                if (array_key_exists('Required', $field) && $field['Required'] === true) {
-                    $additionaldomainfields[$tld][$key]['Required'] = false;
-                }
+                $additionaldomainfields[$tld][$key]['Required'] = false;
             }
         }
     }

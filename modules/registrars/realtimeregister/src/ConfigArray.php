@@ -79,7 +79,7 @@ class ConfigArray
                 'Type' => 'yesno',
                 'Description' => 'The order can only be completed by the customer when he/she completes the required '
                     . 'fields as well. If this option is enabled, the client must fill in the fields that are usually '
-                    . 'required. If this option is disabled, any missing required fiels have to be set by the admin.',
+                    . 'required. If this option is disabled, any missing required fields have to be set by the admin.',
             ],
             'dnssec' => [
                 'FriendlyName' => 'DNSSec',

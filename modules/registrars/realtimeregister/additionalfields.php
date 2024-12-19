@@ -118,4 +118,18 @@ if (!empty($additionaldomainfields['.coop'])) {
     ...
 */
 
+if (!empty($additionaldomainfields) && defined('CLIENTAREA') && CLIENTAREA === true) {
+    $registerConfig = new \RealtimeRegisterDomains\Entities\RegistrarConfig();
+
+    $requiredAdditionalFields = $registerConfig->get('required_additional_fields', '');
+
+    if ($requiredAdditionalFields === '') {
+        foreach ($additionaldomainfields as $tld => $fields) {
+            foreach ($fields as $key => $field) {
+                $additionaldomainfields[$tld][$key]['Required'] = false;
+            }
+        }
+    }
+}
+
 MetadataService::removeDefaultFields($additionaldomainfields);

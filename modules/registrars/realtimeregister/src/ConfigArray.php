@@ -74,6 +74,13 @@ class ConfigArray
                 'Type' => 'yesno',
                 'Description' => 'Enable this ONLY when you want transfers to keep their existing nameservers.',
             ],
+            'required_additional_fields' => [
+                'FriendlyName' => 'Required additional fields',
+                'Type' => 'yesno',
+                'Description' => 'The order can only be completed by the customer when he/she completes the required '
+                    . 'fields as well. If this option is enabled, the client must fill in the fields that are usually '
+                    . 'required. If this option is disabled, any missing required fields have to be set by the admin.',
+            ],
             'dnssec' => [
                 'FriendlyName' => 'DNSSec',
                 'Type' => 'yesno',

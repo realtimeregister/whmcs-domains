@@ -22,7 +22,6 @@ App::hook(RealtimeRegisterDomains\Hooks\AdminClientDomainsTabFields::class);
 App::hook('ClientAreaHeadOutput', Hooks\Adac::class, 10);
 App::hook(Hooks\UserLogin::class);
 
-App::hook(Hooks\Client\ClientAreaPage::class);
 App::hook(Hooks\ContactEdit::class);
 App::hook(Hooks\ContactDelete::class);
 

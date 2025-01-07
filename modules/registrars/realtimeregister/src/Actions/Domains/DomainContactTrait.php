@@ -34,7 +34,11 @@ trait DomainContactTrait
         }
 
         if (!empty($currentProperties) && $currentProperties != $newProperties) {
-            App::client()->contacts->updateProperties($customer, $handle, $tldInfo->provider, $newProperties);
+            try {
+                App::client()->contacts->updateProperties($customer, $handle, $tldInfo->provider, $newProperties);
+            } catch (\Exception) {
+                return; // We might come here when we try to create contacts without the required fields
+            }
         }
     }
 

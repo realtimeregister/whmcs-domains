@@ -13,7 +13,7 @@ final class Assets
 
     public function prependHead(string $content): self
     {
-        array_unshift(self::$head, $content);
+        array_unshift(self::$head, $this->createPayload($content));
 
         return $this;
     }
@@ -27,14 +27,28 @@ final class Assets
         if (is_array($content)) {
             self::$head[] = $content;
         } else {
-            $payload = [];
-            $payload['name'] = uniqid(more_entropy: true);
-            $payload['location'] = ScriptLocationType::Header;
-            $payload['type'] = 'inline';
-            $payload['content'] = $content;
-            self::$head[] = $payload;
+            self::$head[] = $this->createPayload($content);
         }
         return $this;
+    }
+
+    /**
+     * Helper function to create payloads
+     * @param string $content
+     * @param ScriptLocationType $scriptLocationType
+     * @return array
+     */
+    private function createPayload(
+        string $content,
+        ScriptLocationType $scriptLocationType = ScriptLocationType::Header
+    ): array {
+        $payload = [];
+        $payload['name'] = uniqid(more_entropy: true);
+        $payload['location'] = $scriptLocationType;
+        $payload['type'] = 'inline';
+        $payload['content'] = $content;
+
+        return $payload;
     }
 
     public function addScript(string $name, ScriptLocationType $scriptLocationType = ScriptLocationType::Header): self

@@ -32,9 +32,10 @@ class BalanceModuleWidget extends \WHMCS\Module\AbstractWidget
             $content .= "<div class='col-12' style='padding: 15px'>Something went wrong fetching your balance</div>";
         } else {
             foreach ($data as $item) {
+                $balance_format = substr($item->balance, 0, -2) . "," . substr($item->balance, -2);
                 $content .= "<div class='col-sm-6'>
                             <div class='item'>
-                                <div class='data'>" . number_format($item->balance) . "</div>
+                                <div class='data'>" . $balance_format . "</div>
                                 <div class='note'>" . $item->currency . "</div>
                             </div>
                         </div>";

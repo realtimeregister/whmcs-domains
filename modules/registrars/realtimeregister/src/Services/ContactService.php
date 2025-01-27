@@ -28,11 +28,10 @@ class ContactService
             $params,
             [
                 'order' => '-createdDate',
-                'export' => true
             ]
         );
 
-        return App::client()->contacts->list(
+        return App::client()->contacts->export(
             customer: App::registrarConfig()->customerHandle(),
             parameters: $params
         )[0];

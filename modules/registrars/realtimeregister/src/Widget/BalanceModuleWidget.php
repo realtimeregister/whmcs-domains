@@ -34,7 +34,7 @@ class BalanceModuleWidget extends \WHMCS\Module\AbstractWidget
             foreach ($data as $item) {
                 $content .= "<div class='col-sm-6'>
                             <div class='item'>
-                                <div class='data'>" . number_format($item->balance) . "</div>
+                                <div class='data'>" . formatCurrency($item->balance / 100)->toNumeric() . "</div>
                                 <div class='note'>" . $item->currency . "</div>
                             </div>
                         </div>";

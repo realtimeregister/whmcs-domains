@@ -92,7 +92,7 @@ trait DomainTrait
 
             return $handle;
         }
-        return $contact->handle;
+        return $contact['handle'];
     }
 
     protected function getDomainNameservers(Request $request, DataObject $order = null): array

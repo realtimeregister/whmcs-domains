@@ -30,11 +30,11 @@
     "require": {
         "php": "^7.4|^8.1",
         "realtimeregister/realtimeregister-php": "dev-master",
-        "illuminate/cache": "^9",
+        "illuminate/cache": "^7.12",
         "giggsey/libphonenumber-for-php-lite": "^8.13",
         "psr/log": "^1.0.0",
         "guzzlehttp/guzzle": "7.5.0",
-        "illuminate/pagination": "^9"
+        "illuminate/pagination": "^7.12"
     },
     "require-dev": {
         "symfony/var-dumper": "^6.4",

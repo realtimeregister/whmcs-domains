@@ -175,23 +175,6 @@ If you do not use this option, the registrant details will be used for Admin, Bi
                 'Size' => '20',
                 'Description' => '',
             ],
-
-            /**
-             * Domain availability check.
-             */
-            'INFO_WHOIS' => [
-                'FriendlyName' => '<strong>Domain availability check</strong>',
-                'Type' => 'none',
-                'Description' => '<strong>Use Realtime Register WHOIS check instead of WHMCS for a more quick and ' .
-                    'better result.</strong>',
-            ],
-            'rtrWhois' => [
-                'FriendlyName' => 'Use Realtimeregister WHOIS',
-                'Type' => 'yesno',
-                'Description' =>
-                    'Adds WHOIS layer over WHMCS core to check domain availability. ' .
-                    'See installation guide for instructions.',
-            ],
             'INFO_WHOIS_EMPTY_LINE' => [
                 'FriendlyName' => '</br>',
                 'Type' => 'none',

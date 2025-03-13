@@ -5,6 +5,7 @@ namespace RealtimeRegisterDomains;
 use Illuminate\Support\Collection;
 use RealtimeRegisterDomains\Entities\DataObject;
 use RealtimeRegisterDomains\Entities\WhmcsContact;
+use RealtimeRegisterDomains\Services\LogService;
 
 class LocalApi
 {
@@ -15,7 +16,7 @@ class LocalApi
     {
         $startNumber = 0;
         while (true) {
-            $results = localAPI('GetContacts', ['userid' => $clientId, 'limitstart' => $startNumber]);
+            $results = self::getLocalApi('GetContacts', ['userid' => $clientId, 'limitstart' => $startNumber]);
 
             foreach ($results['contacts']['contact'] as $contact) {
                 if ($contact['id'] == $contactId) {
@@ -39,19 +40,18 @@ class LocalApi
      */
     public function domains(array $filters = []): Collection
     {
-        $data = localApi('GetClientsDomains', array_filter($filters));
+        $results = self::getLocalApi('GetClientsDomains', array_filter($filters));
 
-
-        return collect($data['domains'] ?? [])->map(fn($domain) => new DataObject($domain[0]));
+        return collect($results['domains'] ?? [])->map(fn($domain) => new DataObject($domain[0]));
     }
 
     public function domain(int $clientId = null, int $domainId = null, string $domain = null): ?DataObject
     {
         return $this->domains(
             [
-            'clientid' => $clientId,
-            'domainid' => $domainId,
-            'domain' => $domain
+                'clientid' => $clientId,
+                'domainid' => $domainId,
+                'domain' => $domain
             ]
         )->first();
     }
@@ -62,9 +62,9 @@ class LocalApi
      */
     public function orders(array $filters = []): Collection
     {
-        $data = localApi('GetOrders', array_filter($filters));
+        $results = self::getLocalApi('GetOrders', array_filter($filters));
 
-        return collect($data['orders'] ?? [])->map(fn($order) => new DataObject($order[0]));
+        return collect($results['orders'] ?? [])->map(fn($order) => new DataObject($order[0]));
     }
 
     public function order(
@@ -75,10 +75,10 @@ class LocalApi
     ): ?DataObject {
         return $this->orders(
             [
-            'id' => $id,
-            'clientid' => $clientId,
-            'requestor_id' => $requestorId,
-            'status' => $status
+                'id' => $id,
+                'clientid' => $clientId,
+                'requestor_id' => $requestorId,
+                'status' => $status
             ]
         )->first();
     }
@@ -94,7 +94,7 @@ class LocalApi
 
     public static function getClient(int $clientId): array
     {
-        return localAPI('GetClientsDetails', ['clientid' => $clientId])['client'];
+        return  self::getLocalApi('GetClientsDetails', ['clientid' => $clientId]);
     }
 
     public function getContact(int $clientId, int $contactId): ?DataObject
@@ -102,9 +102,9 @@ class LocalApi
         $start = 0;
 
         do {
-            $data = localAPI('GetContacts', ['userid' => $clientId, 'startnumber' => $start]);
+            $results = self::getLocalApi('GetContacts', ['userid' => $clientId, 'startnumber' => $start]);
 
-            $contact = collect($data['contacts']['contact'])->where('id', $contactId);
+            $contact = collect($results['contacts']['contact'])->where('id', $contactId);
 
             if ($contact->isNotEmpty()) {
                 /** @var DataObject $result */
@@ -115,18 +115,17 @@ class LocalApi
                 return new DataObject($result);
             }
 
-            $start += (int)$data['numreturned'];
-        } while ($start < (int)$data['totalresults']);
+            $start += (int)$results['numreturned'];
+        } while ($start < (int)$results['totalresults']);
 
-        $data = localAPI('GetClientsDetails', ['clientid' => $clientId])['client'];
-
-        $data['phonenumberformatted'] = WhmcsContact::formatE164a($data['phonenumber'], $data['country']);
-        return new DataObject($data);
+        $results = self::getLocalApi('GetClientsDetails', ['clientid' => $clientId])['client'];
+        $results['phonenumberformatted'] = WhmcsContact::formatE164a($results['phonenumber'], $results['country']);
+        return new DataObject($results);
     }
 
     public function getContactById(int $contactId): ?DataObject
     {
-        return new DataObject(localAPI('GetContactDetails', ['id' => $contactId])['contacts'][0]);
+        return new DataObject(self::getLocalApi('GetContactDetails', ['id' => $contactId])['contacts'][0]);
     }
 
     public function getTldPricing()
@@ -138,12 +137,40 @@ class LocalApi
         } else {
             $qry['currencyId'] = 'USD';
         }
-        $result = localAPI('GetTldPricing', $qry);
+        $results = self::getLocalApi('GetTldPricing', $qry);
 
-        if ($result) {
-            return $result['pricing'];
+        if ($results['result'] === 'error') {
+            LogService::logError($results['message']);
+        }
+
+        if ($results) {
+            return $results['pricing'];
         }
 
         return null;
+    }
+
+    public function getCurrencies()
+    {
+        return self::getLocalApi('GetCurrencies', []);
+    }
+
+    public function addClient($postData, $admin)
+    {
+        return self::getLocalApi('AddClient', $postData, $admin);
+    }
+
+    public function addContact($postData, $admin)
+    {
+        return self::getLocalApi('AddContact', $postData, $admin);
+    }
+
+    private static function getLocalApi($function, $postData, $user = null)
+    {
+        $results = localAPI($function, $postData, $user);
+        if ($results['result'] === 'error') {
+            LogService::logError($results['message']);
+        }
+        return $results;
     }
 }

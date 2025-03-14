@@ -2,7 +2,9 @@
 
 namespace RealtimeRegisterDomains\Hooks;
 
+use RealtimeRegisterDomains\App;
 use RealtimeRegisterDomains\Entities\DataObject;
+use RealtimeRegisterDomains\LocalApi;
 use RealtimeRegisterDomains\Services\ShoppingCartService;
 
 class UserLogin extends Hook
@@ -11,10 +13,10 @@ class UserLogin extends Hook
     {
         if (!empty($_SESSION['cart']['domains'])) {
             $whmcsCurrencies = [];
-            foreach (localAPI('GetCurrencies', [])['currencies']['currency'] as $c) {
+            foreach (App::localApi()->getCurrencies()['currencies']['currency'] as $c) {
                 $whmcsCurrencies[$c['id']] = strtoupper($c['code']);
             }
-            $client = localAPI('GetClientDetails', ['clientid' => $_SESSION['uid']])['client'];
+            $client = LocalApi::getClient($_SESSION['uid']);
             if (!empty($client['currency']) && in_array($client['currency'], $whmcsCurrencies)) {
                 ShoppingCartService::updateCartPremiumPrices($whmcsCurrencies[$client['currency']]);
             }

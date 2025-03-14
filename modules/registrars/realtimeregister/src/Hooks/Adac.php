@@ -61,7 +61,7 @@ class Adac extends Hook
                  * default WHMCS flow,we mimic this behavior.
                  */
                 $whmcsCurrencies = [];
-                foreach (localAPI('GetCurrencies', [])['currencies']['currency'] as $c) {
+                foreach (App::localApi()->getCurrencies()['currencies']['currency'] as $c) {
                     $whmcsCurrencies[strtoupper($c['code'])] = $c['id'];
                 }
                 $_SESSION['PremiumDomains'][$_POST['adacpremium']]['markupPrice'][1]['currency']

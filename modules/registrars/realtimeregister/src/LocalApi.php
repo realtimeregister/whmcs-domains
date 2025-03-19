@@ -2,6 +2,7 @@
 
 namespace RealtimeRegisterDomains;
 
+use Exceptions\InternalApiException;
 use Illuminate\Support\Collection;
 use RealtimeRegisterDomains\Entities\DataObject;
 use RealtimeRegisterDomains\Entities\WhmcsContact;
@@ -139,10 +140,6 @@ class LocalApi
         }
         $results = self::getLocalApi('GetTldPricing', $qry);
 
-        if ($results['result'] === 'error') {
-            LogService::logError($results['message']);
-        }
-
         if ($results) {
             return $results['pricing'];
         }
@@ -170,6 +167,7 @@ class LocalApi
         $results = localAPI($function, $postData, $user);
         if ($results['result'] === 'error') {
             LogService::logError($results['message']);
+            throw new InternalApiException($results['message']);
         }
         return $results;
     }

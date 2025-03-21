@@ -30,8 +30,11 @@ trait GetPricesTrait
             }
 
             if (str_contains($priceItem->product, 'domain_centralnic_')) {
-                $prices[str_replace('_', '.',
-                    str_replace('domain_centralnic_', '', $priceItem->product))][$priceItem->action] = [
+                $prices[str_replace(
+                    '_',
+                    '.',
+                    str_replace('domain_centralnic_', '', $priceItem->product)
+                )][$priceItem->action] = [
                     'currency' => $priceItem->currency,
                     'price' => $priceItem->price
                 ];

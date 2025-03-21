@@ -186,7 +186,8 @@ trait DomainTrait
         return $billables;
     }
 
-    protected static function getDomainName(Domain $domain) : string {
+    protected static function getDomainName(Domain $domain): string
+    {
         $tld = $domain->tldPunyCode ?? $domain->tld;
         return $domain->domainName() . Config::getPseudoTld($tld);
     }

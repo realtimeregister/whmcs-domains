@@ -17,6 +17,7 @@ class RenewDomain extends Action
     {
         $metadata = $this->metadata($request);
         $domain = $request->domain;
+        $domainName = self::getDomainName($domain);
 
         try {
             if (function_exists('realtimeregister_before_RenewDomain')) {
@@ -46,12 +47,12 @@ class RenewDomain extends Action
          */
         if ($domain->isInRedemptionGracePeriod === true) {
             $renewal = App::client()->domains->restore(
-                domain: $domain->domainName(),
+                domain: $domainName,
                 reason: 'Restore requested of this domain by WHMCS user'
             );
         } else {
             $renewal = App::client()->domains->renew(
-                domain: $domain->domainName(),
+                domain: $domainName,
                 period: $period,
             );
         }

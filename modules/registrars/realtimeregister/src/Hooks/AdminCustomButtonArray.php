@@ -35,13 +35,13 @@ class AdminCustomButtonArray extends Action
 
         $adminButtons['Renew and accept billables'] = "RenewDomainWithBillables";
 
-        $domain = $request->domain->domainName();
+        $domainName = self::getDomainName($request->domain);
         if (!empty($metadata->transferFOA)) {
             $processes = App::client()->processes->list(
                 parameters: [
                     'status' => 'SUSPENDED',
                     'action:in' => 'incomingInternalTransfer,incomingTransfer',
-                    "identifier:eq" => $request->domain->domainName()
+                    "identifier:eq" => $domainName
                 ]
             );
 
@@ -54,7 +54,7 @@ class AdminCustomButtonArray extends Action
         }
         if ($request->params['regtype'] !== 'Transfer' && !empty($metadata->validationCategory)) {
             try {
-                $info = App::client()->domains->get($domain);
+                $info = App::client()->domains->get($domainName);
                 if (in_array('PENDING_VALIDATION', $info->status)) {
                     $adminButtons['Resend validation mails'] = "ResendValidationMails";
                 }

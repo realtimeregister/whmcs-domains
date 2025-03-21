@@ -8,6 +8,7 @@ use RealtimeRegisterDomains\App;
 use RealtimeRegisterDomains\Entities\DataObject;
 use RealtimeRegisterDomains\Enums\WhmcsDomainStatus;
 use RealtimeRegisterDomains\Models\Whmcs\Domain;
+use RealtimeRegisterDomains\Services\Config\Config;
 use RealtimeRegisterDomains\Services\LogService;
 use RealtimeRegisterDomains\Services\MetadataService;
 
@@ -18,7 +19,8 @@ class AdminClientDomainsTabFields extends Hook
     public function __invoke(DataObject $vars): array
     {
         $domainInfo = Domain::find($vars->get('id'));
-        $domainName = $domainInfo->domain;
+        $tld = MetadataService::getTld($domainInfo->domain);
+        $domainName = $domainInfo->domain . Config::getPseudoTld($tld);
 
         $fields = [];
         try {

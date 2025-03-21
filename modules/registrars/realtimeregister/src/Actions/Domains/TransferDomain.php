@@ -25,7 +25,7 @@ class TransferDomain extends Action
             ) = $this->generateContactsForDomain(request: $request, metadata: $metadata);
 
         App::client()->domains->transfer(
-            domainName: $domain->domainName(),
+            domainName: self::getDomainName($request->domain),
             customer: App::registrarConfig()->customerHandle(),
             registrant: $registrant,
             authcode: $request->eppCode,

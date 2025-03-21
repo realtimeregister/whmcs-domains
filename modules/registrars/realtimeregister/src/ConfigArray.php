@@ -39,7 +39,7 @@ class ConfigArray
             'check_credentials' => [
                 'FriendlyName' => "<br/>",
                 'Type' => 'none',
-                'Description' => '<button class="btn btn-xs check-connection">Check Connection</button>
+                'Description' => '<button type="button" class="btn btn-xs check-connection">Check Connection</button>
                     <span class="credentials-result"></span>',
             ],
             /**

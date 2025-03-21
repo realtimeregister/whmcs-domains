@@ -27,7 +27,7 @@ class SaveRegistrarLock extends Action
             }
 
             App::client()->domains->update(
-                domainName: $request->domain->domainName(),
+                domainName: self::getDomainName($request->domain),
                 statuses: array_values($statuses)
             );
 

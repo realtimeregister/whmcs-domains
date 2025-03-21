@@ -23,8 +23,6 @@ class RegisterDomain extends Action
         $metadata = $tldInfo->metadata;
         $domain = $request->domain;
 
-        $domainName = $domain->domainName();
-
         $period = $request->get('regperiod') * 12;
         if (!in_array($period, $metadata->createDomainPeriods)) {
             throw new \Exception(
@@ -38,7 +36,7 @@ class RegisterDomain extends Action
             ) = $this->generateContactsForDomain($request, $metadata);
 
         $parameters = [
-            'domainName' => $domainName,
+            'domainName' => self::getDomainName($domain),
             'customer' => App::registrarConfig()->customerHandle(),
             'registrant' => $registrant,
             'period' => $period,

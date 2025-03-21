@@ -24,7 +24,7 @@ abstract class Action implements InvokableAction
 
     protected function domainInfo(Request $request): DomainDetails
     {
-        $domainName = $request->domain->domainName();
+        $domainName = self::getDomainName($request->domain);
         return Cache::request()->rememberForever(
             'domain-info:' . $domainName,
             function () use ($request, $domainName) {
@@ -35,7 +35,7 @@ abstract class Action implements InvokableAction
 
     protected function forgetDomainInfo(Request $request): bool
     {
-        return Cache::request()->forget('domain-info:' . $request->domain->domainName());
+        return Cache::request()->forget('domain-info:' . self::getDomainName($request->domain));
     }
 
     public function contactInfo(string $handle): Contact

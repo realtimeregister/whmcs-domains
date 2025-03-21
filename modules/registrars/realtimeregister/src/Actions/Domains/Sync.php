@@ -127,9 +127,8 @@ class Sync extends Action
 
     private static function checkForOutgoingTransfer(Request $request): bool
     {
-        $domain = $request->domain->domainName();
         return App::client()->processes->list(parameters:
-            ["identifier:eq" => $domain,
+            ["identifier:eq" => self::getDomainName($request->domain),
                 "status" => "COMPLETED",
                 "action:in" => "outgoingTransfer,outgoingInternalTransfer"
             ])->count() > 0;

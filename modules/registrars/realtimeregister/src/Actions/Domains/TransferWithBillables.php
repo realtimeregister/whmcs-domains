@@ -31,7 +31,7 @@ class TransferWithBillables extends Action
         $whmcsDomain = Domain::query()->find($request->params['domainid']);
         $order = Orders::query()->find($whmcsDomain->orderid);
         $parameters = [
-            'domainName' => $domain->domainName(),
+            'domainName' => self::getDomainName($domain),
             'customer' => App::registrarConfig()->customerHandle(),
             'registrant' => $registrant,
             'ns' => App::registrarConfig()->keepNameServers() ? null : $ns,

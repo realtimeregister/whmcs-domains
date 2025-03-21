@@ -8,9 +8,11 @@ use RealtimeRegister\Domain\DomainQuote;
 use RealtimeRegister\Domain\TLDMetaData;
 use RealtimeRegisterDomains\App;
 use RealtimeRegisterDomains\Entities\DataObject;
+use RealtimeRegisterDomains\Entities\Domain;
 use RealtimeRegisterDomains\Models\RealtimeRegister\ContactMapping;
 use RealtimeRegisterDomains\Models\Whmcs\Configuration;
 use RealtimeRegisterDomains\Request;
+use RealtimeRegisterDomains\Services\Config\Config;
 use RealtimeRegisterDomains\Services\ContactService;
 
 trait DomainTrait
@@ -182,5 +184,10 @@ trait DomainTrait
             }
         }
         return $billables;
+    }
+
+    protected static function getDomainName(Domain $domain) : string {
+        $tld = $domain->tldPunyCode ?? $domain->tld;
+        return $domain->domainName() . Config::getPseudoTld($tld);
     }
 }

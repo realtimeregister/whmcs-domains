@@ -35,7 +35,7 @@ class CheckAvailability extends Action
                 $results->append($searchResult);
                 continue;
             }
-            if (Config::get('tldinfomapping.' . $tld) === 'centralnic') {
+            if (Config::get('tldinfomapping' . $tld) === 'centralnic') {
                 $tlds[$key] = $tld . '.centralnic';
             } else {
                 $tlds[$key] = $tld;

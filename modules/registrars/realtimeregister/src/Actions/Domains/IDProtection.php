@@ -8,11 +8,12 @@ use RealtimeRegisterDomains\Request;
 
 class IDProtection extends Action
 {
+    use DomainTrait;
     public function __invoke(Request $request): array
     {
         try {
             App::client()->domains->update(
-                domainName: $request->domain->domainName(),
+                domainName: self::getDomainName($request->domain),
                 privacyProtect: $request->domain->privacyProtect
             );
         } catch (\Exception $exception) {

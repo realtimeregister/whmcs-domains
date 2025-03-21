@@ -86,7 +86,6 @@ class MetadataService
         if (Config::get('tldinfomapping.' . $domain)) {
             return $domain;
         }
-
         $domain_parts = explode(".", $domain);
         if (count($domain_parts) >= 2) {
             unset($domain_parts[0]);

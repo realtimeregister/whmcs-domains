@@ -23,6 +23,9 @@ class PricingSync extends Action
         if (App::registrarConfig()->customerHandle() === '') {
             throw new \Exception("No Customer set in config");
         }
+
+        $priceList = App::client()->customers->priceList(App::registrarConfig()->customerHandle())->toArray();
+//        dd(array_combine(array_column($priceList, 'product'), $priceList));
         // Then, get the pricing
         $prices = $this->getPrices(App::client()->customers->priceList(App::registrarConfig()->customerHandle()));
 

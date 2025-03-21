@@ -17,7 +17,7 @@ class SaveNameservers extends Action
     {
         try {
             App::client()->domains->update(
-                domainName: $request->domain->domainName(),
+                domainName: self::getDomainName($request->domain),
                 ns: $request->domain->nameservers
             );
 
@@ -33,7 +33,7 @@ class SaveNameservers extends Action
                 return ['success' => true];
             }
             LogService::logError($exception);
-            return ['error' => sprintf('Error fetching domain information: %s', $exception->getMessage())];
+            return ['error' => sprintf('Error updating nameservers: %s', $exception->getMessage())];
         }
     }
 }

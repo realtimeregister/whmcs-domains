@@ -4,6 +4,9 @@ namespace RealtimeRegisterDomains\Services\Config;
 
 class Config
 {
+
+    public const TLD_INFO_MAPPING = 'tldinfomapping';
+
     /**
      * Return all or specific property from a config file.
      *
@@ -30,5 +33,10 @@ class Config
         }
 
         return $config->all();
+    }
+
+    public static function getPseudoTld(string $tld) {
+        $pseudoTld = Config::get(Config::TLD_INFO_MAPPING . '.' . $tld);
+        return $pseudoTld ? '.' . $pseudoTld : '';
     }
 }

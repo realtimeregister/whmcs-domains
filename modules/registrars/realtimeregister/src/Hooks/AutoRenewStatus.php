@@ -11,6 +11,7 @@ use RealtimeRegisterDomains\Services\TemplateService;
 class AutoRenewStatus extends Hook
 {
     use DomainTrait;
+
     private string $ACTION = "autoRenew";
 
     public function __invoke(DataObject $vars): void

@@ -12,8 +12,8 @@ use RealtimeRegisterDomains\Services\TemplateService;
 
 class SyncExpiry extends Hook
 {
-
     use DomainTrait;
+
     private string $ACTION = 'syncExpiry';
 
     public function __invoke(DataObject $vars): void

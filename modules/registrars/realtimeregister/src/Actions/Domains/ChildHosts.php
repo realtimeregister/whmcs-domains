@@ -14,13 +14,12 @@ class ChildHosts extends Action
     public function __invoke(Request $request)
     {
         $domainid = $request->params['domainid'];
-        $domainname = $request->params['domainname'];
+        $domainName = self::getDomainName($request->domain);
         $message = '';
         $saved = false;
 
         try {
             $domainInfo = $this->domainInfo($request);
-            $domain = $domainInfo->domainName;
         } catch (\Exception $e) {
             $message = sprintf("Error while creating or deleting the host: %s", $e->getMessage());
         }
@@ -32,7 +31,7 @@ class ChildHosts extends Action
                         $saved = true;
                         if (!in_array($_POST['hostName'], $domainInfo->childHosts)) {
                             throw new \Exception(
-                                sprintf("Host '%s' is not a subordinate host of '%s'", $_POST['hostName'], $domainname)
+                                sprintf("Host '%s' is not a subordinate host of '%s'", $_POST['hostName'], $domainName)
                             );
                         }
                         App::client()->hosts->delete($_POST['hostName']);
@@ -41,11 +40,11 @@ class ChildHosts extends Action
 
                     if ($_POST['hostAction'] == "create") {
                         $saved = true;
-                        $hostName = $_POST['hostName'] . '.' . $domainname;
+                        $hostName = $_POST['hostName'] . '.' . $domainName;
 
-                        if (!$this->isSubordinateHost($hostName, $domainname)) {
+                        if (!$this->isSubordinateHost($hostName, $domainName)) {
                             throw new \Exception(
-                                sprintf("Host '%s' is not a subordinate host of '%s'", $hostName, $domainname)
+                                sprintf("Host '%s' is not a subordinate host of '%s'", $hostName, $domainName)
                             );
                         }
 
@@ -121,7 +120,7 @@ class ChildHosts extends Action
                     'hosts' => $hosts,
                     'error' => $message,
                     'saved' => $message ? false : $saved,
-                    'domainName' => $domain,
+                    'domainName' => $request->domain->domainName(),
                     'domainId' => $domainid,
                 ]),
             ],

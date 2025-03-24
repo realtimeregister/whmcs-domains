@@ -2,6 +2,7 @@
 
 namespace RealtimeRegisterDomains\Hooks;
 
+use RealtimeRegisterDomains\Actions\Domains\DomainTrait;
 use RealtimeRegisterDomains\App;
 use RealtimeRegisterDomains\Entities\DataObject;
 use RealtimeRegisterDomains\Models\Whmcs\Domain;
@@ -9,6 +10,7 @@ use RealtimeRegisterDomains\Services\TemplateService;
 
 class AutoRenewStatus extends Hook
 {
+    use DomainTrait;
     private string $ACTION = "autoRenew";
 
     public function __invoke(DataObject $vars): void
@@ -27,7 +29,7 @@ class AutoRenewStatus extends Hook
     private static function getDomains(): array
     {
         $whmcsDomains = array_map(
-            fn($domain) => $domain['domain'],
+            fn($domain) => self::getDomainName($domain['domain']),
             Domain::query()
                 ->select(['domain'])
                 ->where('registrar', '=', 'realtimeregister')

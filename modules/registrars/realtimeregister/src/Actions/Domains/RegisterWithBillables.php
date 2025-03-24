@@ -22,7 +22,7 @@ class RegisterWithBillables extends Action
         $ns = $this->getDomainNameservers($request);
 
         try {
-            $domainName = $request->domain->domainName();
+            $domainName = self::getDomainName($request->domain);
 
             $orderId = App::localApi()->domain(
                 clientId: $request->get('userid'),

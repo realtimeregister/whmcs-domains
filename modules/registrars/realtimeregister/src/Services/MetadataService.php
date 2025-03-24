@@ -29,7 +29,7 @@ class MetadataService
                 'tld.' . $this->tld,
                 MetadataService::DAY_MINUTES,
                 function () {
-                    $queryTld = explode('.', $this->tld);
+                    $queryTld = explode('.', Config::getPseudoTld($this->tld) ?? $this->tld);
                     $queryTld = array_pop($queryTld);
                     $metadata = App::client()->tlds->info(App::toPunyCode($queryTld));
                     foreach ($metadata->applicableFor as $app_tld) {

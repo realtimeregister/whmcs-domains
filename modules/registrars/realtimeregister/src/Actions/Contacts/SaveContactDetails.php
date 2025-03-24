@@ -245,7 +245,7 @@ class SaveContactDetails extends Action
                 ];
         }
 
-        $domainName = App::toPunyCode($this->params['original']['domainname']);
+        $domainName = self::getDomainName($this->params['original']['domainname']);
 
         $params = $domain;
         $params['domainName'] = $domainName;

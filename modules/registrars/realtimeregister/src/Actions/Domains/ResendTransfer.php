@@ -2,10 +2,10 @@
 
 namespace RealtimeRegisterDomains\Actions\Domains;
 
+use RealtimeRegister\Domain\Enum\ResumeTypeEnum;
 use RealtimeRegisterDomains\Actions\Action;
 use RealtimeRegisterDomains\App;
 use RealtimeRegisterDomains\Request;
-use RealtimeRegister\Domain\Enum\ResumeTypeEnum;
 
 class ResendTransfer extends Action
 {
@@ -16,7 +16,7 @@ class ResendTransfer extends Action
             ->list(parameters: [
                 'status' => 'SUSPENDED',
                 "action:in" => "incomingTransfer,incomingInternalTransfer",
-                "identifier:eq" => $request->domain->domainName()
+                "identifier:eq" => self::getDomainName($request->domain)
             ]);
 
         if (!$processes->count()) {

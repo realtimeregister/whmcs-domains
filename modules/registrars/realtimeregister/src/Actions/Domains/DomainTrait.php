@@ -14,6 +14,7 @@ use RealtimeRegisterDomains\Models\Whmcs\Configuration;
 use RealtimeRegisterDomains\Request;
 use RealtimeRegisterDomains\Services\Config\Config;
 use RealtimeRegisterDomains\Services\ContactService;
+use RealtimeRegisterDomains\Services\MetadataService;
 
 trait DomainTrait
 {
@@ -186,8 +187,12 @@ trait DomainTrait
         return $billables;
     }
 
-    protected static function getDomainName(Domain $domain): string
+    protected static function getDomainName(Domain | string $domain): string
     {
+        if (is_string($domain)) {
+            $domainName = App::toPunyCode($domain);
+            return $domainName . Config::getPseudoTld(MetadataService::getTld($domainName));
+        }
         $tld = $domain->tldPunyCode ?? $domain->tld;
         return $domain->domainName() . Config::getPseudoTld($tld);
     }

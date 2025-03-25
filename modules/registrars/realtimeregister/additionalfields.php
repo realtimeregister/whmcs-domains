@@ -88,7 +88,7 @@ foreach ($tlds as $tld) {
 
 if (!empty($additionaldomainfields['.eu'])) {
     if (!empty($_SESSION['uid'])) {
-        $client = localAPI('GetClientsDetails', ['clientid' => $_SESSION['uid'], 'stats' => false]);
+        $client = \RealtimeRegisterDomains\LocalApi::getClient($_SESSION['uid']);
         if (!empty($client['companyname'])) {
             foreach ($additionaldomainfields['.eu'] as $i => $field) {
                 if ($field['Name'] === 'countryOfCitizenship') {

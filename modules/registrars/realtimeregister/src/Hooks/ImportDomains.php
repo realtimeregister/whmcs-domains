@@ -142,7 +142,7 @@ class ImportDomains extends Hook
         $paymentMethod = $_POST['fields']['paymentMethod'];
         $tldPricingCurrencyid = 1;
         $adminUser = self::getAdminUsername();
-        $tldPricing = localAPI('GetTLDPricing', ['currencyid' => $tldPricingCurrencyid], $adminUser);
+        $tldPricing = App::localApi()->getTldPricing();
 
         $updated = 0;
 
@@ -255,7 +255,7 @@ class ImportDomains extends Hook
             'password2'   => password_hash(self::randomPassword(), PASSWORD_BCRYPT),
         ];
 
-        $results = localAPI('AddClient', $postData, $admin);
+        $results = App::localApi()->addClient($postData, $admin);
         if ($results['result'] == 'success') {
             return $results['clientid'];
         } else {
@@ -291,7 +291,7 @@ class ImportDomains extends Hook
             'phonenumber' => $info['voice']
         ];
 
-        $results = localAPI('AddContact', $postData, self::getAdminUsername());
+        $results = App::localApi()->addContact($postData, self::getAdminUsername());
         if ($results['result'] == 'success') {
             return $results['contactid'];
         } else {

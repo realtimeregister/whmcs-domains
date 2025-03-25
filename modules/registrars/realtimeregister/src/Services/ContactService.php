@@ -349,7 +349,7 @@ class ContactService
         if ($contactId) {
             $whmcsContact = LocalApi::getContactDetails(clientId: $clientId, contactId: $contactId);
         } else {
-            $whmcsContact = LocalApi::getClient($clientId);
+            $whmcsContact = LocalApi::getClient($clientId)['client'];
         }
 
         // Fix phone number

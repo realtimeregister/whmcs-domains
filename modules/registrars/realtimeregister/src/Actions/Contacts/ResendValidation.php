@@ -2,16 +2,16 @@
 
 namespace RealtimeRegisterDomains\Actions\Contacts;
 
+use RealtimeRegister\Domain\Enum\DomainStatusEnum;
 use RealtimeRegisterDomains\Actions\Action;
 use RealtimeRegisterDomains\App;
 use RealtimeRegisterDomains\Request;
-use RealtimeRegister\Domain\Enum\DomainStatusEnum;
 
 class ResendValidation extends Action
 {
     public function __invoke(Request $request): array
     {
-        $domain = App::client()->domains->get($request->domain->domainName());
+        $domain = App::client()->domains->get(self::getDomainName($request->domain));
         if (!in_array(DomainStatusEnum::STATUS_PENDING_VALIDATION, $domain->status)) {
             return ['success' => true, "message" => "Registrant is already validated"];
         }

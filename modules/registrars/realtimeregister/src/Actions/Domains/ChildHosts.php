@@ -31,7 +31,10 @@ class ChildHosts extends Action
                         $saved = true;
                         if (!in_array($_POST['hostName'], $domainInfo->childHosts)) {
                             throw new \Exception(
-                                sprintf("Host '%s' is not a subordinate host of '%s'", $_POST['hostName'], $request->domain->domainName())
+                                sprintf(
+                                    "Host '%s' is not a subordinate host of '%s'",
+                                    $_POST['hostName'], $request->domain->domainName()
+                                )
                             );
                         }
                         App::client()->hosts->delete($_POST['hostName']);
@@ -44,7 +47,11 @@ class ChildHosts extends Action
 
                         if (!$this->isSubordinateHost($hostName, $domainName)) {
                             throw new \Exception(
-                                sprintf("Host '%s' is not a subordinate host of '%s'", $hostName, $request->domain->domainName())
+                                sprintf(
+                                    "Host '%s' is not a subordinate host of '%s'",
+                                    $hostName,
+                                    $request->domain->domainName()
+                                )
                             );
                         }
 

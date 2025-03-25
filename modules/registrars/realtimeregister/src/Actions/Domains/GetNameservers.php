@@ -5,6 +5,7 @@ namespace RealtimeRegisterDomains\Actions\Domains;
 use RealtimeRegisterDomains\Actions\Action;
 use RealtimeRegisterDomains\Request;
 use RealtimeRegister\Exceptions\BadRequestException;
+use RealtimeRegisterDomains\Services\LogService;
 
 class GetNameservers extends Action
 {
@@ -19,7 +20,8 @@ class GetNameservers extends Action
             }
 
             return $nameservers;
-        } catch (BadRequestException $e) {
+        } catch (BadRequestException $exception) {
+            LogService::logError($exception);
             return [
                 'error' => 'Domain not registered yet.'
             ];

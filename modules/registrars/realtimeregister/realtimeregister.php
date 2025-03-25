@@ -7,6 +7,7 @@ use RealtimeRegisterDomains\Actions\Contacts\ResendValidation;
 use RealtimeRegisterDomains\Actions\Contacts\SaveContactDetails;
 use RealtimeRegisterDomains\Actions\Domains\CheckAvailability;
 use RealtimeRegisterDomains\Actions\Domains\GetDomainInformation;
+use RealtimeRegisterDomains\Actions\Domains\GetNameservers;
 use RealtimeRegisterDomains\Actions\Domains\RegisterDomain;
 use RealtimeRegisterDomains\Actions\Domains\ResendTransfer;
 use RealtimeRegisterDomains\Actions\Domains\SaveNameservers;
@@ -65,6 +66,11 @@ function realtimeregister_CheckAvailability(array $params): ResultsList
 function realtimeregister_GetDomainInformation(array $params)
 {
     return App::dispatch(GetDomainInformation::class, $params);
+}
+
+function realtimeregister_GetNameservers(array $params)
+{
+    return App::dispatch(GetNameservers::class, $params);
 }
 
 function realtimeregister_SaveNameservers(array $params)

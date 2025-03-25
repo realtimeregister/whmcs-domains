@@ -40,12 +40,17 @@ class CustomHandles extends Hook
             } elseif ($_POST['action'] === 'fetchProperties') {
                 $metadata = $this->fetchPropertiesFromRealtimeRegister();
 
+                // Override for Ficora billingContacts
+                $metadata[] = [
+                    'provider' => 'Ficora',
+                    'for' => 'billingContacts',
+                ];
+
                 $customHandles = $this->getCustomHandles();
 
                 $data = [];
 
                 foreach ($metadata as $metadatum) {
-                    /** @noinspection PhpUndefinedFunctionInspection */
                     $value = null;
                     if ($customHandles) {
                         if (array_key_exists($metadatum['provider'], $customHandles)) {

@@ -33,7 +33,8 @@ class ChildHosts extends Action
                             throw new \Exception(
                                 sprintf(
                                     "Host '%s' is not a subordinate host of '%s'",
-                                    $_POST['hostName'], $request->domain->domainName()
+                                    $_POST['hostName'],
+                                    $request->domain->domainName()
                                 )
                             );
                         }

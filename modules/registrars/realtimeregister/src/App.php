@@ -20,7 +20,7 @@ use TrueBV\Punycode;
 class App
 {
     public const NAME = 'realtimeregister';
-    public const VERSION = '2.3.1';
+    public const VERSION = '2.3.2';
 
     protected const API_URL = "https://api.yoursrs.com/";
     protected const API_URL_TEST = "https://api.yoursrs-ote.com/";

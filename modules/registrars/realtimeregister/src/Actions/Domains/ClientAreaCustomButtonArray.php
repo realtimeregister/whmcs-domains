@@ -5,6 +5,7 @@ namespace RealtimeRegisterDomains\Actions\Domains;
 use RealtimeRegisterDomains\Actions\Action;
 use RealtimeRegisterDomains\Models\Whmcs\Registrars;
 use RealtimeRegisterDomains\Request;
+use RealtimeRegisterDomains\Services\Config\Config;
 
 class ClientAreaCustomButtonArray extends Action
 {
@@ -12,9 +13,11 @@ class ClientAreaCustomButtonArray extends Action
     {
         global $_LANG;
 
-        $client_buttons = [
-            $_LANG['rtr']['managechildhosts'] => 'ChildHosts'
-        ];
+        if (!Config::getPseudoTld($request->domain->tldPunyCode ?? $request->domain->tld)) {
+            $client_buttons = [
+                $_LANG['rtr']['managechildhosts'] => 'ChildHosts'
+            ];
+        }
 
         $registrars_dnssec = Registrars::select('value')
             ->where('registrar', 'realtimeregister')

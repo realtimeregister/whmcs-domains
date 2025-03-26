@@ -41,30 +41,32 @@ class RenewDomainWithBillables extends Action
             );
         }
 
+        $domainName = self::getDomainName($domain);
+
         /** @var DomainPricing $pricing */
         $price = DomainPricing::query()->where(['extension' => '.' . $domain->tldPunyCode])->first();
 
         if ($domain->isInRedemptionGracePeriod === true && (int)$price->redemption_grace_period_fee > -1) {
             $billables = $this->buildBillables(App::client()->domains->restore(
-                domain: $domain->domainName(),
+                domain: $domainName,
                 reason: 'Renewal requested of this domain by WHMCS user',
                 isQuote: true
             ));
 
             $renewal = App::client()->domains->restore(
-                domain: $domain->domainName(),
+                domain: $domainName,
                 reason: 'Renewal requested of this domain by WHMCS user',
                 billables: BillableCollection::fromArray($billables)
             );
         } else {
             $billables = $this->buildBillables(App::client()->domains->renew(
-                domain: $domain->domainName(),
+                domain: $domainName,
                 period: $period,
                 isQuote: true
             ));
 
             $renewal = App::client()->domains->renew(
-                domain: $domain->domainName(),
+                domain: $domainName,
                 period: $period,
                 billables: BillableCollection::fromArray($billables)
             );

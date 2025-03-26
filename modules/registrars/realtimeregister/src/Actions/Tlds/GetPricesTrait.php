@@ -2,11 +2,11 @@
 
 namespace RealtimeRegisterDomains\Actions\Tlds;
 
-use RealtimeRegisterDomains\Services\MetadataService;
 use RealtimeRegister\Domain\Price;
 use RealtimeRegister\Domain\PriceCollection;
 use RealtimeRegister\Domain\Promo;
 use RealtimeRegister\Domain\PromoCollection;
+use RealtimeRegisterDomains\Services\MetadataService;
 
 trait GetPricesTrait
 {
@@ -27,6 +27,17 @@ trait GetPricesTrait
                     'price' => $priceItem->price
                 ];
                 continue;
+            }
+
+            if (str_contains($priceItem->product, 'domain_centralnic_')) {
+                $prices[str_replace(
+                    '_',
+                    '.',
+                    str_replace('domain_centralnic_', '', $priceItem->product)
+                )][$priceItem->action] = [
+                    'currency' => $priceItem->currency,
+                    'price' => $priceItem->price
+                ];
             }
 
             if (count($explodeTld) > 2 || count($explodeTld) < 2) {

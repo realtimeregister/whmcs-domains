@@ -2,6 +2,7 @@
 
 namespace RealtimeRegisterDomains\Hooks;
 
+use RealtimeRegisterDomains\Actions\Domains\DomainTrait;
 use RealtimeRegisterDomains\App;
 use RealtimeRegisterDomains\Entities\DataObject;
 use RealtimeRegisterDomains\Models\Whmcs\Domain;
@@ -11,6 +12,8 @@ use RealtimeRegisterDomains\Services\TemplateService;
 
 class SyncExpiry extends Hook
 {
+    use DomainTrait;
+
     private string $ACTION = 'syncExpiry';
 
     public function __invoke(DataObject $vars): void

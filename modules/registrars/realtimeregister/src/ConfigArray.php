@@ -59,8 +59,8 @@ class ConfigArray
                 'check_credentials' => [
                     'FriendlyName' => "<br/>",
                     'Type' => 'none',
-                    'Description' => '<button class="btn btn-xs check-connection">Check Connection</button>
-                        <span class="credentials-result"></span>',
+                    'Description' => '<button type="button" class="btn btn-xs check-connection">Check Connection' .
+                        '</button><span class="credentials-result"></span>',
                 ],
                 /**
                  * General settings.

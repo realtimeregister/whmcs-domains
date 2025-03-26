@@ -7,6 +7,7 @@ use RealtimeRegisterDomains\Actions\Contacts\ResendValidation;
 use RealtimeRegisterDomains\Actions\Contacts\SaveContactDetails;
 use RealtimeRegisterDomains\Actions\Domains\CheckAvailability;
 use RealtimeRegisterDomains\Actions\Domains\GetDomainInformation;
+use RealtimeRegisterDomains\Actions\Domains\GetNameservers;
 use RealtimeRegisterDomains\Actions\Domains\RegisterDomain;
 use RealtimeRegisterDomains\Actions\Domains\ResendTransfer;
 use RealtimeRegisterDomains\Actions\Domains\SaveNameservers;
@@ -21,6 +22,11 @@ use WHMCS\Domains\DomainLookup\SearchResult;
 
 if (!defined("WHMCS")) {
     die("This file cannot be accessed directly");
+}
+
+// This file always gets loaded, even if it's been loaded before, which the old realtimeregister-tools did..
+if (in_array(__FILE__, get_included_files())) {
+    return;
 }
 
 require_once __DIR__ . '/vendor/autoload.php';
@@ -60,6 +66,11 @@ function realtimeregister_CheckAvailability(array $params): ResultsList
 function realtimeregister_GetDomainInformation(array $params)
 {
     return App::dispatch(GetDomainInformation::class, $params);
+}
+
+function realtimeregister_GetNameservers(array $params)
+{
+    return App::dispatch(GetNameservers::class, $params);
 }
 
 function realtimeregister_SaveNameservers(array $params)
@@ -190,3 +201,9 @@ function realtimeregister_TransferSync($params)
 {
     return App::dispatch(\RealtimeRegisterDomains\Actions\Domains\TransferSync::class, $params);
 }
+
+/*
+ * The following line defines a value which is purely intended for users which are migrating to our new module,
+ * this fixes an error inside the deprecated realtimeregister-tools (which should be removed when using this module)
+ */
+define('RTR_AUTHOR', "Realtimeregister");

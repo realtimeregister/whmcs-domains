@@ -23,7 +23,7 @@ class PricingSync extends Action
         if (App::registrarConfig()->customerHandle() === '') {
             throw new \Exception("No Customer set in config");
         }
-        
+
         $prices = $this->getPrices(App::client()->customers->priceList(App::registrarConfig()->customerHandle()));
 
         foreach ($prices as $tld => $priceInfo) {

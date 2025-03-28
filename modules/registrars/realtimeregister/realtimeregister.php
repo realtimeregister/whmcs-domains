@@ -202,6 +202,11 @@ function realtimeregister_TransferSync($params)
     return App::dispatch(\RealtimeRegisterDomains\Actions\Domains\TransferSync::class, $params);
 }
 
+function realtimeregister_GetDomainSuggestions($params)
+{
+    return App::dispatch(\RealtimeRegisterDomains\Actions\Domains\DomainSuggestions::class, $params);
+}
+
 /*
  * The following line defines a value which is purely intended for users which are migrating to our new module,
  * this fixes an error inside the deprecated realtimeregister-tools (which should be removed when using this module)

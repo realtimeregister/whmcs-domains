@@ -5,13 +5,13 @@ namespace RealtimeRegisterDomains\Hooks;
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Illuminate\Database\Schema\Blueprint;
 use RealtimeRegisterDomains\Entities\DataObject;
-use RealtimeRegisterDomains\Models\RealtimeRegister\Cache;
 use RealtimeRegisterDomains\Models\RealtimeRegister\ContactMapping;
 
 class AdminAreaPage extends Hook
 {
     /**
-     * This is a dirty hack to be able to install/update database changes
+     * This is a dirty hack to be able to install/update database changes, because don't have a hook for that kind of
+     * things if we're a registry plugin, so we must do it here..
      *
      * @param  DataObject $vars
      * @return void
@@ -34,6 +34,57 @@ class AdminAreaPage extends Hook
                     $table->unique('handle', 'mod_realtimeregister_contact_mapping_unique_handle');
                 }
             );
+        }
+
+        if (file_exists(__DIR__ . '/../../../../addons/realtimeregister_tools/realtimeregister_tools.php')) {
+            /*
+             * It seems our old accompanying module is still on this system, it should be removed, but at a minimum,
+             * it should be deactivated, which we do here
+             */
+            $moduleHookList = Capsule::table('tblconfiguration')->where('setting', '=', 'AddonModulesHooks')->first();
+            if ($moduleHookList) {
+                $moduleHooks = explode(',', $moduleHookList->value);
+
+                foreach ($moduleHooks as $key => $module) {
+                    if ($module === 'realtimeregister_tools') {
+                        unset($moduleHooks[$key]);
+                        break;
+                    }
+                }
+                Capsule::table('tblconfiguration')
+                    ->where('setting', '=', 'AddonModulesHooks')
+                    ->update(['value' => implode(',', $moduleHooks)]);
+            }
+
+            $moduleAddonList = Capsule::table('tblconfiguration')->where('setting', '=', 'ActiveAddonModules')->first();
+            if ($moduleAddonList) {
+                $moduleHooks = explode(',', $moduleAddonList->value);
+
+                foreach ($moduleHooks as $key => $module) {
+                    if ($module === 'realtimeregister_tools') {
+                        unset($moduleHooks[$key]);
+                        break;
+                    }
+                }
+                Capsule::table('tblconfiguration')
+                    ->where('setting', '=', 'ActiveAddonModules')
+                    ->update(['value' => implode(',', $moduleHooks)]);
+            }
+
+            $modulePermsList = Capsule::table('tblconfiguration')->where('setting', '=', 'AddonModulesPerms')->first();
+            if ($modulePermsList) {
+                $config = unserialize($modulePermsList->value);
+                foreach ($config as $key => $value) {
+                    foreach ($value as $k => $v) {
+                        if ($k == 'realtimeregister_tools') {
+                            unset($config[$key][$k]);
+                        }
+                    }
+                }
+                Capsule::table('tblconfiguration')
+                    ->where('setting', '=', 'AddonModulesPerms')
+                    ->update(['value' => serialize($config)]);
+            }
         }
     }
 }

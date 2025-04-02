@@ -32,7 +32,10 @@ class AdminClientDomainsTabFieldsSave extends Hook
                 return;
             }
 
-            if (count(self::getFieldNames($vars['id'])) !== count($vars['domainfield'])) {
+            if (
+                (count($metadataProperties) !== count($vars['domainfield']))
+                || (array_keys($metadataProperties) !== array_keys($vars['domainfield']))
+            ) {
                 // We load the original files, this tells us how many fields we need to skip in the resulting
                 // domainfields array.
                 $res = (new \WHMCS\Domains\AdditionalFields())->setDomain($domain['domainname']);

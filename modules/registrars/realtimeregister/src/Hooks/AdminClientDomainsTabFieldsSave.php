@@ -32,6 +32,32 @@ class AdminClientDomainsTabFieldsSave extends Hook
                 return;
             }
 
+            if (count(self::getFieldNames($vars['id'])) !== count($vars['domainfield'])) {
+                // We load the original files, this tells us how many fields we need to skip in the resulting
+                // domainfields array.
+                $res = (new \WHMCS\Domains\AdditionalFields())->setDomain($domain['domainname']);
+
+                $originalFields = $res->getFields();
+                $currentIdx = count($originalFields);
+
+                $lastIdx = max(
+                    array_key_last(self::getFieldNames($vars['id'])),
+                    (count($metadataProperties) + count($originalFields))
+                );
+
+                for (; $currentIdx < $lastIdx; $currentIdx++) {
+                    if (!array_key_exists($currentIdx, $vars['domainfield'])) {
+                        /**
+                         * Most probably a checkbox, which doesn't get send because of an empty value when it's not
+                         * selected, so we reserve its place in the array
+                         */
+                        $vars['domainfield'][$currentIdx] = '';
+                    }
+                }
+            }
+
+            ksort($vars['domainfield']);
+
             $newProperties = array_filter(
                 array_combine(array_column(self::getFieldNames($vars['id']), 'name'), $vars['domainfield'] ?? []),
                 fn($key) => $key !== 'languageCode',

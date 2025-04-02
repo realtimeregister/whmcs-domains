@@ -4,11 +4,9 @@ namespace RealtimeRegisterDomains\Actions\Domains;
 
 use RealtimeRegister\Domain\TLDInfo;
 use RealtimeRegister\Domain\TLDMetaData;
-use RealtimeRegister\Exceptions\BadRequestException;
 use RealtimeRegisterDomains\App;
 use RealtimeRegisterDomains\Hooks\CustomHandlesTrait;
 use RealtimeRegisterDomains\Request;
-use RealtimeRegisterDomains\Services\LogService;
 use RealtimeRegisterDomains\Services\MetadataService;
 
 trait DomainContactTrait
@@ -30,17 +28,13 @@ trait DomainContactTrait
         $currentProperties = ($currentContact->properties ?? [])[$tldInfo->provider] ?? [];
         $newProperties = self::getNewProperties($contactProperties, $tldInfo->metadata);
 
-        try {
-            if (empty($currentProperties) && !empty($newProperties)) {
-                App::client()->contacts->addProperties($customer, $handle, $tldInfo->provider, $newProperties);
-                return;
-            }
+        if (empty($currentProperties) && !empty($newProperties)) {
+            App::client()->contacts->addProperties($customer, $handle, $tldInfo->provider, $newProperties);
+            return;
+        }
 
-            if (!empty($currentProperties) && $currentProperties != $newProperties) {
-                App::client()->contacts->updateProperties($customer, $handle, $tldInfo->provider, $newProperties);
-            }
-        } catch (BadRequestException $e) {
-            LogService::logError($e);
+        if (!empty($currentProperties) && $currentProperties != $newProperties) {
+            App::client()->contacts->updateProperties($customer, $handle, $tldInfo->provider, $newProperties);
         }
     }
 

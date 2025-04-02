@@ -76,8 +76,8 @@ class AdminClientDomainsTabFieldsSave extends Hook
                     self::addProperties($newProperties, $handle, $metadata->getAll());
                 } catch (\Exception $e) {
                     LogService::logError($e);
+                    $_SESSION['currentError'] = $e->getMessage();
                     self::revertChanges($handle, $metadata->getAll(), $vars['id']);
-                    throw $e;
                 }
             }
         }

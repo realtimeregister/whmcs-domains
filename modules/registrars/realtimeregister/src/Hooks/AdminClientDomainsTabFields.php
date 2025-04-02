@@ -100,7 +100,8 @@ class AdminClientDomainsTabFields extends Hook
 
             if ($_SESSION['currentError']) {
                 $currentError = $_SESSION['currentError'];
-                $script .= '$(".successbox").removeClass("successbox").addClass("errorbox").html("' . htmlentities($currentError) . '");';
+                $script .= '$(".successbox").removeClass("successbox").addClass("errorbox").html("'
+                    . htmlentities($currentError) . '");';
                 session_start();
                 unset($_SESSION['currentError']);
                 session_write_close();

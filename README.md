@@ -2,7 +2,7 @@
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
 [![CI](https://github.com/realtimeregister/whmcs/actions/workflows/phpcs.yml/badge.svg)](https://github.com/realtimeregister/whmcs/actions/workflows/phpcs.yml)
 
-:construction: This is a beta version of our Domains 2.0 registrar module for WHMCS. Use at your own discretion :construction:
+This is our completely rebuilt WHMCS Domains module, featuring great new enhancements and available under an open-source license. We recommend using this module for all new deployments. If you are currently using our old module, please refer to [this upgrade guide](https://github.com/realtimeregister/whmcs-domains/wiki/upgrade-from-registrar-module-version-1.4.13-and-below) and deploy it to your testing environment first.
 
 ### Features
 - [X] Domain registration

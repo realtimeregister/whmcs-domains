@@ -41,11 +41,11 @@ class AdminClientDomainsTabFieldsSave extends Hook
                 $res = (new \WHMCS\Domains\AdditionalFields())->setDomain($domain['domainname']);
 
                 $originalFields = $res->getFields();
-                $currentIdx = count($originalFields);
+                $currentIdx = array_key_first($originalFields);
 
                 $lastIdx = max(
                     array_key_last(self::getFieldNames($vars['id'])),
-                    (count($metadataProperties) + count($originalFields))
+                    array_key_last($originalFields)
                 );
 
                 for (; $currentIdx < $lastIdx; $currentIdx++) {
@@ -59,7 +59,7 @@ class AdminClientDomainsTabFieldsSave extends Hook
                 }
             }
 
-            ksort($vars['domainfield']);
+            ksort($vars['domainfield']); // just to be sure..
 
             $newProperties = array_filter(
                 array_combine(array_column(self::getFieldNames($vars['id']), 'name'), $vars['domainfield'] ?? []),

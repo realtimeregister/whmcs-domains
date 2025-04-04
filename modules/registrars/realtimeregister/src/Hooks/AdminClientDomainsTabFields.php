@@ -92,10 +92,20 @@ class AdminClientDomainsTabFields extends Hook
                 DomainStatusEnum::STATUS_CLIENT_TRANSFER_PROHIBITED,
                 $rtrDomain?->status ?? []
             );
+
             // ID protection button already visible at registrar commands
             $script =
                 '$(function(){
                     $("input[name=\'idprotection\']").parent("div").parent("div").parent("label").hide();';
+
+            if ($_SESSION['currentError']) {
+                $currentError = $_SESSION['currentError'];
+                $script .= '$(".successbox").removeClass("successbox").addClass("errorbox").html("'
+                    . htmlentities($currentError) . '");';
+                session_start();
+                unset($_SESSION['currentError']);
+                session_write_close();
+            }
 
             if ($rtrDomain) {
                 $script .= 'if($("form").find("tr:contains(\'Language Code\')").length > 1) {

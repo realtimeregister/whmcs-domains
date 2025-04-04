@@ -32,6 +32,35 @@ class AdminClientDomainsTabFieldsSave extends Hook
                 return;
             }
 
+            if (
+                (count($metadataProperties) !== count($vars['domainfield']))
+                || (array_keys($metadataProperties) !== array_keys($vars['domainfield']))
+            ) {
+                // We load the original files, this tells us how many fields we need to skip in the resulting
+                // domainfields array.
+                $res = (new \WHMCS\Domains\AdditionalFields())->setDomain($domain['domainname']);
+
+                $originalFields = $res->getFields();
+                $currentIdx = array_key_first($originalFields);
+
+                $lastIdx = max(
+                    array_key_last(self::getFieldNames($vars['id'])),
+                    array_key_last($originalFields)
+                );
+
+                for (; $currentIdx < $lastIdx; $currentIdx++) {
+                    if (!array_key_exists($currentIdx, $vars['domainfield'])) {
+                        /**
+                         * Most probably a checkbox, which doesn't get send because of an empty value when it's not
+                         * selected, so we reserve its place in the array
+                         */
+                        $vars['domainfield'][$currentIdx] = '';
+                    }
+                }
+            }
+
+            ksort($vars['domainfield']); // just to be sure..
+
             $newProperties = array_filter(
                 array_combine(array_column(self::getFieldNames($vars['id']), 'name'), $vars['domainfield'] ?? []),
                 fn($key) => $key !== 'languageCode',
@@ -50,8 +79,8 @@ class AdminClientDomainsTabFieldsSave extends Hook
                     self::addProperties($newProperties, $handle, $metadata->getAll());
                 } catch (\Exception $e) {
                     LogService::logError($e);
+                    $_SESSION['currentError'] = $e->getMessage();
                     self::revertChanges($handle, $metadata->getAll(), $vars['id']);
-                    throw $e;
                 }
             }
         }

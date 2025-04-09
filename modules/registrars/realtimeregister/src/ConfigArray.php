@@ -114,12 +114,6 @@ class ConfigArray
                     'Description' => 'Use the test environment, request a test account at ' .
                         '<a href="mailto:support@realtimeregister.com">support@realtimeregister.com</a>',
                 ],
-                'ignore_ssl' => [
-                    'FriendlyName' => 'Ignore SSL errors',
-                    'Type' => 'yesno',
-                    'Description' => 'Enable this ONLY when you are having connectivity issues with ' .
-                        'Realtime Register due to SSL errors.',
-                ],
                 'debug_mode' => [
                     'FriendlyName' => 'Debug errors',
                     'Type' => 'yesno',
@@ -129,7 +123,7 @@ class ConfigArray
                 'debug_mail' => [
                     'FriendlyName' => 'Debug API requests',
                     'Type' => 'text',
-                    'Description' => 'Specificy your email address to which you want to receive debug information. ' .
+                    'Description' => 'Specify your email address to which you want to receive debug information. ' .
                         '<br/> If you do not want to receive debug information, leave this field empty.',
                 ],
                 'INFO_GENERAL_EMPTY_LINE' => [

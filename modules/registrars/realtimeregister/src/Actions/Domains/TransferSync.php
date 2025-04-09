@@ -33,18 +33,6 @@ class TransferSync extends Action
     {
         $values = [];
 
-        try {
-            $metadata = $this->metadata($request);
-        } catch (\Exception $ex) {
-            return [
-                'error' =>
-                    sprintf(
-                        'trying connect to server: %s.',
-                        $ex->getMessage()
-                    )
-            ];
-        }
-
         // Lets check transfer information.
         try {
             $transferInfo = App::client()->domains->transferInfo(self::getDomainName($request->domain));
@@ -52,6 +40,17 @@ class TransferSync extends Action
             // Lets process COMPLETED transfer status.
             if ($transferInfo->status == 'completed') {
                 $values['completed'] = true;
+                try {
+                    $metadata = $this->metadata($request);
+                } catch (\Exception $ex) {
+                    return [
+                        'error' =>
+                            sprintf(
+                                'trying connect to server: %s.',
+                                $ex->getMessage()
+                            )
+                    ];
+                }
                 $offset = $metadata->expiryDateOffset;
                 $expirydate = date("Y-m-d", $transferInfo->expiryDate->getTimestamp() - ((int)$offset));
                 $values['expirydate'] = $expirydate;

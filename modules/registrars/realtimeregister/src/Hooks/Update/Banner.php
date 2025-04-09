@@ -13,13 +13,14 @@ class Banner extends Hook
     {
         $json = $this->get();
 
-        if ($this->isOutdated($json->version)) {
+        if (is_object($json) && $this->isOutdated($json->version)) {
             $GLOBALS['updates_available']['realtimeregister'][] = $json;
         }
     }
 
     private function get()
     {
+        // This data is set in \RealtimeRegisterDomains\Services\UpdateService::check
         $version = Capsule::table('tblregistrars')
             ->where('registrar', 'realtimeregister')
             ->where('setting', 'version_information')->first();

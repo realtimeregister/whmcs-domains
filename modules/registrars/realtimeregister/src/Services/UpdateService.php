@@ -7,7 +7,7 @@ use RealtimeRegisterDomains\App;
 
 class UpdateService
 {
-    private string $releaseUrl = 'https://api.github.com/repos/realtimeregister/whmcs/releases';
+    private string $releaseUrl = 'https://api.github.com/repos/realtimeregister/whmcs-domains/releases';
 
     public function check(): void
     {

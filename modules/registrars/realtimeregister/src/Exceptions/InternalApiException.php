@@ -1,6 +1,6 @@
 <?php
 
-namespace Exceptions;
+namespace RealtimeRegisterDomains\Exceptions;
 
 class InternalApiException extends \RuntimeException
 {

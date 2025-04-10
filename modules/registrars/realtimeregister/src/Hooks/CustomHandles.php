@@ -69,7 +69,7 @@ class CustomHandles extends Hook
                 }
                 echo json_encode($data);
                 die;
-            } else if ($vars['filename'] == 'configregistrars') {
+            } elseif ($vars['filename'] == 'configregistrars') {
                 // Base of form is rendered here
                 App::assets()->addStyle('style.css');
                 App::assets()->addScript('customHandles.js', ScriptLocationType::Footer);

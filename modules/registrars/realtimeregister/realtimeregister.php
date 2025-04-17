@@ -24,20 +24,7 @@ if (!defined("WHMCS")) {
     die("This file cannot be accessed directly");
 }
 
-if (!defined("RTR_AUTHOR")) {
-    /*
-     * The following line defines a value which is purely intended for users which are migrating to our new module,
-     * this fixes an error inside the deprecated realtimeregister-tools (which should be removed when using this module)
-     */
-    define('RTR_AUTHOR', "Realtimeregister");
-}
-
 require_once __DIR__ . '/vendor/autoload.php';
-
-// This file always gets loaded, even if it's been loaded before, which the old realtimeregister-tools did..
-if (in_array(__FILE__, get_included_files())) {
-    return;
-}
 
 require_once ROOTDIR . '/includes/registrarfunctions.php';
 if (file_exists(__DIR__ . '/customhooks.php')) {

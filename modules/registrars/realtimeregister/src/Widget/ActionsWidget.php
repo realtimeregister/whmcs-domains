@@ -4,7 +4,7 @@ namespace RealtimeRegisterDomains\Widget;
 
 use RealtimeRegisterDomains\Services\TemplateService;
 
-class ActionsWidget extends \WHMCS\Module\AbstractWidget
+class ActionsWidget extends BalanceModuleWidget
 {
     protected $title = 'Realtime Register - Actions';
     protected $description = '';
@@ -14,13 +14,13 @@ class ActionsWidget extends \WHMCS\Module\AbstractWidget
     protected $cacheExpiry = 120;
     protected $requiredPermission = '';
 
-    public function getData(): array
-    {
-        return [];
-    }
-
     public function generateOutput($data): string
     {
-        return TemplateService::renderTemplate("actions.tpl");
+        $status = 'online';
+        if (is_numeric($data)) {
+            $status = 'offline';
+        }
+
+        return TemplateService::renderTemplate("admin/widget/actions.tpl", ['status' => $status]);
     }
 }

@@ -6,8 +6,6 @@ use Illuminate\Cache\ArrayStore;
 use Illuminate\Cache\DatabaseStore;
 use Illuminate\Cache\Repository;
 use Illuminate\Database\Capsule\Manager as Capsule;
-use RealtimeRegisterDomains\App;
-use RealtimeRegisterDomains\Models\Whmcs\Registrars;
 
 class Cache
 {
@@ -42,19 +40,19 @@ class Cache
                 Cache::TABLE_NAME,
                 function ($table) {
                     $table->string('key')->unique();
-                    $table->text('value');
+                    $table->mediumText('value');
                     $table->integer('expiration');
                 }
             );
-        }
-
-        $currentVersion = Registrars::query()
-            ->where('registrar', 'realtimeregister')
-            ->where('setting', 'active_version')
-            ->value('value');
-
-        if (!$currentVersion || version_compare($currentVersion, App::VERSION)) {
-            Capsule::table(self::TABLE_NAME)->truncate();
+        } else {
+            // Update existing table to use mediumText for value column
+            try {
+                Capsule::schema()->table(Cache::TABLE_NAME, function ($table) {
+                    $table->mediumText('value')->change();
+                });
+            } catch (\Exception $e) {
+                // Ignore errors, as the column might already be MEDIUMTEXT
+            }
         }
     }
 
@@ -83,10 +81,9 @@ class Cache
      * Store an item in the cache.
      *
      * @param  mixed         $value
-     * @param  \DateTime|int $minutes
      * @return void
      */
-    public static function put(string $key, $value, $minutes)
+    public static function put(string $key, $value, int $minutes)
     {
         self::db()->getStore()->put($key, json_encode($value), $minutes);
     }
@@ -94,10 +91,9 @@ class Cache
     /**
      * Get an item from the cache, or store the default value.
      *
-     * @param  \DateTime|int $minutes
      * @return mixed
      */
-    public static function remember(string $key, $minutes, \Closure $callback)
+    public static function remember(string $key, int $minutes, \Closure $callback)
     {
         $value = self::get($key);
 

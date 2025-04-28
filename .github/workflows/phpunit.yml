@@ -19,7 +19,7 @@ jobs:
         env:
           TEST_NAME: WHMCS
         with:
-          version: 9.6
+          version: composer
           php_version: 8.1
           bootstrap: modules/registrars/realtimeregister/vendor/autoload.php
           configuration: modules/registrars/realtimeregister/phpunit.xml.dist

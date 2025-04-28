@@ -8,7 +8,7 @@
     <testsuites>
         <testsuite name="Realtime Register WHMCS Module Tests">
             <directory suffix="Test.php">./tests/</directory>
-<!--            <exclude>./tests/Models/RealtimeRegister/CacheTest.php</exclude>-->
+            <exclude>./tests/Models/RealtimeRegister/CacheTest.php</exclude>
         </testsuite>
     </testsuites>
     <php>

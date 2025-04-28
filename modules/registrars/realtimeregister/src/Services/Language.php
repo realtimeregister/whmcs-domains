@@ -2,8 +2,13 @@
 
 namespace RealtimeRegisterDomains\Services;
 
+use RealtimeRegisterDomains\Models\RealtimeRegister\Cache;
+
 class Language
 {
+    // Cache duration in minutes
+    private const CACHE_DURATION = 60; // 1 hour
+
     public function __construct()
     {
         $_CUSTOMLANG = $this->getTranslationFile();
@@ -21,19 +26,32 @@ class Language
 
     private function getTranslationFile(): array
     {
-        $_LANG = [];
+        $currentLang = 'english'; // we need a default language
 
-        if (is_null($_SESSION['Language'])) {
-            global $CONFIG;
-            $currentLang = $CONFIG['Language'];
-        } else {
-            $currentLang = $_SESSION['Language'];
+        if (isset($_SESSION)) {
+            if (is_null($_SESSION['Language'])) {
+                global $CONFIG;
+                $currentLang = $CONFIG['Language'];
+            } else {
+                $currentLang = $_SESSION['Language'];
+            }
         }
 
-        if (file_exists(__DIR__ . '/../../lang/' . $currentLang . ".php")) {
-            include(__DIR__ . '/../../lang/' . $currentLang . '.php');
+        // Create a cache key based on the current language
+        $cacheKey = 'language_translations_' . $currentLang;
+
+        $result = Cache::get($cacheKey);
+
+        if (!$result) {
+            $_LANG = [];
+            if (file_exists(__DIR__ . '/../../lang/' . $currentLang . ".php")) {
+                include(__DIR__ . '/../../lang/' . $currentLang . '.php');
+            } else {
+                include(__DIR__ . '/../../lang/english.php');
+            }
+            Cache::put($cacheKey, $_LANG, self::CACHE_DURATION);
         } else {
-            include(__DIR__ . '/../../lang/english.php');
+            $_LANG = $result;
         }
 
         return $_LANG;

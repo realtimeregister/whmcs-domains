@@ -7,7 +7,7 @@ use RealtimeRegisterDomains\Models\RealtimeRegister\Cache;
 class Language
 {
     // Cache duration in minutes
-    private const CACHE_DURATION = 60; // 1 hour
+    private const CACHE_DURATION = 10080; // 7 days
 
     public function __construct()
     {

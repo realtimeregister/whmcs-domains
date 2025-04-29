@@ -85,7 +85,7 @@ class Cache
      */
     public static function put(string $key, $value, int $minutes)
     {
-        self::db()->getStore()->put($key, json_encode($value), $minutes);
+        self::db()->getStore()->put($key, json_encode($value), ($minutes * 60));
     }
 
     /**

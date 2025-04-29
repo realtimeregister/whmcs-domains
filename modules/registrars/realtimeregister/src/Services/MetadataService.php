@@ -11,7 +11,7 @@ use RealtimeRegisterDomains\Services\Config\Config;
 
 class MetadataService
 {
-    public const DAY_MINUTES = 14400;
+    public const DAY_MINUTES = 1440;
     private string $tld;
     private string $provider;
     /**

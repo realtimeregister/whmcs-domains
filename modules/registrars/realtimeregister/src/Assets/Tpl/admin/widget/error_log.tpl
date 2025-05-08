@@ -155,6 +155,7 @@
 
                 document.getElementById('previous-log-page').classList.add('hidden');
                 document.getElementById('next-log-page').classList.add('hidden');
+                document.getElementById('current-log-page').value = response.pageId;
                 if (response.pageId > 1) {
                    document.getElementById('previous-log-page').classList.remove('hidden');
                 }

@@ -2,6 +2,7 @@
 
 namespace WHMCS\Module\Addon\RealtimeregisterDns\Client;
 
+use RealtimeRegister\Domain\DomainDetails;
 use RealtimeRegister\Domain\DomainZoneRecordCollection;
 use RealtimeRegister\Domain\Zone;
 use RealtimeRegister\Exceptions\BadRequestException;
@@ -40,7 +41,7 @@ class Controller
             }
 
             if ($_POST) {
-                $result = $this->processUpdate($zone, $_POST['soa'], $_POST['dns-item']);
+                $result = $this->processUpdate($zone, $domain, $_POST['soa'], $_POST['dns-item']);
 
                 $vars['zones'] = $_POST['dns-item'];
                 $vars['soa'] = $_POST['soa'];
@@ -62,7 +63,7 @@ class Controller
         }
     }
 
-    private function processUpdate(?Zone $zone, array $soaData, array $dnsRecords): ?array
+    private function processUpdate(?Zone $zone, DomainDetails $domain, array $soaData, array $dnsRecords): ?array
     {
         // Cleanup the data which has been inserted by our client
         foreach ($dnsRecords as $k => $data) {
@@ -82,6 +83,10 @@ class Controller
             // Clear empty rows
             if ($data['name'] == '' && $data['content'] == '') {
                 unset($dnsRecords[$k]);
+            }
+
+            if ($data['name'] == '') {
+                $dnsRecords[$k]['name'] = $domain->domainName;
             }
 
             if (!in_array('ttl', $data)) {

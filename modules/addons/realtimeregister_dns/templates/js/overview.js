@@ -1,10 +1,18 @@
 document.addEventListener("DOMContentLoaded", function () {
     const selects = document.querySelectorAll("table.dns-overview-form select");
 
-    // Bind to all selects
+    // Bind to all and future selects
     selects.forEach(elm => {
             elm.addEventListener('change', () => onChangeEvent(elm));
             onChangeEvent(elm);
+        }
+    );
+
+    const deleteBtn = document.querySelectorAll("table.dns-overview-form .delete-row-btn");
+
+    // Bind to all and future delete buttons
+    deleteBtn.forEach(elm => {
+            elm.addEventListener('click', () => elm.parentElement.parentElement.remove());
         }
     );
 
@@ -36,13 +44,15 @@ document.addEventListener("DOMContentLoaded", function () {
         const newIndex = currentIndex + 1;
 
         // Update cloned row's inputs
-        newRow.querySelectorAll("input, select, textarea").forEach(el => {
+        newRow.querySelectorAll("input, select, button, textarea").forEach(el => {
             // Clear values
             if (el.tagName === "SELECT") {
                 el.selectedIndex = 0;
                 el.addEventListener('change', function() {
                     onChangeEvent(this);
                 });
+            } else if(el.tagName === 'BUTTON') {
+                el.addEventListener('click', () => el.parentElement.parentElement.remove());
             } else {
                 el.value = "";
             }

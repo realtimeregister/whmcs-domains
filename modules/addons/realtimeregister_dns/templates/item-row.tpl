@@ -60,4 +60,7 @@
             </div>
         {/if}
     </td>
+    <td>
+        <button type="button" class="btn btn-outline-danger delete-row-btn"><i class="fas fa-trash-alt"></i></button>
+    </td>
 </tr>

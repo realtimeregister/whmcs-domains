@@ -1,0 +1,30 @@
+{
+  "schema": "0.1",
+  "type": "whmcs-addons",
+  "name": "realtimeregister_dns",
+  "license": "MIT",
+  "category": "dns",
+  "description": {
+    "name": "Realtime Register DNS addon module",
+    "tagline": "..for all your DNS needs",
+    "long": "Realtime Register API for all your DNS needs",
+    "features": [
+      "Easy to use",
+      "Reliable",
+      "Security",
+      "Open source"
+    ]
+  },
+  "logo": {
+    "filename": "logo.gif"
+  },
+  "support": {
+    "homepage": "https:\/\/realtimeregister.com\/",
+    "email": "support@realtimeregister.com"
+  },
+  "authors": [
+    {
+      "name": "Realtime Register"
+    }
+  ]
+}

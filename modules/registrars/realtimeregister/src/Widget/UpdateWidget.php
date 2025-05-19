@@ -4,7 +4,7 @@ namespace RealtimeRegisterDomains\Widget;
 
 use RealtimeRegisterDomains\Services\TemplateService;
 
-class UpdateWidget extends \WHMCS\Module\AbstractWidget
+class UpdateWidget extends BaseWidget
 {
     protected $title = 'Realtimeregister updates';
     protected $wrapper = false;

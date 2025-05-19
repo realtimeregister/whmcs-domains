@@ -4,7 +4,7 @@ namespace RealtimeRegisterDomains\Widget;
 
 use RealtimeRegisterDomains\Services\TemplateService;
 
-class ErrorLogWidget extends \WHMCS\Module\AbstractWidget
+class ErrorLogWidget extends BaseWidget
 {
     protected $title = 'Realtime Register - Error Log';
     protected $description = '';

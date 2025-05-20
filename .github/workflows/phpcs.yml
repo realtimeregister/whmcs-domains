@@ -23,9 +23,7 @@ jobs:
         uses: php-actions/phpcs@v1
         with:
           php_version: 8.1
-          path: |
-            modules/registrars/realtimeregister 
-            modules/addons/realtimeregister_dns
+          path: "modules/registrars/realtimeregister,modules/addons/realtimeregister_dns"
           ignore: modules/registrars/realtimeregister/vendor,modules/registrars/realtimeregister/lang,modules/addons/realtimeregister_dns/lang
           extensions: php
           standard: PSR12

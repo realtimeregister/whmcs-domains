@@ -4,7 +4,7 @@ namespace RealtimeRegisterDomains\Widget;
 
 use RealtimeRegisterDomains\App;
 
-class DomainOverviewModuleWidget extends \WHMCS\Module\AbstractWidget
+class DomainOverviewModuleWidget extends BaseWidget
 {
     protected $title = 'Realtime Register - Domain statistics';
     protected $description = '';

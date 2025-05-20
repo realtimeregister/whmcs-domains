@@ -4,7 +4,7 @@ namespace RealtimeRegisterDomains\Widget;
 
 use RealtimeRegisterDomains\App;
 
-class BalanceModuleWidget extends \WHMCS\Module\AbstractWidget
+class BalanceModuleWidget extends BaseWidget
 {
     protected $title = 'Realtime Register - Balance';
     protected $description = '';

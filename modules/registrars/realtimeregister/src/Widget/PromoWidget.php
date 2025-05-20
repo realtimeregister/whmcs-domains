@@ -6,7 +6,7 @@ use RealtimeRegisterDomains\Actions\Tlds\GetPricesTrait;
 use RealtimeRegisterDomains\App;
 use RealtimeRegisterDomains\Services\TemplateService;
 
-class PromoWidget extends \WHMCS\Module\AbstractWidget
+class PromoWidget extends BaseWidget
 {
     use GetPricesTrait;
 

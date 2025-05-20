@@ -55,8 +55,31 @@ class ContactEdit extends Hook
                         ...$diff
                     );
                 } catch (\Exception $exception) {
-                    LogService::logError($exception, $diff['addressLine']);
-                    throw $exception;
+                    $errorMessage = json_decode(str_replace('Bad Request: ', '', $exception->getMessage()), true);
+
+                    // Split the contact if the error is a validation error, because we can't update the contact
+                    if (is_array($errorMessage) && $errorMessage['type'] == 'ContactUpdateValidationError') {
+                        $newHandle = uniqid(App::registrarConfig()->contactHandlePrefix() ?: '', true);
+                        App::client()->contacts->split(
+                            App::registrarConfig()->customerHandle(),
+                            $mapping->handle,
+                            $newHandle
+                        );
+
+                        App::client()->contacts->update(
+                            App::registrarConfig()->customerHandle(),
+                            $newHandle,
+                            ...$diff
+                        );
+
+                        LogService::logError(
+                            $exception,
+                            sprintf("Splitting contact from %s to %s", $mapping->handle, $newHandle)
+                        );
+                    } else {
+                        LogService::logError($exception, json_encode($diff));
+                        throw $exception;
+                    }
                 }
             }
         }

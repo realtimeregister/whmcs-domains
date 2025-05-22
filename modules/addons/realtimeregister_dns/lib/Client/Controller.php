@@ -4,6 +4,7 @@ namespace WHMCS\Module\Addon\RealtimeregisterDns\Client;
 
 use RealtimeRegister\Domain\DomainDetails;
 use RealtimeRegister\Domain\DomainZoneRecordCollection;
+use RealtimeRegister\Domain\Enum\ZoneServiceEnum;
 use RealtimeRegister\Domain\Zone;
 use RealtimeRegister\Exceptions\BadRequestException;
 use RealtimeRegisterDomains\App;
@@ -94,6 +95,9 @@ class Controller
             }
         }
 
+        // When we do delete actions, in the frontend, the arraykey may get mangled, a simple sort fixes this problem
+        sort($dnsRecords);
+
         try {
             $dnsZonePayload = [
                 'hostMaster' => $soaData['hostmaster'],
@@ -105,8 +109,21 @@ class Controller
             ];
 
             if (!$zone) {
-                $dnsZonePayload['name'] = 'records_added_by_whmcs';
-                App::client()->dnszones->create(...$dnsZonePayload);
+                App::client()->dnszones->create(
+                    name: $domain->domainName,
+                    service: ZoneServiceEnum::BASIC,
+                    hostMaster: $soaData['hostmaster'],
+                    refresh: (int)$soaData['refresh'],
+                    retry: (int)$soaData['retry'],
+                    expire: (int)$soaData['expire'],
+                    records: DomainZoneRecordCollection::fromArray($dnsRecords),
+                );
+
+                // Enable the just created zone, and thus, enable it to the domain
+                App::client()->domains->update(
+                    domainName: $domain->domainName,
+                    zone: Zone::fromArray(['service' => 'BASIC', 'managed' => true])
+                );
             } else {
                 $dnsZonePayload['id'] = $zone->id;
                 App::client()->dnszones->update(...$dnsZonePayload);
@@ -114,7 +131,6 @@ class Controller
             return ['success' => true];
         } catch (BadRequestException $exception) {
             $exceptionText = substr($exception->getMessage(), 13);
-            // TODO logservice call
             return ['success' => false, 'error' => json_decode($exceptionText, true)];
         }
     }

@@ -18,10 +18,10 @@ class Controller
         $nameservers = $domain->ns;
         sort($nameservers);
         if (
-            ((($nameservers == ['ns1.yoursrs.com', 'ns2.yoursrs.com']) || ($nameservers === [
+            ($nameservers == ['ns1.yoursrs.com', 'ns2.yoursrs.com']) || ($nameservers === [
                             'ns1.realtimeregister-ote.com',
                             'ns2.realtimeregister-ote.com'
-                        ])) && $domain->premium === false) || $domain->premium === true
+                        ])
         ) {
             // we're in control, domain is on our free tier
             $zone = App::client()->domains->get($vars['domain']->domain)->zone;

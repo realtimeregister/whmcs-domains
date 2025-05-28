@@ -25,6 +25,10 @@ class Banner extends Hook
             ->where('registrar', 'realtimeregister')
             ->where('setting', 'version_information')->first();
 
+        if ($version == null) {
+            return null;
+        }
+
         return json_decode($version->value);
     }
 

@@ -43,7 +43,7 @@ class LocalApi
     {
         $results = self::getLocalApi('GetClientsDomains', array_filter($filters));
 
-        return collect($results['domains'] ?? [])->map(fn($domain) => new DataObject($domain[0]));
+        return collect($results['domains']['domain'] ?? [])->map(fn($domain) => new DataObject($domain));
     }
 
     public function domain(int $clientId = null, int $domainId = null, string $domain = null): ?DataObject
@@ -65,7 +65,7 @@ class LocalApi
     {
         $results = self::getLocalApi('GetOrders', array_filter($filters));
 
-        return collect($results['orders'] ?? [])->map(fn($order) => new DataObject($order[0]));
+        return collect($results['orders']['order'] ?? [])->map(fn($order) => new DataObject($order));
     }
 
     public function order(

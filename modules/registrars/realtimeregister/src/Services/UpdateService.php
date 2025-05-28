@@ -41,7 +41,7 @@ class UpdateService
             $results = json_decode($response);
             $latestVersion = [];
             foreach ($results as $result) {
-                if (!$result->draft && $result->prerelease === true) {
+                if (!$result->draft) {
                     $latestVersion = [
                         'version' => $result->tag_name,
                         'prerelease' => $result->prerelease,

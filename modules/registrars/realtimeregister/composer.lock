@@ -1212,12 +1212,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/realtimeregister/realtimeregister-php.git",
-                "reference": "51e095bd38b2a01e4116f32bf0fc43c8f2fd4e8e"
+                "reference": "595c3ffabe76cacdf578bc8982e4b3b6fc0815ee"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/realtimeregister/realtimeregister-php/zipball/51e095bd38b2a01e4116f32bf0fc43c8f2fd4e8e",
-                "reference": "51e095bd38b2a01e4116f32bf0fc43c8f2fd4e8e",
+                "url": "https://api.github.com/repos/realtimeregister/realtimeregister-php/zipball/595c3ffabe76cacdf578bc8982e4b3b6fc0815ee",
+                "reference": "595c3ffabe76cacdf578bc8982e4b3b6fc0815ee",
                 "shasum": ""
             },
             "require": {
@@ -1255,7 +1255,7 @@
                 "issues": "https://github.com/realtimeregister/realtimeregister-php/issues",
                 "source": "https://github.com/realtimeregister/realtimeregister-php/tree/master"
             },
-            "time": "2025-05-22T12:31:59+00:00"
+            "time": "2025-06-04T14:25:13+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",

@@ -25,6 +25,10 @@ class Banner extends Hook
             ->where('registrar', 'realtimeregister')
             ->where('setting', 'version_information')->first();
 
+        if ($version == null) {
+            return null;
+        }
+
         return json_decode($version->value);
     }
 
@@ -34,7 +38,7 @@ class Banner extends Hook
         preg_match('/[0-9][0-9a-z-.]+/', $latestVersion, $latestVersion);
 
         if (array_key_exists(0, $latestVersion)) {
-            return version_compare(App::VERSION, $latestVersion[0], '>');
+            return version_compare(App::VERSION, $latestVersion[0], '<');
         }
         return false;
     }

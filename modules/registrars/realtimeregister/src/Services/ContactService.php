@@ -198,7 +198,7 @@ class ContactService
             $queryParameters['organization:null'] = '';
         }
 
-        $mappedHandles = ContactMapping::all()->pluck('handle')->toArray();
+        $mappedHandles = ContactMapping::query()->where(['userid' => $client_id])->pluck('handle')->toArray();
 
         $queryParameters = array_merge($queryParameters, [
             'order' => '-createdDate',

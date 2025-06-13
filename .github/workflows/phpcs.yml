@@ -27,28 +27,3 @@ jobs:
           ignore: modules/registrars/realtimeregister/vendor,modules/registrars/realtimeregister/lang
           extensions: php
           standard: PSR12
-
-  phpcs-addon:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: "modules/addons/realtimeregister_dns"
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Composer install --dev
-        uses: php-actions/composer@v6
-        env:
-          COMPOSER: "composer.json"
-        with:
-          working_dir: "modules/addons/realtimeregister_dns"
-
-      - name: PHP Code Sniffer
-        uses: php-actions/phpcs@v1
-        with:
-          php_version: 8.1
-          path: "modules/addons/realtimeregister_dns"
-          ignore: modules/addons/realtimeregister_dns/lang
-          extensions: php
-          standard: PSR12

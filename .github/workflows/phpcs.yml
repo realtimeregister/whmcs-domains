@@ -3,7 +3,7 @@ name: CI
 on: [ push ]
 
 jobs:
-  phpcs-registrars:
+  phpcs:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -23,7 +23,13 @@ jobs:
         uses: php-actions/phpcs@v1
         with:
           php_version: 8.1
-          path: "modules/registrars/realtimeregister"
+          path: modules/registrars/realtimeregister
           ignore: modules/registrars/realtimeregister/vendor,modules/registrars/realtimeregister/lang
           extensions: php
           standard: PSR12
+
+#      - name: PHP Compatibility
+#        uses: pantheon-systems/phpcompatibility-action@v1
+#        with:
+#          test-versions: 7.4-
+##          paths: ${{ github.workspace }}/src

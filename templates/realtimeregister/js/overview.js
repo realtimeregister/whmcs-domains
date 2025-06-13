@@ -29,8 +29,8 @@ document.addEventListener("DOMContentLoaded", function () {
         const lastRow = rows[rows.length - 1];
         const newRow = lastRow.cloneNode(true);
 
-        // Extract the current index from any input name like dns-item[1][...]
-        const regex = /dns-item\[(\d+)\]/;
+        // Extract the current index from any input name like dns-items[1][...]
+        const regex = /dns-items\[(\d+)\]/;
         const lastInputs = lastRow.querySelectorAll("input, select, textarea");
         let currentIndex = 1;
 
@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             // Update name attribute
             if (el.name) {
-                el.name = el.name.replace(regex, `dns-item[${newIndex}]`);
+                el.name = el.name.replace(regex, `dns-items[${newIndex}]`);
             }
         });
 

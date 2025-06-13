@@ -6,7 +6,7 @@
     {/if}
 
     <td>
-        <input type="text" class="form-control {if $errors['errors'][$index]['name']}is-invalid{/if}" placeholder="{$_lang['name']}" value="{$zone.name}" name="dns-item[{$index}][name]">
+        <input type="text" class="form-control {if $errors['errors'][$index]['name']}is-invalid{/if}" placeholder="{$_lang['name']}" value="{$zone['name']}" name="dns-items[{$index}][name]">
         {if $errors['errors'][$index]['name']}
             <div class="invalid-feedback">
                 {foreach $errors['errors'][$index]['name'] as $key => $err}
@@ -16,10 +16,10 @@
         {/if}
     </td>
     <td>
-        <select class="form-control {if $errors['errors'][$index]['type']}is-invalid{/if}" name="dns-item[{$index}][type]">
+        <select class="form-control {if $errors['errors'][$index]['type']}is-invalid{/if}" name="dns-items[{$index}][type]">
             <option disabled="">{$_lang['nothing_selected']}</option>
             {foreach from=$typesOfRecords item=record}
-                <option value="{$record}" {if $record eq $zone.type}selected{/if}>{$record}</option>
+                <option value="{$record}" {if $record eq $zone['type']}selected{/if}>{$record}</option>
             {/foreach}
         </select>
         {if $errors['errors'][$index]['type']}
@@ -31,7 +31,7 @@
         {/if}
     </td>
     <td>
-        <input type="text" class="form-control {if $errors['errors'][$index]['content']}is-invalid{/if}" placeholder="{$_lang['content']}" required value="{$zone.content}" name="dns-item[{$index}][content]">
+        <input type="text" class="form-control {if $errors['errors'][$index]['content']}is-invalid{/if}" placeholder="{$_lang['content']}" required value="{$zone['content']}" name="dns-items[{$index}][content]">
         {if $errors['errors'][$index]['content']}
             <div class="invalid-feedback">
                 {foreach $errors['errors'][$index]['content'] as $key => $err}
@@ -41,7 +41,7 @@
         {/if}
     </td>
     <td>
-        <input type="number" class="form-control {if $errors['errors'][$index]['ttl']}is-invalid{/if}" placeholder="{$_lang['ttl']}" value="{$zone.ttl}" name="dns-item[{$index}][ttl]">
+        <input type="number" class="form-control {if $errors['errors'][$index]['ttl']}is-invalid{/if}" placeholder="{$_lang['ttl']}" value="{$zone['ttl']}" name="dns-items[{$index}][ttl]">
         {if $errors['errors'][$index]['ttl']}
             <div class="invalid-feedback">
                 {foreach $errors['errors'][$index]['ttl'] as $key => $err}
@@ -51,7 +51,7 @@
         {/if}
     </td>
     <td>
-        <input type="number" class="form-control {if $errors['errors'][$index]['prio']}is-invalid{/if}" placeholder="{$_lang['prio']}" value="{$zone.prio}" name="dns-item[{$index}][prio]">
+        <input type="number" class="form-control {if $errors['errors'][$index]['prio']}is-invalid{/if}" placeholder="{$_lang['prio']}" value="{$zone['prio']}" name="dns-items[{$index}][prio]">
         {if $errors['errors'][$index]['prio']}
             <div class="invalid-feedback">
                 {foreach $errors['errors'][$index]['prio'] as $key => $err}

@@ -113,6 +113,27 @@ $_LANG['rtr']['widgets']['errorlog'] = [
 $_LANG['rtr']['process']['info'] = 'For more information on any process in the listing, click the corresponding row to 
 navigate to the  process in the Realtime Register Portal.';
 
+$_LANG['rtr']['dns']['soa_records'] = 'SOA records';
+$_LANG['rtr']['dns']['name'] = 'Name';
+$_LANG['rtr']['dns']['nothing_selected'] = '-Nothing selected-';
+$_LANG['rtr']['dns']['type'] = 'Type';
+$_LANG['rtr']['dns']['content'] = 'Content';
+$_LANG['rtr']['dns']['ttl'] = 'TTL';
+$_LANG['rtr']['dns']['prio'] = 'prio';
+$_LANG['rtr']['dns']['not_in_control'] = 'We are not in control of the domainservers of ":domain", you will need to go to the owner of the dnsservers which are located at';
+$_LANG['rtr']['dns']['no_records_yet'] = 'You don\'t have any dns records yet, start adding today!';
+$_LANG['rtr']['dns']['add_new_row'] = 'Add new row';
+$_LANG['rtr']['dns']['save'] = 'Save';
+$_LANG['rtr']['dns']['dns_settings'] = 'DNS settings';
+$_ADDONLANG['rtr']['dns']['dns_settings_pagetitle'] = 'Update DNS settings for ":domain"';
+$_LANG['rtr']['dns']['save_successful'] = 'Your DNS settings have been saved successfully';
+$_LANG['rtr']['dns']['not_found_heading'] = 'Domain not found';
+$_LANG['rtr']['dns']['not_found_text'] = 'The domain you\'ve selected is not know, or you don\'t have access to it';
+$_LANG['rtr']['dns']['hostmaster'] = 'Hostmaster';
+$_LANG['rtr']['dns']['refresh'] = 'Refresh';
+$_LANG['rtr']['dns']['retry'] = 'Retry';
+$_LANG['rtr']['dns']['expire'] = 'Expire';
+
 include_once implode(
     DIRECTORY_SEPARATOR,
     [ROOTDIR, 'modules', 'registrars', 'realtimeregister', 'lang', 'english.additional.php']

@@ -86,6 +86,27 @@ $_LANG['rtr']['actions']['change_autorenew_status'] = 'Verander Auto Renew Statu
 $_LANG['rtr']['actions']['change_autorenew_to_false']
     = 'Verander van alle domeinen de autorenew status naar false bij RealtimeRegister';
 
+$_LANG['rtr']['dns']['name'] = 'Naam';
+$_LANG['rtr']['dns']['soa_records'] = 'SOA records';
+$_LANG['rtr']['dns']['nothing_selected'] = '-Niets geselecteerd-';
+$_LANG['rtr']['dns']['type'] = 'Type';
+$_LANG['rtr']['dns']['content'] = 'Inhoud';
+$_LANG['rtr']['dns']['ttl'] = 'TTL';
+$_LANG['rtr']['dns']['prio'] = 'prio';
+$_LANG['rtr']['dns']['not_in_control'] = 'We hebben niet de controle over de domeinservers van ":domain", je zult moeten gaan naar de eigenaar van de dnsservers, welke zijn te vinden op';
+$_LANG['rtr']['dns']['no_records_yet'] = 'Je hebt nog geen dns records, begin vandaag nog!';
+$_LANG['rtr']['dns']['add_new_row'] = 'Voeg nieuwe rij toe';
+$_LANG['rtr']['dns']['save'] = 'Opslaan';
+$_LANG['rtr']['dns']['dns_settings'] = 'DNS instellingen';
+$_ADDONLANG['rtr']['dns']['dns_settings_pagetitle'] = 'Verander DNS instellingen van ":domain"';
+$_LANG['rtr']['dns']['save_successful'] = 'De DNS wijzigingen zijn doorgevoerd';
+$_LANG['rtr']['dns']['not_found_heading'] = 'Domein niet gevonden';
+$_LANG['rtr']['dns']['not_found_text'] = 'Het domein wat je geselecteerd hebt is onbekend, of je hebt er geen toegang toe';
+$_LANG['rtr']['dns']['hostmaster'] = 'Hostmaster';
+$_LANG['rtr']['dns']['refresh'] = 'Refresh';
+$_LANG['rtr']['dns']['retry'] = 'Retry';
+$_LANG['rtr']['dns']['expire'] = 'Expire';
+
 include_once implode(
     DIRECTORY_SEPARATOR,
     [ROOTDIR, 'modules', 'registrars', 'realtimeregister', 'lang', 'dutch.additional.php']

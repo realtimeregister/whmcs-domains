@@ -11,9 +11,8 @@ class ConfigurationValidation extends Action
 {
     public function __invoke(Request $request)
     {
-        $credits = App::client()->customers->credits(App::registrarConfig()->customerHandle());
-
-        if ($credits->entities) {
+        $brands = App::client()->brands->list(customer: App::registrarConfig()->customerHandle());
+        if ($brands->count() > 0) {
             return;
         } else {
             throw new \WHMCS\Exception\Module\InvalidConfiguration();

@@ -45,6 +45,8 @@
                             <option {if $dns->algorithm == '14'}selected{/if} value="14">14 (ECDSA Curve P-384 with SHA-384)</option>
                             <option {if $dns->algorithm == '15'}selected{/if} value="15">15 (Ed25519)</option>
                             <option {if $dns->algorithm == '16'}selected{/if} value="16">16 (Ed448)</option>
+                            <option {if $dns->algorithm == '17'}selected{/if} value="17">17 (SM2 signing algorithm with SM3 hashing algorithm)</option>
+                            <option {if $dns->algorithm == '23'}selected{/if} value="23">23 (GOST R 34.10.2012)</option>
                         </select>
                     </td>
                     <td>

@@ -54,8 +54,9 @@ class AdminCustomButtonArray extends Action
                 }
             } catch (\Throwable $exception) {
                 /**
-                 * This will happen if, for example, the Realtime Register account has been suspended, but we're unable
-                 * to tell the user that, so we add an error to our logservice, and return no entries for the adminbuttons
+                 * This will happen if, for example, the Realtime Register account has been suspended, but we're
+                 * unable to tell the user that, so we add an error to our logservice, and return no entries for the
+                 * adminbuttons
                  */
                 LogService::logError($exception);
                 return ['Sync domain' => 'ManualSync'];

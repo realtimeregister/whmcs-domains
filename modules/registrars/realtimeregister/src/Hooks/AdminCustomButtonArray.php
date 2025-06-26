@@ -20,49 +20,59 @@ class AdminCustomButtonArray extends Action
         $metadata = $this->metadata($request);
 
         $adminButtons = [
-            "Sync domain" => "ManualSync"
+            'Sync domain' => 'ManualSync'
         ];
 
         $whmcsDomain = Domain::find($request->params['domainid']);
         if ($whmcsDomain['status'] === 'Pending') {
             if ($whmcsDomain['type'] === 'Register') {
-                $adminButtons['Register and accept billables'] = "RegisterWithBillables";
+                $adminButtons['Register and accept billables'] = 'RegisterWithBillables';
             }
             if ($whmcsDomain['type'] === 'Transfer') {
-                $adminButtons['Transfer and accept billables'] = "TransferWithBillables";
+                $adminButtons['Transfer and accept billables'] = 'TransferWithBillables';
             }
         }
 
-        $adminButtons['Renew and accept billables'] = "RenewDomainWithBillables";
+        $adminButtons['Renew and accept billables'] = 'RenewDomainWithBillables';
 
         $domainName = self::getDomainName($request->domain);
         if (!empty($metadata->transferFOA)) {
-            $processes = App::client()->processes->list(
-                parameters: [
-                    'status' => 'SUSPENDED',
-                    'action:in' => 'incomingInternalTransfer,incomingTransfer',
-                    "identifier:eq" => $domainName
-                ]
-            );
+            try {
+                $processes = App::client()->processes->list(
+                    parameters: [
+                        'status' => 'SUSPENDED',
+                        'action:in' => 'incomingInternalTransfer,incomingTransfer',
+                        'identifier:eq' => $domainName
+                    ]
+                );
 
-            if (
-                $processes->count() > 0
-                && in_array(ResumeTypeEnum::TYPE_RESEND, $processes->entities[0]->resumeTypes ?? [])
-            ) {
-                $adminButtons['Resend FOA'] = "ResendTransfer";
+                if (
+                    $processes->count() > 0
+                    && in_array(ResumeTypeEnum::TYPE_RESEND, $processes->entities[0]->resumeTypes ?? [])
+                ) {
+                    $adminButtons['Resend FOA'] = 'ResendTransfer';
+                }
+            } catch (\Throwable $exception) {
+                /**
+                 * This will happen if, for example, the Realtime Register account has been suspended, but we're
+                 * unable to tell the user that, so we add an error to our logservice, and return no entries for the
+                 * adminbuttons
+                 */
+                LogService::logError($exception);
+                return ['Sync domain' => 'ManualSync'];
             }
         }
         if ($request->params['regtype'] !== 'Transfer' && !empty($metadata->validationCategory)) {
             try {
                 $info = App::client()->domains->get($domainName);
                 if (in_array('PENDING_VALIDATION', $info->status)) {
-                    $adminButtons['Resend validation mails'] = "ResendValidationMails";
+                    $adminButtons['Resend validation mails'] = 'ResendValidationMails';
                 }
-            } catch (\RealtimeRegister\Exceptions\NotFoundException $exception) {
+            } catch (\RealtimeRegister\Exceptions\NotFoundException $ignored) {
                 // Don't care about this exception at this point in the code
             } catch (\Exception $ex) {
                 if (!str_contains($ex->getMessage(), 'Entity not found')) {
-                    throw $ex;
+                    return [];
                 }
             }
         }
@@ -76,8 +86,8 @@ class AdminCustomButtonArray extends Action
     {
         LogService::logError($exception);
         return [
-            "success" => false,
-            "message" => sprintf('Error retrieving information about domain: %s.', $exception->getMessage())
+            'success' => false,
+            'message' => sprintf('Error retrieving information about domain: %s.', $exception->getMessage())
         ];
     }
 }

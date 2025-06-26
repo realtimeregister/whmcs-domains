@@ -10,7 +10,6 @@ use RealtimeRegister\Exceptions\UnauthorizedException;
 use RealtimeRegisterDomains\Actions\Action;
 use RealtimeRegisterDomains\App;
 use RealtimeRegisterDomains\Enums\WhmcsDomainStatus;
-use RealtimeRegisterDomains\Exceptions\DomainNotFoundException;
 use RealtimeRegisterDomains\Models\Whmcs\Domain;
 use RealtimeRegisterDomains\Request;
 use RealtimeRegisterDomains\Services\LogService;
@@ -25,6 +24,8 @@ class Sync extends Action
         $metadata = $this->metadata($request);
         $persist = $request->params['persist'];
         $values = [];
+        $domain = null;
+        $expiryDate = null;
 
         try {
             $domain = $this->domainInfo($request);
@@ -34,7 +35,7 @@ class Sync extends Action
             if ($metadata->expiryDateOffset) {
                 $expiryDate = $expiryDate->sub(new \DateInterval('PT' . $metadata->expiryDateOffset . 'S'));
             }
-        } catch (BadRequestException | UnauthorizedException | ForbiddenException $exception) {
+        } catch (BadRequestException | UnauthorizedException $exception) {
             $whmcsDomain = Domain::query()->where('domain', $request->domain->unicodeDomain())->firstOrFail();
             if (self::checkForOutgoingTransfer($request)) {
                 if ($persist) {
@@ -42,7 +43,12 @@ class Sync extends Action
                 }
                 return ["transferredAway" => true];
             }
-            throw new DomainNotFoundException($exception);
+            LogService::logError($exception, sprintf('Sync failed for "%s"', $request->domain->unicodeDomain()));
+            return ['error' => sprintf('Sync failed for "%s"', $request->domain->unicodeDomain())];
+        } catch (ForbiddenException $exception) {
+            LogService::logError($exception, sprintf('Sync failed for "%s"', $request->domain->unicodeDomain()));
+            $values['active'] = false;
+            $values['inactive'] = true;
         }
 
         $whmcsDomain = Domain::query()->where('domain', $request->domain->unicodeDomain())->firstOrFail();
@@ -60,51 +66,55 @@ class Sync extends Action
             ];
         }
 
-        if ($domain->autoRenewPeriod < 12 && $domain->autoRenew) {
-            if (strtotime($domain->expiryDate) >= strtotime($whmcsDomain->nextduedate)) {
-                return [];
+        if ($domain) {
+            $status = WhmcsDomainStatus::fromDomainDetails($domain);
+            if (!array_key_exists('inactive', $values)) {
+                if ($domain->autoRenewPeriod < 12 && $domain->autoRenew) {
+                    if (strtotime($domain->expiryDate) >= strtotime($whmcsDomain->nextduedate)) {
+                        return [];
+                    }
+                }
+
+                if (strtotime($expiryDate->format('Y-m-d')) < strtotime($whmcsDomain->nextduedate)) {
+                    $values['expirydate'] = $this->syncDueDate($expiryDate->format('Y-m-d'));
+                }
+
+                if ($expiryDate->format('Y-m-d') != '0000-00-00') {
+                    $values['expirydate'] = $expiryDate->format('Y-m-d');
+                }
+
+                if (
+                    !in_array(
+                        $status,
+                        [
+                            WhmcsDomainStatus::Active,
+                            WhmcsDomainStatus::Expired,
+                            WhmcsDomainStatus::Redemption,
+                            WhmcsDomainStatus::Pending,
+                            WhmcsDomainStatus::Fraud
+                        ]
+                    )
+                ) {
+                    throw new Exception(sprintf("Domain status %s", $status->value));
+                }
+
+                if ($status->value === WhmcsDomainStatus::Pending->value) {
+                    $values['active'] = false;
+                    $values['cancelled'] = false;
+                    $values['transferredAway'] = false;
+                } else {
+                    $values[strtolower($status->value)] = true;
+                }
             }
-        }
-
-        if (strtotime($expiryDate->format('Y-m-d')) < strtotime($whmcsDomain->nextduedate)) {
-            $values['expirydate'] = $this->syncDueDate($expiryDate->format('Y-m-d'));
-        }
-
-        if ($expiryDate->format('Y-m-d') != '0000-00-00') {
-            $values['expirydate'] = $expiryDate->format('Y-m-d');
-        }
-
-        $status = WhmcsDomainStatus::fromDomainDetails($domain);
-
-        if (
-            !in_array(
-                $status,
-                [
-                    WhmcsDomainStatus::Active,
-                    WhmcsDomainStatus::Expired,
-                    WhmcsDomainStatus::Redemption,
-                    WhmcsDomainStatus::Pending
-                ]
-            )
-        ) {
-            throw new Exception(sprintf("Domain status %s", $status->value));
-        }
-
-        if ($status->value === WhmcsDomainStatus::Pending->value) {
-            $values['active'] = false;
-            $values['cancelled'] = false;
-            $values['transferredAway'] = false;
-        } else {
-            $values[strtolower($status->value)] = true;
         }
 
         if ($persist) {
             self::persist(
                 $request,
                 $whmcsDomain->id,
-                $status->value,
+                $status ? $status->value : '',
                 $expiryDate,
-                $this->syncDueDate($domain->expiryDate->format('Y-m-d'))
+                $domain ? $this->syncDueDate($domain->expiryDate->format('Y-m-d')) : null
             );
         }
 

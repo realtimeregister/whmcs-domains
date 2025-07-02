@@ -19,6 +19,7 @@ This is our completely rebuilt WHMCS Domains module, featuring great new enhance
 - [X] Import of portfolio
 - [X] Bulk Sync
 - [X] Additional fields support for all supported TLD's
+- [X] DNS management
 
 We also provide widgets for you to use on your admin homepage:
 - Promotion overview

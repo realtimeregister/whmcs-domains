@@ -31,9 +31,9 @@ if (file_exists(__DIR__ . '/customhooks.php')) {
     require_once __DIR__ . '/customhooks.php';
 }
 
-new \RealtimeRegisterDomains\Services\Language(); // Load our own language strings before anything else
-
 $app = App::boot();
+
+new \RealtimeRegisterDomains\Services\Language(); // Load our own language strings before anything else
 
 function realtimeregister_version(): string
 {

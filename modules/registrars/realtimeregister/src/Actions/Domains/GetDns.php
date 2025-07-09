@@ -10,7 +10,10 @@ class GetDns extends Action
 {
     public function __invoke(Request $request): array
     {
-        if ($request->params['dnsmanagement'] === true) {
+        if (
+            $request->params['dnsmanagement'] === true
+            && App::registrarConfig()->get('dns_support', 'none') !== 'none'
+        ) {
             $domain = $this->domainInfo($request);
 
             /** @var  $zone */
@@ -29,8 +32,8 @@ class GetDns extends Action
                 ];
                 return $vars;
             }
+        } else {
+            throw new \Exception('DNS management not enabled on this domain');
         }
-
-        return ['error' => 'Something went wrong'];
     }
 }

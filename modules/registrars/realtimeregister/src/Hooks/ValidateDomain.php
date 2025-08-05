@@ -18,8 +18,8 @@ class ValidateDomain extends Hook
     public function __invoke(DataObject $vars)
     {
         $errors = [];
-        $nameservers = self::getNameServersFromCart();
-        if (!empty($_SESSION['cart']['domains'])) {
+        if (!empty($_SESSION['cart']['domains']) && self::hasNameServers()) {
+            $nameservers = self::getNameServersFromCart();
             foreach ($_SESSION['cart']['domains'] as $domain) {
                 try {
                     $metadata = (new MetadataService(App::toPunycode($domain['domain'])));
@@ -31,6 +31,10 @@ class ValidateDomain extends Hook
             }
         }
         return $errors;
+    }
+
+    private static function hasNameServers() : bool {
+        return [] !== array_filter([1,2,3,4,5], fn($item) => array_key_exists('ns' . $item, $_SESSION['cart']));
     }
 
     private static function validateNameServers(

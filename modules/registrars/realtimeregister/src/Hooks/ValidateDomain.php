@@ -33,7 +33,8 @@ class ValidateDomain extends Hook
         return $errors;
     }
 
-    private static function hasNameServers() : bool {
+    private static function hasNameServers(): bool
+    {
         return [] !== array_filter([1,2,3,4,5], fn($item) => array_key_exists('ns' . $item, $_SESSION['cart']));
     }
 

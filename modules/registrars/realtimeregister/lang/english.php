@@ -84,6 +84,11 @@ $_LANG['rtr']['promotions']['from_date'] = 'Start date';
 $_LANG['rtr']['promotions']['end_date'] = 'End date';
 $_LANG['rtr']['promotions']['none'] = 'We didn\'t find any promotions';
 
+$_LANG['rtr']['problematic_domains']['explanation'] = 'These domains should be checked, they cannot be used right ' .
+    'now, until the problems at the registry are fixed';
+$_LANG['rtr']['problematic_domains']['none'] = 'Good work, there are no domains with an \'invalid\' state!';
+$_LANG['rtr']['problematic_domains']['since'] = 'Since: ';
+
 $_LANG['rtr']['actions']['import_domains'] = 'Import domains';
 $_LANG['rtr']['actions']['import_into_whmcs'] = 'Import domains/clients from RealtimeRegister into WHMCS';
 $_LANG['rtr']['actions']['sync_expire_dates'] = 'Sync Expiry Dates';

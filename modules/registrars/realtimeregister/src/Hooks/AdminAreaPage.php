@@ -6,6 +6,7 @@ use Illuminate\Database\Capsule\Manager as Capsule;
 use Illuminate\Database\Schema\Blueprint;
 use RealtimeRegisterDomains\Entities\DataObject;
 use RealtimeRegisterDomains\Models\RealtimeRegister\ContactMapping;
+use RealtimeRegisterDomains\Models\RealtimeRegister\ProblematicDomains;
 
 class AdminAreaPage extends Hook
 {
@@ -32,6 +33,18 @@ class AdminAreaPage extends Hook
                         'mod_realtimeregister_contact_mapping_unique_contact'
                     );
                     $table->unique('handle', 'mod_realtimeregister_contact_mapping_unique_handle');
+                }
+            );
+        }
+
+        if (!Capsule::schema()->hasTable(ProblematicDomains::TABLE_NAME)) {
+            Capsule::schema()->create(
+                ProblematicDomains::TABLE_NAME,
+                function (Blueprint $table) {
+                    $table->integer('id', true);
+                    $table->string('domain_name', 255);
+                    $table->dateTime('since');
+                    $table->unique('domain_name');
                 }
             );
         }

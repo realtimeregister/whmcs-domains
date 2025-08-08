@@ -78,6 +78,11 @@ $_LANG['rtr']['promotions']['from_date'] = 'Begindatum';
 $_LANG['rtr']['promotions']['end_date'] = 'Einddatum';
 $_LANG['rtr']['promotions']['none'] = 'We hebben geen promoties gevonden';
 
+$_LANG['rtr']['problematic_domains']['explanation'] = 'Deze domainen moeten gecontroleerd worden, ze kunnen nu niet ' .
+    'gebruikt worden totdat de problemen aan de kant van de registry opgelost worden';
+$_LANG['rtr']['problematic_domains']['none'] = 'Goezo! Er zijn geen domeinen met een \'invalid\' status aanwezig!';
+$_LANG['rtr']['problematic_domains']['since'] = 'Sinds: ';
+
 $_LANG['rtr']['actions']['import_domains'] = 'Importeer domeinen';
 $_LANG['rtr']['actions']['import_into_whmcs'] = 'Importeer domeinen/clienten vanuit RealtimeRegister naar WHMCS';
 $_LANG['rtr']['actions']['sync_expire_dates'] = 'Sync Verloopdatums';

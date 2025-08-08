@@ -12,7 +12,7 @@ class GetDns extends Action
     {
         if (
             $request->params['dnsmanagement'] === true
-            && App::registrarConfig()->get('dns_support', 'none') !== 'none'
+            && App::registrarConfig()->hasDnsSupport()
         ) {
             $domain = $this->domainInfo($request);
 

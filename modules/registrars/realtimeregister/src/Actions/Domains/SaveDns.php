@@ -15,7 +15,7 @@ class SaveDns extends Action
 {
     public function __invoke(Request $request): array
     {
-        if ($request->params['dnsmanagement'] === true && App::registrarConfig()->get('dns_support') != 'none') {
+        if ($request->params['dnsmanagement'] === true && App::registrarConfig()->hasDnsSupport()) {
             $domain = $this->domainInfo($request);
             $zone = App::client()->domains->get($domain->domainName)->zone;
             return $this->processUpdate($zone, $domain, $_POST['soa'], $_POST['dns-items']);

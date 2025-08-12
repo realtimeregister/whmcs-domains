@@ -4,9 +4,9 @@ namespace RealtimeRegisterDomains\Models\RealtimeRegister;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ProblematicDomains extends Model
+class InactiveDomains extends Model
 {
-    public const TABLE_NAME = 'mod_realtimeregister_problematic_domains';
+    public const TABLE_NAME = 'mod_realtimeregister_inactive_domains';
     protected $table = self::TABLE_NAME;
 
     public $timestamps = false;

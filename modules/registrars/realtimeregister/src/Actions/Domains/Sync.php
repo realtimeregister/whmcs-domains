@@ -11,7 +11,7 @@ use RealtimeRegister\Exceptions\UnauthorizedException;
 use RealtimeRegisterDomains\Actions\Action;
 use RealtimeRegisterDomains\App;
 use RealtimeRegisterDomains\Enums\WhmcsDomainStatus;
-use RealtimeRegisterDomains\Models\RealtimeRegister\ProblematicDomains;
+use RealtimeRegisterDomains\Models\RealtimeRegister\InactiveDomains;
 use RealtimeRegisterDomains\Models\Whmcs\Domain;
 use RealtimeRegisterDomains\Request;
 use RealtimeRegisterDomains\Services\LogService;
@@ -107,14 +107,14 @@ class Sync extends Action
                 } else {
                     $values[strtolower($status->value)] = true;
                 }
-                // because the lookup now works, we can delete the entry from ProblematicDomains (if present)
+                // because the lookup now works, we can delete the entry from InactiveDomains (if present)
                 try {
-                    Manager::table(ProblematicDomains::TABLE_NAME)->where(['domainName' => $domain->domainName])
+                    Manager::table(InactiveDomains::TABLE_NAME)->where(['domainName' => $domain->domainName])
                         ->delete();
                 } catch (\Exception $ignored) {
                 }
             } else {
-                ProblematicDomains::query()->insertOrIgnore(
+                InactiveDomains::query()->insertOrIgnore(
                     [
                         'domainName' => $domain->domainName,
                         'since' => new \DateTime(),

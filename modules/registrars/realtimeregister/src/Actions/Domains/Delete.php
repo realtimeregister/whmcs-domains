@@ -5,7 +5,7 @@ namespace RealtimeRegisterDomains\Actions\Domains;
 use Illuminate\Database\Capsule\Manager;
 use RealtimeRegisterDomains\Actions\Action;
 use RealtimeRegisterDomains\App;
-use RealtimeRegisterDomains\Models\RealtimeRegister\ProblematicDomains;
+use RealtimeRegisterDomains\Models\RealtimeRegister\InactiveDomains;
 use RealtimeRegisterDomains\Request;
 
 class Delete extends Action
@@ -16,7 +16,7 @@ class Delete extends Action
         $this->forgetDomainInfo($request);
 
         try {
-            Manager::table(ProblematicDomains::TABLE_NAME)->where(['domainName' => $request->domain])
+            Manager::table(InactiveDomains::TABLE_NAME)->where(['domainName' => $request->domain])
                 ->delete();
         } catch (\Exception $ignored) {
         }

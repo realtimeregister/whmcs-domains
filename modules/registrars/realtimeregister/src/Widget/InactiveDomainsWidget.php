@@ -3,12 +3,12 @@
 namespace RealtimeRegisterDomains\Widget;
 
 use RealtimeRegisterDomains\App;
-use RealtimeRegisterDomains\Models\RealtimeRegister\ProblematicDomains;
+use RealtimeRegisterDomains\Models\RealtimeRegister\InactiveDomains;
 use RealtimeRegisterDomains\Services\TemplateService;
 
-class ProblematicDomainsWidget extends BaseWidget
+class InactiveDomainsWidget extends BaseWidget
 {
-    protected $title = 'Realtime Register - Problemantic Domains';
+    protected $title = 'Realtime Register - Inactive Domains';
     protected $description = '';
     protected $weight = 150;
     protected $columns = 1;
@@ -18,13 +18,13 @@ class ProblematicDomainsWidget extends BaseWidget
 
     public function getData(): array
     {
-        return ProblematicDomains::all()->toArray();
+        return InactiveDomains::all()->toArray();
     }
 
     public function generateOutput($data): string
     {
         return TemplateService::renderTemplate(
-            'admin' . DIRECTORY_SEPARATOR . 'widget' . DIRECTORY_SEPARATOR . 'problematic_domains.tpl',
+            'admin' . DIRECTORY_SEPARATOR . 'widget' . DIRECTORY_SEPARATOR . 'inactive_domains.tpl',
             [
                 'problems' => $data,
                 'baseLink' => App::portalUrl() . '/app/domains/'

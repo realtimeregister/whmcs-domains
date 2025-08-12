@@ -6,7 +6,7 @@ use Illuminate\Database\Capsule\Manager as Capsule;
 use Illuminate\Database\Schema\Blueprint;
 use RealtimeRegisterDomains\Entities\DataObject;
 use RealtimeRegisterDomains\Models\RealtimeRegister\ContactMapping;
-use RealtimeRegisterDomains\Models\RealtimeRegister\ProblematicDomains;
+use RealtimeRegisterDomains\Models\RealtimeRegister\InactiveDomains;
 
 class AdminAreaPage extends Hook
 {
@@ -37,9 +37,9 @@ class AdminAreaPage extends Hook
             );
         }
 
-        if (!Capsule::schema()->hasTable(ProblematicDomains::TABLE_NAME)) {
+        if (!Capsule::schema()->hasTable(InactiveDomains::TABLE_NAME)) {
             Capsule::schema()->create(
-                ProblematicDomains::TABLE_NAME,
+                InactiveDomains::TABLE_NAME,
                 function (Blueprint $table) {
                     $table->integer('id', true);
                     $table->string('domain_name', 255);

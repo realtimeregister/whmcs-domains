@@ -8,6 +8,13 @@
     </div>
 {/if}
 
+{if $saved}
+    <div class="alert alert-success alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <strong>{$LANG.rtr.saved}</strong>
+    </div>
+{/if}
+
 <form method="POST" class="text-muted">
     <input type='hidden' name='totalDNSsec' value="{count($keyData)}">
     <input type="hidden" name="dnssecAction" value="update" />

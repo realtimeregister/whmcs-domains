@@ -84,6 +84,11 @@ $_LANG['rtr']['promotions']['from_date'] = 'Start date';
 $_LANG['rtr']['promotions']['end_date'] = 'End date';
 $_LANG['rtr']['promotions']['none'] = 'We didn\'t find any promotions';
 
+$_LANG['rtr']['inactive_domains']['explanation'] = 'These domain are currently inactive due to invalid name server ' .
+    'configuration or other issues';
+$_LANG['rtr']['inactive_domains']['none'] = 'Good work, there are no domains with an \'invalid\' state!';
+$_LANG['rtr']['inactive_domains']['since'] = 'Since: ';
+
 $_LANG['rtr']['actions']['import_domains'] = 'Import domains';
 $_LANG['rtr']['actions']['import_into_whmcs'] = 'Import domains/clients from RealtimeRegister into WHMCS';
 $_LANG['rtr']['actions']['sync_expire_dates'] = 'Sync Expiry Dates';

@@ -102,4 +102,20 @@ class Cache
 
         return $value;
     }
+
+    /**
+     * *poof* Forget *poof*
+     */
+    public static function forget(string $key): void
+    {
+        self::db()->getStore()->forget($key);
+    }
+
+    /**
+     * Remember forever
+     */
+    public static function rememberForever(string $key, $value): void
+    {
+        self::db()->getStore()->forever($key, $value);
+    }
 }

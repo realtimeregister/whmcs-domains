@@ -35,6 +35,7 @@ App::hook('AdminHomeWidgets', Hooks\Widgets\DomainOverviewWidget::class);
 App::hook('AdminHomeWidgets', Hooks\Widgets\BalanceWidget::class);
 App::hook('AdminHomeWidgets', Hooks\Widgets\ErrorLogWidget::class, 40);
 App::hook('AdminHomeWidgets', Hooks\Widgets\PromoWidget::class);
+App::hook('AdminHomeWidgets', Hooks\Widgets\InactiveDomainWidget::class);
 
 App::hook(Hooks\AdminHomepage::class);
 App::hook('ClientAreaHeadOutput', Hooks\HeadAssets::class, 100);

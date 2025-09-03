@@ -6,6 +6,7 @@ use Illuminate\Cache\ArrayStore;
 use Illuminate\Cache\DatabaseStore;
 use Illuminate\Cache\Repository;
 use Illuminate\Database\Capsule\Manager as Capsule;
+use Illuminate\Database\Schema\Blueprint;
 
 class Cache
 {
@@ -18,6 +19,7 @@ class Cache
     public static function db(): Repository
     {
         if (!static::$dbCache) {
+            self::boot();
             static::$dbCache = new Repository(new DatabaseStore(Capsule::connection(), self::TABLE_NAME));
         }
 
@@ -27,6 +29,7 @@ class Cache
     public static function request(): Repository
     {
         if (!static::$requestCache) {
+            self::boot();
             static::$requestCache = new Repository(new ArrayStore());
         }
 
@@ -38,21 +41,12 @@ class Cache
         if (!Capsule::schema()->hasTable(Cache::TABLE_NAME)) {
             Capsule::schema()->create(
                 Cache::TABLE_NAME,
-                function ($table) {
+                function (Blueprint $table) {
                     $table->string('key')->unique();
                     $table->mediumText('value');
                     $table->integer('expiration');
                 }
             );
-        } else {
-            // Update existing table to use mediumText for value column
-            try {
-                Capsule::schema()->table(Cache::TABLE_NAME, function ($table) {
-                    $table->mediumText('value')->change();
-                });
-            } catch (\Exception $e) {
-                // Ignore errors, as the column might already be MEDIUMTEXT
-            }
         }
     }
 
@@ -107,5 +101,21 @@ class Cache
         self::put($key, $value = $callback(), $minutes);
 
         return $value;
+    }
+
+    /**
+     * *poof* Forget *poof*
+     */
+    public static function forget(string $key): void
+    {
+        self::db()->getStore()->forget($key);
+    }
+
+    /**
+     * Remember forever
+     */
+    public static function rememberForever(string $key, $value): void
+    {
+        self::db()->getStore()->forever($key, $value);
     }
 }

@@ -4,6 +4,9 @@
 
 This is our completely rebuilt WHMCS Domains module, featuring great new enhancements and available under an open-source license. We recommend using this module for all new deployments. If you are currently using our old module, please refer to [this upgrade guide](https://github.com/realtimeregister/whmcs-domains/wiki/upgrade-from-registrar-module-version-1.4.13-and-below) and deploy it to your testing environment first.
 
+### Quick start
+[Install guide](https://github.com/realtimeregister/whmcs-domains/wiki/Registrar-module-installation)
+
 ### Features
 - [X] Domain registration
 - [X] Domain transfer

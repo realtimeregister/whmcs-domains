@@ -3,6 +3,7 @@
 namespace RealtimeRegisterDomains;
 
 use Illuminate\Database\Capsule\Manager as Capsule;
+use RealtimeRegister\Domain\Enum\ZoneServiceEnum;
 
 class ConfigArray
 {
@@ -168,7 +169,11 @@ class ConfigArray
                 'dns_support' => [
                     'FriendlyName' => 'DNS support',
                     'Type' => 'dropdown',
-                    'Options' => ['none', 'basic', 'premium'],
+                    'Options' => [
+                        'none',
+                        ZoneServiceEnum::BASIC->value => ZoneServiceEnum::BASIC->value,
+                        ZoneServiceEnum::PREMIUM->value => ZoneServiceEnum::PREMIUM->value,
+                    ],
                     'Default' => 'none',
                     'Description' => 'Enable DNS support from Realtime Register. The option <strong>Premium</strong> ' .
                         'will yield <b>1 payed zone per domain</b>. The price of the DNS support can be set in the ' .

@@ -71,6 +71,7 @@ $_LANG['rtr']['algorithm'] = 'Algorithm';
 $_LANG['rtr']['public_key'] = 'Public key';
 
 $_LANG['rtr']['date'] = 'Date';
+$_LANG['rtr']['type'] = 'Type';
 $_LANG['rtr']['action'] = 'Action';
 $_LANG['rtr']['status'] = 'Status';
 

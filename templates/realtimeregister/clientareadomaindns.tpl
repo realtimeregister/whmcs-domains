@@ -1,5 +1,3 @@
-<h1>{$domain->domain}</h1>
-
 {if $dnsrecords['zones'] == null}
     <div class="alert alert-primary" role="alert">
         {$LANG.rtr.dns.no_records_yet}
@@ -34,23 +32,24 @@
         <tr>
             <td>
                 <label class="sr-only" for="soa_hostmaster">{$LANG.rtr.dns.hostmaster}</label>
-                <input id="soa_hostmaster" type="text" name="soa[hostmaster]" value="{$dnsrecords['soa']['hostmaster']}" class="form-control">
+                <input id="soa_hostmaster" type="text" name="soa[hostmaster]" value="{if $dnsrecords['soa']['hostmaster'] != ''}{$dnsrecords['soa']['hostmaster']}{else}hostmaster@{$domain}{/if}" class="form-control">
             </td>
             <td>
                 <label class="sr-only" for="soa_refresh">{$LANG.rtr.dns.refresh}</label>
-                <input id="soa_refresh" type="text" name="soa[refresh]" value="{$dnsrecords['soa']['refresh']}" class="form-control">
+                <input id="soa_refresh" type="text" name="soa[refresh]" value="{if $dnsrecords['soa']['refresh'] != ''}{$dnsrecords['soa']['refresh']}{else}3600{/if}" class="form-control">
             </td>
             <td>
                 <label class="sr-only" for="soa_retry">{$LANG.rtr.dns.retry}</label>
-                <input id="soa_retry" type="number" name="soa[retry]" value="{$dnsrecords['soa']['retry']}" class="form-control">
+                <input id="soa_retry" type="number" name="soa[retry]" value="{if $dnsrecords['soa']['retry'] != ''}{$dnsrecords['soa']['retry']}{else}3600{/if}" class="form-control">
             </td>
             <td>
                 <label class="sr-only" for="soa_expire">{$LANG.rtr.dns.expire}</label>
-                <input id="soa_expire" type="number" name="soa[expire]" value="{$dnsrecords['soa']['expire']}" class="form-control">
+                <input id="soa_expire" type="number" name="soa[expire]" value="{if $dnsrecords['soa']['expire'] != ''}{$dnsrecords['soa']['expire']}{else}1209600{/if}" class="form-control"
+                       min="86400">
             </td>
             <td>
                 <label class="sr-only" for="soa_ttl">{$LANG.rtr.dns.ttl}</label>
-                <input id="soa_ttl" type="number" name="soa[ttl]" value="{$dnsrecords['soa']['ttl']}" class="form-control">
+                <input id="soa_ttl" type="number" name="soa[ttl]" value="{if $dnsrecords['soa']['ttl'] != ''}{$dnsrecords['soa']['ttl']}{else}3600{/if}" class="form-control">
             </td>
         </tr>
         </tbody>

@@ -34,8 +34,8 @@ class RegistrarConfig
 
     public function hasDnsSupport(): bool
     {
-        $dnsSupport = $this->get('dns_support', 'none');
-        if ($dnsSupport === 'none') {
+        $dnsSupport = $this->get('dns_support', '');
+        if ($dnsSupport === '') {
             return false;
         }
         return true;

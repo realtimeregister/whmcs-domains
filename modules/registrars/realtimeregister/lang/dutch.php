@@ -65,6 +65,7 @@ $_LANG['rtr']['algorithm'] = 'Algorithme';
 $_LANG['rtr']['public_key'] = 'Publieke sleutel';
 
 $_LANG['rtr']['date'] = 'Datum';
+$_LANG['rtr']['type'] = 'Soort';
 $_LANG['rtr']['action'] = 'Actie';
 $_LANG['rtr']['status'] = 'Status';
 

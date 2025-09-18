@@ -39,8 +39,8 @@ We also provide widgets for you to use on your admin homepage:
 Please check the latest [Releases](https://github.com/realtimeregister/whmcs-domains/releases) and Download files 
 
 ### Suggestions, Bugs, Issues, New Features
-You are of course welcome to send us requests for new features, suggestions, issues or any possible bugs found
-[Submission form](https://github.com/realtimeregister/whmcs-domains/issues/new/choose)
+You are of course more than welcome to send us requests for new features, suggestions, issues or any possible bugs found
+[via Github issues](https://github.com/realtimeregister/whmcs-domains/issues/new).
 
 ### WIKI
 Check out our [WIKI](https://github.com/realtimeregister/whmcs-domains/wiki) for manuals and description of all features.

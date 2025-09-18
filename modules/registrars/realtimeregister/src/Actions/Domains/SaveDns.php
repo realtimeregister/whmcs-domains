@@ -13,9 +13,12 @@ use RealtimeRegisterDomains\Request;
 
 class SaveDns extends Action
 {
+    private ZoneServiceEnum $serviceType;
+
     public function __invoke(Request $request): array
     {
-        if ($request->params['dnsmanagement'] === true && App::registrarConfig()->hasDnsSupport()) {
+        if ($request->params['dnsmanagement'] === true && App::registrarConfig()->hasDnsSupport() === true) {
+            $this->serviceType = ZoneServiceEnum::from(App::registrarConfig()->get('dns_support'));
             $domain = $this->domainInfo($request);
             $zone = App::client()->domains->get($domain->domainName)->zone;
             return $this->processUpdate($zone, $domain, $_POST['soa'], $_POST['dns-items']);
@@ -50,7 +53,7 @@ class SaveDns extends Action
                 $dnsRecords[$k]['name'] = $domain->domainName;
             }
 
-            if (!in_array('ttl', $data)) {
+            if (!array_key_exists('ttl', $data)) {
                 $dnsRecords[$k]['ttl'] = 3600;
             }
         }
@@ -67,28 +70,22 @@ class SaveDns extends Action
                 'ttl' => (int)$soaData['ttl'],
                 'records' => DomainZoneRecordCollection::fromArray($dnsRecords)
             ];
-
             if (!$zone) {
                 App::client()->dnszones->create(
                     name: $domain->domainName,
-                    service: App::registrarConfig()->get('dns_support') === 'basic' ? ZoneServiceEnum::BASIC
-                        : ZoneServiceEnum::PREMIUM,
+                    service: $this->serviceType,
                     hostMaster: $soaData['hostmaster'],
                     refresh: (int)$soaData['refresh'],
                     retry: (int)$soaData['retry'],
                     expire: (int)$soaData['expire'],
                     records: DomainZoneRecordCollection::fromArray($dnsRecords),
                 );
-
                 // Enable the just created zone, and thus, enable it to the domain
                 App::client()->domains->update(
                     domainName: $domain->domainName,
                     zone: Zone::fromArray(
                         [
-                            'service' => App::registrarConfig()->get(
-                                'dns_support'
-                            ) === 'basic' ? ZoneServiceEnum::BASIC->value : ZoneServiceEnum::PREMIUM->value,
-                            'managed' => true
+                            'service' => $this->serviceType->value,
                         ]
                     )
                 );

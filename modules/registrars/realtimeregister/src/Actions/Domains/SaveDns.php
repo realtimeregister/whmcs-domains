@@ -24,6 +24,9 @@ class SaveDns extends Action
             if (isset($_SESSION['rtr']['dns'], $_SESSION['rtr']['dns']['success'])) {
                 unset($_SESSION['rtr']['dns']['success']);
             }
+            if (!is_array($_POST['dns-items'])) {
+                $_POST['dns-items'] = [];
+            }
             // Temporary keep the items in memory
             $_SESSION['rtr']['dns']['soa'] = $_POST['soa'];
             $_SESSION['rtr']['dns']['dns-items'] = $_POST['dns-items'];

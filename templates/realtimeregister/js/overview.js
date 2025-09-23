@@ -12,7 +12,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Bind to all and future delete buttons
     deleteBtn.forEach(elm => {
-            elm.addEventListener('click', () => elm.parentElement.parentElement.remove());
+            elm.addEventListener('click', () => {
+                // we don't want to remove the last row, because it is our template, instead we wipe the content
+                if (elm.parentElement.parentElement.parentElement.childElementCount === 1) {
+                    for (let child of elm.parentElement.parentElement.children) {
+                        child.children[0].value = '';
+                    }
+                } else {
+                    elm.parentElement.parentElement.remove();
+                }
+            });
         }
     );
 

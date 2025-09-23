@@ -22,7 +22,16 @@ class GetDns extends Action
             if ($zone && $zone->id !== null && $zone->master === null && $zone->template === null) {
                 $dataFromServer = App::client()->dnszones->get($zone->id);
 
-                $vars['zones'] = $dataFromServer->records->toArray();
+                // Saveguard for zones which are saved, but don't have any records
+                if ($dataFromServer->records !== null) {
+                    $records = $dataFromServer->records->toArray();
+
+                    foreach ($records as $k => $record) {
+                        $records[$k]['content'] = htmlentities($record['content']);
+                    }
+                    $vars['zones'] = $records;
+                }
+
                 $vars['soa'] = [
                     'hostmaster' => $dataFromServer->hostMaster,
                     'refresh' => $dataFromServer->refresh,
@@ -30,6 +39,10 @@ class GetDns extends Action
                     'expire' => $dataFromServer->expire,
                     'ttl' => $dataFromServer->ttl,
                 ];
+
+                if (isset($_SESSION['rtr']['dns'], $_SESSION['rtr']['dns']['error'], $_SESSION['rtr']['dns']['error']['errors'])) {
+                    $vars['formerrors'] = $_SESSION['rtr']['dns']['error']['errors'];
+                }
                 if (isset($_SESSION['rtr']['dns'], $_SESSION['rtr']['dns']['success'])) {
                     $vars['status']['success'] = $_SESSION['rtr']['dns']['success'];
                     unset($_SESSION['rtr']['dns']['success']);

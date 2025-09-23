@@ -57,6 +57,8 @@ class SaveDns extends Action
             // Clear empty rows
             if ($data['name'] == '' && $data['content'] == '') {
                 unset($dnsRecords[$k]);
+            } else {
+                $dnsRecords[$k]['content'] = html_entity_decode($data['content']);
             }
 
             if ($data['name'] == '') {
@@ -110,6 +112,7 @@ class SaveDns extends Action
         } catch (BadRequestException $exception) {
             $_SESSION['rtr']['dns']['success'] = false;
             $exceptionText = substr($exception->getMessage(), 13);
+            $_SESSION['rtr']['dns']['error'] = json_decode($exceptionText, true);
             return ['error' => json_decode($exceptionText, true)];
         }
     }

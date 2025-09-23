@@ -30,6 +30,10 @@ class GetDns extends Action
                     'expire' => $dataFromServer->expire,
                     'ttl' => $dataFromServer->ttl,
                 ];
+                if (isset($_SESSION['rtr']['dns'], $_SESSION['rtr']['dns']['success'])) {
+                    $vars['status']['success'] = $_SESSION['rtr']['dns']['success'];
+                    unset($_SESSION['rtr']['dns']['success']);
+                }
                 return $vars;
             }
         } else {

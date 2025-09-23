@@ -21,6 +21,13 @@ class SaveDns extends Action
             $this->serviceType = ZoneServiceEnum::from(App::registrarConfig()->get('dns_support'));
             $domain = $this->domainInfo($request);
             $zone = App::client()->domains->get($domain->domainName)->zone;
+            if (isset($_SESSION['rtr']['dns'], $_SESSION['rtr']['dns']['success'])) {
+                unset($_SESSION['rtr']['dns']['success']);
+            }
+            // Temporary keep the items in memory
+            $_SESSION['rtr']['dns']['soa'] = $_POST['soa'];
+            $_SESSION['rtr']['dns']['dns-items'] = $_POST['dns-items'];
+
             return $this->processUpdate($zone, $domain, $_POST['soa'], $_POST['dns-items']);
         } else {
             return ['error' => 'DNS management not enabled on this domain'];
@@ -92,8 +99,13 @@ class SaveDns extends Action
             } else {
                 $dnsZonePayload['id'] = $zone->id;
                 App::client()->dnszones->update(...$dnsZonePayload);
+                $_SESSION['rtr']['dns']['success'] = true;
+                // We don't need this data anymore, everything went succesfully
+                unset($_SESSION['rtr']['dns']['soa']);
+                unset($_SESSION['rtr']['dns']['dns-items']);
             }
         } catch (BadRequestException $exception) {
+            $_SESSION['rtr']['dns']['success'] = false;
             $exceptionText = substr($exception->getMessage(), 13);
             return ['error' => json_decode($exceptionText, true)];
         }

@@ -3,9 +3,14 @@
         {$LANG.rtr.dns.no_records_yet}
     </div>
 {/if}
-{if $success == true}
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        {$LANG.rtr.dns.save_successful}
+
+{if isset($dnsrecords.status)}
+    <div class="alert alert-{if $dnsrecords.status.success == true}success{else}danger{/if} alert-dismissible fade show" role="alert">
+        {if $dnsrecords.status.success == true}
+            {$LANG.rtr.dns.save_successful}
+        {else}
+            {$LANG.rtr.dns.save_error}
+        {/if}
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>

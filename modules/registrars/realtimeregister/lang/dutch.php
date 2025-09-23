@@ -106,6 +106,7 @@ $_LANG['rtr']['dns']['save'] = 'Opslaan';
 $_LANG['rtr']['dns']['dns_settings'] = 'DNS instellingen';
 $_ADDONLANG['rtr']['dns']['dns_settings_pagetitle'] = 'Verander DNS instellingen van ":domain"';
 $_LANG['rtr']['dns']['save_successful'] = 'De DNS wijzigingen zijn doorgevoerd';
+$_LANG['rtr']['dns']['save_error'] = 'Er is iets mis gegaan bij het opslaan van de DNS records';
 $_LANG['rtr']['dns']['not_found_heading'] = 'Domein niet gevonden';
 $_LANG['rtr']['dns']['not_found_text'] = 'Het domein wat je geselecteerd hebt is onbekend, of je hebt er geen toegang toe';
 $_LANG['rtr']['dns']['hostmaster'] = 'Hostmaster';

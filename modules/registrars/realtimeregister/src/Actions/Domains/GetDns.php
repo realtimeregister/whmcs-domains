@@ -26,6 +26,7 @@ class GetDns extends Action
                 if ($dataFromServer->records !== null) {
                     $records = $dataFromServer->records->toArray();
 
+                    // If there are any quotes in the record, we have problems in the html, so we html encode those
                     foreach ($records as $k => $record) {
                         $records[$k]['content'] = htmlentities($record['content']);
                     }
@@ -40,7 +41,13 @@ class GetDns extends Action
                     'ttl' => $dataFromServer->ttl,
                 ];
 
-                if (isset($_SESSION['rtr']['dns'], $_SESSION['rtr']['dns']['error'], $_SESSION['rtr']['dns']['error']['errors'])) {
+                if (
+                    isset(
+                        $_SESSION['rtr']['dns'],
+                        $_SESSION['rtr']['dns']['error'],
+                        $_SESSION['rtr']['dns']['error']['errors']
+                    )
+                ) {
                     $vars['formerrors'] = $_SESSION['rtr']['dns']['error']['errors'];
                 }
                 if (isset($_SESSION['rtr']['dns'], $_SESSION['rtr']['dns']['success'])) {

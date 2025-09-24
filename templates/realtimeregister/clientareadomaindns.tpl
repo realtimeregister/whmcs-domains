@@ -17,7 +17,7 @@
     </div>
 {/if}
 
-<form id="realtimeregister-dns-addon" method="post" action="{$smarty.server.PHP_SELF}?action=domaindns">
+<form id="realtimeregister-dns-addon" method="post">
     <input type="hidden" name="sub" value="save" />
     <input type="hidden" name="domainid" value="{$domainid}" />
 

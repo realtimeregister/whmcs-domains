@@ -1,6 +1,6 @@
 <div class="autorenew">
     <p>
-        Set the renewal for <span class="amount">{count($domains)}</span> domains to <strong>false</strong>
+        Set the auto-renewal for <span class="amount">{count($domains)}</span> domains to <strong>false</strong>
     </p>
 
     <p class="processed_updates">Processed updates: <span class="processed_updates__amount">0</span>/<span

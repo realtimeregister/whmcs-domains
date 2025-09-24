@@ -2,10 +2,10 @@
 
 namespace RealtimeRegisterDomains;
 
-use Exceptions\InternalApiException;
 use Illuminate\Support\Collection;
 use RealtimeRegisterDomains\Entities\DataObject;
 use RealtimeRegisterDomains\Entities\WhmcsContact;
+use RealtimeRegisterDomains\Exceptions\InternalApiException;
 use RealtimeRegisterDomains\Services\LogService;
 
 class LocalApi
@@ -166,8 +166,9 @@ class LocalApi
     {
         $results = localAPI($function, $postData, $user);
         if ($results['result'] === 'error') {
-            LogService::logError($results['message']);
-            throw new InternalApiException($results['message']);
+            $exception = new InternalApiException($results['message']);
+            LogService::logError($exception, $results['message']);
+            throw $exception;
         }
         return $results;
     }

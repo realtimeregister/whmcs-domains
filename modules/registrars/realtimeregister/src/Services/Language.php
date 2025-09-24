@@ -9,6 +9,8 @@ class Language
     // Cache duration in minutes
     private const CACHE_DURATION = 10080; // 7 days
 
+    public const CACHE_KEY = 'realtimeregister_domains_language_translations_';
+
     public function __construct()
     {
         $_CUSTOMLANG = $this->getTranslationFile();
@@ -38,7 +40,7 @@ class Language
         }
 
         // Create a cache key based on the current language
-        $cacheKey = 'language_translations_' . $currentLang;
+        $cacheKey = self::CACHE_KEY . $currentLang;
 
         $result = Cache::get($cacheKey);
 

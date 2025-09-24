@@ -32,6 +32,15 @@ class RegistrarConfig
         return $this->get('rtr_api_key');
     }
 
+    public function hasDnsSupport(): bool
+    {
+        $dnsSupport = $this->get('dns_support', '');
+        if ($dnsSupport === '') {
+            return false;
+        }
+        return true;
+    }
+
     public function get(string $key, $default = null)
     {
         if ($this->request) {

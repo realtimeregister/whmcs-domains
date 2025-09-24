@@ -4,12 +4,13 @@ namespace RealtimeRegisterDomains\Hooks\Client;
 
 use RealtimeRegisterDomains\App;
 use RealtimeRegisterDomains\Entities\DataObject;
+use RealtimeRegisterDomains\Enums\ScriptLocationType;
 use RealtimeRegisterDomains\Hooks\Hook;
 use RealtimeRegisterDomains\Services\JSRouter;
 use RealtimeRegisterDomains\Services\LogService;
 use RealtimeRegisterDomains\Services\MetadataService;
 
-class ClientAreaHeadOutput extends Hook
+class ClientAreaOutput extends Hook
 {
     public function __invoke(DataObject $vars)
     {
@@ -33,8 +34,8 @@ class ClientAreaHeadOutput extends Hook
             }
         }
 
-        App::assets()->addScript("rtr.js");
-        App::assets()->addScript("rtrClient.js");
+        App::assets()->addScript("rtr.js", ScriptLocationType::Footer);
+        App::assets()->addScript("rtrClient.js", ScriptLocationType::Footer);
         App::assets()->addStyle('style.css');
 
         $jsRouter = new JSRouter($vars);

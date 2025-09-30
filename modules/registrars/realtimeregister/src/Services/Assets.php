@@ -4,7 +4,6 @@ namespace RealtimeRegisterDomains\Services;
 
 use RealtimeRegisterDomains\App;
 use RealtimeRegisterDomains\Enums\ScriptLocationType;
-
 use WHMCS\Config\Setting;
 
 final class Assets
@@ -137,23 +136,23 @@ final class Assets
         return $content;
     }
 
- private function getBasePath(string $assetUrl): string
-{
-    // Filesystem: WHMCS root and this module's /src folder
-    $fsWhmcsRoot  = realpath(__DIR__ . '/../../../../../');
-    $fsModuleSrc  = realpath(__DIR__ . '/../');
+    private function getBasePath(string $assetUrl): string
+    {
+        // Filesystem: WHMCS root and this module's /src folder
+        $fsWhmcsRoot = realpath(__DIR__ . '/../../../../../');
+        $fsModuleSrc = realpath(__DIR__ . '/../');
 
-    // Relative web path to the module's /src (e.g. /modules/registrars/realtimeregister/src)
-    $relative = str_replace($fsWhmcsRoot, '', $fsModuleSrc);
-    $relative = str_replace(DIRECTORY_SEPARATOR, '/', $relative);
+        // Relative web path to the module's /src (e.g. /modules/registrars/realtimeregister/src)
+        $relative = str_replace($fsWhmcsRoot, '', $fsModuleSrc);
+        $relative = str_replace(DIRECTORY_SEPARATOR, '/', $relative);
 
-    // Prepend the SystemURL *path* (handles installs under /clients, /billing, etc.)
-    $systemPath = parse_url(Setting::getValue('SystemURL'), PHP_URL_PATH) ?? '';
-    $systemPath = rtrim($systemPath, '/');
+        // Prepend the SystemURL *path* (handles installs under /clients, /billing, etc.)
+        $systemPath = parse_url(Setting::getValue('SystemURL'), PHP_URL_PATH) ?? '';
+        $systemPath = rtrim($systemPath, '/');
 
-    // Final absolute path for href/src (no scheme/host so getPath() won’t break https://)
-    return $systemPath . $relative . $assetUrl;
-}
+        // Final absolute path for href/src (no scheme/host so getPath() won’t break https://)
+        return $systemPath . $relative . $assetUrl;
+    }
 
     public function addStyle(string $name): self
     {

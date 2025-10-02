@@ -1,20 +1,6 @@
 <?php
 
 return [
-    'co.uk' => 'uk',
-    'org.uk' => 'uk',
-    'net.uk' => 'uk',
-    'me.uk' => 'uk',
-    'ltd.uk' => 'uk',
-    'plc.uk' => 'uk',
-    'sch.uk' => 'uk',
-    'ac.uk' => 'uk',
-    'gov.uk' => 'uk',
-    'mod.uk' => 'uk',
-    'mil.uk' => 'uk',
-    'nhs.uk' => 'uk',
-    'police.uk' => 'uk',
-
     'mex.com' => 'centralnic',
     'radio.am' => 'centralnic',
     'eu.com' => 'centralnic',

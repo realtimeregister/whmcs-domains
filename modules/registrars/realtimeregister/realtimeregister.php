@@ -202,3 +202,15 @@ function realtimeregister_GetDomainSuggestions($params)
 {
     return App::dispatch(\RealtimeRegisterDomains\Actions\Domains\DomainSuggestions::class, $params);
 }
+
+if (App::registrarConfig()->hasDnsSupport()) {
+    function realtimeregister_GetDNS($params)
+    {
+        return App::dispatch(\RealtimeRegisterDomains\Actions\Domains\GetDns::class, $params);
+    }
+
+    function realtimeregister_SaveDNS($params)
+    {
+        return App::dispatch(\RealtimeRegisterDomains\Actions\Domains\SaveDns::class, $params);
+    }
+}

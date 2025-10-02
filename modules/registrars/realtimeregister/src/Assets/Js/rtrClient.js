@@ -86,6 +86,8 @@
                     {key: '14', text: '14 (ECDSA Curve P-384 with SHA-384)'},
                     {key: '15', text: '15 (Ed25519)'},
                     {key: '16', text: '16 (Ed448)'},
+                    {key: '17', text: '17 (SM2 signing algorithm with SM3 hashing algorithm)'},
+                    {key: '23', text: '23 (GOST R 34.10.2012)'}
                     ];
 
                     for (let i = 0; i < algorithmsOptions.length; i++) {

@@ -13,6 +13,7 @@ use RealtimeRegisterDomains\Logger\DebugMailLogger;
 use RealtimeRegisterDomains\Models\RealtimeRegister\Cache;
 use RealtimeRegisterDomains\Services\Assets;
 use RealtimeRegisterDomains\Services\ContactService;
+use RealtimeRegisterDomains\Services\Language;
 use RealtimeRegisterDomains\Services\LogService;
 use RuntimeException;
 use TrueBV\Punycode;
@@ -20,7 +21,8 @@ use TrueBV\Punycode;
 class App
 {
     public const NAME = 'realtimeregister';
-    public const VERSION = '2.3.10';
+    public const VERSION = '2.3.13';
+    private const CACHE_KEY_VERSION = 'realtimeregister_domains_version_number';
 
     protected const API_URL = "https://api.yoursrs.com/";
     protected const API_URL_TEST = "https://api.yoursrs-ote.com/";
@@ -63,6 +65,13 @@ class App
         if (!static::$booted) {
             if (!defined('PHPUNIT_REALTIMEREGISTER_TESTSUITE')) {
                 Cache::boot();
+                // After a new version, we want to remove all the translations in order to stay up-to-date
+                if (self::VERSION != Cache::get(self::CACHE_KEY_VERSION)) {
+                    foreach (\WHMCS\Language\ClientLanguage::getLanguages() as $language) {
+                        Cache::forget(Language::CACHE_KEY . $language);
+                    }
+                    Cache::rememberForever(self::CACHE_KEY_VERSION, self::VERSION);
+                }
             }
             static::$booted = true;
         }

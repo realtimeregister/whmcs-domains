@@ -71,7 +71,7 @@ class SaveDns extends Action
         }
 
         // When we do delete actions, in the frontend, the arraykey may get mangled, a simple sort fixes this problem
-        sort($dnsRecords);
+        $dnsRecords = array_values($dnsRecords);
 
         try {
             $dnsZonePayload = [

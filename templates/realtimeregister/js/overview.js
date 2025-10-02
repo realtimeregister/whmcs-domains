@@ -14,9 +14,13 @@ document.addEventListener("DOMContentLoaded", function () {
     deleteBtn.forEach(elm => {
             elm.addEventListener('click', () => {
                 // we don't want to remove the last row, because it is our template, instead we wipe the content
-                if (elm.parentElement.parentElement.parentElement.childElementCount === 1) {
+                if (elm.parentElement.parentElement.parentElement.childElementCount === 1 ) {
                     for (let child of elm.parentElement.parentElement.children) {
-                        child.children[0].value = '';
+                        for (let i= 0; i < child.children.length; i++) {
+                           if (child.children[i].tagName.toLowerCase() === 'input' || child.children[i].tagName.toLowerCase() === 'select') {
+                               child.children[i].value = '';
+                           }
+                        }
                     }
                 } else {
                     elm.parentElement.parentElement.remove();
@@ -62,9 +66,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
             } else if(el.tagName === 'BUTTON') {
                 el.addEventListener('click', () => el.parentElement.parentElement.remove());
+            } else if(el.tagName === 'DIV') {
+                el.remove();
             } else {
                 el.value = "";
             }
+            el.classList.remove('is-invalid');
 
             // Update name attribute
             if (el.name) {

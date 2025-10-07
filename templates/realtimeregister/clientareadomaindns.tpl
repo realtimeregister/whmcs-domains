@@ -9,7 +9,9 @@
         {if $dnsrecords.status.success == true}
             {$LANG.rtr.dns.success}
         {else}
-            {$LANG.rtr.dns.error}
+            {if isset($dnsrecords.formerrors['message'])}
+                {$dnsrecords.formerrors['message']}
+            {/if}
         {/if}
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>

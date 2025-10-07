@@ -44,17 +44,16 @@ class GetDns extends Action
                 if (
                     isset(
                         $_SESSION['rtr']['dns'],
-                        $_SESSION['rtr']['dns']['error'],
-                        $_SESSION['rtr']['dns']['error']['errors']
+                        $_SESSION['rtr']['dns']['error']
                     )
                 ) {
-                    $vars['formerrors'] = $_SESSION['rtr']['dns']['error']['errors'];
+                    $vars['formerrors'] = $_SESSION['rtr']['dns']['error'];
                     /**
                      * we probably had a problem while saving, so we overwrite the data we got from Realtime Register,
                      * and reinsert our previous data
                      */
                     $vars['zones'] = $_SESSION['rtr']['dns']['dns-items'];
-                    unset($_SESSION['rtr']['dns']['error']['errors']);
+                    unset($_SESSION['rtr']['dns']['error']);
                     unset($_SESSION['rtr']['dns']['dns-items']);
                 }
                 if (isset($_SESSION['rtr']['dns'], $_SESSION['rtr']['dns']['success'])) {

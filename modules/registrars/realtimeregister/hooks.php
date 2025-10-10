@@ -56,6 +56,7 @@ App::hook(Hooks\AdminClientDomainsTabFieldsSave::class);
 
 App::hook('ShoppingCartValidateCheckout', Hooks\ValidateDomain::class);
 App::hook('ShoppingCartValidateDomainsConfig', Hooks\ValidateDomain::class);
+App::hook(Hooks\Client\ClientAreaPageDomainDNSManagement::class);
 
 // Hooks incompatible with invokable hook
 add_hook('ClientAreaPrimarySidebar', 1, function (MenuItem $primarySidebar) {

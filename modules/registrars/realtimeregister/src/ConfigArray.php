@@ -3,6 +3,7 @@
 namespace RealtimeRegisterDomains;
 
 use Illuminate\Database\Capsule\Manager as Capsule;
+use RealtimeRegister\Domain\Enum\ZoneServiceEnum;
 
 class ConfigArray
 {
@@ -164,6 +165,20 @@ class ConfigArray
                     'Description' => '<button class="btn btn-xs info rtr-custom-properties" type="button" 
                             data-toggle="modal" data-target="#propertiesModal">Contact Handles Override
                         </button>',
+                ],
+                'dns_support' => [
+                    'FriendlyName' => 'DNS support',
+                    'Type' => 'dropdown',
+                    'Options' => [
+                        'none',
+                        ZoneServiceEnum::BASIC->value => ZoneServiceEnum::BASIC->value,
+                        ZoneServiceEnum::PREMIUM->value => ZoneServiceEnum::PREMIUM->value,
+                    ],
+                    'Default' => 'none',
+                    'Description' => 'Enable DNS support from Realtime Register. The option <strong>Premium</strong> ' .
+                        'will yield <b>1 payed zone per domain</b>. The price of the DNS support can be set in the ' .
+                        'domainpricing overview in WHMCS, individual TLDs can be enabled and disabled there as well. ' .
+                        'As indicated in our Terms and conditions; BASIC DNS can only be offered for free'
                 ],
                 'INFO_REGISTRATION_EMPTY_LINE' => [
                     'FriendlyName' => '</br>',

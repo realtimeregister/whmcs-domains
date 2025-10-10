@@ -39,7 +39,7 @@ class AdminClientDomainsTabFields extends Hook
             $processes = array_map(
                 fn($process) => [...$process, 'link' => App::portalUrl() . '/app/process/' . $process['id']],
                 App::client()->processes->export([
-                    'fields' => 'createdDate,action,status,id',
+                    'fields' => 'createdDate,type,action,status,id',
                     'order' => '-createdDate',
                     'identifier:eq' => $domainName
                 ])

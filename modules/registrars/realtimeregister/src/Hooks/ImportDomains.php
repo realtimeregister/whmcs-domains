@@ -5,6 +5,7 @@ namespace RealtimeRegisterDomains\Hooks;
 use JetBrains\PhpStorm\NoReturn;
 use RealtimeRegisterDomains\App;
 use RealtimeRegisterDomains\Entities\DataObject;
+use RealtimeRegisterDomains\Exceptions\InternalApiException;
 use RealtimeRegisterDomains\Models\RealtimeRegister\Cache;
 use RealtimeRegisterDomains\Models\Whmcs\AdditionalFields;
 use RealtimeRegisterDomains\Models\Whmcs\Admin;
@@ -14,6 +15,7 @@ use RealtimeRegisterDomains\Models\Whmcs\Domain;
 use RealtimeRegisterDomains\Models\Whmcs\DomainPricing;
 use RealtimeRegisterDomains\Models\Whmcs\PaymentGateway;
 use RealtimeRegisterDomains\Services\Config\Config;
+use RealtimeRegisterDomains\Services\LogService;
 use RealtimeRegisterDomains\Services\MetadataService;
 use RealtimeRegisterDomains\Services\TemplateService;
 
@@ -151,11 +153,17 @@ class ImportDomains extends Hook
             }
 
             $userId = App::contacts()->fetchMappingByHandle($domain['registrant']['handle'])?->userid;
+
             if (!$userId) {
-                if (in_array($domain['brand']['handle'], $brands)) {
-                    $userId = self::createClient($domain['brand'], $adminUser);
-                } else {
-                    $userId = self::createClient($domain['registrant'], $adminUser);
+                try {
+                    if (in_array($domain['brand']['handle'], $brands)) {
+                        $userId = self::createClient($domain['brand'], $adminUser);
+                    } else {
+                        $userId = self::createClient($domain['registrant'], $adminUser);
+                    }
+                } catch (InternalApiException $e) {
+                    LogService::logError($e);
+                    continue;
                 }
 
                 $contactId = self::createContact($userId, $domain['registrant']);
@@ -255,13 +263,7 @@ class ImportDomains extends Hook
         ];
 
         $results = App::localApi()->addClient($postData, $admin);
-        if ($results['result'] == 'success') {
-            return $results['clientid'];
-        } else {
-            logActivity("Error for creating a client. An Error Occurred: " . implode(" | ", $results));
-        }
-
-        return 0;
+        return $results['clientid'];
     }
 
     public static function createContact($clientId, $info)

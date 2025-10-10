@@ -6,6 +6,7 @@ use RealtimeRegisterDomains\Actions\Domains\DomainTrait;
 use RealtimeRegisterDomains\App;
 use RealtimeRegisterDomains\Entities\DataObject;
 use RealtimeRegisterDomains\Models\Whmcs\Domain;
+use RealtimeRegisterDomains\Services\LogService;
 use RealtimeRegisterDomains\Services\TemplateService;
 
 class AutoRenewStatus extends Hook
@@ -61,7 +62,7 @@ class AutoRenewStatus extends Hook
             logActivity(sprintf('Autorenew is set to false for domain: %s', $domain));
             echo json_encode(["updated" => true]);
         } catch (\Exception $e) {
-            logActivity('ERROR (Realtime Register): ' . $domain . ': ' . $e->getMessage());
+            LogService::logError($e, 'Auto renew can not be set to false for domain: ' . $domain);
             http_response_code(500);
             echo json_encode(["message" => $domain . ': ' . $e->getMessage()]);
         }

@@ -176,7 +176,7 @@ class ConfigArray
                     ],
                     'Default' => 'none',
                     'Description' => 'Enable DNS support from Realtime Register. The option <strong>Premium</strong> ' .
-                        'will yield <b>1 payed zone per domain</b>. The price of the DNS support can be set in the ' .
+                        'will yield <b>1 paid zone per domain</b>. The price of the DNS support can be set in the ' .
                         'domainpricing overview in WHMCS, individual TLDs can be enabled and disabled there as well. ' .
                         'As indicated in our Terms and conditions; BASIC DNS can only be offered for free'
                 ],

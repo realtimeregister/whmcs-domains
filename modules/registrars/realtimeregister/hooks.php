@@ -27,7 +27,7 @@ App::hook(Hooks\ContactDelete::class);
 App::hook('ClientEdit', Hooks\ContactEdit::class);
 App::hook('ClientDelete', Hooks\ContactDelete::class);
 
-App::hook('ClientAreaHeadOutput', Hooks\Client\ClientAreaHeadOutput::class, 20);
+App::hook('ClientAreaHeadOutput', Hooks\Client\ClientAreaOutput::class, 20);
 App::hook(Hooks\Client\ClientAreaPageDomainDetails::class);
 
 App::hook('AdminHomeWidgets', Hooks\Widgets\ActionsWidget::class);
@@ -35,6 +35,7 @@ App::hook('AdminHomeWidgets', Hooks\Widgets\DomainOverviewWidget::class);
 App::hook('AdminHomeWidgets', Hooks\Widgets\BalanceWidget::class);
 App::hook('AdminHomeWidgets', Hooks\Widgets\ErrorLogWidget::class, 40);
 App::hook('AdminHomeWidgets', Hooks\Widgets\PromoWidget::class);
+App::hook('AdminHomeWidgets', Hooks\Widgets\InactiveDomainWidget::class);
 
 App::hook(Hooks\AdminHomepage::class);
 App::hook('ClientAreaHeadOutput', Hooks\HeadAssets::class, 100);
@@ -55,6 +56,7 @@ App::hook(Hooks\AdminClientDomainsTabFieldsSave::class);
 
 App::hook('ShoppingCartValidateCheckout', Hooks\ValidateDomain::class);
 App::hook('ShoppingCartValidateDomainsConfig', Hooks\ValidateDomain::class);
+App::hook(Hooks\Client\ClientAreaPageDomainDNSManagement::class);
 
 // Hooks incompatible with invokable hook
 add_hook('ClientAreaPrimarySidebar', 1, function (MenuItem $primarySidebar) {

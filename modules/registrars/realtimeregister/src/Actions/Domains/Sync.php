@@ -3,6 +3,7 @@
 namespace RealtimeRegisterDomains\Actions\Domains;
 
 use Exception;
+use Illuminate\Database\Capsule\Manager;
 use RealtimeRegister\Domain\Enum\DomainStatusEnum;
 use RealtimeRegister\Exceptions\BadRequestException;
 use RealtimeRegister\Exceptions\ForbiddenException;
@@ -10,6 +11,7 @@ use RealtimeRegister\Exceptions\UnauthorizedException;
 use RealtimeRegisterDomains\Actions\Action;
 use RealtimeRegisterDomains\App;
 use RealtimeRegisterDomains\Enums\WhmcsDomainStatus;
+use RealtimeRegisterDomains\Models\RealtimeRegister\InactiveDomains;
 use RealtimeRegisterDomains\Models\Whmcs\Domain;
 use RealtimeRegisterDomains\Request;
 use RealtimeRegisterDomains\Services\LogService;
@@ -68,7 +70,7 @@ class Sync extends Action
 
         if ($domain) {
             $status = WhmcsDomainStatus::fromDomainDetails($domain);
-            if (!array_key_exists('inactive', $values)) {
+            if (!array_key_exists(WhmcsDomainStatus::Inactive->value, $values)) {
                 if ($domain->autoRenewPeriod < 12 && $domain->autoRenew) {
                     if (strtotime($domain->expiryDate) >= strtotime($whmcsDomain->nextduedate)) {
                         return [];
@@ -105,6 +107,23 @@ class Sync extends Action
                 } else {
                     $values[strtolower($status->value)] = true;
                 }
+                // because the lookup now works, we can delete the entry from InactiveDomains (if present)
+                try {
+                    Manager::table(InactiveDomains::TABLE_NAME)->where(['domainName' => $domain->domainName])
+                        ->delete();
+                } catch (\Exception $ignored) {
+                }
+            } else {
+                InactiveDomains::query()->insertOrIgnore(
+                    [
+                        'domainName' => $domain->domainName,
+                        'since' => new \DateTime(),
+                    ]
+                );
+                LogService::logError(
+                    new Exception(),
+                    'Domain ' . $domain->domainName . ' returns a statuscode we don\'t handle'
+                );
             }
         }
 

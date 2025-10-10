@@ -14,16 +14,18 @@ class DNSSec extends Action
     public function __invoke(Request $request)
     {
         $domainid = $request->params['domainid'];
+        $domainName = $request->params['domainname'];
         $message = '';
 
         $tldInfo = $this->tldInfo($request);
         $metadata = $tldInfo->metadata;
+        $keyData = [];
+        $saved = false;
 
         if ($metadata->allowedDnssecRecords) {
             try {
                 $domain = $this->domainInfo($request);
 
-                $keyData = [];
                 if ($domain->keyData) {
                     $keyData = $domain->keyData;
                 }
@@ -44,16 +46,15 @@ class DNSSec extends Action
                     }
                 }
 
+
                 try {
                     App::client()->domains->update(
-                        domainName: $domain->domainName,
+                        domainName: $domainName,
                         keyData: KeyDataCollection::fromArray($DNSSecBuild)
                     );
-
-                    header('Location: ' . html_entity_decode($_SERVER['REQUEST_URI']));
-                    exit;
+                    $saved = true;
                 } catch (\Exception $ex) {
-                    $keyData = $DNSSecBuild;
+                    $keyData = json_decode(json_encode($DNSSecBuild), false);
                     $message = sprintf("Error while updating the DNS Sec: %s", $ex->getMessage());
                 }
             }
@@ -61,14 +62,15 @@ class DNSSec extends Action
             return [
                 'templatefile' => 'load_template',
                 'breadcrumb' => [
-                    'clientarea.php?action=domaindetails&id=' . $domainid . '&modop=custom&a=ChildHosts'
-                    => 'Child Hosts'
+                    'clientarea.php?action=domaindetails&id=' . $domainid . '&modop=custom&a=DNSSec'
+                    => 'DNSSec Management'
                 ],
                 'vars' => [
                     'content' => $this->render(__DIR__ . '/../../Assets/Tpl/dns_sec_form.tpl', [
                         'keyData' => $keyData,
                         'error' => $message,
-                        'domainName' => $domain->domainName,
+                        'saved' => $saved,
+                        'domainName' => $domainName,
                         'domainId' => $domainid,
                     ]),
                 ]

@@ -1,0 +1,4 @@
+name: "Realtime Register example template"
+author: "Realtime Register B.V."
+config:
+  parent: twenty-one

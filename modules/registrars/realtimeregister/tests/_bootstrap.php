@@ -7,6 +7,7 @@ if (!defined('WHMCS')) {
     define('WHMCS', true);
 }
 
+require_once __DIR__ . '/../src/Services/Language.php';
 new \RealtimeRegisterDomains\Services\Language(); // Load our own language strings before anything else
 
 global $_LANG;

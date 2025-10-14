@@ -238,33 +238,39 @@ class MetadataService
 
     public static function removeDefaultFields(&$rtrAdditionalFields): void
     {
-        $defaultFields = implode(DIRECTORY_SEPARATOR, [ROOTDIR, 'resources', 'domains', 'dist.additionalfields.php']);
+        if (defined('ROOTDIR')) {
+            $defaultFields = implode(
+                DIRECTORY_SEPARATOR,
+                [ROOTDIR, 'resources', 'domains', 'dist.additionalfields.php']
+            );
 
-        if (!file_exists($defaultFields)) {
-            return;
-        }
+            if (!file_exists($defaultFields)) {
+                return;
+            }
 
-        $additionaldomainfields = [];
-        include $defaultFields;
+            $additionaldomainfields = [];
+            include $defaultFields;
 
-        $tldNames = array_reduce(
-            array_keys($rtrAdditionalFields),
-            function ($names, $tld) use ($rtrAdditionalFields) {
-                $names[$tld] = array_map(fn($field) => $field['Name'], $rtrAdditionalFields[$tld]);
-                return $names;
-            },
-            []
-        );
+            $tldNames = array_reduce(
+                array_keys($rtrAdditionalFields),
+                function ($names, $tld) use ($rtrAdditionalFields) {
+                    $names[$tld] = array_map(fn($field) => $field['Name'], $rtrAdditionalFields[$tld]);
+                    return $names;
+                },
+                []
+            );
 
-        foreach ($additionaldomainfields as $tld => $tld_fields) {
-            foreach ($tld_fields as $tld_field) {
-                if (!array_key_exists($tld, $tldNames)) {
-                    continue;
-                }
-                if (!in_array($tld_field['Name'], $tldNames[$tld])) {
-                    $rtrAdditionalFields[$tld][] = [
-                        "Name" => is_array($tld_field) ? $tld_field["Name"] : $tld_field, "Remove" => true
-                    ];
+            foreach ($additionaldomainfields as $tld => $tld_fields) {
+                foreach ($tld_fields as $tld_field) {
+                    if (!array_key_exists($tld, $tldNames)) {
+                        continue;
+                    }
+                    if (!in_array($tld_field['Name'], $tldNames[$tld])) {
+                        $rtrAdditionalFields[$tld][] = [
+                            "Name" => is_array($tld_field) ? $tld_field["Name"] : $tld_field,
+                            "Remove" => true
+                        ];
+                    }
                 }
             }
         }

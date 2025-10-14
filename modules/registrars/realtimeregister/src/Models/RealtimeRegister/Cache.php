@@ -6,6 +6,7 @@ use Illuminate\Cache\ArrayStore;
 use Illuminate\Cache\DatabaseStore;
 use Illuminate\Cache\Repository;
 use Illuminate\Database\Capsule\Manager as Capsule;
+use Illuminate\Contracts\Cache\Repository as CacheRepository;
 use Illuminate\Database\Schema\Blueprint;
 
 class Cache
@@ -13,41 +14,29 @@ class Cache
     public const TABLE_NAME = 'mod_realtimeregister_cache';
     protected $table = self::TABLE_NAME;
 
-    protected static ?Repository $requestCache = null;
-    protected static ?Repository $dbCache = null;
+    protected static Repository | CacheRepository | null $cache;
 
-    public static function db(): Repository
+    public static function request(): CacheRepository
     {
-        if (!static::$dbCache) {
-            self::boot();
-            static::$dbCache = new Repository(new DatabaseStore(Capsule::connection(), self::TABLE_NAME));
+        if (defined('PHPUNIT_REALTIMEREGISTER_TESTSUITE')) {
+            // Use in-memory array cache — no database required
+            self::$cache = new Repository(new ArrayStore());
+        } else {
+            // Use database-backed cache (same as original)
+            if (!defined('PHPUNIT_REALTIMEREGISTER_TESTSUITE') && !Capsule::schema()->hasTable(Cache::TABLE_NAME)) {
+                Capsule::schema()->create(
+                    Cache::TABLE_NAME,
+                    function (Blueprint $table) {
+                        $table->string('key')->unique();
+                        $table->mediumText('value');
+                        $table->integer('expiration');
+                    }
+                );
+            }
+            $store = new DatabaseStore(Capsule::connection(), self::TABLE_NAME);
+            self::$cache = new Repository($store);
         }
-
-        return static::$dbCache;
-    }
-
-    public static function request(): Repository
-    {
-        if (!static::$requestCache) {
-            self::boot();
-            static::$requestCache = new Repository(new ArrayStore());
-        }
-
-        return static::$requestCache;
-    }
-
-    public static function boot(): void
-    {
-        if (!Capsule::schema()->hasTable(Cache::TABLE_NAME)) {
-            Capsule::schema()->create(
-                Cache::TABLE_NAME,
-                function (Blueprint $table) {
-                    $table->string('key')->unique();
-                    $table->mediumText('value');
-                    $table->integer('expiration');
-                }
-            );
-        }
+        return self::$cache;
     }
 
     /**
@@ -58,14 +47,16 @@ class Cache
      */
     public static function get(string $key, $default = null)
     {
-        $value = self::db()->getStore()->get($key);
-        $decoded = json_decode($value, true);
-        if ($decoded !== null) {
-            return $decoded;
-        }
+        $value = self::request()->get($key);
+        if ($value !== null) {
+            $decoded = json_decode($value, true);
+            if ($decoded !== null) {
+                return $decoded;
+            }
 
-        if (is_null($value)) {
-            $value = value($default);
+            if (is_null($value)) {
+                $value = value($default);
+            }
         }
 
         return $value;
@@ -79,7 +70,7 @@ class Cache
      */
     public static function put(string $key, $value, int $minutes)
     {
-        self::db()->getStore()->put($key, json_encode($value), ($minutes * 60));
+        self::request()->put($key, json_encode($value), ($minutes * 60));
     }
 
     /**
@@ -108,7 +99,7 @@ class Cache
      */
     public static function forget(string $key): void
     {
-        self::db()->getStore()->forget($key);
+        self::request()->forget($key);
     }
 
     /**
@@ -116,6 +107,6 @@ class Cache
      */
     public static function rememberForever(string $key, $value): void
     {
-        self::db()->getStore()->forever($key, $value);
+        self::request()->forever($key, $value);
     }
 }

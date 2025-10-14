@@ -64,7 +64,7 @@ class RegistrarConfig
 
     protected function loadRegistrarConfig(): void
     {
-        if ($this->registrarConfig === null) {
+        if ($this->registrarConfig === null && defined('ROOTDIR')) {
             /**
              * @noinspection PhpUndefinedConstantInspection
              */

@@ -26,7 +26,10 @@ if (!defined("WHMCS")) {
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-require_once ROOTDIR . '/includes/registrarfunctions.php';
+if (defined('ROOTDIR')) {
+    require_once ROOTDIR . '/includes/registrarfunctions.php';
+}
+
 if (file_exists(__DIR__ . '/customhooks.php')) {
     require_once __DIR__ . '/customhooks.php';
 }

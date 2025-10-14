@@ -23,6 +23,8 @@ class Language
             } else {
                 $_LANG = array_merge($_CUSTOMLANG, $_LANG);
             }
+        } else {
+            $GLOBALS['_LANG'] = $_CUSTOMLANG;
         }
     }
 

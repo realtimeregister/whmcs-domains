@@ -7,12 +7,12 @@ if (!defined('WHMCS')) {
     define('WHMCS', true);
 }
 
-if (!defined('ROOTDIR')) {
-    define('ROOTDIR', __DIR__ . '/../../../../');
-}
+new \RealtimeRegisterDomains\Services\Language(); // Load our own language strings before anything else
 
-require_once __DIR__ . '/../../../../vendor/autoload.php';
-require_once __DIR__ . '/../vendor/autoload.php';
+global $_LANG;
+// These are mock classes, we don't want to include WHMCS itself..
+require_once __DIR__ . '/Mock/WHMCS/Module/AbstractWidget.php';
+require_once __DIR__ . '/Mock/WHMCS/Config/Setting.php';
 
 // Include the WHMCS module.
 require_once __DIR__ . '/../realtimeregister.php';

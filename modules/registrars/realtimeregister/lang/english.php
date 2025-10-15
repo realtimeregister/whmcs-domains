@@ -142,7 +142,10 @@ $_LANG['rtr']['dns']['expire'] = 'Expire';
 $_LANG['rtr']['dns']['success'] = 'Your DNS records have been saved successfully';
 $_LANG['rtr']['dns']['error'] = 'Something went wrong saving your DNS settings';
 
-include_once implode(
-    DIRECTORY_SEPARATOR,
-    [ROOTDIR, 'modules', 'registrars', 'realtimeregister', 'lang', 'english.additional.php']
-);
+if (defined('ROOTDIR')) {
+    include_once implode(
+        DIRECTORY_SEPARATOR,
+        [ROOTDIR, 'modules', 'registrars', 'realtimeregister', 'lang', 'english.additional.php']
+    );
+}
+

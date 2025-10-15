@@ -2,7 +2,6 @@
 
 namespace RealtimeRegisterDomains\Hooks\Update;
 
-use RealtimeRegisterDomains\App;
 use RealtimeRegisterDomains\Entities\DataObject;
 use RealtimeRegisterDomains\Hooks\Hook;
 use Illuminate\Database\Capsule\Manager as Capsule;
@@ -12,8 +11,7 @@ class Banner extends Hook
     public function __invoke(DataObject $vars): void
     {
         $json = $this->get();
-
-        if (is_object($json) && $this->isOutdated($json->version)) {
+        if (is_object($json)) {
             $GLOBALS['updates_available']['realtimeregister'][] = $json;
         }
     }
@@ -30,16 +28,5 @@ class Banner extends Hook
         }
 
         return json_decode($version->value);
-    }
-
-    private function isOutdated($latestVersion): bool
-    {
-        // little cleanup of versionnumbers
-        preg_match('/[0-9][0-9a-z-.]+/', $latestVersion, $latestVersion);
-
-        if (array_key_exists(0, $latestVersion)) {
-            return version_compare(App::VERSION, $latestVersion[0], '<');
-        }
-        return false;
     }
 }

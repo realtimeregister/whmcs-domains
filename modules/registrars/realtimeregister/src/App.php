@@ -45,7 +45,6 @@ class App
     protected static ?RealtimeRegister $client = null;
     protected static ?IsProxy $isProxy = null;
 
-    protected static bool $booted = false;
     protected Assets $assets;
     protected readonly Punycode $punyCode;
 
@@ -62,18 +61,13 @@ class App
     {
         $app = static::instance();
 
-        if (!static::$booted) {
-            if (!defined('PHPUNIT_REALTIMEREGISTER_TESTSUITE')) {
-                Cache::boot();
-                // After a new version, we want to remove all the translations in order to stay up-to-date
-                if (self::VERSION != Cache::get(self::CACHE_KEY_VERSION)) {
-                    foreach (\WHMCS\Language\ClientLanguage::getLanguages() as $language) {
-                        Cache::forget(Language::CACHE_KEY . $language);
-                    }
-                    Cache::rememberForever(self::CACHE_KEY_VERSION, self::VERSION);
+        if (self::VERSION != Cache::get(self::CACHE_KEY_VERSION)) {
+            if (class_exists(\WHMCS\Language\ClientLanguage::class)) {
+                foreach (\WHMCS\Language\ClientLanguage::getLanguages() as $language) {
+                    Cache::forget(Language::CACHE_KEY . $language);
                 }
             }
-            static::$booted = true;
+            Cache::rememberForever(self::CACHE_KEY_VERSION, self::VERSION);
         }
 
         return $app;

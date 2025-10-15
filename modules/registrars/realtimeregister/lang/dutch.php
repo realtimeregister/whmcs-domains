@@ -114,7 +114,9 @@ $_LANG['rtr']['dns']['refresh'] = 'Refresh';
 $_LANG['rtr']['dns']['retry'] = 'Retry';
 $_LANG['rtr']['dns']['expire'] = 'Expire';
 
-include_once implode(
-    DIRECTORY_SEPARATOR,
-    [ROOTDIR, 'modules', 'registrars', 'realtimeregister', 'lang', 'dutch.additional.php']
-);
+if (defined('ROOTDIR')) {
+    include_once implode(
+        DIRECTORY_SEPARATOR,
+        [ROOTDIR, 'modules', 'registrars', 'realtimeregister', 'lang', 'dutch.additional.php']
+    );
+}

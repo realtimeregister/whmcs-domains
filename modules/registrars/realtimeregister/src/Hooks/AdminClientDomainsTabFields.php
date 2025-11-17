@@ -119,7 +119,7 @@ class AdminClientDomainsTabFields extends Hook
                     '});';
 
             if ($metaData && $domainInfo->status === 'Active' && $metaData->expiryDateOffset > 0 && $rtrDomain) {
-                $script = /** @lang JavaScript */
+                $script .= /** @lang JavaScript */
                     '
                 let newElm = document.createElement("i");
                 newElm.classList.add("fas","fa-info-circle");

@@ -21,7 +21,7 @@ use TrueBV\Punycode;
 class App
 {
     public const NAME = 'realtimeregister';
-    public const VERSION = '2.4.1';
+    public const VERSION = '2.4.2';
     private const CACHE_KEY_VERSION = 'realtimeregister_domains_version_number';
 
     protected const API_URL = "https://api.yoursrs.com/";

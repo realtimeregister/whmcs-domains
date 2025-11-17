@@ -32,21 +32,17 @@ class AdminClientDomainsTabFieldsSave extends Hook
                 return;
             }
 
+            // We load the original files, this gives us the field names and tells us how many fields we need to
+            // append in the resulting domainfields array.
+            $originalFields = (new \WHMCS\Domains\AdditionalFields())->setDomain($domain['domainname'])->getFields();
+            $fieldNames = array_values(array_map(fn($field) => $field['Name'], $originalFields));
+
             if (
                 (count($metadataProperties) !== count($vars['domainfield']))
                 || (array_keys($metadataProperties) !== array_keys($vars['domainfield']))
             ) {
-                // We load the original files, this tells us how many fields we need to skip in the resulting
-                // domainfields array.
-                $res = (new \WHMCS\Domains\AdditionalFields())->setDomain($domain['domainname']);
-
-                $originalFields = $res->getFields();
                 $currentIdx = array_key_first($originalFields);
-
-                $lastIdx = max(
-                    array_key_last(self::getFieldNames($vars['id'])),
-                    array_key_last($originalFields)
-                );
+                $lastIdx = array_key_last($originalFields);
 
                 for (; $currentIdx < $lastIdx; $currentIdx++) {
                     if (!array_key_exists($currentIdx, $vars['domainfield'])) {
@@ -62,7 +58,7 @@ class AdminClientDomainsTabFieldsSave extends Hook
             ksort($vars['domainfield']); // just to be sure..
 
             $newProperties = array_filter(
-                array_combine(array_column(self::getFieldNames($vars['id']), 'name'), $vars['domainfield'] ?? []),
+                array_combine($fieldNames, $vars['domainfield'] ?? []),
                 fn($key) => $key !== 'languageCode',
                 ARRAY_FILTER_USE_KEY
             );
@@ -84,15 +80,6 @@ class AdminClientDomainsTabFieldsSave extends Hook
                 }
             }
         }
-    }
-
-    private static function getFieldNames(int $domainId): array
-    {
-        return AdditionalFields::query()
-            ->select(["name"])
-            ->where("domainid", '=', $domainId)
-            ->get()
-            ->toArray();
     }
 
     private static function revertChanges($handle, $tldInfo, $domainId): void

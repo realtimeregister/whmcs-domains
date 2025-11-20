@@ -109,6 +109,7 @@ class SaveDns extends Action
                 unset($_SESSION['rtr']['dns']['soa']);
                 unset($_SESSION['rtr']['dns']['dns-items']);
             }
+            return ['success' => true];
         } catch (BadRequestException $exception) {
             $_SESSION['rtr']['dns']['success'] = false;
             $exceptionText = substr($exception->getMessage(), 13);

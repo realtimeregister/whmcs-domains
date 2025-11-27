@@ -31,7 +31,9 @@ class SaveDns extends Action
             $_SESSION['rtr']['dns']['soa'] = $_POST['soa'];
             $_SESSION['rtr']['dns']['dns-items'] = $_POST['dns-items'];
 
-            return $this->processUpdate($zone, $domain, $_POST['soa'], $_POST['dns-items']);
+            $updated = $this->processUpdate($zone, $domain, $_POST['soa'], $_POST['dns-items']);
+            $this->forgetDomainInfo($request);
+            return $updated;
         } else {
             return ['error' => 'DNS management not enabled on this domain'];
         }

@@ -31,6 +31,8 @@ class SaveRegistrarLock extends Action
                 statuses: array_values($statuses)
             );
 
+            $this->forgetDomainInfo($request);
+
             if ($_REQUEST['action'] == 'domaindetails') {
                 $url = 'clientarea.php?action=domaindetails&id=' . $_REQUEST['id'] . '#tabReglock';
 

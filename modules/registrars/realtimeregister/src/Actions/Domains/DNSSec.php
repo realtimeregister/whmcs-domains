@@ -52,6 +52,7 @@ class DNSSec extends Action
                         domainName: $domainName,
                         keyData: KeyDataCollection::fromArray($DNSSecBuild)
                     );
+                    $this->forgetDomainInfo($request);
                     $saved = true;
                 } catch (\Exception $ex) {
                     $keyData = json_decode(json_encode($DNSSecBuild), false);

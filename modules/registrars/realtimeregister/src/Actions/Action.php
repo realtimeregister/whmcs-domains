@@ -27,12 +27,13 @@ abstract class Action implements InvokableAction
         $domainName = self::getDomainName($request->domain);
         return DomainDetails::fromArray(
             Cache::remember(
-            'domain-info:' . $domainName,
-            MetadataService::DAY_MINUTES,
-            function () use ($request, $domainName) {
-                return App::client()->domains->get($domainName)->toArray();
-            }
-        ));
+                'domain-info:' . $domainName,
+                MetadataService::DAY_MINUTES,
+                function () use ($request, $domainName) {
+                    return App::client()->domains->get($domainName)->toArray();
+                }
+            )
+        );
     }
 
     protected function forgetDomainInfo(Request $request): bool

@@ -25,13 +25,14 @@ abstract class Action implements InvokableAction
     protected function domainInfo(Request $request): DomainDetails
     {
         $domainName = self::getDomainName($request->domain);
-        return Cache::remember(
+        return DomainDetails::fromArray(
+            Cache::remember(
             'domain-info:' . $domainName,
             MetadataService::DAY_MINUTES,
             function () use ($request, $domainName) {
-                return App::client()->domains->get($domainName);
+                return App::client()->domains->get($domainName)->toArray();
             }
-        );
+        ));
     }
 
     protected function forgetDomainInfo(Request $request): bool
@@ -43,13 +44,13 @@ abstract class Action implements InvokableAction
     {
         $customerHandle = App::registrarConfig()->customerHandle();
 
-        return Cache::remember(
+        return Contact::fromArray(Cache::remember(
             'contact-info:' . $customerHandle . ':' . $handle,
             MetadataService::DAY_MINUTES,
             function () use ($customerHandle, $handle) {
-                return App::client()->contacts->get($customerHandle, $handle);
+                return App::client()->contacts->get($customerHandle, $handle)->toArray();
             }
-        );
+        ));
     }
 
     protected function metadata(Request $request): TLDMetaData

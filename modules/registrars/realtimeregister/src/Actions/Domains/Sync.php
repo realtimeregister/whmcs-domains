@@ -24,6 +24,7 @@ class Sync extends Action
     public function __invoke(Request $request)
     {
         $metadata = $this->metadata($request);
+        $this->forgetDomainInfo($request);
         $persist = $request->params['persist'];
         $values = [];
         $domain = null;

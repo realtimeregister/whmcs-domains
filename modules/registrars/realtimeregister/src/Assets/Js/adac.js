@@ -73,7 +73,7 @@ function getCheckedBoxes(checkboxName)
     const checkboxes = document.getElementsByName(checkboxName);
     const checkboxesChecked = [];
 
-    for (const i = 0; i < checkboxes.length; i++) {
+    for (let i = 0; i < checkboxes.length; i++) {
         if (checkboxes[i].checked) {
             checkboxesChecked.push(checkboxes[i]);
         }
@@ -299,8 +299,7 @@ var adac = {
         }
     },
 
-    preInput: function (value) {
-    },
+    preInput: function (_value) {},
 
     processInput: function (event, value) {
         if (adac.resultsElement) {
@@ -352,10 +351,9 @@ var adac = {
         if (!h3.length) {
             target.style.backgroundColor = '#EDEEEF';
 
-            var h3 = $('<h3/>')
-                .css('padding', '30px 15px 15px 15px')
-                .text(suggestionLang)
-                .appendTo(target);
+            $('<h3/>').css('padding', '30px 15px 15px 15px')
+              .text(suggestionLang)
+              .appendTo(target);
         }
 
 
@@ -410,7 +408,7 @@ var adac = {
         var price = document.getElementById('price-' + domainResult.domain_name);
 
         if (!price) {
-            var price = document.createElement('div');
+            price = document.createElement('div');
             price.id = "price-" + domainResult.domain_name;
             div.appendChild(price);
         } else {
@@ -421,7 +419,7 @@ var adac = {
         var suffixWithoutDot = domainResult.suffix.split('.').join("");
 
         if (!orderBtn) {
-            var orderBtn = document.createElement('div');
+            orderBtn = document.createElement('div');
             orderBtn.id = "order-" + domainResult.domain_name;
             orderBtn.className = 'text-center col-xs-12 col-sm-4 col-md-3 col-lg-2';
             div.appendChild(orderBtn);
@@ -646,7 +644,7 @@ function priceHtml(price, domainResult, status)
 
 function clickRegister(event, domain)
 {
-    var button = $('.adac-register-domain[domain="' + domain + '"]');
+    const button = $('.adac-register-domain[domain="' + domain + '"]');
 
     if (!button.hasClass('checkout')) {
         event.preventDefault();

@@ -53,7 +53,7 @@ $(document).ready(
                     },
                     "json"
                 ).fail(
-                    function (e) {
+                    function () {
                         btn.html(text);
                         btn.removeClass("disabled");
                         btn.attr("disabled", false);

@@ -1,4 +1,4 @@
-name: eslint.yml
+name: JavaScript CI
 on: [ push ]
 
 jobs:

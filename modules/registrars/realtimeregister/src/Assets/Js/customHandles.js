@@ -1,5 +1,5 @@
-$('#propertiesModal').on('shown.bs.modal', function (e) {
-    const response = fetch(window.location.href, {
+$('#propertiesModal').on('shown.bs.modal', function () {
+    fetch(window.location.href, {
         method: 'POST',
         headers: {
             Accept: 'application/json',
@@ -13,8 +13,6 @@ $('#propertiesModal').on('shown.bs.modal', function (e) {
         const placeholder = document.getElementById('waiting-for-input');
 
         if (placeholder) {
-            let counter = 0;
-
             const res = await response.json();
             let placeholderReplacement = document.createElement('div');
             res.forEach((item) => {
@@ -23,7 +21,7 @@ $('#propertiesModal').on('shown.bs.modal', function (e) {
 
                 let label = document.createElement('label');
                 label.classList.add('form-control-label');
-                label.innerHTML = item.provider + ' (' + item.forType + ')';
+                label.innerText = item.provider + ' (' + item.forType + ')';
                 label.htmlFor = 'prop-' + item.provider + '-' + item.forType;
 
                 let input = document.createElement('input');
@@ -37,7 +35,6 @@ $('#propertiesModal').on('shown.bs.modal', function (e) {
                 placeholderReplacement.appendChild(label);
                 placeholderReplacement.appendChild(input);
 
-                counter++;
             });
             placeholder.replaceWith(placeholderReplacement);
         }
@@ -51,7 +48,7 @@ $('#propertiesModal').on('shown.bs.modal', function (e) {
     {
         e.preventDefault();
 
-        const response = fetch(window.location.href, {
+        fetch(window.location.href, {
             method: 'POST',
             headers: {
                 Accept: 'application/json',

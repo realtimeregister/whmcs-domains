@@ -11,7 +11,7 @@
                 function () {
                     let self = $(this);
                     let domain = self.prevAll('.sub-heading').first().find('span').text();
-                    if (domain.match(/^([0-9a-z\-]+\.)+([a-z\-]+|xn--[a-z0-9\-]+)$/) && !domain.startsWith('xn--')) {
+                    if (domain.match(/^([0-9a-z-]+\.)+([a-z-]+|xn--[a-z0-9-]+)$/) && !domain.startsWith('xn--')) {
                         self.remove();
                     }
                 }
@@ -35,7 +35,7 @@
                                 hostAction: "delete",
                                 hostName: host
                             },
-                            function (response) {
+                            function () {
                                 $(self).closest('li').remove();
                             }
                         );

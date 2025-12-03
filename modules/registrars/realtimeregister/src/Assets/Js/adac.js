@@ -1,6 +1,6 @@
-var statusMapping = {};
+let statusMapping = {};
 
-if (adacLang.status != undefined) {
+if (adacLang.status !== undefined) {
     statusMapping = adacLang.status;
 } else {
     statusMapping[0] = 'Checking...';
@@ -11,47 +11,48 @@ if (adacLang.status != undefined) {
     statusMapping[5] = 'unknown';
 }
 
-var registerLang = 'Register';
-if (adacLang.register != undefined) {
+let registerLang = 'Register';
+if (adacLang.register !== undefined) {
     registerLang = adacLang.register;
 }
 
-var transferLang = 'Transfer';
-if (adacLang.transfer != undefined) {
+let transferLang = 'Transfer';
+if (adacLang.transfer !== undefined) {
     transferLang = adacLang.transfer;
 }
 
-var premiumLang = 'Premium';
-if (adacLang.premium != undefined) {
+let premiumLang = 'Premium';
+if (adacLang.premium !== undefined) {
     premiumLang = adacLang.premium;
 }
 
-var checkoutLang = 'Checkout';
-if (adacLang.checkout != undefined) {
+let checkoutLang = 'Checkout';
+if (adacLang.checkout !== undefined) {
     checkoutLang = adacLang.checkout;
 }
 
-var suggestionLang = 'Need suggestions? You might also like:';
-if (adacLang.suggestions != undefined) {
+let suggestionLang = 'Need suggestions? You might also like:';
+if (adacLang.suggestions !== undefined) {
     suggestionLang = adacLang.suggestions;
 }
 
-var premiumNotSupportedLang = 'Premium domains are not supported';
-if (adacLang.premium_not_supported != undefined) {
+let premiumNotSupportedLang = 'Premium domains are not supported';
+if (adacLang.premium_not_supported !== undefined) {
     premiumNotSupportedLang = adacLang.premium_not_supported;
 }
 
-var statusClass = {};
-statusClass[0] = 'label-default';
-statusClass[1] = 'label-success';
-statusClass[2] = 'label-warning';
-statusClass[3] = 'label-danger';
-statusClass[4] = 'label-default';
-statusClass[5] = 'label-default';
+const statusClass = {
+  0: 'label-default',
+  1: 'label-success',
+   2: 'label-warning',
+   3: 'label-danger',
+   4: 'label-default',
+   5: 'label-default'
+};
 
 function ready(fn)
 {
-    if (document.readyState != 'loading') {
+    if (document.readyState !== 'loading') {
         fn();
     } else if (document.addEventListener) {
         document.addEventListener('DOMContentLoaded', fn);
@@ -69,10 +70,10 @@ function ready(fn)
 
 function getCheckedBoxes(checkboxName)
 {
-    var checkboxes = document.getElementsByName(checkboxName);
-    var checkboxesChecked = [];
+    const checkboxes = document.getElementsByName(checkboxName);
+    const checkboxesChecked = [];
 
-    for (var i = 0; i < checkboxes.length; i++) {
+    for (const i = 0; i < checkboxes.length; i++) {
         if (checkboxes[i].checked) {
             checkboxesChecked.push(checkboxes[i]);
         }
@@ -81,11 +82,11 @@ function getCheckedBoxes(checkboxName)
     return checkboxesChecked.length > 0 ? checkboxesChecked : null;
 }
 
-var init = function () {
+const init = function () {
     adac.ensureUUID();
 
-    var setupFallbackConnection = function () {
-        var xhr = new XMLHttpRequest();
+    const setupFallbackConnection = function () {
+        const xhr = new XMLHttpRequest();
 
         xhr.onreadystatechange = function () {
             if (xhr.readyState == XMLHttpRequest.DONE) {
@@ -149,7 +150,7 @@ var init = function () {
         }
         setupFallbackConnection();
     } else {
-        var setupWebsocketConnection = function () {
+        const setupWebsocketConnection = function () {
             adac.sendCommand = function (command) {
                 if (adac.connection.readyState === 1) {
                     adac.connection.send(JSON.stringify(command));
@@ -615,20 +616,17 @@ function priceHtml(price, domainResult, status)
                 )
                     .done(
                         function (data) {
-                            var json = $.parseJSON(data);
+                            const json = $.parseJSON(data);
 
-                            if (json.error != undefined) {
+                            if (json.error !== undefined) {
                                 price.innerHTML = '';
                                 status.innerHTML = '<span class="label label-danger">error</span>';
-                                $('.adac-register-domain[domain="' + domainResult.domain_name + '"]').replaceWith(
-                                    json.error
-                                );
+                                const errorMessage = document.createTextNode(json.error);
+                                $('.adac-register-domain[domain="' + domainResult.domain_name + '"]').replaceWith(errorMessage);
                             } else {
                                 // Set register to enable
-                                price.innerHTML = json.price + ' ' + json.currency['suffix'];
-                                $('.adac-register-domain[domain="' + domainResult.domain_name + '"]').removeClass(
-                                    'disabled'
-                                );
+                                price.innerText = json.price + ' ' + json.currency['suffix'];
+                                $('.adac-register-domain[domain="' + domainResult.domain_name + '"]').removeClass('disabled');
                             }
                         },
                         "json"

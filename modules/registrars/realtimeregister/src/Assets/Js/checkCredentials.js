@@ -41,7 +41,13 @@ $(document).ready(
                             btn.remove();
                             result.html('<span class="status success">Check successful<br></span>');
                         } else {
-                            result.html('<span class="status error"><strong>Check failed:</strong> ' + response.msg + '</span>');
+                            const wrapper = document.createElement('span')
+                                  wrapper.className = 'status error'
+                            const message = document.createElement('strong')
+                                  message.innerText = 'Check failed:'
+                            const responseMessage = document.createTextNode(response.msg)
+                            wrapper.append(message, responseMessage)
+                            result.html(wrapper);
                         }
                         btn.attr("disabled", false);
                     },

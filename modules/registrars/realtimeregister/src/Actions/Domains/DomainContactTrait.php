@@ -5,6 +5,7 @@ namespace RealtimeRegisterDomains\Actions\Domains;
 use RealtimeRegister\Domain\TLDInfo;
 use RealtimeRegister\Domain\TLDMetaData;
 use RealtimeRegisterDomains\App;
+use RealtimeRegisterDomains\Entities\Contact;
 use RealtimeRegisterDomains\Hooks\CustomHandlesTrait;
 use RealtimeRegisterDomains\Request;
 use RealtimeRegisterDomains\Services\MetadataService;
@@ -83,26 +84,22 @@ trait DomainContactTrait
 
         self::addProperties($request->domain->contactProperties, $registrant, $tldInfo);
 
-        $customHandles = $this->getCustomHandles();
         foreach (self::$CONTACT_ROLES as $role => $name) {
             $organizationAllowed = $metadata->{$name}->organizationAllowed;
-            if (
-                array_key_exists($tldInfo->provider, $customHandles)
-                && array_key_exists($name, $customHandles[$tldInfo->provider])
-                && $customHandles[$tldInfo->provider][$name] !== ''
-            ) {
+            $customHandle = $this->getCustomHandle($tldInfo, $name, $request->domain->registrant->companyName);
+            if ($customHandle) {
                 $contacts[] = [
                     'role' => $role,
-                    'handle' => $customHandles[$tldInfo->provider][$name]
+                    'handle' => $customHandle
                 ];
             } else {
                 $handle = $this->getOrCreateContact(
                     clientId: $clientId,
                     contactId: $contactId,
                     organizationAllowed: $organizationAllowed,
-                    role: $role
+                    role: $customHandle === false ? null : $role
                 );
-                if (!$this->handleOverride($role)) {
+                if ($customHandle !== false && !$this->handleOverride($role)) {
                     self::addProperties($request->domain->contactProperties, $handle, $tldInfo);
                 }
                 $contacts[] = [
@@ -113,5 +110,23 @@ trait DomainContactTrait
         }
 
         return ['contacts' => $contacts, 'registrant' => $registrant];
+    }
+
+    protected function getCustomHandle(TLDInfo $tldInfo, string $roleName, ?string $companyName): mixed
+    {
+        $customHandles = $this->getCustomHandles();
+        if ($tldInfo->provider == 'NicLV' && !$companyName) {
+            return false;
+        }
+
+        if (
+            array_key_exists($tldInfo->provider, $customHandles)
+            && array_key_exists($roleName, $customHandles[$tldInfo->provider])
+            && $customHandles[$tldInfo->provider][$roleName] !== ''
+        ) {
+            return $customHandles[$tldInfo->provider][$roleName];
+        }
+
+        return null;
     }
 }

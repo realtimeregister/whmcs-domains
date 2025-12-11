@@ -4,6 +4,7 @@ namespace RealtimeRegisterDomains\Hooks;
 
 use RealtimeRegister\Domain\TLDInfo;
 use RealtimeRegister\Domain\TLDMetaData;
+use RealtimeRegisterDomains\Actions\Domains\DomainContactTrait;
 use RealtimeRegisterDomains\Actions\Domains\DomainTrait;
 use RealtimeRegisterDomains\App;
 use RealtimeRegisterDomains\Entities\DataObject;
@@ -14,6 +15,7 @@ class ValidateDomain extends Hook
 {
     use CustomHandlesTrait;
     use DomainTrait;
+    use DomainContactTrait;
 
     public function __invoke(DataObject $vars)
     {
@@ -62,12 +64,7 @@ class ValidateDomain extends Hook
             return;
         }
         foreach (self::$CONTACT_ROLES as $name => $role) {
-            if (
-                $this->handleOverride($name) ||
-                (array_key_exists($tldInfo->provider, $customHandles) &&
-                array_key_exists($name, $customHandles[$tldInfo->provider]) &&
-                $customHandles[$tldInfo->provider][$name] !== '')
-            ) {
+            if ($this->handleOverride($name) || $this->getCustomHandle($tldInfo, $name, $_REQUEST['companyname'])) {
                 continue;
             }
 

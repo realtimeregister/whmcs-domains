@@ -22,6 +22,9 @@ $('#propertiesModal').on('shown.bs.modal', function () {
                 let label = document.createElement('label');
                 label.classList.add('form-control-label');
                 label.innerText = item.provider + ' (' + item.forType + ')';
+                if (item.extra) {
+                    label.innerText += ` (${item.extra})`
+                }
                 label.htmlFor = 'prop-' + item.provider + '-' + item.forType;
 
                 let input = document.createElement('input');

@@ -97,7 +97,7 @@ trait DomainContactTrait
                     clientId: $clientId,
                     contactId: $contactId,
                     organizationAllowed: $organizationAllowed,
-                    role: $role
+                    role: $customHandle === false ? null : $role
                 );
                 if ($customHandle !== false && !$this->handleOverride($role)) {
                     self::addProperties($request->domain->contactProperties, $handle, $tldInfo);

@@ -99,7 +99,7 @@ trait DomainContactTrait
                     organizationAllowed: $organizationAllowed,
                     role: $customHandle === false ? null : $role
                 );
-                if ($customHandle !== false && !$this->handleOverride($role)) {
+                if (!$this->handleOverride($role) || $customHandle === false) {
                     self::addProperties($request->domain->contactProperties, $handle, $tldInfo);
                 }
                 $contacts[] = [

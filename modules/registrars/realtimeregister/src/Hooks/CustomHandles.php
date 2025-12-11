@@ -61,10 +61,14 @@ class CustomHandles extends Hook
                             }
                         }
                     }
+                    $extra = $metadatum['provider'] == 'NicLV'
+                        ? 'Only applied if registrant is organization'
+                        : null;
                     $data[] = [
                         'provider' => $metadatum['provider'],
                         'value' => $value,
                         'forType' => $metadatum['for'],
+                        'extra' => $extra,
                     ];
                 }
                 echo json_encode($data);

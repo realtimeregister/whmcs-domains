@@ -18,8 +18,7 @@ class GetDns extends Action
 
             /** @var  $zone */
             $zone = App::client()->domains->get($domain->domainName)->zone;
-
-            if ($zone && $zone->id !== null && $zone->master === null && $zone->template === null) {
+            if ($zone->id) {
                 $dataFromServer = App::client()->dnszones->get($zone->id);
 
                 // Saveguard for zones which are saved, but don't have any records
@@ -31,37 +30,37 @@ class GetDns extends Action
                         $records[$k]['content'] = htmlentities($record['content']);
                     }
                     $vars['zones'] = $records;
-                }
 
-                $vars['soa'] = [
-                    'hostmaster' => $dataFromServer->hostMaster,
-                    'refresh' => $dataFromServer->refresh,
-                    'retry' => $dataFromServer->retry,
-                    'expire' => $dataFromServer->expire,
-                    'ttl' => $dataFromServer->ttl,
-                ];
-
-                if (
-                    isset(
-                        $_SESSION['rtr']['dns'],
-                        $_SESSION['rtr']['dns']['error']
-                    )
-                ) {
-                    $vars['formerrors'] = $_SESSION['rtr']['dns']['error'];
-                    /**
-                     * we probably had a problem while saving, so we overwrite the data we got from Realtime Register,
-                     * and reinsert our previous data
-                     */
-                    $vars['zones'] = $_SESSION['rtr']['dns']['dns-items'];
-                    unset($_SESSION['rtr']['dns']['error']);
-                    unset($_SESSION['rtr']['dns']['dns-items']);
+                    $vars['soa'] = [
+                        'hostmaster' => $dataFromServer->hostMaster,
+                        'refresh' => $dataFromServer->refresh,
+                        'retry' => $dataFromServer->retry,
+                        'expire' => $dataFromServer->expire,
+                        'ttl' => $dataFromServer->ttl,
+                    ];
                 }
-                if (isset($_SESSION['rtr']['dns'], $_SESSION['rtr']['dns']['success'])) {
-                    $vars['status']['success'] = $_SESSION['rtr']['dns']['success'];
-                    unset($_SESSION['rtr']['dns']['success']);
-                }
-                return $vars;
             }
+            if (
+                isset(
+                    $_SESSION['rtr']['dns'],
+                    $_SESSION['rtr']['dns']['error']
+                )
+            ) {
+                $vars['formerrors'] = $_SESSION['rtr']['dns']['error'];
+                /**
+                 * we probably had a problem while saving, so we overwrite the data we got from Realtime Register,
+                 * and reinsert our previous data
+                 */
+                $vars['zones'] = $_SESSION['rtr']['dns']['dns-items'];
+                unset($_SESSION['rtr']['dns']['error']);
+                unset($_SESSION['rtr']['dns']['dns-items']);
+            }
+
+            if (isset($_SESSION['rtr']['dns'], $_SESSION['rtr']['dns']['success'])) {
+                $vars['status']['success'] = $_SESSION['rtr']['dns']['success'];
+                unset($_SESSION['rtr']['dns']['success']);
+            }
+            return $vars;
         } else {
             throw new \Exception('DNS management not enabled on this domain');
         }

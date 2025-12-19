@@ -46,7 +46,7 @@ class DNSSec extends Action
                     }
                 }
 
-
+                $keyData = json_decode(json_encode($DNSSecBuild), false);
                 try {
                     App::client()->domains->update(
                         domainName: $domainName,
@@ -55,7 +55,6 @@ class DNSSec extends Action
                     $this->forgetDomainInfo($request);
                     $saved = true;
                 } catch (\Exception $ex) {
-                    $keyData = json_decode(json_encode($DNSSecBuild), false);
                     $message = sprintf("Error while updating the DNS Sec: %s", $ex->getMessage());
                 }
             }

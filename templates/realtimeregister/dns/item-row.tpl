@@ -46,7 +46,7 @@
     </td>
     <td>
         <label class="sr-only" for="dns-items-{$index}-ttl">{$_lang['ttl']}</label>
-        <input type="number" class="form-control {if isset($dnsrecords.formerrors[$index]['ttl'])}is-invalid{/if}"
+        <input type="number" class="form-control {if isset($dnsrecords.formerrors['errors'][$index]['ttl'])}is-invalid{/if}"
                placeholder="{$_lang['ttl']}" value="{$zone['ttl']}" id="dns-items-{$index}-ttl" name="dns-items[{$index}][ttl]">
         {if isset($dnsrecords.formerrors['errors'][$index]['ttl'])}
             <div class="invalid-feedback">
@@ -58,7 +58,7 @@
     </td>
     <td>
         <label class="sr-only" for="dns-items-{$index}-prio">{$_lang['prio']}</label>
-        <input type="number" class="form-control {if isset($dnsrecords.formerrors[$index]['prio'])}is-invalid{/if}"
+        <input type="number" class="form-control {if isset($dnsrecords.formerrors['errors'][$index]['prio'])}is-invalid{/if}"
                placeholder="{$_lang['prio']}" value="{$zone['prio']}" id="dns-items-{$index}-prio" name="dns-items[{$index}][prio]">
         {if isset($dnsrecords.formerrors['errors'][$index]['prio'])}
             <div class="invalid-feedback">

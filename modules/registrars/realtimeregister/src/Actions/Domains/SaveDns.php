@@ -14,11 +14,32 @@ use RealtimeRegisterDomains\Request;
 class SaveDns extends Action
 {
     private ZoneServiceEnum $serviceType;
+    private array $vanityNameservers;
 
     public function __invoke(Request $request): array
     {
         if ($request->params['dnsmanagement'] === true && App::registrarConfig()->hasDnsSupport() === true) {
             $this->serviceType = ZoneServiceEnum::from(App::registrarConfig()->get('dns_support'));
+            if ($this->serviceType == ZoneServiceEnum::PREMIUM) {
+                $vanityNameservers = [
+                    App::registrarConfig()->get('dns_vanity_nameserver_1'),
+                    App::registrarConfig()->get('dns_vanity_nameserver_2')
+                ];
+
+                $vanityNameservers = array_values(
+                    array_unique(
+                        array_filter(
+                            $vanityNameservers,
+                            static fn($v) => $v !== ''
+                        )
+                    )
+                );
+
+                if ($vanityNameservers !== []) {
+                    $this->vanityNameservers = $vanityNameservers;
+                }
+            }
+
             $domain = $this->domainInfo($request);
             $zone = App::client()->domains->get($domain->domainName)->zone;
             if (isset($_SESSION['rtr']['dns'], $_SESSION['rtr']['dns']['success'])) {
@@ -84,16 +105,16 @@ class SaveDns extends Action
                 'ttl' => (int)$soaData['ttl'],
                 'records' => DomainZoneRecordCollection::fromArray($dnsRecords)
             ];
+
+            if (count($this->vanityNameservers) > 0) {
+                $dnsZonePayload['ns'] = $this->vanityNameservers;
+            }
+
             if (!$zone) {
-                App::client()->dnszones->create(
-                    name: $domain->domainName,
-                    service: $this->serviceType,
-                    hostMaster: $soaData['hostmaster'],
-                    refresh: (int)$soaData['refresh'],
-                    retry: (int)$soaData['retry'],
-                    expire: (int)$soaData['expire'],
-                    records: DomainZoneRecordCollection::fromArray($dnsRecords),
-                );
+                // only ttl is missing?
+                $dnsZonePayload['name'] = $domain->domainName;
+
+                App::client()->dnszones->create(...$dnsZonePayload);
                 // Enable the just created zone, and thus, enable it to the domain
                 App::client()->domains->update(
                     domainName: $domain->domainName,

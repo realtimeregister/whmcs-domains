@@ -29,11 +29,11 @@ class ConfigArray
             $configArray,
             [
                 'FriendlyName' => [
-                    'Type'  => 'System',
+                    'Type' => 'System',
                     'Value' => 'Realtime Register'
                 ],
                 'Description' => [
-                    'Type'  => 'System',
+                    'Type' => 'System',
                     'Value' => 'The Domains &amp; Digital Security Experts'
                 ],
                 /**
@@ -179,6 +179,25 @@ class ConfigArray
                         'will yield <b>1 paid zone per domain</b>. The price of the DNS support can be set in the ' .
                         'domainpricing overview in WHMCS, individual TLDs can be enabled and disabled there as well. ' .
                         'As indicated in our Terms and conditions; BASIC DNS can only be offered for free'
+                ],
+                'dns_vanity_nameservers' => [
+                    'FriendlyName' => 'DNS Vanity Nameservers',
+                    'Type' => 'none',
+                    'Description' => 'Override the default DNS nameservers to your own vanity nameservers <a href=' .
+                        '"https://kb.realtimeregister.com/article/372-setup-vanity-nameservers-for-premium-dns-zones"' .
+                        ' target="_blank">More information</a>',
+                ],
+                'dns_vanity_nameserver_1' => [
+                    'FriendlyName' => 'DNS Vanity Nameserver 1',
+                    'Type' => 'text',
+                    'Description' => '<br>Only fill this out, when you have setup your own vanity nameservers, ' .
+                        'by default, we use the default nameservers provided by Realtime Register'
+                ],
+                'dns_vanity_nameserver_2' => [
+                    'FriendlyName' => 'DNS Vanity Nameserver 2',
+                    'Type' => 'text',
+                    'Description' => '<br>Only fill this out, when you have setup your own vanity nameservers, ' .
+                        'by default, we use the default nameservers provided by Realtime Register'
                 ],
                 'INFO_REGISTRATION_EMPTY_LINE' => [
                     'FriendlyName' => '</br>',

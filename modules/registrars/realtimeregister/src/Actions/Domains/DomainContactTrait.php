@@ -81,12 +81,13 @@ trait DomainContactTrait
             organizationAllowed: $metadata->registrant->organizationAllowed,
             role: 'REGISTRANT'
         );
+        $companyName = $request->domain->registrant->companyName;
 
         self::addProperties($request->domain->contactProperties, $registrant, $tldInfo);
 
         foreach (self::$CONTACT_ROLES as $role => $name) {
             $organizationAllowed = $metadata->{$name}->organizationAllowed;
-            $customHandle = $this->getCustomHandle($tldInfo, $name, $request->domain->registrant->companyName);
+            $customHandle = $this->getCustomHandle($tldInfo, $name, $companyName, $registrant);
             if ($customHandle) {
                 $contacts[] = [
                     'role' => $role,
@@ -97,9 +98,9 @@ trait DomainContactTrait
                     clientId: $clientId,
                     contactId: $contactId,
                     organizationAllowed: $organizationAllowed,
-                    role: $customHandle === false ? null : $role
+                    role: $role
                 );
-                if (!$this->handleOverride($role) || $customHandle === false) {
+                if (!$this->handleOverride($role)) {
                     self::addProperties($request->domain->contactProperties, $handle, $tldInfo);
                 }
                 $contacts[] = [
@@ -112,11 +113,15 @@ trait DomainContactTrait
         return ['contacts' => $contacts, 'registrant' => $registrant];
     }
 
-    protected function getCustomHandle(TLDInfo $tldInfo, string $roleName, ?string $companyName): mixed
-    {
+    protected function getCustomHandle(
+        TLDInfo $tldInfo,
+        string $roleName,
+        ?string $companyName,
+        ?string $registrant
+    ): string | null {
         $customHandles = $this->getCustomHandles();
         if ($tldInfo->provider == 'NicLV' && !$companyName) {
-            return false;
+            return $registrant ?? null;
         }
 
         if (

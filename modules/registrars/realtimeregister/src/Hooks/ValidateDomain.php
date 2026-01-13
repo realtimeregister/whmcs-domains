@@ -56,7 +56,6 @@ class ValidateDomain extends Hook
         if ($_REQUEST['a'] !== 'checkout') {
             return;
         }
-        $customHandles = $this->getCustomHandles();
         $error = $this->validateContact($tldInfo->metadata, "registrant", $domain);
 
         if ($error) {
@@ -64,7 +63,10 @@ class ValidateDomain extends Hook
             return;
         }
         foreach (self::$CONTACT_ROLES as $name => $role) {
-            if ($this->handleOverride($name) || $this->getCustomHandle($tldInfo, $name, $_REQUEST['companyname'])) {
+            if (
+                $this->handleOverride($name)
+                || $this->getCustomHandle($tldInfo, $name, $_REQUEST['companyname'], null)
+            ) {
                 continue;
             }
 

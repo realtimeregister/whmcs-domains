@@ -102,6 +102,7 @@ class SaveDns extends Action
                 'refresh' => (int)$soaData['refresh'],
                 'retry' => (int)$soaData['retry'],
                 'expire' => (int)$soaData['expire'],
+                'service' => $this->serviceType,
                 'ttl' => (int)$soaData['ttl'],
                 'records' => DomainZoneRecordCollection::fromArray($dnsRecords)
             ];
@@ -111,7 +112,6 @@ class SaveDns extends Action
             }
 
             if (!$zone) {
-                // only ttl is missing?
                 $dnsZonePayload['name'] = $domain->domainName;
 
                 App::client()->dnszones->create(...$dnsZonePayload);

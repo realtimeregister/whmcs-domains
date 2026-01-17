@@ -6,7 +6,6 @@ use RealtimeRegister\Domain\DomainDetails;
 use RealtimeRegister\Domain\DomainZoneRecordCollection;
 use RealtimeRegister\Domain\Enum\ZoneServiceEnum;
 use RealtimeRegister\Domain\Zone;
-use RealtimeRegister\Exceptions\BadRequestException;
 use RealtimeRegisterDomains\Actions\Action;
 use RealtimeRegisterDomains\App;
 use RealtimeRegisterDomains\Request;
@@ -102,17 +101,17 @@ class SaveDns extends Action
                 'refresh' => (int)$soaData['refresh'],
                 'retry' => (int)$soaData['retry'],
                 'expire' => (int)$soaData['expire'],
-                'service' => $this->serviceType,
                 'ttl' => (int)$soaData['ttl'],
                 'records' => DomainZoneRecordCollection::fromArray($dnsRecords)
             ];
 
-            if (count($this->vanityNameservers) > 0) {
-                $dnsZonePayload['ns'] = $this->vanityNameservers;
-            }
-
             if (!$zone) {
                 $dnsZonePayload['name'] = $domain->domainName;
+                $dnsZonePayload['service'] = $this->serviceType;
+
+                if (isset($this->vanityNameservers) && count($this->vanityNameservers) > 0) {
+                    $dnsZonePayload['ns'] = $this->vanityNameservers;
+                }
 
                 App::client()->dnszones->create(...$dnsZonePayload);
                 // Enable the just created zone, and thus, enable it to the domain
@@ -125,6 +124,7 @@ class SaveDns extends Action
                     )
                 );
             } else {
+                // FIXME vanity nameservers mutations
                 $dnsZonePayload['id'] = $zone->id;
                 App::client()->dnszones->update(...$dnsZonePayload);
                 $_SESSION['rtr']['dns']['success'] = true;
@@ -133,7 +133,7 @@ class SaveDns extends Action
                 unset($_SESSION['rtr']['dns']['dns-items']);
             }
             return ['success' => true];
-        } catch (BadRequestException $exception) {
+        } catch (\Throwable $exception) {
             $_SESSION['rtr']['dns']['success'] = false;
             $exceptionText = substr($exception->getMessage(), 13);
             $_SESSION['rtr']['dns']['error'] = json_decode($exceptionText, true);

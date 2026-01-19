@@ -29,7 +29,7 @@
     "minimum-stability": "stable",
     "require": {
         "php": "^7.4|^8.1",
-        "realtimeregister/realtimeregister-php": "dev-master",
+        "realtimeregister/realtimeregister-php": "^1.1.7",
         "illuminate/cache": "^7.12",
         "giggsey/libphonenumber-for-php-lite": "^8.13",
         "psr/log": "^1.0.0",

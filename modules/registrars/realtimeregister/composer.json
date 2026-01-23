@@ -44,8 +44,7 @@
         "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
         "illuminate/database": "^7.12",
         "illuminate/events": "^7.12",
-        "smarty/smarty": "^3.1",
-        "true/punycode": "^2.1"
+        "smarty/smarty": "^3.1"
     },
     "config": {
         "allow-plugins": {

@@ -3,7 +3,7 @@
 namespace RealtimeRegisterDomains\Services;
 
 use Carbon\Carbon;
-use Illuminate\Contracts\Pagination\Paginator;
+use Illuminate\Database\Eloquent\Collection;
 use RealtimeRegisterDomains\Models\Whmcs\ErrorLog;
 
 class LogService
@@ -25,17 +25,12 @@ class LogService
         );
     }
 
-    public static function getErrors(int $pageId = 1, string $searchTerm = ''): Paginator
+    public static function getErrors(int $pageId = 1, string $searchTerm = ''): array | Collection
     {
         return ErrorLog::query()
             ->where("severity", "=", "error")
             ->where("message", "LIKE", "RealtimeRegister: %" . ($searchTerm ? $searchTerm . "%" : ''))
             ->orderBy("id", "desc")
-            ->simplePaginate(
-                self::$pageSize,
-                ['id', 'severity', 'exception_class', 'message', 'filename', 'line', 'details', 'created_at'],
-                'page',
-                $pageId
-            );
+            ->forPage($pageId, self::$pageSize)->get();
     }
 }

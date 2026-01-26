@@ -29,12 +29,9 @@
     "minimum-stability": "stable",
     "require": {
         "php": "^7.4|^8.1",
-        "realtimeregister/realtimeregister-php": "dev-master",
-        "illuminate/cache": "^7.12",
+        "realtimeregister/realtimeregister-php": "^v1.1.7",
         "giggsey/libphonenumber-for-php-lite": "^8.13",
-        "psr/log": "^1.0.0",
-        "guzzlehttp/guzzle": "7.2.0",
-        "illuminate/pagination": "^7.12"
+        "psr/log": "^1.0.0"
     },
     "require-dev": {
         "symfony/var-dumper": "^6.4",
@@ -45,7 +42,9 @@
         "illuminate/database": "^7.12",
         "illuminate/events": "^7.12",
         "smarty/smarty": "^3.1",
-        "true/punycode": "^2.1"
+        "true/punycode": "^2.1",
+        "illuminate/cache": "^7.12|^9",
+        "guzzlehttp/guzzle": "^7.2|^7.9.3"
     },
     "config": {
         "allow-plugins": {

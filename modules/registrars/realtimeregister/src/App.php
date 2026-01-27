@@ -64,7 +64,7 @@ class App
                     Cache::forget(Language::CACHE_KEY . $language);
                 }
             }
-            Cache::rememberForever(self::CACHE_KEY_VERSION, self::VERSION);
+            Cache::rememberForever(self::CACHE_KEY_VERSION, fn() => self::VERSION);
         }
 
         return $app;

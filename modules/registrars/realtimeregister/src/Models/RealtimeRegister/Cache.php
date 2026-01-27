@@ -2,65 +2,51 @@
 
 namespace RealtimeRegisterDomains\Models\RealtimeRegister;
 
-use Illuminate\Cache\ArrayStore;
-use Illuminate\Cache\DatabaseStore;
-use Illuminate\Cache\Repository;
 use Illuminate\Database\Capsule\Manager as Capsule;
-use Illuminate\Contracts\Cache\Repository as CacheRepository;
-use Illuminate\Database\Schema\Blueprint;
+use Psr\Cache\InvalidArgumentException;
+use Symfony\Component\Cache\Adapter\AdapterInterface;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
+use Symfony\Component\Cache\Adapter\PdoAdapter;
+use Symfony\Contracts\Cache\ItemInterface;
 
 class Cache
 {
-    public const TABLE_NAME = 'mod_realtimeregister_cache';
+    public const TABLE_NAME = 'mod_realtimeregister_cache_v2';
     protected $table = self::TABLE_NAME;
 
-    protected static Repository | CacheRepository | null $cache;
+    private static ?AdapterInterface $pool = null;
 
-    public static function request(): CacheRepository
+    private static function pool(): AdapterInterface
     {
-        if (defined('PHPUNIT_REALTIMEREGISTER_TESTSUITE')) {
-            // Use in-memory array cache — no database required
-            self::$cache = new Repository(new ArrayStore());
-        } else {
-            // Use database-backed cache (same as original)
-            if (!defined('PHPUNIT_REALTIMEREGISTER_TESTSUITE') && !Capsule::schema()->hasTable(Cache::TABLE_NAME)) {
-                Capsule::schema()->create(
-                    Cache::TABLE_NAME,
-                    function (Blueprint $table) {
-                        $table->string('key')->unique();
-                        $table->mediumText('value');
-                        $table->integer('expiration');
-                    }
+        if (self::$pool === null) {
+            if (defined('PHPUNIT_REALTIMEREGISTER_TESTSUITE')) {
+                self::$pool = new ArrayAdapter();
+            } else {
+                self::$pool = new PdoAdapter(
+                    Capsule::connection()->getPdo(),
+                    'realtimeregister',
+                    3600,
+                    ['db_table' => self::TABLE_NAME]
                 );
             }
-            $store = new DatabaseStore(Capsule::connection(), self::TABLE_NAME);
-            self::$cache = new Repository($store);
         }
-        return self::$cache;
+        return self::$pool;
     }
 
     /**
      * Retrieve an item from the cache by key.
      *
-     * @param  mixed $default
+     * @param mixed $default
      * @return mixed
+     * @throws InvalidArgumentException
      */
     public static function get(string $key, $default = null)
     {
-        $value = self::request()->get($key);
-        if ($value !== null) {
-            $decoded = json_decode($value, true);
-            if ($decoded !== null) {
-                return $decoded;
-            }
+        $item = self::pool()->getItem($key);
 
-            if (is_null($value)) {
-                $value = value($default);
-            }
-        }
-
-        return $value;
+        return $item->isHit() ? $item->get() : $default;
     }
+
 
     /**
      * Store an item in the cache.
@@ -70,7 +56,9 @@ class Cache
      */
     public static function put(string $key, $value, int $minutes)
     {
-        self::request()->put($key, json_encode($value), ($minutes * 60));
+        $item = self::pool()->getItem($key);
+        $item->set($value);
+        $item->expiresAfter($minutes * 60);
     }
 
     /**
@@ -78,35 +66,30 @@ class Cache
      *
      * @return mixed
      */
-    public static function remember(string $key, int $minutes, \Closure $callback)
+    public static function remember(string $key, int $minutes, callable $callback)
     {
-        $value = self::get($key);
-
-        // If the item exists in the cache we will just return this immediately and if
-        // not we will execute the given Closure and cache the result of that for a
-        // given number of minutes so it's available for all subsequent requests.
-        if (!is_null($value)) {
-            return $value;
-        }
-
-        self::put($key, $value = $callback(), $minutes);
-
-        return $value;
+        return self::pool()->get($key, function (ItemInterface $item) use ($minutes, $callback) {
+            $item->expiresAfter($minutes * 60);
+            return $callback();
+        });
     }
 
     /**
      * *poof* Forget *poof*
      */
-    public static function forget(string $key): void
+    public static function forget(string $key): bool
     {
-        self::request()->forget($key);
+        return self::pool()->deleteItem($key);
     }
 
     /**
      * Remember forever
      */
-    public static function rememberForever(string $key, $value): void
+    public static function rememberForever(string $key, callable $callback)
     {
-        self::request()->forever($key, $value);
+        return self::pool()->get($key, function (ItemInterface $item) use ($callback) {
+            $item->expiresAfter(null); // never expire automatically
+            return $callback();
+        });
     }
 }

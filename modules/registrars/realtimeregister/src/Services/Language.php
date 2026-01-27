@@ -9,7 +9,7 @@ class Language
     // Cache duration in minutes
     private const CACHE_DURATION = 10080; // 7 days
 
-    public const CACHE_KEY = 'realtimeregister_domains_language_translations_';
+    public const CACHE_KEY = 'language_translations_';
 
     public function __construct()
     {

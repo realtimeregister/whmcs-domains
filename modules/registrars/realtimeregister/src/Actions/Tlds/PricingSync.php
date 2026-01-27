@@ -33,8 +33,7 @@ class PricingSync extends Action
             } catch (\Exception $e) {
                 continue;
             }
-
-            $item->setExtension(idn_to_utf8($tld));
+            $item->setExtension(idn_to_ascii($tld));
             $item->setEppRequired($metadata->transferSupportsAuthcode);
             if ($priceInfo['CREATE']) {
                 $item->setRegisterPrice(number_format($priceInfo['CREATE']['price'] / 100, 2, '.', ''));

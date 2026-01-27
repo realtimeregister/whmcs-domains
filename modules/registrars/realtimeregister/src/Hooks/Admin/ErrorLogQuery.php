@@ -19,9 +19,8 @@ class ErrorLogQuery extends Hook
                 echo json_encode(
                     [
                         'result' => 'success',
-                        'logEntries' => $logData->items(),
-                        'pageId' => $logData->currentPage(),
-                        'hasMorePages' => $logData->hasMorePages()
+                        'logEntries' => $logData,
+                        'pageId' => $pageId
                     ]
                 );
                 die();

@@ -159,9 +159,7 @@
                 if (response.pageId > 1) {
                    document.getElementById('previous-log-page').classList.remove('hidden');
                 }
-                if (response.hasMorePages === true) {
-                   document.getElementById('next-log-page').classList.remove('hidden');
-                }
+               document.getElementById('next-log-page').classList.remove('hidden');
                 document.getElementById('results-log-waiting-for-input').classList.add('hidden');
 
                 if (pageId === 1 && response.logEntries.length === 0) {

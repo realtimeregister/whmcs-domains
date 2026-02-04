@@ -21,6 +21,8 @@
     ],
     "support": {
         "email": "support@realtimeregister.com",
+        "issues": "https://github.com/realtimeregister/whmcs-domains/issues",
+        "wiki": "https://github.com/realtimeregister/whmcs-domains/wiki",
         "docs": "https://kb.realtimeregister.com/category/100-whmcs",
         "security": "https://realtimeregister.com/.well-known/security.txt",
         "source": "https://github.com/realtimeregister/whmcs"
@@ -31,8 +33,7 @@
         "php": "^7.4|^8.1",
         "realtimeregister/realtimeregister-php": "^v1.1.7",
         "giggsey/libphonenumber-for-php-lite": "^8.13",
-        "psr/log": "^1.0.0",
-        "illuminate/cache": "^7.12"
+        "psr/log": "^1.0.0"
     },
     "require-dev": {
         "symfony/var-dumper": "^6.4",
@@ -43,8 +44,9 @@
         "illuminate/database": "^7.12",
         "illuminate/events": "^7.12",
         "smarty/smarty": "^3.1",
-        "true/punycode": "^2.1",
-        "guzzlehttp/guzzle": "^7.2|^7.9.3"
+        "illuminate/contracts": "^7.20",
+        "guzzlehttp/guzzle": "^7.2.0",
+        "symfony/cache": "^6.4"
     },
     "config": {
         "allow-plugins": {

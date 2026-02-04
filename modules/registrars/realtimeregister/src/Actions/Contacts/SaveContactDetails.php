@@ -18,7 +18,6 @@ use RealtimeRegisterDomains\Exceptions\DomainNotFoundException;
 use RealtimeRegisterDomains\Models\RealtimeRegister\ContactMapping;
 use RealtimeRegisterDomains\Models\Whmcs\Contact as ContactModel;
 use RealtimeRegisterDomains\Models\Whmcs\Domain;
-use RealtimeRegisterDomains\PunyCode;
 use RealtimeRegisterDomains\Request;
 use RealtimeRegisterDomains\Services\ContactService;
 use WHMCS\View\Template\AssetUtil;

@@ -600,16 +600,16 @@
         },
         {
             "name": "realtimeregister/realtimeregister-php",
-            "version": "v1.2.0",
+            "version": "v1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/realtimeregister/realtimeregister-php.git",
-                "reference": "f1d3a5f55490dbfa4836ab7a019682efefc90a37"
+                "reference": "2bfe3db8e99af1e645a82baa31ed5c86f87832d1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/realtimeregister/realtimeregister-php/zipball/f1d3a5f55490dbfa4836ab7a019682efefc90a37",
-                "reference": "f1d3a5f55490dbfa4836ab7a019682efefc90a37",
+                "url": "https://api.github.com/repos/realtimeregister/realtimeregister-php/zipball/2bfe3db8e99af1e645a82baa31ed5c86f87832d1",
+                "reference": "2bfe3db8e99af1e645a82baa31ed5c86f87832d1",
                 "shasum": ""
             },
             "require": {
@@ -644,9 +644,9 @@
             "description": "The PHP SDK for the RealtimeRegister REST API.",
             "support": {
                 "issues": "https://github.com/realtimeregister/realtimeregister-php/issues",
-                "source": "https://github.com/realtimeregister/realtimeregister-php/tree/v1.2.0"
+                "source": "https://github.com/realtimeregister/realtimeregister-php/tree/v.1.30"
             },
-            "time": "2026-01-19T13:48:54+00:00"
+            "time": "2026-02-04T14:52:45+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
@@ -4770,5 +4770,5 @@
         "php": "^7.4|^8.1"
     },
     "platform-dev": {},
-    "plugin-api-version": "2.9.0"
+    "plugin-api-version": "2.6.0"
 }

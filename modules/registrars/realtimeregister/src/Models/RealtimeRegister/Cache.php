@@ -42,11 +42,19 @@ class Cache
      */
     public static function get(string $key, $default = null)
     {
-        $item = self::pool()->getItem($key);
+        $item = self::pool()->getItem(self::fixKey($key));
 
         return $item->isHit() ? $item->get() : $default;
     }
 
+
+    /**
+     * Some characters are not allowed..
+     */
+    private static function fixKey(string $key): string
+    {
+        return str_replace(['{', '}', '(', ')', '/', '\\', '@', ':'], '|', $key);
+    }
 
     /**
      * Store an item in the cache.
@@ -56,7 +64,7 @@ class Cache
      */
     public static function put(string $key, $value, int $minutes)
     {
-        $item = self::pool()->getItem($key);
+        $item = self::pool()->getItem(self::fixKey($key));
         $item->set($value);
         $item->expiresAfter($minutes * 60);
     }
@@ -68,7 +76,7 @@ class Cache
      */
     public static function remember(string $key, int $minutes, callable $callback)
     {
-        return self::pool()->get($key, function (ItemInterface $item) use ($minutes, $callback) {
+        return self::pool()->get(self::fixKey($key), function (ItemInterface $item) use ($minutes, $callback) {
             $item->expiresAfter($minutes * 60);
             return $callback();
         });
@@ -79,7 +87,7 @@ class Cache
      */
     public static function forget(string $key): bool
     {
-        return self::pool()->deleteItem($key);
+        return self::pool()->deleteItem(self::fixKey($key));
     }
 
     /**
@@ -87,7 +95,7 @@ class Cache
      */
     public static function rememberForever(string $key, callable $callback)
     {
-        return self::pool()->get($key, function (ItemInterface $item) use ($callback) {
+        return self::pool()->get(self::fixKey($key), function (ItemInterface $item) use ($callback) {
             $item->expiresAfter(null); // never expire automatically
             return $callback();
         });

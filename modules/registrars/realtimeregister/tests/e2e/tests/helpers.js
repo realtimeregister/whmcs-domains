@@ -3,16 +3,16 @@ import {expect} from "@playwright/test"
 export async function loginAsUser(page) {
     // login as client
     await page.goto('/index.php?rp=/login')
-    await page.getByPlaceholder('name@example.com').fill('test2@example.com')
-    await page.getByPlaceholder('Password').fill('testtest123')
+    await page.getByPlaceholder('name@example.com').fill(process.env.TEST_USER)
+    await page.getByPlaceholder('Password').fill(process.env.TEST_PASSWORD)
     await page.getByRole('button', {name: 'Login'}).click()
 }
 
 export async function loginAsAdmin(page) {
     // Login
     await page.goto('/admin');
-    await page.getByPlaceholder("Username").fill('admin');
-    await page.getByPlaceholder("Password").fill('admin')
+    await page.getByPlaceholder("Username").fill(process.env.ADMIN_USER)
+    await page.getByPlaceholder("Password").fill(process.env.ADMIN_PASSWORD)
     await page.getByRole('button', {name: 'Login'}).click()
 }
 
@@ -30,7 +30,7 @@ export async function orderDomain(page, dnsManagement) {
 
     if (dnsManagement === true) {
         // Check the checkbox
-        await page.getByText('DNS Management').check();
+        await page.getByText('DNS Management').check()
     }
 
     await page.getByRole('button', {name: /^Continue/ }).click()

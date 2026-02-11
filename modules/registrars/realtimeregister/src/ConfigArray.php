@@ -225,9 +225,10 @@ class ConfigArray
                     'Size' => '20',
                     'Description' => '',
                 ],
-                'INFO_WHOIS_EMPTY_LINE' => [
+                'ADAC_EMPTY_LINE' => [
                     'FriendlyName' => '</br>',
                     'Type' => 'none',
+                    'Description' => '<small>Running version ' . App::VERSION . '</small>',
                 ],
             ]
         );

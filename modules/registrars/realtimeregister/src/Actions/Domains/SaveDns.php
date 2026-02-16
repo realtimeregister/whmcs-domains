@@ -123,6 +123,7 @@ class SaveDns extends Action
                         ]
                     )
                 );
+                $_SESSION['rtr']['dns']['success'] = true;
             } else {
                 // FIXME vanity nameservers mutations
                 $dnsZonePayload['id'] = $zone->id;

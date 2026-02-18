@@ -46,6 +46,10 @@ class RegisterDomain extends Action
             'privacyProtect' => $domain->privacyProtect
         ];
 
+        if (App::registrarConfig()->hasDnsSupport()) {
+            unset($parameters['ns']);
+        }
+
         if ($domain->idnLanguage && $domain->isIdn) {
             $parameters['languageCode'] = $domain->idnLanguage;
         }

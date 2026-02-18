@@ -14,6 +14,7 @@ class GetDns extends Action
             $request->params['dnsmanagement'] === true
             && App::registrarConfig()->hasDnsSupport()
         ) {
+            $vars = [];
             $domain = $this->domainInfo($request);
 
             /** @var  $zone */

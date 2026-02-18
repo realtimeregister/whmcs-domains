@@ -44,3 +44,7 @@ You are of course more than welcome to send us requests for new features, sugges
 
 ### WIKI
 Check out our [WIKI](https://github.com/realtimeregister/whmcs-domains/wiki) for manuals and description of all features.
+
+### Playwright
+The Playwright tests are located in tests/e2e. They can be run by installing the test framework (`yarn install`) and running 
+Playwright (`yarn playwright test`).

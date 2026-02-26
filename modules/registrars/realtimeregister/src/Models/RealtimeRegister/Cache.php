@@ -3,11 +3,11 @@
 namespace RealtimeRegisterDomains\Models\RealtimeRegister;
 
 use Illuminate\Database\Capsule\Manager as Capsule;
+use PDOException;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Cache\Adapter\PdoAdapter;
-use Symfony\Contracts\Cache\ItemInterface;
 
 class Cache
 {
@@ -28,6 +28,10 @@ class Cache
                     3600,
                     ['db_table' => self::TABLE_NAME]
                 );
+                try {
+                    self::$pool->createTable();
+                } catch (PDOException $ignored) {
+                }
             }
         }
         return self::$pool;
@@ -65,8 +69,11 @@ class Cache
     public static function put(string $key, $value, int $minutes)
     {
         $item = self::pool()->getItem(self::fixKey($key));
-        $item->set($value);
-        $item->expiresAfter($minutes * 60);
+        if (!$item->isHit()) {
+            $item->expiresAfter($minutes * 60);
+            $item->set($value);
+        }
+        self::pool()->save($item);
     }
 
     /**
@@ -76,10 +83,14 @@ class Cache
      */
     public static function remember(string $key, int $minutes, callable $callback)
     {
-        return self::pool()->get(self::fixKey($key), function (ItemInterface $item) use ($minutes, $callback) {
+        $item = self::pool()->getItem(self::fixKey($key));
+        if (!$item->isHit()) {
             $item->expiresAfter($minutes * 60);
-            return $callback();
-        });
+            $item->set($callback());
+            self::pool()->save($item);
+        }
+
+        return $item->get();
     }
 
     /**
@@ -95,9 +106,12 @@ class Cache
      */
     public static function rememberForever(string $key, callable $callback)
     {
-        return self::pool()->get(self::fixKey($key), function (ItemInterface $item) use ($callback) {
-            $item->expiresAfter(null); // never expire automatically
-            return $callback();
-        });
+        $item = self::pool()->getItem(self::fixKey($key));
+        if (!$item->isHit()) {
+            $item->expiresAfter(null);
+            $item->set($callback());
+            self::pool()->save($item);
+        }
+        return $item->get();
     }
 }

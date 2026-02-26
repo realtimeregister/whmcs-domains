@@ -14,10 +14,7 @@ class MetadataService
     public const DAY_MINUTES = 1440;
     private string $tld;
     private string $provider;
-    /**
-     * @var TLDInfo
-     */
-    private $info;
+    private TLDInfo $info;
 
     public function __construct(string $tld)
     {
@@ -54,7 +51,6 @@ class MetadataService
     }
 
     /**
-     * @param  string $param
      * @return string|int|array|bool
      */
     public function get(string $param)
@@ -72,16 +68,12 @@ class MetadataService
         return [];
     }
 
-    public function getApplicableFor()
+    public function getApplicableFor(): array
     {
         return $this->info->applicableFor;
     }
 
-    /**
-     * @param  string $domain the domain name
-     * @return string
-     */
-    public static function getTld($domain)
+    public static function getTld(string $domain): string
     {
         if (Config::get('tldinfomapping.' . $domain)) {
             return $domain;
@@ -152,7 +144,7 @@ class MetadataService
 
         try {
             $rtr_contact = App::client()->contacts->get(App::registrarConfig()->customerHandle(), $handle);
-        } catch (\Exception $e) {
+        } catch (\Exception $ignored) {
             return [];
         }
 

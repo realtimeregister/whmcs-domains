@@ -13,6 +13,9 @@ class ClientAreaPageDomainDetails extends Hook
 {
     public function __invoke(DataObject $vars): array
     {
+        if ($vars['registrar'] != 'realtimeregister') {
+            return [];
+        }
         try {
             $possibleStatuses = (new MetadataService(App::toPunycode($vars['domain'])))
                 ->getMetadata()

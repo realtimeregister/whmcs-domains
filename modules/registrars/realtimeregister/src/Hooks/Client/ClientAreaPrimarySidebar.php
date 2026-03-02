@@ -12,7 +12,7 @@ class ClientAreaPrimarySidebar
 {
     public function __invoke(MenuItem $primarySidebar, mixed $domain): void
     {
-        if (!$domain instanceof Domain) {
+        if (!$domain instanceof Domain || $domain->registrar != 'realtimeregister') {
             return;
         }
         try {

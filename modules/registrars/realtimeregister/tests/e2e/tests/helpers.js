@@ -16,13 +16,13 @@ export async function loginAsAdmin(page) {
     await page.getByRole('button', {name: 'Login'}).click()
 }
 
-export function generateDomainName()
+export function generateDomainName(tld = 'nl')
 {
     // We need to generate a unique domainname...
     let today = new Date()
     let date = today.getFullYear() + '' + ('0' + (today.getMonth() + 1)).slice(-2) + '' + ('0' + today.getDate()).slice(-2) +
         't' + ('0' + today.getHours()).slice(-2) + '' + ('0' + today.getMinutes()).slice(-2) + '' + ('0' + today.getSeconds()).slice(-2)
-    return 'whmcs' + date + '.nl'
+    return 'whmcs' + date + '.' + tld;
 }
 
 export async function orderDomain(page, domainName, dnsManagement) {
@@ -60,4 +60,43 @@ export async function addDnsItem(page, domainName) {
 
     await page.getByRole('button', { name: 'Save' }).click()
     await expect(page.getByText('Your DNS records have been saved successfully')).toBeVisible()
+}
+
+export async function setDnsServers(page, dnsServers, typeOf, vanityNameservers){
+    // change config of WHMCS
+    await page.goto('/admin/configgeneral.php#tab=0');
+
+    if (await page.isVisible('text="Password"')) {
+        // if (page.getByRole('textbox', {name: 'Password'})) {
+        await page.getByRole('textbox', {name: 'Password'}).fill(process.env.ADMIN_PASSWORD)
+        await page.getByRole('button', { name: 'Confirm Password' }).click()
+    }
+
+    await page.selectOption('select[name="template"]', 'realtimeregister')
+    await page.getByRole('button', {name: 'Save Changes'}).click()
+
+    // Set default nameservers
+    await page.goto('/admin/configgeneral.php#tab=4');
+
+    if (await page.isVisible('text="Password"')) {
+        // if (page.getByRole('textbox', {name: 'Password'})) {
+        await page.getByRole('textbox', {name: 'Password'}).fill(process.env.ADMIN_PASSWORD)
+        await page.getByRole('button', { name: 'Confirm Password' }).click()
+    }
+
+    await page.fill('input[name="ns1"]', dnsServers[0])
+    await page.fill('input[name="ns2"]', dnsServers[1])
+
+    await page.goto('/admin/configregistrars.php')
+    await page.locator('td:nth-child(3) > .btn.btn-default').click();
+    await page.selectOption('select[name="dns_support"]', typeOf)
+
+    if (typeOf === 'BASIC') {
+        await page.fill('input[name="dns_vanity_nameserver_1"]', '')
+        await page.fill('input[name="dns_vanity_nameserver_2"]', '')
+    } else if (vanityNameservers.length > 0) {
+        await page.fill('input[name="dns_vanity_nameserver_1"]', vanityNameservers[0])
+        await page.fill('input[name="dns_vanity_nameserver_2"]', vanityNameservers[1])
+    }
+    await page.getByRole('button', {name: 'save'}).click()
 }

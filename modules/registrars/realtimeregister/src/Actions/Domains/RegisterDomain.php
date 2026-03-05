@@ -5,6 +5,8 @@ namespace RealtimeRegisterDomains\Actions\Domains;
 use RealtimeRegister\Domain\BillableCollection;
 use RealtimeRegister\Domain\DomainContactCollection;
 use RealtimeRegister\Domain\DomainRegistration;
+use RealtimeRegister\Domain\Enum\ZoneServiceEnum;
+use RealtimeRegister\Domain\Zone;
 use RealtimeRegisterDomains\Actions\Action;
 use RealtimeRegisterDomains\App;
 use RealtimeRegisterDomains\Request;
@@ -13,6 +15,7 @@ class RegisterDomain extends Action
 {
     use DomainTrait;
     use DomainContactTrait;
+    use DNSServicesTrait;
 
     /**
      * @throws \Exception
@@ -47,7 +50,24 @@ class RegisterDomain extends Action
         ];
 
         if (App::registrarConfig()->hasDnsSupport()) {
+            // remove default nameservers, we set the correct ones via the zone
             unset($parameters['ns']);
+            // Add a zone, we need this because some registries require nameservers on the create call
+            $this->generateDnsServers();
+
+            $dnsParameters = [
+                'name' => self::getDomainName($domain),
+                'service' => ZoneServiceEnum::from(App::registrarConfig()->get('dns_support'))
+            ];
+
+            if ($this->vanityNameservers !== []) {
+                $dnsParameters['ns'] = $this->vanityNameservers;
+            }
+
+            App::client()->dnszones->create(...$dnsParameters);
+            $parameters['zone'] = Zone::fromArray(
+                ['service' => ZoneServiceEnum::from(App::registrarConfig()->get('dns_support'))->value]
+            );
         }
 
         if ($domain->idnLanguage && $domain->isIdn) {

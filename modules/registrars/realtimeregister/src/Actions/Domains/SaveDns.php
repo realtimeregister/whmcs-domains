@@ -4,7 +4,6 @@ namespace RealtimeRegisterDomains\Actions\Domains;
 
 use RealtimeRegister\Domain\DomainDetails;
 use RealtimeRegister\Domain\DomainZoneRecordCollection;
-use RealtimeRegister\Domain\Enum\ZoneServiceEnum;
 use RealtimeRegister\Domain\Zone;
 use RealtimeRegisterDomains\Actions\Action;
 use RealtimeRegisterDomains\App;
@@ -12,32 +11,12 @@ use RealtimeRegisterDomains\Request;
 
 class SaveDns extends Action
 {
-    private ZoneServiceEnum $serviceType;
-    private array $vanityNameservers;
+    use DNSServicesTrait;
 
     public function __invoke(Request $request): array
     {
         if ($request->params['dnsmanagement'] === true && App::registrarConfig()->hasDnsSupport() === true) {
-            $this->serviceType = ZoneServiceEnum::from(App::registrarConfig()->get('dns_support'));
-            if ($this->serviceType == ZoneServiceEnum::PREMIUM) {
-                $vanityNameservers = [
-                    App::registrarConfig()->get('dns_vanity_nameserver_1'),
-                    App::registrarConfig()->get('dns_vanity_nameserver_2')
-                ];
-
-                $vanityNameservers = array_values(
-                    array_unique(
-                        array_filter(
-                            $vanityNameservers,
-                            static fn($v) => $v !== ''
-                        )
-                    )
-                );
-
-                if ($vanityNameservers !== []) {
-                    $this->vanityNameservers = $vanityNameservers;
-                }
-            }
+            $this->generateDnsServers();
 
             $domain = $this->domainInfo($request);
             $zone = App::client()->domains->get($domain->domainName)->zone;

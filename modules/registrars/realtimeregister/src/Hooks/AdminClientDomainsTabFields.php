@@ -160,7 +160,7 @@ class AdminClientDomainsTabFields extends Hook
                 elm.style.display = "none";';
             }
 
-            if ($metaData && !$metaData->adjustableAuthCode && !$rtrDomain->authcode) {
+            if ($metaData && !$metaData->adjustableAuthCode && !$rtrDomain?->authcode) {
                 $script .= /** @lang JavaScript */
                 'const eppElement = document.querySelector(\'[data-target="#modalGetEPP"]\');
                     eppElement.style.display = "none"

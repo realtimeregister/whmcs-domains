@@ -12,19 +12,19 @@ class ContactDelete extends Hook
 {
     public function __invoke(DataObject $vars): void
     {
-        $handles = ContactMapping::query()->where(
-            ['userid' => $vars->userid],
-            ['contactid', $vars->get('contactid')]
-        )->pluck('handle');
+        $handles = ContactMapping::query()
+            ->where('userid', $vars->get('userid'))
+            ->where('contactid', $vars->get('contactid'))
+            ->pluck('handle');
 
         foreach ($handles as $handle) {
             try {
                 App::client()->contacts->delete(App::registrarConfig()->customerHandle(), $handle);
-                ContactMapping::query()->where(
-                    ['userid', $vars->get('userid')],
-                    ['contactid', $vars->get('contactid')],
-                    ['handle', $handle]
-                )->delete();
+                ContactMapping::query()
+                    ->where('userid', $vars->get('userid'))
+                    ->where('contactid', $vars->get('contactid'))
+                    ->where('handle', $handle)
+                    ->delete();
             } catch (BadRequestException $exception) {
                 // Most of the time a validation error, because the contact is still in use
                 LogService::logError($exception);

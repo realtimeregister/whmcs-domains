@@ -8,6 +8,7 @@ use RealtimeRegisterDomains\Actions\Domains\DomainTrait;
 use RealtimeRegisterDomains\App;
 use RealtimeRegisterDomains\Entities\DataObject;
 use RealtimeRegisterDomains\Entities\WhmcsContact;
+use RealtimeRegisterDomains\Services\ContactService;
 use RealtimeRegisterDomains\Services\LogService;
 
 class ContactEdit extends Hook
@@ -72,6 +73,14 @@ class ContactEdit extends Hook
                             ...$diff
                         );
 
+                        // Update the mapping to the new handle so future registrations
+                        // use the split contact (with updated data) instead of the pre-split handle.
+                        ContactService::storeContactMapping(
+                            clientId: $mapping->userid,
+                            contactId: $mapping->contactid,
+                            handle: $newHandle,
+                            organizationAllowed: $mapping->org_allowed
+                        );
                         LogService::logError(
                             $exception,
                             sprintf("Splitting contact from %s to %s", $mapping->handle, $newHandle)

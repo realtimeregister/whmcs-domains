@@ -4,11 +4,13 @@ namespace RealtimeRegisterDomains\Actions\Domains;
 
 use Illuminate\Database\Capsule\Manager as Capsule;
 use RealtimeRegister\Domain\Billable;
+use RealtimeRegister\Domain\DomainDetails;
 use RealtimeRegister\Domain\DomainQuote;
 use RealtimeRegister\Domain\TLDMetaData;
 use RealtimeRegisterDomains\App;
 use RealtimeRegisterDomains\Entities\DataObject;
 use RealtimeRegisterDomains\Entities\Domain;
+use RealtimeRegisterDomains\Models\RealtimeRegister\Cache;
 use RealtimeRegisterDomains\Models\RealtimeRegister\ContactMapping;
 use RealtimeRegisterDomains\Models\Whmcs\Configuration;
 use RealtimeRegisterDomains\Request;
@@ -33,6 +35,20 @@ trait DomainTrait
             'TECH' => App::registrarConfig()->get('handle_tech'),
             default => null
         };
+    }
+
+    protected function domainInfo(Request | string $request): DomainDetails
+    {
+        $domainName = $request instanceof Request
+            ? self::getDomainName($request->domain)
+            : $request;
+        return Cache::remember(
+            'domain-info:' . $domainName,
+            MetadataService::DAY_MINUTES,
+            function () use ($request, $domainName) {
+                return App::client()->domains->get($domainName);
+            }
+        );
     }
 
     protected function getOrCreateContact(int $clientId, int $contactId, bool $organizationAllowed, string $role = null)

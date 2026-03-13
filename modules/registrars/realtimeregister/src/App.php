@@ -20,7 +20,7 @@ use RuntimeException;
 class App
 {
     public const NAME = 'realtimeregister';
-    public const VERSION = '2.5.6';
+    public const VERSION = '2.5.7';
     private const CACHE_KEY_VERSION = 'realtimeregister_domains_version_number';
 
     protected const API_URL = "https://api.yoursrs.com/";

@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace RealtimeRegisterDomains\Hooks;
 
+use RealtimeRegister\Exceptions\BadRequestException;
 use RealtimeRegisterDomains\Actions\Domains\DomainTrait;
 use RealtimeRegisterDomains\App;
 use RealtimeRegisterDomains\Entities\DataObject;
 use RealtimeRegisterDomains\Entities\WhmcsContact;
+use RealtimeRegisterDomains\Models\RealtimeRegister\ContactMapping;
 use RealtimeRegisterDomains\Services\LogService;
 
 class ContactEdit extends Hook
@@ -43,7 +45,25 @@ class ContactEdit extends Hook
         $contact = WhmcsContact::make($vars);
 
         foreach ($mappings as $mapping) {
-            $rtrContact = App::client()->contacts->get(App::registrarConfig()->customerHandle(), $mapping->handle);
+            try {
+                $rtrContact = App::client()->contacts->get(App::registrarConfig()->customerHandle(), $mapping->handle);
+            } catch (BadRequestException $exception) {
+                LogService::logError(
+                    $exception,
+                    sprintf("Stale mapping for handle %s, recreating contact", $mapping->handle)
+                );
+                ContactMapping::query()
+                    ->where('userid', $mapping->userid)
+                    ->where('contactid', $mapping->contactid)
+                    ->where('handle', $mapping->handle)
+                    ->delete();
+                $this->getOrCreateContact(
+                    $mapping->userid,
+                    $mapping->contactid,
+                    $mapping->org_allowed
+                );
+                continue;
+            }
 
             $diff = $contact->diff($rtrContact, $contact->toRtrArray($mapping->org_allowed));
 

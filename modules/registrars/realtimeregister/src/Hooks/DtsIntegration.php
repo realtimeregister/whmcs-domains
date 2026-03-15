@@ -30,11 +30,13 @@ class DtsIntegration extends Hook
             $domains = [];
 
             foreach ($items as $item) {
-                if (in_array($item->type, [
-                    'DomainTransfer',
-                    'DomainRenew',
-                    'Domain'
-                ])) {
+                if (
+                    in_array($item->type, [
+                        'DomainTransfer',
+                        'DomainRenew',
+                        'Domain'
+                    ])
+                ) {
                     $domain = null;
 
                     if (!empty($item->relid)) {
@@ -112,11 +114,13 @@ class DtsIntegration extends Hook
                             logActivity('RealtimeRegister: domains sent successfully');
 
                             foreach ($items as $item) {
-                                if (in_array($item->type, [
+                                if (
+                                    in_array($item->type, [
                                         'DomainTransfer',
                                         'DomainRenew',
                                         'Domain'
-                                    ]) && !empty($item->relid)) {
+                                    ]) && !empty($item->relid)
+                                ) {
                                     Capsule::table('tbldomains')
                                         ->where('id', $item->relid)
                                         ->update([
@@ -131,7 +135,8 @@ class DtsIntegration extends Hook
             }
 
             logActivity(
-                'Added domain to DTS domains(' . implode(',', array_filter($domains)) . ') because of invoice ' . $invoiceId,
+                'Added domain to DTS domains(' . implode(',', array_filter($domains))
+                . ') because of invoice ' . $invoiceId,
                 $invoice->userid
             );
         }

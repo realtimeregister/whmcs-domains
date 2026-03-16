@@ -25,6 +25,14 @@ class ConfigArray
             ];
         }
 
+        // Find all custom email templates
+        $emailTemplates = Capsule::table('tblemailtemplates')
+            ->where('disabled', false)
+            ->where('custom', true)
+            ->pluck('name')
+            ->toArray();
+        array_unshift($emailTemplates, 'none');
+
         return array_merge(
             $configArray,
             [
@@ -203,7 +211,32 @@ class ConfigArray
                     'FriendlyName' => '</br>',
                     'Type' => 'none',
                 ],
-
+                'INFO_DTS' => [
+                    'FriendlyName' => '<strong>DTS integration</strong>',
+                    'Type' => 'none',
+                    'Description' => 'This enables the hook which will send domains to our DTS tool after your '
+                        . 'customer paid the renewal invoice. This allows you to gracefully move all your domains to '
+                        . 'Realtime Register<br><strong>Please note this based on best effort. For more information, '
+                        . 'contact our support department via '
+                        . '<a href="mailto:support@realtimeregister.com">support@realtimeregister.com</a></strong>'
+                ],
+                'dts_enable' => [
+                    'FriendlyName' => 'Enable DTS integration',
+                    'Type' => 'yesno',
+                    'Description' => 'Enable DTS integration',
+                ],
+                'dts_api_key' => [
+                    'FriendlyName' => 'DTS API Key',
+                    'Type' => 'text',
+                    'Description' => 'A <i>per integration</i> API key, generated in the Portal',
+                    'Size' => 255,
+                ],
+                'dts_email_template' => [
+                    'FriendlyName' => 'Email Template',
+                    'Type' => 'dropdown',
+                    'Options' => $emailTemplates,
+                    'Description' => 'You might wish to inform your clients via an email'
+                ],
                 /**
                  * Adac
                  */

@@ -21,9 +21,9 @@ This is our completely rebuilt WHMCS Domains module, featuring great new enhance
 - [X] Transfer in/out of domains
 - [X] Import of portfolio
 - [X] Bulk Sync
-- [X] Additional fields support for all supported TLD's
+- [X] Additional fields support for all supported TLDs
 - [X] DNS-management (works best if you are using our template as a base)
-- [X] Transfer domains when invoice is payed via DTS, try to move the domains to Realtime Register
+- [X] Transfer domains when invoice is paid via DTS, try to move the domains to Realtime Register
 
 We also provide widgets for you to use on your admin homepage:
 - Promotion overview

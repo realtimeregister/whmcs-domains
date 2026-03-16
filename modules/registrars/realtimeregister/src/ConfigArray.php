@@ -228,7 +228,7 @@ class ConfigArray
                 'dts_api_key' => [
                     'FriendlyName' => 'DTS API Key',
                     'Type' => 'text',
-                    'Description' => '<br>Use a comma to separated values when you need more than one integration ',
+                    'Description' => 'A <i>per integration</i> API key, generated in the Portal',
                     'Size' => 255,
                 ],
                 'dts_email_template' => [

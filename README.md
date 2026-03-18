@@ -34,6 +34,7 @@ We also provide widgets for you to use on your admin homepage:
 ### Prerequisites
 - Account at [realtimeregister.com](https://realtimeregister.com) with the ability to create an API key
 - Access to WHMCS admin area
+- A [currently supported version](https://docs.whmcs.com/about-whmcs/whmcs-development/#active-development) of WHMCS
 - PHP 8+
 
 ### Releases/Downloads

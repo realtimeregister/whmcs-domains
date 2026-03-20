@@ -4,6 +4,7 @@ namespace RealtimeRegisterDomains\Actions\Domains;
 
 use RealtimeRegister\Domain\BillableCollection;
 use RealtimeRegister\Domain\DomainContactCollection;
+use RealtimeRegister\Domain\KeyDataCollection;
 use RealtimeRegisterDomains\Actions\Action;
 use RealtimeRegisterDomains\App;
 use RealtimeRegisterDomains\Models\Whmcs\Domain;
@@ -38,7 +39,8 @@ class TransferWithBillables extends Action
             'authcode' => html_entity_decode(unserialize($order->transfersecret)[$domain->domainName()]),
             'autoRenew' => false,
             'contacts' => DomainContactCollection::fromArray($contacts),
-            'isQuote' => true
+            'isQuote' => true,
+            'keyData' => KeyDataCollection::fromArray([])
         ];
 
         $billables = $this->buildBillables(App::client()->domains->transfer(...$parameters));

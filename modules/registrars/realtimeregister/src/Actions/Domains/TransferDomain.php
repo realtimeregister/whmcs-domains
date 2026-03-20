@@ -3,6 +3,7 @@
 namespace RealtimeRegisterDomains\Actions\Domains;
 
 use RealtimeRegister\Domain\DomainContactCollection;
+use RealtimeRegister\Domain\KeyDataCollection;
 use RealtimeRegisterDomains\Actions\Action;
 use RealtimeRegisterDomains\App;
 use RealtimeRegisterDomains\Exceptions\ActionFailedException;
@@ -24,15 +25,21 @@ class TransferDomain extends Action
             'contacts' => $contacts
             ) = $this->generateContactsForDomain(request: $request, metadata: $metadata);
 
-        App::client()->domains->transfer(
-            domainName: self::getDomainName($request->domain),
-            customer: App::registrarConfig()->customerHandle(),
-            registrant: $registrant,
-            authcode: $request->eppCode,
-            autoRenew: false,
-            ns: App::registrarConfig()->keepNameServers() ? null : $domain->nameservers,
-            contacts: DomainContactCollection::fromArray($contacts),
-        );
+        $parameters = [
+            'domainName' => self::getDomainName($request->domain),
+            'customer' =>  App::registrarConfig()->customerHandle(),
+            'registrant' => $registrant,
+            'authcode' => $request->eppCode,
+            'autoRenew' => false,
+            'ns' => App::registrarConfig()->keepNameServers() ? null : $domain->nameservers,
+            'contacts' => DomainContactCollection::fromArray($contacts),
+        ];
+
+        if (!App::registrarConfig()->keepNameServers()) {
+            $parameters['keyData'] = KeyDataCollection::fromArray([]);
+        }
+
+        App::client()->domains->transfer(...$parameters);
 
         return ['success' => true];
     }

@@ -9,6 +9,9 @@ trait SmartyTrait
     private function render(string $template, ?array $parameters): bool|string
     {
         $smarty = new Smarty();
+        if (isset($GLOBALS['templates_compiledir'])) {
+            $smarty->setCompileDir($GLOBALS['templates_compiledir']);
+        }
 
         global $_LANG;
 

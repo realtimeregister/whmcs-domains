@@ -10,6 +10,9 @@ class TemplateService
     {
         global $_LANG;
         $smarty = new Smarty();
+        if (isset($GLOBALS['templates_compiledir'])) {
+            $smarty->setCompileDir($GLOBALS['templates_compiledir']);
+        }
 
         $args['LANG'] = $_LANG;
 

@@ -34,7 +34,6 @@ class DtsIntegration extends Hook
             foreach ($items as $item) {
                 if (
                     in_array($item->type, [
-                        'DomainTransfer',
                         'DomainRenew',
                         'Domain'
                     ])
@@ -85,7 +84,6 @@ class DtsIntegration extends Hook
                     foreach ($items as $item) {
                         if (
                             in_array($item->type, [
-                                'DomainTransfer',
                                 'DomainRenew',
                                 'Domain'
                             ]) && !empty($item->relid)

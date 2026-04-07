@@ -7,6 +7,7 @@ require_once implode(DIRECTORY_SEPARATOR, [__DIR__, '..', '..', '..', '..', '..'
 if (defined('ROOTDIR')) {
     require_once ROOTDIR . '/includes/registrarfunctions.php';
 }
+
 use RealtimeRegisterDomains\Services\MetadataService;
 
 ini_set('max_execution_time', 0);
@@ -35,7 +36,11 @@ foreach ($tlds as $tld) {
 
                 if ($property['values']) {
                     foreach ($property['values'] as $key => $value) {
-                        $lines[] = sprintf($entry, $langvar . '_' . $key, addcslashes($value, "'"));
+                        $lines[] = sprintf(
+                            $entry,
+                            $langvar . '_' . strtolower($key),
+                            addcslashes($value, "'")
+                        );
                     }
                 }
             }

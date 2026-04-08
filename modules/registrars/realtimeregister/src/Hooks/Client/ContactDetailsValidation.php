@@ -5,11 +5,12 @@ namespace RealtimeRegisterDomains\Hooks\Client;
 use RealtimeRegisterDomains\Entities\DataObject;
 use RealtimeRegisterDomains\Hooks\Hook;
 
-class ClientDetailsValidation extends Hook
+class ContactDetailsValidation extends Hook
 {
     /**
      * These patterns purely given as an indication and give no guarantee the submitted postalcode is also allowed by
-     * registries. Some will, for example, disallow PO Boxes
+     * registries. Some will, for example, disallow PO Boxes, which we don't check for here, this will be checked by
+     * the backend of Realtime Register
      *
      * @var array|string[]
      */
@@ -99,7 +100,7 @@ class ClientDetailsValidation extends Hook
         $country = strtoupper(trim($vars['country'] ?? ''));
         $postalcode = trim($vars['postcode'] ?? '');
         if (isset($this->postalcodePatterns[$country]) && $postalcode !== '') {
-            if (!preg_match('/' . $this->postalcodePatterns[$country] . '/', $postalcode)) {
+            if (!preg_match('/^' . $this->postalcodePatterns[$country] . '$/', $postalcode)) {
                 return 'Invalid postcode, we expect "' . $this->postalcodePatterns[$country] . '"';
             }
         }

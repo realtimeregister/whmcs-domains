@@ -4,14 +4,14 @@ namespace Tests\Hooks\Client;
 
 use RealtimeRegisterDomains\App;
 use RealtimeRegisterDomains\Entities\DataObject;
-use RealtimeRegisterDomains\Hooks\Client\ClientDetailsValidation;
+use RealtimeRegisterDomains\Hooks\Client\ContactDetailsValidation;
 use PHPUnit\Framework\TestCase;
 
 class ClientDetailsValidationTest extends TestCase
 {
     public function testDutchPostalcode()
     {
-        $clientDetailsValidation = new ClientDetailsValidation(App::instance());
+        $clientDetailsValidation = new ContactDetailsValidation(App::instance());
         $this->assertEmpty($clientDetailsValidation(new DataObject(['postcode' => '8000 AA', 'country' => 'NL'])));
         $this->assertEmpty($clientDetailsValidation(new DataObject(['postcode' => '1741 VM', 'country' => 'NL'])));
         $this->assertEquals(
@@ -22,7 +22,7 @@ class ClientDetailsValidationTest extends TestCase
 
     public function testBelgianPostalcode()
     {
-        $clientDetailsValidation = new ClientDetailsValidation(App::instance());
+        $clientDetailsValidation = new ContactDetailsValidation(App::instance());
 
         $this->assertEmpty($clientDetailsValidation(new DataObject(['postcode' => '1000', 'country' => 'BE'])));
         $this->assertEquals(
@@ -33,7 +33,7 @@ class ClientDetailsValidationTest extends TestCase
 
     public function testBurundianPostalcode()
     {
-        $clientDetailsValidation = new ClientDetailsValidation(App::instance());
+        $clientDetailsValidation = new ContactDetailsValidation(App::instance());
         $this->assertEmpty($clientDetailsValidation(new DataObject(['postcode' => 'BP2755', 'country' => 'BI'])));
     }
 }

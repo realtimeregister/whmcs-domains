@@ -21,15 +21,14 @@ App::hook(RealtimeRegisterDomains\Hooks\AdminClientDomainsTabFields::class);
 
 App::hook('ClientAreaHeadOutput', Hooks\Adac::class, 10);
 
-App::hook('ContactAdd', Hooks\ContactEdit::class);
-App::hook(Hooks\ContactEdit::class);
+App::hook('ContactAdd', Hooks\ContactEdit::class, 10);
+App::hook(Hooks\ContactEdit::class, 10);
 App::hook(Hooks\ContactDelete::class);
 
-App::hook('ClientEdit', Hooks\ContactEdit::class);
+App::hook('ClientEdit', Hooks\ContactEdit::class, 10);
 App::hook('ClientDelete', Hooks\ContactDelete::class);
 
-App::hook(Hooks\Client\ClientDetailsValidation::class);
-App::hook('ContactDetailsValidation', Hooks\Client\ClientDetailsValidation::class);
+App::hook(Hooks\Client\ContactDetailsValidation::class, 1);
 
 App::hook('ClientAreaHeadOutput', Hooks\Client\ClientAreaOutput::class, 20);
 App::hook(Hooks\Client\ClientAreaPageDomainDetails::class);

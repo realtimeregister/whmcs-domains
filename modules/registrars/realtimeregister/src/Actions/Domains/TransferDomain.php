@@ -37,8 +37,10 @@ class TransferDomain extends Action
         ];
 
         // period has to be at least 1 year
-        if (array_filter($transferDomainPeriods, fn($period) => $period % 12 !== 0)
-            && in_array(12, $transferDomainPeriods)) {
+        if (
+            array_filter($transferDomainPeriods, fn($period) => $period % 12 !== 0)
+            && in_array(12, $transferDomainPeriods)
+        ) {
             $parameters['period'] = 12;
         }
 

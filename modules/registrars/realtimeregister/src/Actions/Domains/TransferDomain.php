@@ -24,16 +24,25 @@ class TransferDomain extends Action
             'registrant' => $registrant,
             'contacts' => $contacts
             ) = $this->generateContactsForDomain(request: $request, metadata: $metadata);
+        $transferDomainPeriods = $metadata->transferDomainPeriods;
 
         $parameters = [
             'domainName' => self::getDomainName($request->domain),
-            'customer' =>  App::registrarConfig()->customerHandle(),
+            'customer' => App::registrarConfig()->customerHandle(),
             'registrant' => $registrant,
             'authcode' => $request->eppCode,
             'autoRenew' => false,
             'ns' => App::registrarConfig()->keepNameServers() ? null : $domain->nameservers,
             'contacts' => DomainContactCollection::fromArray($contacts),
         ];
+
+        // period has to be at least 1 year
+        if (
+            array_filter($transferDomainPeriods, fn($period) => $period % 12 !== 0)
+            && in_array(12, $transferDomainPeriods)
+        ) {
+            $parameters['period'] = 12;
+        }
 
         if (!App::registrarConfig()->keepNameServers()) {
             $parameters['keyData'] = KeyDataCollection::fromArray([]);

@@ -10,7 +10,7 @@ test ('Set dns setup to BASIC and order domain', async ({ page }) => {
 
     await loginAsUser(page)
 
-    let domain = generateDomainName('no')
+    let domain = generateDomainName('com')
     await orderDomain(page, domain, true)
     await addDnsItem(page, domain)
 });

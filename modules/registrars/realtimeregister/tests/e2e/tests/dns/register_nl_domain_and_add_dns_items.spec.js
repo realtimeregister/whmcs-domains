@@ -3,9 +3,22 @@ import {addDnsItem, generateDomainName, loginAsAdmin, loginAsUser, orderDomain, 
 
 
 // TODO delete used domainnames after tests
+test ('Set dns setup to "none" and own dnsservers, then order domain', async ({ page }) => {
+    await loginAsAdmin(page)
+    await setDnsServers(page, [process.env.OWN_NAMESERVER_1, process.env.OWN_NAMESERVER_2], 'none', false);
+    // logout
+    await page.goto('/admin/logout.php')
+
+    await loginAsUser(page)
+
+    let domain = generateDomainName('nl')
+    await orderDomain(page, domain, false)
+    // TODO check for absence of dns management option in menu
+});
+
 test ('Set dns setup to "none" and order domain', async ({ page }) => {
     await loginAsAdmin(page)
-    await setDnsServers(page, [process.env.BASIC_NAMESERVER_1, process.env.BASIC_NAMESERVER_2], 'none', false);
+    await setDnsServers(page, [process.env.OWN_NAMESERVER_1, process.env.OWN_NAMESERVER_2], 'none', false);
     // logout
     await page.goto('/admin/logout.php')
 

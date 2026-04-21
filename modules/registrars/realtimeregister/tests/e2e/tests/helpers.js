@@ -72,7 +72,7 @@ export async function setDnsServers(page, dnsServers, typeOf, vanityNameservers)
         await page.getByRole('button', { name: 'Confirm Password' }).click()
     }
 
-    await page.selectOption('select[name="template"]', 'realtimeregister')
+    await page.selectOption('select[name="template"]', 'realtimeregister-example')
     await page.getByRole('button', {name: 'Save Changes'}).click()
 
     // Set default nameservers
@@ -91,10 +91,12 @@ export async function setDnsServers(page, dnsServers, typeOf, vanityNameservers)
     await page.locator('td:nth-child(3) > .btn.btn-default').click();
     await page.selectOption('select[name="dns_support"]', typeOf)
 
-    if (typeOf === 'BASIC') {
+    if (typeOf === 'BASIC' || typeOf === 'PREMIUM') {
         await page.fill('input[name="dns_vanity_nameserver_1"]', '')
         await page.fill('input[name="dns_vanity_nameserver_2"]', '')
-    } else if (vanityNameservers.length > 0) {
+    }
+
+    if (vanityNameservers.length > 0) {
         await page.fill('input[name="dns_vanity_nameserver_1"]', vanityNameservers[0])
         await page.fill('input[name="dns_vanity_nameserver_2"]', vanityNameservers[1])
     }

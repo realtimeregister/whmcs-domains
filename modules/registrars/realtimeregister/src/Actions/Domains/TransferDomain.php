@@ -24,7 +24,7 @@ class TransferDomain extends Action
             'registrant' => $registrant,
             'contacts' => $contacts
             ) = $this->generateContactsForDomain(request: $request, metadata: $metadata);
-        $transferDomainPeriods = $metadata->transferDomainPeriods;
+        $transferDomainPeriods = $metadata->transferDomainPeriods ?? [];
 
         $parameters = [
             'domainName' => self::getDomainName($request->domain),

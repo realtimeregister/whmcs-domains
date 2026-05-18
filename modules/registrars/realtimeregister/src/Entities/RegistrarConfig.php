@@ -22,6 +22,11 @@ class RegistrarConfig
         return $this->get('contact_handle_prefix', 'srs_');
     }
 
+    public function autoCreateContacts(): bool
+    {
+        return $this->get('auto_create_contacts') === 'on';
+    }
+
     public function isTest(): bool
     {
         return $this->get('test_mode', true);

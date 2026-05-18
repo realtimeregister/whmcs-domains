@@ -64,7 +64,6 @@ trait DomainTrait
     protected function createContact(int $clientId, int $contactId, bool $organizationAllowed)
     {
         $whmcsContact = App::localApi()->getContact($clientId, $contactId);
-        // If we do not find a match we create a new contact
         $rtrContact = ContactService::convertToRtrContact($whmcsContact, $organizationAllowed);
         $handle = uniqid(App::registrarConfig()->contactHandlePrefix() ?: '', true);
 

@@ -25,13 +25,23 @@ class ContactEdit extends Hook
         $mappings = App::contacts()->fetchMappingByContactId((int)$vars->get('userid'), (int)$vars->get('contactid'));
 
         if ($mappings->isEmpty()) {
-            // No mapping found, so we create one from the whmcs contact, if possible
             try {
-                $this->getOrCreateContact(
+                $contact = $this->getContact(
                     (int)$vars->get('userid'),
                     (int)$vars->get('contactid'),
                     (bool)$vars->get('companyname')
                 );
+
+                if (!$contact) {
+                    if (!App::registrarConfig()->autoCreateContacts()) {
+                        return;
+                    }
+                    $this->createContact(
+                        (int)$vars->get('userid'),
+                        (int)$vars->get('contactid'),
+                        (bool)$vars->get('companyname')
+                    );
+                }
 
                 $mappings = App::contacts()->fetchMappingByContactId(
                     (int)$vars->get('userid'),

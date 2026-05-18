@@ -86,6 +86,13 @@ class ConfigArray
                     'Size' => '20',
                     'Description' => 'Specify the brand that will be used when creating new contacts.',
                 ],
+                'auto_create_contacts' => [
+                    'FriendlyName' => 'Auto create contacts',
+                    'Type' => 'yesno',
+                    'Default' => 'on',
+                    'Description' => 'Enable this to automatically create contacts at Realtime Register
+                    when they are created in WHMCS.',
+                ],
                 'contact_handle_prefix' => [
                     'FriendlyName' => 'Contact handle prefix',
                     'Type' => 'text',

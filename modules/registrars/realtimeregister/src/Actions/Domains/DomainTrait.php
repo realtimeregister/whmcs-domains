@@ -51,8 +51,48 @@ trait DomainTrait
         );
     }
 
-    protected function getOrCreateContact(int $clientId, int $contactId, bool $organizationAllowed, string $role = null)
+    protected function getOrCreateContact(
+        int $clientId,
+        int $contactId,
+        bool $organizationAllowed,
+        string $role = null
+    ): string {
+        return $this->getContact($clientId, $contactId, $organizationAllowed, $role)
+            ?? $this->createContact($clientId, $contactId, $organizationAllowed);
+    }
+
+    protected function createContact(int $clientId, int $contactId, bool $organizationAllowed)
     {
+        $whmcsContact = App::localApi()->getContact($clientId, $contactId);
+        // If we do not find a match we create a new contact
+        $rtrContact = ContactService::convertToRtrContact($whmcsContact, $organizationAllowed);
+        $handle = uniqid(App::registrarConfig()->contactHandlePrefix() ?: '', true);
+
+        App::client()->contacts->create(
+            customer: App::registrarConfig()->customerHandle(),
+            handle: $handle,
+            name: $rtrContact->get('name'),
+            addressLine: $rtrContact->get('addressLine'),
+            postalCode: $rtrContact->get('postalCode'),
+            city: $rtrContact->get('city'),
+            country: $rtrContact->get('country'),
+            email: $rtrContact->get('email'),
+            voice: $rtrContact->get('voice') ?: '',
+            organization: $rtrContact->get('organization'),
+            state: $rtrContact->get('state')
+        );
+
+        App::contacts()->addContactMapping($clientId, $contactId, $handle, $organizationAllowed);
+
+        return $handle;
+    }
+
+    protected function getContact(
+        int $clientId,
+        int $contactId,
+        bool $organizationAllowed,
+        string $role = null
+    ): ?string {
         if ($role) {
             $handle = $this->handleOverride($role);
 
@@ -88,31 +128,13 @@ trait DomainTrait
             $organizationAllowed
         );
 
-        if (!$contact) {
-            // If we do not find a match we create a new contact
-            $rtrContact = ContactService::convertToRtrContact($whmcsContact, $organizationAllowed);
-            $handle = uniqid(App::registrarConfig()->contactHandlePrefix() ?: '', true);
-
-            App::client()->contacts->create(
-                customer: App::registrarConfig()->customerHandle(),
-                handle: $handle,
-                name: $rtrContact->get('name'),
-                addressLine: $rtrContact->get('addressLine'),
-                postalCode: $rtrContact->get('postalCode'),
-                city: $rtrContact->get('city'),
-                country: $rtrContact->get('country'),
-                email: $rtrContact->get('email'),
-                voice: $rtrContact->get('voice') ?: '',
-                organization: $rtrContact->get('organization'),
-                state: $rtrContact->get('state')
-            );
-
-            App::contacts()->addContactMapping($clientId, $contactId, $handle, $organizationAllowed);
-
-            return $handle;
+        if ($contact) {
+            return $contact['handle'];
         }
-        return $contact['handle'];
+
+        return null;
     }
+
 
     protected function getDomainNameservers(Request $request, DataObject $order = null): array
     {

@@ -49,6 +49,7 @@ class RegisterDomain extends Action
             'privacyProtect' => $domain->privacyProtect
         ];
 
+        $createdDnsZone = null;
         if (App::registrarConfig()->hasDnsSupport()) {
             // remove default nameservers, we set the correct ones via the zone
             unset($parameters['ns']);
@@ -64,7 +65,7 @@ class RegisterDomain extends Action
                 $dnsParameters['ns'] = $this->vanityNameservers;
             }
 
-            App::client()->dnszones->create(...$dnsParameters);
+            $createdDnsZone = App::client()->dnszones->create(...$dnsParameters);
             $parameters['zone'] = Zone::fromArray(
                 ['service' => ZoneServiceEnum::from(App::registrarConfig()->get('dns_support'))->value]
             );
@@ -84,12 +85,22 @@ class RegisterDomain extends Action
         }
 
         /** @var DomainRegistration $domainRegistration */
-        $domainRegistration = App::client()->domains->register(...$parameters);
+        try {
+            $domainRegistration = App::client()->domains->register(...$parameters);
+            if ($domainRegistration->expiryDate) {
+                return ['success' => true];
+            }
 
-        if ($domainRegistration->expiryDate) {
-            return ['success' => true];
+            return ['pending' => true];
+        } catch (\Exception) {
+            /*
+             * If we have dns support (in any fashion) enabled, we have already created a zone, this will cause problems
+             * later, so we delete the zone if anything goed wrong while registering the domain
+             */
+            if (App::registrarConfig()->hasDnsSupport() && $createdDnsZone !== null) {
+                App::client()->dnszones->delete($createdDnsZone);
+            }
         }
-
-        return ['pending' => true];
+        return ['success' => false];
     }
 }

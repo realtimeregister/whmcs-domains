@@ -92,14 +92,15 @@ class RegisterDomain extends Action
             }
 
             return ['pending' => true];
-        } catch (\Exception) {
+        } catch (\Exception $exception) {
             /*
              * If we have dns support (in any fashion) enabled, we have already created a zone, this will cause problems
              * later, so we delete the zone if anything goed wrong while registering the domain
              */
-            if (App::registrarConfig()->hasDnsSupport() && $createdDnsZone !== null) {
+            if ($createdDnsZone !== null) {
                 App::client()->dnszones->delete($createdDnsZone);
             }
+            throw $exception;
         }
         return ['success' => false];
     }

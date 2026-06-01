@@ -384,10 +384,61 @@ class ContactService
     }
 
     /**
+     * Resolves the RTR brand handle for an outgoing contact create call.
+     *
+     * Default behaviour: returns the brand configured globally in the
+     * registrar settings (App::registrarConfig()->brand()).
+     *
+     * Integrators that need a different brand per contact (per-language
+     * registrar emails, per-client whitelabel, …) can implement the WHMCS
+     * hook `RTRContactBrandResolve` and return ['brand' => 'handle'] to
+     * override. Example:
+     *
+     *     add_hook('RTRContactBrandResolve', 1, function ($vars) {
+     *         $map = ['french' => 'default', 'english' => 'default-us'];
+     *         $clientId = (int) ($vars['clientId'] ?? 0);
+     *         if (!$clientId) return [];
+     *         $lang = \WHMCS\Database\Capsule::table('tblclients')
+     *             ->where('id', $clientId)->value('language');
+     *         return isset($map[$lang]) ? ['brand' => $map[$lang]] : [];
+     *     });
+     *
+     * The first non-empty `brand` returned by any listener wins. If none
+     * override, we fall back on the global registrar-config brand.
+     *
+     * @param  int|null $clientId  WHMCS client ID (tblclients.id), or null
+     *                             when called outside of a client context
+     *                             (admin domain registration, etc.).
+     * @return string|null         Brand handle to send to RTR.
+     */
+    public static function resolveContactBrand(?int $clientId): ?string
+    {
+        $defaultBrand = self::getDefaultParams()['brand'] ?? null;
+
+        $hookResults = function_exists('run_hook')
+            ? run_hook('RTRContactBrandResolve', [
+                'clientId'     => $clientId,
+                'defaultBrand' => $defaultBrand,
+            ])
+            : [];
+
+        foreach ((array) $hookResults as $result) {
+            if (is_array($result) && !empty($result['brand'])) {
+                return (string) $result['brand'];
+            }
+        }
+        return $defaultBrand;
+    }
+
+    /**
      * @throws \Exception
      */
-    public static function contactCreate(DataObject $rtrContact, ?TLDInfo $tldInfo, ?array $properties): string
-    {
+    public static function contactCreate(
+        DataObject $rtrContact,
+        ?TLDInfo $tldInfo,
+        ?array $properties,
+        ?int $clientId = null
+    ): string {
         if (App::registrarConfig()->customerHandle() !== null && App::registrarConfig()->apiKey() !== null) {
             // Generate unique contact handle
             $handle = uniqid(App::registrarConfig()->contactHandlePrefix() ?: 'srs_');
@@ -398,10 +449,11 @@ class ContactService
             $rtrContact['customer'] = App::registrarConfig()->customerHandle();
             $rtrContact['handle'] = $handle;
 
-            // Set brand
-            $params = self::getDefaultParams();
-            if (!empty($params['brand'])) {
-                $rtrContact['brand'] = $params['brand'];
+            // Resolve brand: defaults to the global registrar-config brand,
+            // overridable per client via the RTRContactBrandResolve hook.
+            $brand = self::resolveContactBrand($clientId);
+            if ($brand) {
+                $rtrContact['brand'] = $brand;
             }
 
             // Create contact at RTR
@@ -451,7 +503,12 @@ class ContactService
             whmcsContact: new DataObject($whmcs_contact),
             organizationAllowed: $organizationAllowed
         );
-        return self::contactCreate(rtrContact: $rtr_contact, tldInfo: $tldInfo, properties: $properties);
+        return self::contactCreate(
+            rtrContact: $rtr_contact,
+            tldInfo: $tldInfo,
+            properties: $properties,
+            clientId: $clientId
+        );
     }
 
     public static function convertWhmcsDomainContactToRtrContact(

@@ -52,7 +52,7 @@ class SaveDns extends Action
                 // Fallback to standard WHMCS dnsrecords
                 if (isset($request->params['dnsrecords']) && is_array($request->params['dnsrecords'])) {
                     foreach ($request->params['dnsrecords'] as $record) {
-                        if (empty($record['hostname']) && empty($record['address'])) {
+                        if (empty($record['hostname']) || empty($record['address'])) {
                             continue;
                         }
                         $dnsItems[] = [

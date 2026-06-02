@@ -23,14 +23,54 @@ class SaveDns extends Action
             if (isset($_SESSION['rtr']['dns'], $_SESSION['rtr']['dns']['success'])) {
                 unset($_SESSION['rtr']['dns']['success']);
             }
-            if (!is_array($_POST['dns-items'])) {
-                $_POST['dns-items'] = [];
-            }
-            // Temporary keep the items in memory
-            $_SESSION['rtr']['dns']['soa'] = $_POST['soa'];
-            $_SESSION['rtr']['dns']['dns-items'] = $_POST['dns-items'];
 
-            $updated = $this->processUpdate($zone, $domain, $_POST['soa'], $_POST['dns-items']);
+            $soa = $_POST['soa'] ?? null;
+            if (!is_array($soa)) {
+                if ($zone && $zone->id) {
+                    $dataFromServer = App::client()->dnszones->get($zone->id);
+                    $soa = [
+                        'hostmaster' => $dataFromServer->hostMaster,
+                        'refresh' => $dataFromServer->refresh,
+                        'retry' => $dataFromServer->retry,
+                        'expire' => $dataFromServer->expire,
+                        'ttl' => $dataFromServer->ttl,
+                    ];
+                } else {
+                    $soa = [
+                        'hostmaster' => 'hostmaster@' . $domain->domainName,
+                        'refresh' => 3600,
+                        'retry' => 3600,
+                        'expire' => 1209600,
+                        'ttl' => 3600
+                    ];
+                }
+            }
+
+            $dnsItems = $_POST['dns-items'] ?? null;
+            if (!is_array($dnsItems)) {
+                $dnsItems = [];
+                // Fallback to standard WHMCS dnsrecords
+                if (isset($request->params['dnsrecords']) && is_array($request->params['dnsrecords'])) {
+                    foreach ($request->params['dnsrecords'] as $record) {
+                        if (empty($record['hostname']) || empty($record['address'])) {
+                            continue;
+                        }
+                        $dnsItems[] = [
+                            'name' => $record['hostname'],
+                            'type' => $record['type'],
+                            'content' => $record['address'],
+                            'prio' => $record['priority'] ?? '',
+                            'ttl' => 3600
+                        ];
+                    }
+                }
+            }
+
+            // Temporary keep the items in memory
+            $_SESSION['rtr']['dns']['soa'] = $soa;
+            $_SESSION['rtr']['dns']['dns-items'] = $dnsItems;
+
+            $updated = $this->processUpdate($zone, $domain, $soa, $dnsItems);
             $this->forgetDomainInfo($request);
             return $updated;
         } else {

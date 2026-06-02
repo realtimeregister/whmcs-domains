@@ -50,7 +50,7 @@ class RegisterDomain extends Action
         ];
 
         $createdDnsZone = null;
-        if (App::registrarConfig()->hasDnsSupport()) {
+        if ($request->params['dnsmanagement'] === true && App::registrarConfig()->hasDnsSupport()) {
             // remove default nameservers, we set the correct ones via the zone
             unset($parameters['ns']);
             // Add a zone, we need this because some registries require nameservers on the create call

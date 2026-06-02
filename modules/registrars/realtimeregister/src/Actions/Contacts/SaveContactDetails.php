@@ -118,7 +118,8 @@ class SaveContactDetails extends Action
                         $newDomainContacts[$role] = ContactService::contactCreate(
                             rtrContact: new DataObject($newContact),
                             tldInfo: $tldInfo,
-                            properties: $properties
+                            properties: $properties,
+                            clientId: $clientId
                         );
 
                         $createdContacts[] = $newDomainContacts[$role];

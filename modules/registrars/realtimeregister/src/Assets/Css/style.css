@@ -1,3 +1,6 @@
+/*
+ * These are used in the admin @ Domain registrars
+ */
 #realtimeregisterconfig table .fieldlabel {
     width: 200px;
 }
@@ -12,42 +15,46 @@
 #realtimeregisterconfig table td a {
     text-decoration: underline;
 }
-form .view-ips {
+
+/**
+ * Used in the custom child host form
+ */
+.rtr-child-host-form form .view-ips {
     padding-top: 4px;
     vertical-align: top;
     max-width: initial;
 }
-.manage-ips, .delete-host {
+.rtr-child-host-form .manage-ips, .delete-host {
     vertical-align: top;
 }
-.add-ip {
+.rtr-child-host-form .add-ip {
     font-weight: bold;
     padding: 0 5px;
 }
-.remove-ip {
+.rtr-child-host-form .remove-ip {
     padding: 5px;
 }
 
-.remove-ip i {
+.rtr-child-host-form .remove-ip i {
     margin-top: 4px;
 }
 
-.extra-ips {
+.rtr-child-host-form .extra-ips {
     padding: 0 5px;
     white-space: nowrap;
 }
-.extra-ips:hover, .add-ip:hover {
+.rtr-child-host-form .extra-ips:hover, .add-ip:hover {
     text-decoration: none;
 }
-.ip-version {
+.rtr-child-host-form .ip-version {
     min-width: 175px;
 }
 
-@keyframes spinner-border {
+.rtr-child-host-form @keyframes spinner-border {
     to { transform: rotate(360deg); }
 }
 
-.spinner {
+.rtr-child-host-form .spinner {
     display: none;
     background-color: rgba(255, 255, 255, 0.6);
     height: 100%;
@@ -57,11 +64,11 @@ form .view-ips {
     top: 0;
     text-align: center;
 }
-.spinner.active {
+.rtr-child-host-form .spinner.active {
     display: block;
 }
 
-.spinner-border {
+.rtr-child-host-form .spinner-border {
     position: absolute;
     top: calc(50% - 1rem);
     display: inline-block;
@@ -75,35 +82,32 @@ form .view-ips {
     animation: spinner-border .75s linear infinite;
 }
 
-.child-host {
-}
-
-.child-host__table {
+.rtr-child-host-form .child-host__table {
     width: 100%;
 }
 
-.child-host__table td input,
-.child-host__table td select {
+.rtr-child-host-form .child-host__table td input,
+.rtr-child-host-form .child-host__table td select {
     height: 30px;
     padding: 5px;
 }
 
-.child-host__table td label,
-.child-host__table td input,
-.child-host__table td select {
+.rtr-child-host-form .child-host__table td label,
+.rtr-child-host-form .child-host__table td input,
+.rtr-child-host-form .child-host__table td select {
     width: 100%;
 }
 
-.child-host__table td {
+.rtr-child-host-form .child-host__table td {
     padding-bottom: 5px;
     padding-top: 5px;
 }
 
-.child-host__table td.version {
+.rtr-child-host-form .child-host__table td.version {
     padding-left: 10px;
 }
 
-.child-host__table td.remove {
+.rtr-child-host-form .child-host__table td.remove {
     width: 20px;
 }
 
@@ -116,21 +120,21 @@ form .view-ips {
     color: white;
 }
 
-.status {
+.rtr-child-host-form .status {
     border-radius: 5px;
     padding: 5px;
     color: white;
 }
 
-.status.success {
+.rtr-child-host-form .status.success {
     color: black;
     background-color: #abf4bf;
 }
 
-.status.error {
+.rtr-child-host-form .status.error {
     background-color: #e85e5e;
 }
 
-.fa-white {
+.rtr-child-host-form .fa-white {
     color: white !important;
 }

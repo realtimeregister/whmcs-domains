@@ -10,18 +10,20 @@ class BalanceModuleWidget extends BaseWidget
     protected $description = '';
     protected $weight = 150;
     protected $columns = 1;
-    protected $cache = false;
+    protected $cache = true;
     protected $cacheExpiry = 120;
     protected $requiredPermission = '';
 
     public function getData()
     {
-        try {
-            $credits = App::client()->customers->credits(App::registrarConfig()->customerHandle());
-            return $credits->entities;
-        } catch (\Exception) {
-            return 0;
+        if ($this->isVisible()) {
+            try {
+                $credits = App::client()->customers->credits(App::registrarConfig()->customerHandle());
+                return $credits->entities;
+            } catch (\Exception) {
+            }
         }
+        return 0;
     }
 
     public function generateOutput($data): string

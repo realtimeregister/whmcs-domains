@@ -7,8 +7,8 @@ use RealtimeRegisterDomains\Hooks\Hook;
 
 class ActionsWidget extends Hook
 {
-    public function __invoke(DataObject $vars)
+    public function __invoke(DataObject $vars): \RealtimeRegisterDomains\Widget\ActionsWidget
     {
-        return new \RealtimeRegisterDomains\Widget\ActionsWidget();
+        return new \RealtimeRegisterDomains\Widget\ActionsWidget($vars);
     }
 }

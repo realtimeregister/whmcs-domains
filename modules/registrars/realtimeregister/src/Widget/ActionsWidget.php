@@ -10,7 +10,7 @@ class ActionsWidget extends BalanceModuleWidget
     protected $description = '';
     protected $weight = 150;
     protected $columns = 1;
-    protected $cache = false;
+    protected $cache = true;
     protected $cacheExpiry = 120;
     protected $requiredPermission = '';
 

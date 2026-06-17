@@ -12,13 +12,16 @@ class InactiveDomainsWidget extends BaseWidget
     protected $description = '';
     protected $weight = 150;
     protected $columns = 1;
-    protected $cache = false;
+    protected $cache = true;
     protected $cacheExpiry = 120;
     protected $requiredPermission = '';
 
     public function getData(): array
     {
-        return InactiveDomains::all()->toArray();
+        if ($this->isVisible()) {
+            return InactiveDomains::all()->toArray();
+        }
+        return [];
     }
 
     public function generateOutput($data): string

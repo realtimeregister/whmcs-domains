@@ -10,7 +10,7 @@ class ErrorLogWidget extends BaseWidget
     protected $description = '';
     protected $weight = 150;
     protected $columns = 1;
-    protected $cache = false;
+    protected $cache = true;
 
     public function getData(): array
     {

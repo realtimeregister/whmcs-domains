@@ -10,18 +10,20 @@ class DomainOverviewModuleWidget extends BaseWidget
     protected $description = '';
     protected $weight = 150;
     protected $columns = 1;
-    protected $cache = false;
+    protected $cache = true;
     protected $cacheExpiry = 120;
     protected $requiredPermission = '';
 
-    public function getData()
+    public function getData(): int
     {
-        try {
-            $domainStatistics = App::client()->domains->list(limit: 1);
-        } catch (\Exception) {
-            return 0;
+        if ($this->isVisible()) {
+            try {
+                $domainStatistics = App::client()->domains->list(limit: 1);
+                return $domainStatistics->pagination->total;
+            } catch (\Exception) {
+            }
         }
-        return $domainStatistics->pagination->total;
+        return 0;
     }
 
     public function generateOutput($data): string

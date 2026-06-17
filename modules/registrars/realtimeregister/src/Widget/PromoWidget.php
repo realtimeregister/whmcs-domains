@@ -15,19 +15,20 @@ class PromoWidget extends BaseWidget
     protected $weight = 150;
     protected $columns = 1;
     protected $height = 150;
-    protected $cache = false;
+    protected $cache = true;
     protected $cacheExpiry = 60 * 60 * 24; // One day
     protected $requiredPermission = '';
 
     public function getData(): array
     {
-        try {
-            $promotions = App::client()->customers->promoList(App::registrarConfig()->customerHandle());
-        } catch (\Exception) {
-            return [];
+        if ($this->isVisible()) {
+            try {
+                $promotions = App::client()->customers->promoList(App::registrarConfig()->customerHandle());
+                return ['promotions' => $promotions];
+            } catch (\Exception) {
+            }
         }
-
-        return ['promotions' => $promotions];
+        return [];
     }
 
     public function generateOutput($data): string

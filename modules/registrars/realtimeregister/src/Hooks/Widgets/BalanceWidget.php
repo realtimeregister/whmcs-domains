@@ -7,8 +7,8 @@ use RealtimeRegisterDomains\Hooks\Hook;
 
 class BalanceWidget extends Hook
 {
-    public function __invoke(DataObject $vars)
+    public function __invoke(DataObject $vars): \RealtimeRegisterDomains\Widget\BalanceModuleWidget
     {
-        return new \RealtimeRegisterDomains\Widget\BalanceModuleWidget();
+        return new \RealtimeRegisterDomains\Widget\BalanceModuleWidget($vars);
     }
 }

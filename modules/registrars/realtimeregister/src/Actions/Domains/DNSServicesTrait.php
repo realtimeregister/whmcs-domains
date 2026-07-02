@@ -7,8 +7,8 @@ use RealtimeRegisterDomains\App;
 
 trait DNSServicesTrait
 {
-    private ZoneServiceEnum $serviceType;
-    private array $vanityNameservers = [];
+    protected ZoneServiceEnum $serviceType;
+    protected array $vanityNameservers = [];
 
     private function generateDnsServers(): void
     {

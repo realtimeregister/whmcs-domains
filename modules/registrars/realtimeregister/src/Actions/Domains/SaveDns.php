@@ -29,20 +29,14 @@ class SaveDns extends Action
                 if ($zone && $zone->id) {
                     $dataFromServer = App::client()->dnszones->get($zone->id);
                     $soa = [
-                        'hostmaster' => $dataFromServer->hostMaster,
+                        'hostMaster' => $dataFromServer->hostMaster,
                         'refresh' => $dataFromServer->refresh,
                         'retry' => $dataFromServer->retry,
                         'expire' => $dataFromServer->expire,
                         'ttl' => $dataFromServer->ttl,
                     ];
                 } else {
-                    $soa = [
-                        'hostmaster' => 'hostmaster@' . $domain->domainName,
-                        'refresh' => 3600,
-                        'retry' => 3600,
-                        'expire' => 1209600,
-                        'ttl' => 3600
-                    ];
+                    $soa = $this->generateDefaultSoaRecords($domain);
                 }
             }
 
@@ -78,7 +72,7 @@ class SaveDns extends Action
         }
     }
 
-    private function processUpdate(?Zone $zone, DomainDetails $domain, array $soaData, array $dnsRecords): ?array
+    protected function processUpdate(?Zone $zone, DomainDetails $domain, array $soaData, array $dnsRecords): ?array
     {
         // Cleanup the data which has been inserted by our client
         foreach ($dnsRecords as $k => $data) {
@@ -116,7 +110,7 @@ class SaveDns extends Action
 
         try {
             $dnsZonePayload = [
-                'hostMaster' => $soaData['hostmaster'],
+                'hostMaster' => $soaData['hostMaster'],
                 'refresh' => (int)$soaData['refresh'],
                 'retry' => (int)$soaData['retry'],
                 'expire' => (int)$soaData['expire'],
@@ -125,23 +119,7 @@ class SaveDns extends Action
             ];
 
             if (!$zone) {
-                $dnsZonePayload['name'] = $domain->domainName;
-                $dnsZonePayload['service'] = $this->serviceType;
-
-                if (isset($this->vanityNameservers) && count($this->vanityNameservers) > 0) {
-                    $dnsZonePayload['ns'] = $this->vanityNameservers;
-                }
-
-                App::client()->dnszones->create(...$dnsZonePayload);
-                // Enable the just created zone, and thus, enable it to the domain
-                App::client()->domains->update(
-                    domainName: $domain->domainName,
-                    zone: Zone::fromArray(
-                        [
-                            'service' => $this->serviceType->value,
-                        ]
-                    )
-                );
+                $this->attachNewZoneToDomain($domain, $dnsZonePayload);
                 $_SESSION['rtr']['dns']['success'] = true;
             } else {
                 // FIXME vanity nameservers mutations
@@ -159,5 +137,46 @@ class SaveDns extends Action
             $_SESSION['rtr']['dns']['error'] = json_decode($exceptionText, true);
             return ['error' => json_decode($exceptionText, true)];
         }
+    }
+
+    /**
+     * @param DomainDetails $domain
+     * @return array
+     */
+    protected function generateDefaultSoaRecords(DomainDetails $domain): array
+    {
+        return [
+            'hostMaster' => 'hostmaster@' . $domain->domainName,
+            'refresh' => 3600,
+            'retry' => 3600,
+            'expire' => 1209600,
+            'ttl' => 3600
+        ];
+    }
+
+    /**
+     * @param DomainDetails $domain
+     * @param array $dnsZonePayload
+     * @return void
+     */
+    public function attachNewZoneToDomain(DomainDetails $domain, array $dnsZonePayload): void
+    {
+        $dnsZonePayload['name'] = $domain->domainName;
+        $dnsZonePayload['service'] = $this->serviceType;
+
+        if (isset($this->vanityNameservers) && count($this->vanityNameservers) > 0) {
+            $dnsZonePayload['ns'] = $this->vanityNameservers;
+        }
+
+        App::client()->dnszones->create(...$dnsZonePayload);
+        // Enable the just created zone, and thus, enable it to the domain
+        App::client()->domains->update(
+            domainName: $domain->domainName,
+            zone: Zone::fromArray(
+                [
+                    'service' => $this->serviceType->value,
+                ]
+            )
+        );
     }
 }

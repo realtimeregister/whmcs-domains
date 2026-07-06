@@ -33,7 +33,7 @@ class GetDns extends Action
                     $vars['zones'] = $records;
 
                     $vars['soa'] = [
-                        'hostmaster' => $dataFromServer->hostMaster,
+                        'hostMaster' => $dataFromServer->hostMaster,
                         'refresh' => $dataFromServer->refresh,
                         'retry' => $dataFromServer->retry,
                         'expire' => $dataFromServer->expire,

@@ -141,6 +141,11 @@ function realtimeregister_TransferWithBillables($params)
     return App::dispatch(TransferWithBillables::class, $params);
 }
 
+function realtimeregister_ForceDNSSupport($params)
+{
+    return App::dispatch(\RealtimeRegisterDomains\Actions\Domains\ForceDNSSupport::class, $params);
+}
+
 function realtimeregister_ResendTransfer(array $params)
 {
     return App::dispatch(ResendTransfer::class, $params);

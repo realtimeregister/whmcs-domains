@@ -77,6 +77,11 @@ class AdminCustomButtonArray extends Action
             }
         }
 
+        if ($whmcsDomain['dnsmanagement'] === 1) {
+            // show force button
+            $adminButtons['Force DNS support'] = 'ForceDNSSupport';
+        }
+
         App::assets()->addScript('renew.js', ScriptLocationType::Footer);
 
         return $adminButtons;

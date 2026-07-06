@@ -600,16 +600,16 @@
         },
         {
             "name": "realtimeregister/realtimeregister-php",
-            "version": "v1.4.1",
+            "version": "v1.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/realtimeregister/realtimeregister-php.git",
-                "reference": "9b764303a6caf7471ea6482fbe3c92ba1e22ba0a"
+                "reference": "a2f8be1ec160afe04fcc5ef021996f26f43050d5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/realtimeregister/realtimeregister-php/zipball/9b764303a6caf7471ea6482fbe3c92ba1e22ba0a",
-                "reference": "9b764303a6caf7471ea6482fbe3c92ba1e22ba0a",
+                "url": "https://api.github.com/repos/realtimeregister/realtimeregister-php/zipball/a2f8be1ec160afe04fcc5ef021996f26f43050d5",
+                "reference": "a2f8be1ec160afe04fcc5ef021996f26f43050d5",
                 "shasum": ""
             },
             "require": {
@@ -617,12 +617,12 @@
                 "guzzlehttp/guzzle": "^6.2.0|^7.0.1",
                 "php": "^8.1",
                 "psr/log": "^1.0|^2.0|^3.0.0",
-                "webmozart/assert": "^1.0.3"
+                "webmozart/assert": "^1.0.3|^2.0"
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^3.14.4",
                 "phpstan/phpstan": "^1.10.6",
-                "phpunit/phpunit": "^10.0.15",
+                "phpunit/phpunit": "^10.5.63",
                 "sandwave-io/php-cs-fixer-config": "^1.0.0"
             },
             "type": "library",
@@ -644,9 +644,9 @@
             "description": "The PHP SDK for the RealtimeRegister REST API.",
             "support": {
                 "issues": "https://github.com/realtimeregister/realtimeregister-php/issues",
-                "source": "https://github.com/realtimeregister/realtimeregister-php/tree/v1.4.1"
+                "source": "https://github.com/realtimeregister/realtimeregister-php/tree/v1.5.0"
             },
-            "time": "2026-03-09T15:17:45+00:00"
+            "time": "2026-06-29T09:16:36+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
@@ -4815,5 +4815,5 @@
         "php": "^7.4|^8.1"
     },
     "platform-dev": {},
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }

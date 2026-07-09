@@ -115,7 +115,7 @@ class ContactEdit extends Hook
                             $exception,
                             sprintf("Splitting contact from %s to %s", $mapping->handle, $newHandle)
                         );
-                    } else if (is_array($errorMessage) && $errorMessage['type'] == 'ObjectExists') {
+                    } elseif (is_array($errorMessage) && $errorMessage['type'] == 'ObjectExists') {
                         LogService::logError(
                             $exception,
                             sprintf("Update contact command for %s already exists", $mapping->handle)

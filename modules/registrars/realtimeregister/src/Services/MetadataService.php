@@ -97,7 +97,7 @@ class MetadataService
 
         $tldAdditionalFields = [];
 
-        if (!empty($languageCodes)) {
+        if (!empty($languageCodes) && $defaultLanguageCode !== null) {
             $entry = [
                 'Name' => 'languageCode',
                 'LangVar' => 'rtr_languagecode_label',
@@ -105,13 +105,11 @@ class MetadataService
                 'Type' => 'dropdown',
                 'Options' => ',' . implode(',', array_keys($languageCodes)),
             ];
-            if ($defaultLanguageCode) {
-                $entry['Required'] = true;
-                foreach (array_keys($languageCodes) as $languageCode) {
-                    if (strtolower($languageCode) == $defaultLanguageCode) {
-                        $entry['Default'] = $languageCode;
-                        break;
-                    }
+            $entry['Required'] = true;
+            foreach (array_keys($languageCodes) as $languageCode) {
+                if (strtolower($languageCode) == $defaultLanguageCode) {
+                    $entry['Default'] = $languageCode;
+                    break;
                 }
             }
             $tldAdditionalFields[] = $entry;

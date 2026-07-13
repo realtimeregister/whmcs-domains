@@ -114,4 +114,12 @@ class Cache
         }
         return $item->get();
     }
+
+    /**
+     * Flush complete cache
+     */
+    public static function flush(): void
+    {
+        self::pool()->clear();
+    }
 }

@@ -13,14 +13,13 @@ use RealtimeRegisterDomains\Logger\DebugMailLogger;
 use RealtimeRegisterDomains\Models\RealtimeRegister\Cache;
 use RealtimeRegisterDomains\Services\Assets;
 use RealtimeRegisterDomains\Services\ContactService;
-use RealtimeRegisterDomains\Services\Language;
 use RealtimeRegisterDomains\Services\LogService;
 use RuntimeException;
 
 class App
 {
     public const NAME = 'realtimeregister';
-    public const VERSION = '2.9.1';
+    public const VERSION = '2.9.2';
     private const CACHE_KEY_VERSION = 'realtimeregister_domains_version_number';
 
     protected const API_URL = "https://api.yoursrs.com/";
@@ -59,11 +58,7 @@ class App
         $app = static::instance();
 
         if (self::VERSION != Cache::get(self::CACHE_KEY_VERSION)) {
-            if (class_exists(\WHMCS\Language\ClientLanguage::class)) {
-                foreach (\WHMCS\Language\ClientLanguage::getLanguages() as $language) {
-                    Cache::forget(Language::CACHE_KEY . $language);
-                }
-            }
+            Cache::flush();
             Cache::rememberForever(self::CACHE_KEY_VERSION, fn() => self::VERSION);
         }
 

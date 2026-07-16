@@ -2,6 +2,7 @@
 
 namespace RealtimeRegisterDomains\Actions\Domains;
 
+use RealtimeRegister\Domain\DomainDetails;
 use RealtimeRegister\Domain\Zone;
 use RealtimeRegister\Exceptions\BadRequestException;
 use RealtimeRegisterDomains\App;
@@ -35,17 +36,9 @@ class ForceDNSSupport extends SaveDns
                 try {
                     $this->attachNewZoneToDomain($domain, $dnsZonePayload);
                 } catch (BadRequestException $e) {
-                    $res = json_decode(substr($e->getMessage(), 13), true);
-                    // If the zone already exists, we want to attach it to the domain without creating a new one
+                    $res = json_decode(str_replace('Bad Request: ', '', $e->getMessage()), true);
                     if (is_array($res) && $res['type'] === 'ObjectExists') {
-                        $foundZones = App::client()->dnszones->list(1, null, null, ['name:eq' => $domain->domainName]);
-                        if ($foundZones->count() === 1) {
-                            $foundZone = $foundZones->entities[0];
-                            App::client()->domains->update(
-                                domainName: $domain->domainName,
-                                zone: Zone::fromArray(['service' => $foundZone->service->value])
-                            );
-                        }
+                        $this->attachExistingZoneToDomain($domain);
                     }
                 }
                 return ['success' => 'Zone was attached!'];
@@ -54,6 +47,21 @@ class ForceDNSSupport extends SaveDns
             }
         } else {
             return ['error' => 'Domain doesn\'t have DNS management enabled or we don\'t support it'];
+        }
+    }
+
+    /**
+     * If there is already a zone for the domain, we want to attach it to the domain without creating a new one
+     */
+    private function attachExistingZoneToDomain(DomainDetails $domain): void
+    {
+        $foundZones = App::client()->dnszones->list(1, null, null, ['name:eq' => $domain->domainName]);
+        if ($foundZones->count() === 1) {
+            $foundZone = $foundZones->entities[0];
+            App::client()->domains->update(
+                domainName: $domain->domainName,
+                zone: Zone::fromArray(['service' => $foundZone->service->value])
+            );
         }
     }
 }

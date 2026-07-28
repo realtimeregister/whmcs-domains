@@ -12,6 +12,7 @@
  * ```
  *
  */
+
 namespace RealtimeRegisterDomains\Cron;
 
 use RealtimeRegisterDomains\App;

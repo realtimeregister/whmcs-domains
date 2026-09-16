@@ -18,11 +18,10 @@ class MailService
     {
         global $whmcs;
 
-        $mail = new PHPMailer();
-
         $mailConfig = json_decode(decrypt($whmcs->get_config('MailConfig'), $GLOBALS['cc_encryption_hash']), true);
 
         if (is_array($mailConfig)) {
+            $mail = new PHPMailer();
             if ($mailConfig['module'] == 'SmtpMail' || $mailConfig['module'] == 'Mailgun') {
                 $mail->isSMTP();
                 $mail->SMTPAuth = true;
@@ -62,13 +61,17 @@ class MailService
             $mail->Body = $message;
             $mail->AltBody = strip_tags(preg_replace('/\<br(\s*)?\/?\>/i', "\n", $message));
 
-            if (!$mail->send()) {
-                logActivity(sprintf('RealTimeRegister error sending email to %s', $email));
-                return false;
-            } else {
-                logActivity(sprintf('RealTimeRegister sent email `%s` to %s', $subject, $email));
-                return true;
-            }
+            $mailSend = $mail->send();
+        } else {
+            $mailSend = mail($email, $subject, $message);
+        }
+
+        if (!$mailSend) {
+            logActivity(sprintf('RealTimeRegister error sending email to %s', $email));
+            return false;
+        } else {
+            logActivity(sprintf('RealTimeRegister sent email `%s` to %s', $subject, $email));
+            return true;
         }
     }
 }

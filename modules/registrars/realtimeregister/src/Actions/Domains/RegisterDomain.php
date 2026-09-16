@@ -43,7 +43,7 @@ class RegisterDomain extends Action
             'customer' => App::registrarConfig()->customerHandle(),
             'registrant' => $registrant,
             'period' => $period,
-            'autoRenew' => false,
+            'autoRenew' => App::registrarConfig()->shouldAutorenew(),
             'ns' => $domain->nameservers,
             'contacts' => DomainContactCollection::fromArray($contacts),
             'privacyProtect' => $domain->privacyProtect

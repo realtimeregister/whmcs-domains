@@ -31,7 +31,7 @@ class TransferDomain extends Action
             'customer' => App::registrarConfig()->customerHandle(),
             'registrant' => $registrant,
             'authcode' => $request->eppCode,
-            'autoRenew' => false,
+            'autoRenew' => App::registrarConfig()->shouldAutorenew(),
             'ns' => App::registrarConfig()->keepNameServers() ? null : $domain->nameservers,
             'contacts' => DomainContactCollection::fromArray($contacts),
         ];

@@ -241,7 +241,7 @@ var adac = {
 
         if (ote != undefined && ote == 'on') {
             adac.WEBSOCKET_URL = 'wss://adac.api.yoursrs-ote.com/ws';
-            adac.XHR_URL = 'wss://adac.api.yoursrs-ote.com/ws';
+            adac.XHR_URL = 'https://adac.api.yoursrs-ote.com/ws';
         }
 
         for (var attr in user_config) {

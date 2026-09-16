@@ -110,9 +110,9 @@ class ConfigArray
                     'FriendlyName' => 'Force Auto Renew',
                     'Type' => 'yesno',
                     'Description' =>
-                        'Enables the `auto-renew` setting for all supported extensions. This will automatically renew ' .
-                        'the domain when it expires at Realtime Register.<br><br><strong>Please be very certain you ' .
-                        'understand the consequences of this option when you enable it.</strong>',
+                        'Enables the `auto-renew` setting for all supported extensions. This will automatically ' .
+                        'renew the domain when it expires at Realtime Register.<br><br><strong>Please be very ' .
+                        'certain you understand the consequences of this option when you enable it.</strong>',
                 ],
                 'transfer_keep_nameservers' => [
                     'FriendlyName' => 'Keep nameservers for transfers',

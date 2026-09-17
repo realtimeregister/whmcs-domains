@@ -110,9 +110,11 @@ class ConfigArray
                     'FriendlyName' => 'Force Auto Renew',
                     'Type' => 'yesno',
                     'Description' =>
-                        'Enables the `auto-renew` setting for all supported extensions. This will automatically ' .
-                        'renew the domain when it expires at Realtime Register.<br><br><strong>Please be very ' .
-                        'certain you understand the consequences of this option when you enable it.</strong>',
+                        'Enables automatic renewal at Realtime Register upon domain expiration. <br>' .
+                        '<strong>Warning: Not recommended.</strong><br>WHMCS already controls domain renewals based ' .
+                        'on invoice payment. Enabling this will cause Realtime Register to automatically renew ' .
+                        'domains and charge your account even if the client has cancelled or not paid their ' .
+                        'renewal invoice.</span>',
                 ],
                 'transfer_keep_nameservers' => [
                     'FriendlyName' => 'Keep nameservers for transfers',

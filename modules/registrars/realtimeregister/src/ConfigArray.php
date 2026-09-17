@@ -106,6 +106,16 @@ class ConfigArray
                     'Description' =>
                         'Enable Transfer Lock by default for all supported extensions. <i>(new domains)</i>',
                 ],
+                'force_autorenew' => [
+                    'FriendlyName' => 'Force Auto Renew',
+                    'Type' => 'yesno',
+                    'Description' =>
+                        'Enables automatic renewal at Realtime Register upon domain expiration. <br>' .
+                        '<strong>Warning: Not recommended.</strong><br>WHMCS already controls domain renewals based ' .
+                        'on invoice payment. Enabling this will cause Realtime Register to automatically renew ' .
+                        'domains and charge your account even if the client has cancelled or not paid their ' .
+                        'renewal invoice.</span>',
+                ],
                 'transfer_keep_nameservers' => [
                     'FriendlyName' => 'Keep nameservers for transfers',
                     'Type' => 'yesno',

@@ -37,7 +37,7 @@ class TransferWithBillables extends Action
             'registrant' => $registrant,
             'ns' => App::registrarConfig()->keepNameServers() ? null : $ns,
             'authcode' => html_entity_decode(unserialize($order->transfersecret)[$domain->domainName()]),
-            'autoRenew' => false,
+            'autoRenew' => App::registrarConfig()->shouldAutorenew(),
             'contacts' => DomainContactCollection::fromArray($contacts),
             'isQuote' => true,
             'keyData' => KeyDataCollection::fromArray([])

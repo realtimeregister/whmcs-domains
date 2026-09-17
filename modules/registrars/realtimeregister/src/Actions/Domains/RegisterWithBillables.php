@@ -87,7 +87,7 @@ class RegisterWithBillables extends Action
                 'customer' => App::registrarConfig()->customerHandle(),
                 'registrant' => $registrant,
                 'ns' => $ns,
-                'autorenew' => false,
+                'autoRenew' => App::registrarConfig()->shouldAutorenew(),
                 'contacts' => DomainContactCollection::fromArray($contacts),
                 'billables' => BillableCollection::fromArray($billables),
             ];

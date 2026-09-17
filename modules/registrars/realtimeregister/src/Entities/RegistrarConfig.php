@@ -46,6 +46,15 @@ class RegistrarConfig
         return true;
     }
 
+    public function shouldAutorenew(): bool
+    {
+        $autorenew = $this->get('force_autorenew', false);
+        if ($autorenew === false) {
+            return false;
+        }
+        return true;
+    }
+
     public function get(string $key, $default = null)
     {
         if ($this->request) {

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5688e476d61562634094a196d97d9a8c",
+    "content-hash": "ed98a088636fd6b0cefa7af04c1c5ccf",
     "packages": [
         {
             "name": "giggsey/libphonenumber-for-php-lite",
@@ -600,21 +600,22 @@
         },
         {
             "name": "realtimeregister/realtimeregister-php",
-            "version": "v1.5.0",
+            "version": "v1.5.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/realtimeregister/realtimeregister-php.git",
-                "reference": "a2f8be1ec160afe04fcc5ef021996f26f43050d5"
+                "reference": "758b68e20e1369af9c39c900e3422389ee983e40"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/realtimeregister/realtimeregister-php/zipball/a2f8be1ec160afe04fcc5ef021996f26f43050d5",
-                "reference": "a2f8be1ec160afe04fcc5ef021996f26f43050d5",
+                "url": "https://api.github.com/repos/realtimeregister/realtimeregister-php/zipball/758b68e20e1369af9c39c900e3422389ee983e40",
+                "reference": "758b68e20e1369af9c39c900e3422389ee983e40",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
-                "guzzlehttp/guzzle": "^6.2.0|^7.0.1",
+                "ext-mbstring": "*",
+                "guzzlehttp/guzzle": "^6.2.0|^7",
                 "php": "^8.1",
                 "psr/log": "^1.0|^2.0|^3.0.0",
                 "webmozart/assert": "^1.0.3|^2.0"
@@ -644,9 +645,9 @@
             "description": "The PHP SDK for the RealtimeRegister REST API.",
             "support": {
                 "issues": "https://github.com/realtimeregister/realtimeregister-php/issues",
-                "source": "https://github.com/realtimeregister/realtimeregister-php/tree/v1.5.0"
+                "source": "https://github.com/realtimeregister/realtimeregister-php/tree/v1.5.5"
             },
-            "time": "2026-06-29T09:16:36+00:00"
+            "time": "2026-10-05T12:08:37+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",

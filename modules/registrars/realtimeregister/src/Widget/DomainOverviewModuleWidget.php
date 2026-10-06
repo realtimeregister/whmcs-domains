@@ -18,7 +18,7 @@ class DomainOverviewModuleWidget extends BaseWidget
     {
         if ($this->isVisible()) {
             try {
-                $domainStatistics = App::client()->domains->list(limit: 1);
+                $domainStatistics = App::client()->domains->list(limit: 0);
                 return $domainStatistics->pagination->total;
             } catch (\Exception) {
             }

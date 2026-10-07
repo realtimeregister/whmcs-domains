@@ -29,6 +29,7 @@ class Sync extends Action
         $values = [];
         $domain = null;
         $expiryDate = null;
+        $status = null;
 
         try {
             $domain = $this->domainInfo($request);
@@ -76,10 +77,6 @@ class Sync extends Action
                     if (strtotime($domain->expiryDate) >= strtotime($whmcsDomain->nextduedate)) {
                         return [];
                     }
-                }
-
-                if (strtotime($expiryDate->format('Y-m-d')) < strtotime($whmcsDomain->nextduedate)) {
-                    $values['expirydate'] = $this->syncDueDate($expiryDate->format('Y-m-d'));
                 }
 
                 if ($expiryDate->format('Y-m-d') != '0000-00-00') {
@@ -134,7 +131,7 @@ class Sync extends Action
                 $whmcsDomain->id,
                 $status ? $status->value : '',
                 $expiryDate,
-                $domain ? $this->syncDueDate($domain->expiryDate->format('Y-m-d')) : null
+                $expiryDate ? $this->syncDueDate($expiryDate->format('Y-m-d')) : null
             );
         }
 
@@ -164,17 +161,22 @@ class Sync extends Action
             ])->count() > 0;
     }
 
-
-
-    protected function syncDueDate(string $date): string
+    /**
+     * Calculate the next due date based on the WHMCS domain sync settings.
+     *
+     * Returns null when "Sync Next Due Date" (DomainSyncNextDueDate) is disabled, meaning the
+     * existing next due date must be preserved. When enabled, the number of days configured in
+     * DomainSyncNextDueDateDays is subtracted from the given (expiry) date.
+     */
+    protected function syncDueDate(string $date): ?string
     {
-        $syncDueOffset = (int)$this->config('DomainSyncNextDueDate', 0);
-
-        if (!$syncDueOffset) {
-            return $date;
+        if (!$this->config('DomainSyncNextDueDate')) {
+            return null;
         }
 
-        return date("Y-m-d", strtotime($date . ($syncDueOffset * -1) . ' days'));
+        $syncDueOffset = max(0, (int)$this->config('DomainSyncNextDueDateDays', 0));
+
+        return date('Y-m-d', strtotime($date . ' -' . $syncDueOffset . ' days'));
     }
 
     protected function parseDomainStatus(array $statuses): string
@@ -214,7 +216,7 @@ class Sync extends Action
         int $domainId,
         string $status,
         ?\DateTime $newExpiry = null,
-        string $nextDueDate = null
+        ?string $nextDueDate = null
     ): void {
         $values = [
             'status' => $status,
@@ -223,7 +225,9 @@ class Sync extends Action
             $values['expirydate'] = $newExpiry->format('Y-m-d');
         }
         if ($nextDueDate) {
+            // Keep nextinvoicedate in line with nextduedate, as WHMCS does in its own domain sync
             $values['nextduedate'] = $nextDueDate;
+            $values['nextinvoicedate'] = $nextDueDate;
         }
 
         Domain::query()->where('id', $domainId)->update($values);

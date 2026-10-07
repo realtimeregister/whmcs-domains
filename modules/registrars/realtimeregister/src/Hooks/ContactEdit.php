@@ -8,6 +8,7 @@ use RealtimeRegister\Exceptions\BadRequestException;
 use RealtimeRegisterDomains\Actions\Domains\DomainTrait;
 use RealtimeRegisterDomains\App;
 use RealtimeRegisterDomains\Entities\DataObject;
+use RealtimeRegisterDomains\Models\Whmcs\Domain;
 use RealtimeRegisterDomains\Entities\WhmcsContact;
 use RealtimeRegisterDomains\Models\RealtimeRegister\ContactMapping;
 use RealtimeRegisterDomains\Services\ContactService;
@@ -22,107 +23,120 @@ class ContactEdit extends Hook
      */
     public function __invoke(DataObject $vars): void
     {
-        $mappings = App::contacts()->fetchMappingByContactId((int)$vars->get('userid'), (int)$vars->get('contactid'));
+        $hasRtrDomain = Domain::query()
+            ->where('registrar', App::NAME)
+           ->where('userid', $vars->get('userid'))->exists();
 
-        if ($mappings->isEmpty()) {
-            try {
-                $contact = $this->getContact(
-                    (int)$vars->get('userid'),
-                    (int)$vars->get('contactid'),
-                    (bool)$vars->get('companyname')
-                );
+        // If this isn't one of our users, we don't need to bother the Realtime Register API with it
+        if ($hasRtrDomain) {
+            $mappings = App::contacts()->fetchMappingByContactId(
+                (int)$vars->get('userid'),
+                (int)$vars->get('contactid')
+            );
 
-                if (!$contact) {
-                    if (!App::registrarConfig()->autoCreateContacts()) {
-                        return;
-                    }
-                    $this->createContact(
+            if ($mappings->isEmpty()) {
+                try {
+                    $contact = $this->getContact(
                         (int)$vars->get('userid'),
                         (int)$vars->get('contactid'),
                         (bool)$vars->get('companyname')
                     );
-                }
 
-                $mappings = App::contacts()->fetchMappingByContactId(
-                    (int)$vars->get('userid'),
-                    (int)$vars->get('contactid')
-                );
-            } catch (\Exception $exception) {
-                LogService::logError($exception);
-                throw $exception;
-            }
-        }
+                    if (!$contact) {
+                        if (!App::registrarConfig()->autoCreateContacts()) {
+                            return;
+                        }
+                        $this->createContact(
+                            (int)$vars->get('userid'),
+                            (int)$vars->get('contactid'),
+                            (bool)$vars->get('companyname')
+                        );
+                    }
 
-        $contact = WhmcsContact::make($vars);
-
-        foreach ($mappings as $mapping) {
-            try {
-                $rtrContact = App::client()->contacts->get(App::registrarConfig()->customerHandle(), $mapping->handle);
-            } catch (BadRequestException $exception) {
-                LogService::logError(
-                    $exception,
-                    sprintf("Stale mapping for handle %s, recreating contact", $mapping->handle)
-                );
-                ContactMapping::query()
-                    ->where('userid', $mapping->userid)
-                    ->where('contactid', $mapping->contactid)
-                    ->where('handle', $mapping->handle)
-                    ->delete();
-                $this->getOrCreateContact(
-                    $mapping->userid,
-                    $mapping->contactid,
-                    $mapping->org_allowed
-                );
-                continue;
-            }
-
-            $diff = $contact->diff($rtrContact, $contact->toRtrArray($mapping->org_allowed));
-
-            if (!empty($diff)) {
-                try {
-                    App::client()->contacts->update(
-                        App::registrarConfig()->customerHandle(),
-                        $mapping->handle,
-                        ...$diff
+                    $mappings = App::contacts()->fetchMappingByContactId(
+                        (int)$vars->get('userid'),
+                        (int)$vars->get('contactid')
                     );
                 } catch (\Exception $exception) {
-                    $errorMessage = json_decode(str_replace('Bad Request: ', '', $exception->getMessage()), true);
+                    LogService::logError($exception);
+                    throw $exception;
+                }
+            }
 
-                    // Split the contact if the error is a validation error, because we can't update the contact
-                    if (is_array($errorMessage) && $errorMessage['type'] == 'ContactUpdateValidationError') {
-                        $newHandle = uniqid(App::registrarConfig()->contactHandlePrefix() ?: '', true);
-                        App::client()->contacts->split(
-                            App::registrarConfig()->customerHandle(),
-                            $mapping->handle,
-                            $newHandle
-                        );
+            $contact = WhmcsContact::make($vars);
 
+            foreach ($mappings as $mapping) {
+                try {
+                    $rtrContact = App::client()->contacts->get(
+                        App::registrarConfig()->customerHandle(),
+                        $mapping->handle
+                    );
+                } catch (BadRequestException $exception) {
+                    LogService::logError(
+                        $exception,
+                        sprintf("Stale mapping for handle %s, recreating contact", $mapping->handle)
+                    );
+                    ContactMapping::query()
+                        ->where('userid', $mapping->userid)
+                        ->where('contactid', $mapping->contactid)
+                        ->where('handle', $mapping->handle)
+                        ->delete();
+                    $this->getOrCreateContact(
+                        $mapping->userid,
+                        $mapping->contactid,
+                        $mapping->org_allowed
+                    );
+                    continue;
+                }
+
+                $diff = $contact->diff($rtrContact, $contact->toRtrArray($mapping->org_allowed));
+
+                if (!empty($diff)) {
+                    try {
                         App::client()->contacts->update(
                             App::registrarConfig()->customerHandle(),
-                            $newHandle,
+                            $mapping->handle,
                             ...$diff
                         );
+                    } catch (\Exception $exception) {
+                        $errorMessage = json_decode(str_replace('Bad Request: ', '', $exception->getMessage()), true);
 
-                        // Update the mapping to the new handle so future registrations
-                        // use the split contact (with updated data) instead of the pre-split handle.
-                        ContactService::storeContactMapping(
-                            clientId: $mapping->userid,
-                            contactId: $mapping->contactid,
-                            handle: $newHandle,
-                            organizationAllowed: $mapping->org_allowed
-                        );
-                        LogService::logError(
-                            $exception,
-                            sprintf("Splitting contact from %s to %s", $mapping->handle, $newHandle)
-                        );
-                    } elseif (is_array($errorMessage) && $errorMessage['type'] == 'ObjectExists') {
-                        LogService::logError(
-                            $exception,
-                            sprintf("Update contact command for %s already exists", $mapping->handle)
-                        );
-                    } else {
-                        LogService::logError($exception, json_encode($diff));
-                        throw $exception;
+                        // Split the contact if the error is a validation error, because we can't update the contact
+                        if (is_array($errorMessage) && $errorMessage['type'] == 'ContactUpdateValidationError') {
+                            $newHandle = uniqid(App::registrarConfig()->contactHandlePrefix() ?: '', true);
+                            App::client()->contacts->split(
+                                App::registrarConfig()->customerHandle(),
+                                $mapping->handle,
+                                $newHandle
+                            );
+
+                            App::client()->contacts->update(
+                                App::registrarConfig()->customerHandle(),
+                                $newHandle,
+                                ...$diff
+                            );
+
+                            // Update the mapping to the new handle so future registrations
+                            // use the split contact (with updated data) instead of the pre-split handle.
+                            ContactService::storeContactMapping(
+                                clientId: $mapping->userid,
+                                contactId: $mapping->contactid,
+                                handle: $newHandle,
+                                organizationAllowed: $mapping->org_allowed
+                            );
+                            LogService::logError(
+                                $exception,
+                                sprintf("Splitting contact from %s to %s", $mapping->handle, $newHandle)
+                            );
+                        } elseif (is_array($errorMessage) && $errorMessage['type'] == 'ObjectExists') {
+                            LogService::logError(
+                                $exception,
+                                sprintf("Update contact command for %s already exists", $mapping->handle)
+                            );
+                        } else {
+                            LogService::logError($exception, json_encode($diff));
+                            throw $exception;
+                        }
                     }
                 }
             }

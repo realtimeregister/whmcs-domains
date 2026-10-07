@@ -2,12 +2,15 @@
 
 namespace Widgets;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use RealtimeRegisterDomains\App;
 use RealtimeRegisterDomains\Widget\UpdateWidget;
 
 class UpdateWidgetTest extends TestCase
 {
+    private UpdateWidget&MockObject $widget;
+
     public function setUp(): void
     {
         $this->widget = $this->createPartialMock(UpdateWidget::class, ['deleteCurrentReference']);

@@ -74,7 +74,7 @@ class Sync extends Action
             $status = WhmcsDomainStatus::fromDomainDetails($domain);
             if (!array_key_exists(WhmcsDomainStatus::Inactive->value, $values)) {
                 if ($domain->autoRenewPeriod < 12 && $domain->autoRenew) {
-                    if (strtotime($domain->expiryDate) >= strtotime($whmcsDomain->nextduedate)) {
+                    if (strtotime($expiryDate->format('Y-m-d')) >= strtotime($whmcsDomain->nextduedate)) {
                         return [];
                     }
                 }

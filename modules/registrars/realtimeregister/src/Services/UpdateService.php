@@ -11,41 +11,22 @@ class UpdateService
 
     public function check(): void
     {
-        $headers = [];
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $this->releaseUrl);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPGET, true);
-        curl_setopt($ch, CURLOPT_USERAGENT, 'Realtime Register WHMCS Client/' . App::VERSION);
-        curl_setopt(
-            $ch,
-            CURLOPT_HEADERFUNCTION,
-            function ($curl, $header) use (&$headers) {
-                $len = strlen($header);
-                $header = explode(':', $header, 2);
-                // ignore invalid headers
-                if (count($header) < 2) {
-                    return $len;
-                }
-
-                $headers[strtolower(trim($header[0]))][] = trim($header[1]);
-
-                return $len;
-            }
-        );
-        $response = curl_exec($ch);
-        curl_close($ch);
+        [$headers, $response] = $this->fetchReleases();
 
         // See if we got any results, we could be rate limited..
         if (array_key_exists('x-ratelimit-remaining', $headers) && $headers['x-ratelimit-remaining'][0] > 0) {
-            $results = json_decode($response);
+            $results = json_decode((string)$response);
+            if (!is_array($results)) {
+                return;
+            }
+
             $latestVersion = [];
             foreach ($results as $result) {
                 if (!$result->draft) {
                     $latestVersion = [
                         'version' => $result->tag_name,
                         'prerelease' => $result->prerelease,
-                        'description' => nl2br($result->body),
+                        'description' => nl2br((string)$result->body),
                         'link' => $result->html_url,
                     ];
                     break;
@@ -74,5 +55,40 @@ class UpdateService
                     ->delete();
             }
         }
+    }
+
+    /**
+     * Fetch the releases from GitHub.
+     *
+     * @return array{0: array<string, string[]>, 1: string|false} The (lowercased) response headers and the body
+     */
+    protected function fetchReleases(): array
+    {
+        $headers = [];
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $this->releaseUrl);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPGET, true);
+        curl_setopt($ch, CURLOPT_USERAGENT, 'Realtime Register WHMCS Client/' . App::VERSION);
+        curl_setopt(
+            $ch,
+            CURLOPT_HEADERFUNCTION,
+            function ($curl, $header) use (&$headers) {
+                $len = strlen($header);
+                $header = explode(':', $header, 2);
+                // ignore invalid headers
+                if (count($header) < 2) {
+                    return $len;
+                }
+
+                $headers[strtolower(trim($header[0]))][] = trim($header[1]);
+
+                return $len;
+            }
+        );
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+        return [$headers, $response];
     }
 }

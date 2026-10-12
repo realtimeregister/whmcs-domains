@@ -10,7 +10,11 @@ class CheckForUpdates extends Hook
 {
     public function __invoke(DataObject $vars): void
     {
-        $updateService = new UpdateService();
-        $updateService->check();
+        $this->updateService()->check();
+    }
+
+    protected function updateService(): UpdateService
+    {
+        return new UpdateService();
     }
 }

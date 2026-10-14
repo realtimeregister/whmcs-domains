@@ -62,6 +62,7 @@ App::hook('ShoppingCartValidateDomainsConfig', Hooks\ValidateDomain::class);
 App::hook(Hooks\Client\ClientAreaPageDomainDNSManagement::class);
 
 App::hook('InvoicePaid', Hooks\DtsIntegration::class);
+App::hook('LogActivity', Hooks\DomainOwnershipTransfer::class);
 
 // Hooks incompatible with invokable hook
 add_hook('ClientAreaPrimarySidebar', 1, function (MenuItem $primarySidebar) {

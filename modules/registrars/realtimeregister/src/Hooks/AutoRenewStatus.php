@@ -17,7 +17,7 @@ class AutoRenewStatus extends Hook
 
     public function __invoke(DataObject $vars): void
     {
-        if ($_POST['action'] === $this->ACTION && $_POST['module'] == 'realtimeregister') {
+        if ($_POST['action'] === $this->ACTION && $_POST['module'] == App::NAME) {
             if ($_POST['domain']) {
                 self::updateDomain($_POST['domain']);
             } else {
@@ -34,7 +34,7 @@ class AutoRenewStatus extends Hook
             fn($domain) => self::getDomainName($domain['domain']),
             Domain::query()
                 ->select(['domain'])
-                ->where('registrar', '=', 'realtimeregister')
+                ->where('registrar', '=', App::NAME)
                 ->whereIn('status', ['active', 'pending'])
                 ->get()
                 ->toArray()

@@ -290,7 +290,7 @@ class ContactService
         if (empty($params) && defined('ROOTDIR')) {
             require_once ROOTDIR . "/includes/registrarfunctions.php";
             // Skip undefined notices.
-            $params = getRegistrarConfigOptions('realtimeregister') + [
+            $params = getRegistrarConfigOptions(App::NAME) + [
                     'SyncStatus' => null,
                     'SyncExpireDate' => null,
                     'SyncDueDate' => null,

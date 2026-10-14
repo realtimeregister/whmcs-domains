@@ -13,7 +13,7 @@ class ClientAreaPageDomainDetails extends Hook
 {
     public function __invoke(DataObject $vars): array
     {
-        if ($vars['registrar'] != 'realtimeregister') {
+        if ($vars['registrar'] != App::NAME) {
             return [];
         }
         try {

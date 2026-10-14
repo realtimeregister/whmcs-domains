@@ -5,6 +5,7 @@ namespace RealtimeRegisterDomains\Models\Whmcs;
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use RealtimeRegisterDomains\App;
 
 class Registrars extends Model
 {
@@ -20,13 +21,13 @@ class Registrars extends Model
      */
     public function scopeRegistrar(Builder $query): Builder
     {
-        return $query->where('registrar', 'realtimeregister');
+        return $query->where('registrar', App::NAME);
     }
 
     public static function getRegistrarConfig($settingParams): array
     {
         $tblregistrars = Capsule::table('tblregistrars')
-            ->where('registrar', 'realtimeregister')
+            ->where('registrar', App::NAME)
             ->whereIn('setting', $settingParams)
             ->get();
 

@@ -21,8 +21,8 @@ class UpdateWidget extends BaseWidget
     {
         return [
             'updates_available' =>
-                !empty($GLOBALS['updates_available']['realtimeregister'])
-                    ? $GLOBALS['updates_available']['realtimeregister'] : [],
+                !empty($GLOBALS['updates_available'][App::NAME])
+                    ? $GLOBALS['updates_available'][App::NAME] : [],
         ];
     }
 
@@ -51,7 +51,7 @@ class UpdateWidget extends BaseWidget
     public function deleteCurrentReference(): void
     {
         Capsule::table('tblregistrars')
-            ->where('registrar', 'realtimeregister')
+            ->where('registrar', App::NAME)
             ->where('setting', 'version_information')
             ->delete();
     }

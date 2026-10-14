@@ -15,7 +15,7 @@ class CheckCredentials extends Hook
             App::assets()->addScript("checkCredentials.js");
         }
 
-        if ($_POST['action'] === $this->ACTION && $_POST['module'] == 'realtimeregister') {
+        if ($_POST['action'] === $this->ACTION && $_POST['module'] == App::NAME) {
             self::checkConnection();
         }
     }

@@ -28,7 +28,7 @@ class CustomHandles extends Hook
 
                 Registrars::updateOrCreate(
                     [
-                        'registrar' => 'realtimeregister',
+                        'registrar' => App::NAME,
                         'setting' => 'customHandles',
                     ],
                     [

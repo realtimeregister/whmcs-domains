@@ -16,7 +16,7 @@ class ClientAreaPrimarySidebar
 
     public function __invoke(MenuItem $primarySidebar, mixed $domain): void
     {
-        if (!$domain instanceof Domain || $domain->registrar != 'realtimeregister') {
+        if (!$domain instanceof Domain || $domain->registrar != App::NAME) {
             return;
         }
         try {

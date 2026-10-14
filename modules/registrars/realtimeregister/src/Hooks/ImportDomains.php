@@ -26,7 +26,7 @@ class ImportDomains extends Hook
     public function __invoke(DataObject $vars): void
     {
         App::assets()->addStyle("importdomains.css");
-        if ($_REQUEST['action'] === $this->ACTION && $_REQUEST['module'] == 'realtimeregister') {
+        if ($_REQUEST['action'] === $this->ACTION && $_REQUEST['module'] == App::NAME) {
             self::importWizard();
         }
     }
@@ -187,7 +187,7 @@ class ImportDomains extends Hook
                 'registrationdate'   => $domain['createdDate'],
                 'domain'             => $domain['domainName'],
                 'recurringamount'    => $recurringAmount,
-                'registrar'          => 'realtimeregister',
+                'registrar'          => App::NAME,
                 'registrationperiod' => ceil($domain['autoRenewPeriod'] / 12),
                 'paymentmethod'      => $paymentMethod,
                 'status'             => 'Active',

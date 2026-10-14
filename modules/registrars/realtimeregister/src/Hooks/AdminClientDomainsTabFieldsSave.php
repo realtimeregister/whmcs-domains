@@ -24,7 +24,7 @@ class AdminClientDomainsTabFieldsSave extends Hook
         $domain = App::localApi()->domain($vars['userid'], $vars['id']);
 
         // See if the domain is still in our portfolio
-        if ($domain && $domain->get('registrar') === 'realtimeregister') {
+        if ($domain && $domain->get('registrar') === App::NAME) {
             $metadata = (new MetadataService(App::toPunyCode($domain['domainname'])));
             $metadataProperties = $metadata->getMetadata()->contactProperties?->toArray();
 

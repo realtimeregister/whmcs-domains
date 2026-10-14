@@ -3,6 +3,7 @@
 namespace RealtimeRegisterDomains\Actions\Domains;
 
 use RealtimeRegisterDomains\Actions\Action;
+use RealtimeRegisterDomains\App;
 use RealtimeRegisterDomains\Models\Whmcs\Registrars;
 use RealtimeRegisterDomains\Request;
 use RealtimeRegisterDomains\Services\Config\Config;
@@ -20,7 +21,7 @@ class ClientAreaCustomButtonArray extends Action
         }
 
         $registrars_dnssec = Registrars::select('value')
-            ->where('registrar', 'realtimeregister')
+            ->where('registrar', App::NAME)
             ->where('setting', 'dnssec')
             ->first();
 

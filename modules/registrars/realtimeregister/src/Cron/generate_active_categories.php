@@ -24,7 +24,7 @@ if (defined('ROOTDIR')) {
     require_once ROOTDIR . '/includes/registrarfunctions.php';
 }
 
-$domainPricingList = DomainPricing::where('autoreg', 'realtimeregister')->get()->all();
+$domainPricingList = DomainPricing::where('autoreg', App::NAME)->get()->all();
 
 $key = 'Used at Realtime Register';
 

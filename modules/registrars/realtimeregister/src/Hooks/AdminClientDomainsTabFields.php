@@ -86,7 +86,7 @@ class AdminClientDomainsTabFields extends Hook
 
         // Some special features, which can only be done by using javascript
         if (
-            $domainInfo->registrar === 'realtimeregister'
+            $domainInfo->registrar === App::NAME
         ) {
             $hasTransferLock = in_array(
                 DomainStatusEnum::STATUS_CLIENT_TRANSFER_PROHIBITED,

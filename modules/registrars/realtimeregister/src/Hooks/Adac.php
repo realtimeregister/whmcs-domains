@@ -2,6 +2,7 @@
 
 namespace RealtimeRegisterDomains\Hooks;
 
+use Illuminate\Support\Collection;
 use RealtimeRegisterDomains\App;
 use RealtimeRegisterDomains\Entities\DataObject;
 use RealtimeRegisterDomains\Enums\ScriptLocationType;
@@ -134,9 +135,17 @@ class Adac extends Hook
             }
         }
 
-        $prices = Pricing::query()->where('currency', $currency)
-            ->whereIn('type', ['domainregister', 'domaintransfer', 'domainrenew'])
-            ->get();
+        $clientGroupId = 0;
+        if (!empty($vars['client']->groupid)) {
+            $clientGroupId = (int) $vars['client']->groupid;
+        }
+
+        $prices = self::pricesForClientGroup(
+            Pricing::query()->where('currency', $currency)
+                ->whereIn('type', ['domainregister', 'domaintransfer', 'domainrenew'])
+                ->get(),
+            $clientGroupId
+        );
         $currency = Currencies::query()->where("id", '=', $currency)->first();
 
         if (!empty($prices)) {
@@ -207,5 +216,18 @@ class Adac extends Hook
         }
 
         return $prices;
+    }
+
+    /**
+     * Domain pricing slabs are stored in tblpricing with the client group id in `tsetupfee` (0 = default price).
+     * Like the WHMCS cart, use the client group's slab when there is one and fall back to the default price otherwise.
+     */
+    public static function pricesForClientGroup(Collection $prices, int $clientGroupId): Collection
+    {
+        return $prices
+            ->filter(fn($price) => in_array((int) $price['tsetupfee'], [0, $clientGroupId], true))
+            ->sortBy(fn($price) => (int) $price['tsetupfee'] === $clientGroupId ? 1 : 0)
+            ->keyBy(fn($price) => $price['relid'] . '-' . $price['type'])
+            ->values();
     }
 }

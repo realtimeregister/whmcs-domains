@@ -283,7 +283,7 @@ class MetadataService
     {
         return DomainPricing::query()
             ->where("extension", "." . $tld)
-            ->whereIn("autoreg", ["realtimeregister", ""])
+            ->whereIn("autoreg", [App::NAME, ""])
             ->first() !== null;
     }
 

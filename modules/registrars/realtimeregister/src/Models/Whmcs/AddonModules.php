@@ -4,6 +4,7 @@ namespace RealtimeRegisterDomains\Models\Whmcs;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use RealtimeRegisterDomains\App;
 
 class AddonModules extends Model
 {
@@ -18,6 +19,6 @@ class AddonModules extends Model
      */
     public function scopeAddon(Builder $query): Builder
     {
-        return $query->where('module', 'realtimeregister');
+        return $query->where('module', App::NAME);
     }
 }

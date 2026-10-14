@@ -2,6 +2,7 @@
 
 namespace RealtimeRegisterDomains\Hooks\Update;
 
+use RealtimeRegisterDomains\App;
 use RealtimeRegisterDomains\Entities\DataObject;
 use RealtimeRegisterDomains\Hooks\Hook;
 use Illuminate\Database\Capsule\Manager as Capsule;
@@ -12,7 +13,7 @@ class Banner extends Hook
     {
         $json = $this->get();
         if (is_object($json)) {
-            $GLOBALS['updates_available']['realtimeregister'][] = $json;
+            $GLOBALS['updates_available'][App::NAME][] = $json;
         }
     }
 
@@ -20,7 +21,7 @@ class Banner extends Hook
     {
         // This data is set in \RealtimeRegisterDomains\Services\UpdateService::check
         $version = Capsule::table('tblregistrars')
-            ->where('registrar', 'realtimeregister')
+            ->where('registrar', App::NAME)
             ->where('setting', 'version_information')->first();
 
         if ($version == null) {

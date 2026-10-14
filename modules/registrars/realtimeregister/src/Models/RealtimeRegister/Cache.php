@@ -5,6 +5,7 @@ namespace RealtimeRegisterDomains\Models\RealtimeRegister;
 use Illuminate\Database\Capsule\Manager as Capsule;
 use PDOException;
 use Psr\Cache\InvalidArgumentException;
+use RealtimeRegisterDomains\App;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Cache\Adapter\PdoAdapter;
@@ -24,7 +25,7 @@ class Cache
             } else {
                 self::$pool = new PdoAdapter(
                     Capsule::connection()->getPdo(),
-                    'realtimeregister',
+                    App::NAME,
                     3600,
                     ['db_table' => self::TABLE_NAME]
                 );

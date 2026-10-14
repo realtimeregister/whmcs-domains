@@ -35,11 +35,11 @@ class UpdateService
 
             if (!empty($latestVersion)) {
                 $attributes = Capsule::table('tblregistrars')
-                    ->where('registrar', 'realtimeregister')
+                    ->where('registrar', App::NAME)
                     ->where('setting', 'version_information');
 
                 $values = [
-                    'registrar' => 'realtimeregister',
+                    'registrar' => App::NAME,
                     'setting' => 'version_information',
                     'value' => json_encode($latestVersion),
                 ];
@@ -50,7 +50,7 @@ class UpdateService
                 }
             } else {
                 Capsule::table('tblregistrars')
-                    ->where('registrar', 'realtimeregister')
+                    ->where('registrar', App::NAME)
                     ->where('setting', 'version_information')
                     ->delete();
             }

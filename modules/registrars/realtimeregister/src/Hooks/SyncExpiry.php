@@ -18,7 +18,7 @@ class SyncExpiry extends Hook
 
     public function __invoke(DataObject $vars): void
     {
-        if ($_POST['action'] === $this->ACTION && $_POST['module'] == 'realtimeregister') {
+        if ($_POST['action'] === $this->ACTION && $_POST['module'] == App::NAME) {
             if ($_POST['domains']) {
                 self::syncDomains($_POST['domains']);
                 exit();
@@ -28,7 +28,7 @@ class SyncExpiry extends Hook
                 fn($domain) => $domain['domain'],
                 Domain::query()
                     ->select(['domain'])
-                    ->where('registrar', '=', 'realtimeregister')
+                    ->where('registrar', '=', App::NAME)
                     ->get()
                     ->toArray()
             );

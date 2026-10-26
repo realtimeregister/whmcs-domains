@@ -48,11 +48,7 @@ class RegistrarConfig
 
     public function shouldAutorenew(): bool
     {
-        $autorenew = $this->get('force_autorenew', false);
-        if ($autorenew === false) {
-            return false;
-        }
-        return true;
+        return $this->get('force_autorenew') === 'on';
     }
 
     public function get(string $key, $default = null)

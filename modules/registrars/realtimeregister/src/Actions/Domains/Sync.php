@@ -71,7 +71,7 @@ class Sync extends Action
         }
 
         if ($domain) {
-            if (App::registrarConfig()->get('force_autorenew', false)) {
+            if (App::registrarConfig()->shouldAutorenew()) {
                 Domain::query()->where('id', $whmcsDomain->id)->update(['donotrenew' => (int)!$domain->autoRenew]);
             }
 

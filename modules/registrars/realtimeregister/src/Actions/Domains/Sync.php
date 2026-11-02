@@ -4,6 +4,7 @@ namespace RealtimeRegisterDomains\Actions\Domains;
 
 use Exception;
 use Illuminate\Database\Capsule\Manager;
+use RealtimeRegister\Domain\DomainDetails;
 use RealtimeRegister\Domain\Enum\DomainStatusEnum;
 use RealtimeRegister\Exceptions\BadRequestException;
 use RealtimeRegister\Exceptions\ForbiddenException;
@@ -71,6 +72,8 @@ class Sync extends Action
         }
 
         if ($domain) {
+            $this->syncAutoRenew($request, $domain, $whmcsDomain);
+
             $status = WhmcsDomainStatus::fromDomainDetails($domain);
             if (!array_key_exists(WhmcsDomainStatus::Inactive->value, $values)) {
                 if ($domain->autoRenewPeriod < 12 && $domain->autoRenew) {
@@ -150,6 +153,36 @@ class Sync extends Action
         }
 
         return $values;
+    }
+
+    /**
+     * WHMCS decides: autorenew stays on at Realtime Register only when "Force Auto Renew" is enabled and renewal is
+     * not disabled on the WHMCS domain.
+     */
+    private function syncAutoRenew(Request $request, DomainDetails $domain, Domain $whmcsDomain): void
+    {
+        $autoRenew = App::registrarConfig()->shouldAutorenew() && !$whmcsDomain->donotrenew;
+
+        if (!$this->autoRenewNeedsUpdate($domain->autoRenew, $autoRenew, $domain->autoRenewPeriod)) {
+            return;
+        }
+
+        try {
+            App::client()->domains->update(domainName: $domain->domainName, autoRenew: $autoRenew);
+            $this->forgetDomainInfo($request);
+            logActivity(
+                sprintf('Autorenew is set to %s for domain: %s', $autoRenew ? 'true' : 'false', $domain->domainName)
+            );
+        } catch (\Exception $exception) {
+            // A failed autorenew update should not block the rest of the sync
+            LogService::logError($exception, 'Auto renew can not be updated for domain: ' . $domain->domainName);
+        }
+    }
+
+    protected function autoRenewNeedsUpdate(bool $current, bool $wanted, int $period): bool
+    {
+        // Periods under 12 months must keep renewing, WHMCS bills those yearly (see AutoRenewStatus)
+        return $current !== $wanted && ($wanted || $period >= 12);
     }
 
     private static function checkForOutgoingTransfer(Request $request): bool

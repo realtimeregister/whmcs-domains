@@ -31,6 +31,24 @@ class SyncTest extends TestCase
         $this->assertSame($expected, $sync->callSyncDueDate('2027-10-05'));
     }
 
+    public static function autoRenewProvider(): array
+    {
+        return [
+            'already on stays untouched' => [true, true, 12, false],
+            'already off stays untouched' => [false, false, 12, false],
+            'gets enabled' => [false, true, 12, true],
+            'gets disabled' => [true, false, 12, true],
+            'short period gets enabled' => [false, true, 1, true],
+            'short period is not disabled' => [true, false, 1, false],
+        ];
+    }
+
+    #[DataProvider('autoRenewProvider')]
+    public function testAutoRenewNeedsUpdate(bool $current, bool $wanted, int $period, bool $expected): void
+    {
+        $this->assertSame($expected, $this->makeSync([])->callAutoRenewNeedsUpdate($current, $wanted, $period));
+    }
+
     private function makeSync(array $config): object
     {
         $sync = new class (App::instance()) extends Sync {
@@ -39,6 +57,11 @@ class SyncTest extends TestCase
             public function config(string $key, $default = null)
             {
                 return ($this->settings[$key] ?? null) ?: $default;
+            }
+
+            public function callAutoRenewNeedsUpdate(bool $current, bool $wanted, int $period): bool
+            {
+                return $this->autoRenewNeedsUpdate($current, $wanted, $period);
             }
 
             public function callSyncDueDate(string $date): ?string

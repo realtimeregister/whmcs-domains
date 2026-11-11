@@ -87,7 +87,8 @@ class LocalApi
     public function getDomainOrder(int $domainId, int $clientId = null): ?DataObject
     {
         $domain = $this->domain($clientId, $domainId);
-        if ($domain == null) {
+        // orderid 0 would be dropped by array_filter in orders() and match an arbitrary order
+        if ($domain == null || empty($domain['orderid'])) {
             return null;
         }
         return $this->order($domain['orderid'], $clientId);

@@ -66,12 +66,8 @@ trait DomainContactTrait
     {
         $clientId = $request->get('clientid') ?? $request->get('userid');
         $tldInfo = $this->tldInfo($request);
-        // Check if we even need nameservers
-        $orderId = App::localApi()->domain(
-            clientId: $clientId,
-            domainId: $request->get('domainid')
-        )->get('orderid');
-        $contactId = App::localApi()->order(id: $orderId)->get('contactid');
+        // The original order may have been deleted; contact id 0 falls back to the client's own details
+        $contactId = (int) App::localApi()->getDomainOrder($request->get('domainid'), $clientId)?->get('contactid');
 
         $contacts = [];
 

@@ -55,4 +55,19 @@ class AdacTest extends TestCase
         $this->assertSame('10.00', $this->registerPrice(self::SLAB_GROUP_ID, 2));
         $this->assertSame('30.00', $prices->firstWhere('type', 'domainrenew')['msetupfee']);
     }
+
+    /**
+     * Unrelated client-area pages may pass currency as a stdClass; ADAC must not touch it there (#253)
+     */
+    public function testUnrelatedPageWithObjectCurrencyIsIgnored()
+    {
+        global $smarty;
+        $smarty = (object) ['tpl_vars' => ['templatefile' => (object) ['value' => 'some_addon_page']]];
+
+        $result = (new Adac(\RealtimeRegisterDomains\App::instance()))(
+            new \RealtimeRegisterDomains\Entities\DataObject(['currency' => (object) ['code' => 'eur', 'id' => 1]])
+        );
+
+        $this->assertNull($result);
+    }
 }

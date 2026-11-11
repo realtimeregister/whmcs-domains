@@ -18,26 +18,25 @@ class Adac extends Hook
     public function __invoke(DataObject $vars)
     {
         global $smarty;
-        $shopCurrency = strtoupper($vars['currency']['code']);
+        $template = $smarty->tpl_vars['templatefile']->value ?? null;
 
-        if (
-            !empty($smarty->tpl_vars['templatefile']->value)
-            && in_array($smarty->tpl_vars['templatefile']->value, ['viewcart', 'domainregister'])
-        ) {
-            if ($_POST['currency']) {
-                if (ShoppingCartService::updateCartPremiumPrices($shopCurrency)) {
-                    header("Refresh: 0");
-                    exit;
-                }
+        if (!in_array($template, ['viewcart', 'domainregister'], true)) {
+            return;
+        }
+
+        // currency can be an array, an object or missing depending on the page (#253)
+        $shopCurrency = strtoupper((string) data_get($vars['currency'] ?? null, 'code'));
+
+        if (!empty($_POST['currency']) && $shopCurrency !== '') {
+            if (ShoppingCartService::updateCartPremiumPrices($shopCurrency)) {
+                header("Refresh: 0");
+                exit;
             }
         }
 
-        if (
-            !empty($smarty->tpl_vars['templatefile']->value)
-            && $smarty->tpl_vars['templatefile']->value == 'domainregister'
-        ) {
+        if ($template === 'domainregister') {
             if (
-                !empty($_POST['adacpremium']) && !empty($_POST['adacpremiumprice'])
+                $shopCurrency !== '' && !empty($_POST['adacpremium']) && !empty($_POST['adacpremiumprice'])
                 && !empty($_POST['adacpremiumcurrency'])
             ) {
                 $premiumPrice = $_POST['adacpremiumprice'] / 100;
@@ -120,8 +119,8 @@ class Adac extends Hook
 
         $currency = 1;
 
-        if (!empty($vars['currency']['id'])) {
-            $currency = $vars['currency']['id'];
+        if (!empty(data_get($vars['currency'] ?? null, 'id'))) {
+            $currency = data_get($vars['currency'], 'id');
         } elseif (!empty($vars['client']->currency)) {
             $currency = $vars['client']->currency;
         }

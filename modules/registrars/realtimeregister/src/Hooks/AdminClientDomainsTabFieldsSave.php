@@ -32,36 +32,17 @@ class AdminClientDomainsTabFieldsSave extends Hook
                 return;
             }
 
-            // We load the original files, this gives us the field names and tells us how many fields we need to
-            // append in the resulting domainfields array.
+            // The original fields are keyed by the same indexes the admin form submits
             $originalFields = (new \WHMCS\Domains\AdditionalFields())->setDomain($domain['domainname'])->getFields();
-            $fieldNames = array_values(array_map(fn($field) => $field['Name'], $originalFields));
+            $newProperties = self::mapDomainFields($originalFields, $vars['domainfield']);
 
-            if (
-                (count($metadataProperties) !== count($vars['domainfield']))
-                || (array_keys($metadataProperties) !== array_keys($vars['domainfield']))
-            ) {
-                $currentIdx = array_key_first($originalFields);
-                $lastIdx = array_key_last($originalFields);
-
-                for (; $currentIdx < $lastIdx; $currentIdx++) {
-                    if (!array_key_exists($currentIdx, $vars['domainfield'])) {
-                        /**
-                         * Most probably a checkbox, which doesn't get send because of an empty value when it's not
-                         * selected, so we reserve its place in the array
-                         */
-                        $vars['domainfield'][$currentIdx] = '';
-                    }
-                }
+            if ($newProperties === null) {
+                LogService::logError(new \Exception(
+                    'Submitted domain fields for ' . $domain['domainname'] . ' do not match the additional fields'
+                    . ' definitions, contact properties are not synchronized'
+                ));
+                return;
             }
-
-            ksort($vars['domainfield']); // just to be sure..
-
-            $newProperties = array_filter(
-                array_combine($fieldNames, $vars['domainfield'] ?? []),
-                fn($key) => $key !== 'languageCode',
-                ARRAY_FILTER_USE_KEY
-            );
 
             $order = App::localApi()->order($domain['orderid']);
             $handle = ContactService::getContactMapping(
@@ -80,6 +61,27 @@ class AdminClientDomainsTabFieldsSave extends Hook
                 }
             }
         }
+    }
+
+    /**
+     * Maps submitted values to field names by their form index, which can have gaps (e.g. removed default fields).
+     * Returns null when a submitted index has no field definition, so no value ends up at the wrong property.
+     */
+    public static function mapDomainFields(array $originalFields, array $submitted): ?array
+    {
+        if (array_diff_key($submitted, $originalFields)) {
+            return null;
+        }
+
+        $properties = [];
+        foreach ($originalFields as $idx => $field) {
+            if (!empty($field['Remove']) || $field['Name'] === 'languageCode') {
+                continue;
+            }
+            // An unchecked checkbox is not submitted at all
+            $properties[$field['Name']] = $submitted[$idx] ?? '';
+        }
+        return $properties;
     }
 
     private static function revertChanges($handle, $tldInfo, $domainId): void

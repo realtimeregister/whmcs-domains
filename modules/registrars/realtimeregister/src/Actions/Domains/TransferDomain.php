@@ -65,6 +65,6 @@ class TransferDomain extends Action
 
         LogService::logError($exception, $message);
 
-        return ActionFailedException::forException($exception, $message)->response("RegisterDomain");
+        return ActionFailedException::forException($exception, $message)->response("TransferDomain");
     }
 }

@@ -34,6 +34,14 @@ class ClientAreaOutput extends Hook
             }
         }
 
+        // Only domain configuration and domain management pages (incl. child hosts / DNSSEC) need our assets (#253)
+        $isConfigureDomains = ($smarty->tpl_vars['templatefile']->value ?? null) === 'configuredomains';
+        $isDomainManagement = ($vars['filename'] ?? null) === 'clientarea'
+            && str_starts_with((string) ($_REQUEST['action'] ?? ''), 'domain');
+        if (!$isConfigureDomains && !$isDomainManagement) {
+            return;
+        }
+
         App::assets()->addScript("rtr.js", ScriptLocationType::Footer);
         App::assets()->addScript("rtrClient.js", ScriptLocationType::Footer);
         App::assets()->addStyle('style.css');

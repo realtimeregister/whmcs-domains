@@ -26,7 +26,6 @@ return [
     'de.com' => 'centralnic',
     'ae.org' => 'centralnic',
     'co.no' => 'centralnic',
-    'gr.com' => 'centralnic',
     'sa.com' => 'centralnic',
     'it.com' => 'centralnic',
 ];

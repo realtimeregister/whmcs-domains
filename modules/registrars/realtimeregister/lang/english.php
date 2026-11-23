@@ -142,6 +142,8 @@ $_LANG['rtr']['dns']['expire'] = 'Expire';
 $_LANG['rtr']['dns']['success'] = 'Your DNS records have been saved successfully';
 $_LANG['rtr']['dns']['error'] = 'Something went wrong saving your DNS settings';
 
+$_LANG['rtr']['resendvalidation'] = "Resend Verification Email";
+
 if (defined('ROOTDIR')) {
     include_once implode(
         DIRECTORY_SEPARATOR,

@@ -114,6 +114,8 @@ $_LANG['rtr']['dns']['refresh'] = 'Refresh';
 $_LANG['rtr']['dns']['retry'] = 'Retry';
 $_LANG['rtr']['dns']['expire'] = 'Expire';
 
+$_LANG['rtr']['resendvalidation'] = "Verificatie-e-mail opnieuw versturen";
+
 if (defined('ROOTDIR')) {
     include_once implode(
         DIRECTORY_SEPARATOR,

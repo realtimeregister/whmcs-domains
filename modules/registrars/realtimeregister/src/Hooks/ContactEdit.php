@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace RealtimeRegisterDomains\Hooks;
 
+use libphonenumber\NumberParseException;
 use RealtimeRegister\Exceptions\BadRequestException;
 use RealtimeRegisterDomains\Actions\Domains\DomainTrait;
 use RealtimeRegisterDomains\App;
@@ -22,6 +23,32 @@ class ContactEdit extends Hook
      * @throws \Exception
      */
     public function __invoke(DataObject $vars): void
+    {
+        try {
+            $this->sync($vars);
+        } catch (BadRequestException | NumberParseException $exception) {
+            /*
+             * The contact is saved in WHMCS, but incomplete for Realtime Register (e.g. no or an invalid phone
+             * number). Don't fail the local save; it is validated again when used for a domain.
+             */
+            if ($exception instanceof BadRequestException && !self::isConstraintViolation($exception)) {
+                throw $exception;
+            }
+            LogService::logError(
+                $exception,
+                sprintf(
+                    'Contact %d of client %d is incomplete, not synced to Realtime Register',
+                    (int)$vars->get('contactid'),
+                    (int)$vars->get('userid')
+                )
+            );
+        }
+    }
+
+    /**
+     * @throws \Exception
+     */
+    private function sync(DataObject $vars): void
     {
         $hasRtrDomain = Domain::query()
             ->where('registrar', App::NAME)
@@ -141,5 +168,12 @@ class ContactEdit extends Hook
                 }
             }
         }
+    }
+
+    public static function isConstraintViolation(BadRequestException $exception): bool
+    {
+        $error = json_decode(str_replace('Bad Request: ', '', $exception->getMessage()), true);
+
+        return is_array($error) && ($error['type'] ?? null) === 'ConstraintViolationException';
     }
 }

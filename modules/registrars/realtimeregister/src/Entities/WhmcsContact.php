@@ -94,8 +94,12 @@ class WhmcsContact
         return WhmcsContact::formatE164a($this->phoneNumber, $this->countryCode);
     }
 
-    public static function formatE164a(string $number, ?string $country = null): ?string
+    public static function formatE164a(?string $number, ?string $country = null): ?string
     {
+        if (!$number) {
+            return null;
+        }
+
         $phoneNumberUtil = PhoneNumberUtil::getInstance();
 
         $phoneNumber = $phoneNumberUtil->parse($number, $country);

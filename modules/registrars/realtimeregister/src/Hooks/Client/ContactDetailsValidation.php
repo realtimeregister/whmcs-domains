@@ -2,7 +2,9 @@
 
 namespace RealtimeRegisterDomains\Hooks\Client;
 
+use libphonenumber\NumberParseException;
 use RealtimeRegisterDomains\Entities\DataObject;
+use RealtimeRegisterDomains\Entities\WhmcsContact;
 use RealtimeRegisterDomains\Hooks\Hook;
 
 class ContactDetailsValidation extends Hook
@@ -95,14 +97,29 @@ class ContactDetailsValidation extends Hook
         'VE' => '\d{4}'
     ];
 
-    public function __invoke(DataObject $vars)
+    public function __invoke(DataObject $vars): array
     {
+        $errors = [];
         $country = strtoupper(trim($vars['country'] ?? ''));
         $postalcode = trim($vars['postcode'] ?? '');
         if (isset($this->postalcodePatterns[$country]) && $postalcode !== '') {
             if (!preg_match('/^' . $this->postalcodePatterns[$country] . '$/', $postalcode)) {
-                return 'Invalid postcode, we expect "' . $this->postalcodePatterns[$country] . '"';
+                $errors[] = 'Invalid postcode, we expect "' . $this->postalcodePatterns[$country] . '"';
             }
         }
+
+        // Contacts can be used as registrant, and Realtime Register requires a valid phone number
+        $phoneNumber = trim($vars['phonenumber'] ?? '');
+        if ($phoneNumber === '') {
+            $errors[] = 'A phone number is required';
+        } else {
+            try {
+                WhmcsContact::formatE164a($phoneNumber, $country ?: null);
+            } catch (NumberParseException) {
+                $errors[] = 'Invalid phone number';
+            }
+        }
+
+        return $errors;
     }
 }

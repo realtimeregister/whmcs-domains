@@ -33,7 +33,7 @@ class Language
         $currentLang = 'english'; // we need a default language
 
         if (isset($_SESSION)) {
-            if (is_null($_SESSION['Language'])) {
+            if (!isset($_SESSION['Language'])) {
                 global $CONFIG;
                 $currentLang = $CONFIG['Language'];
             } else {

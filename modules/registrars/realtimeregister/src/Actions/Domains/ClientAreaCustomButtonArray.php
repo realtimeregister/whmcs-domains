@@ -2,6 +2,7 @@
 
 namespace RealtimeRegisterDomains\Actions\Domains;
 
+use RealtimeRegister\Domain\Enum\DomainStatusEnum;
 use RealtimeRegisterDomains\Actions\Action;
 use RealtimeRegisterDomains\App;
 use RealtimeRegisterDomains\Models\Whmcs\Registrars;
@@ -13,6 +14,8 @@ class ClientAreaCustomButtonArray extends Action
     public function __invoke(Request $request): array
     {
         global $_LANG;
+
+        $client_buttons = [];
 
         if (!Config::getPseudoTld($request->domain->tldPunyCode ?? $request->domain->tld)) {
             $client_buttons = [
@@ -30,6 +33,22 @@ class ClientAreaCustomButtonArray extends Action
 
             if ($registrars_dnssec_value === 'on') {
                 $client_buttons['DNSSec Management'] = 'DNSSec';
+            }
+        }
+
+        if (($request->params['regtype'] ?? null) !== 'Transfer') {
+            try {
+                if (
+                    !empty($this->metadata($request)->validationCategory)
+                    && in_array(
+                        DomainStatusEnum::STATUS_PENDING_VALIDATION,
+                        App::client()->domains->get(self::getDomainName($request->domain))->status
+                    )
+                ) {
+                    $client_buttons[$_LANG['rtr']['resendvalidation']] = 'ClientResendValidationMails';
+                }
+            } catch (\Throwable $ignored) {
+                // Never break the client area domain page over an optional button
             }
         }
 

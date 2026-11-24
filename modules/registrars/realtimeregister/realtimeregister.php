@@ -156,6 +156,11 @@ function realtimeregister_ResendValidationMails(array $params)
     return App::dispatch(ResendValidation::class, $params);
 }
 
+function realtimeregister_ClientResendValidationMails(array $params)
+{
+    return App::dispatch(ResendValidation::class, [...$params, 'cooldown' => true]);
+}
+
 function realtimeregister_GetEPPCode($params)
 {
     return App::dispatch(\RealtimeRegisterDomains\Actions\Domains\GetAuthCode::class, $params);
